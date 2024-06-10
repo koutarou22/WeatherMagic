@@ -8,10 +8,9 @@
 namespace
 {
 	const float MOVE_SPEED = 2.5f;
-	const float GROUND = 500.0f;
-	const float JUMP_HEIGHT = 64.0f * 2.0f;
+	const float GROUND = 580.0f;
+	const float JUMP_HEIGHT = 64.0f * 1.0f;
 	const float GRAVITY = 9.8f / 60.0f;
-
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop)
 {
@@ -117,4 +116,8 @@ void Player::Draw()
 	int y = (int)transform_.position_.y;
 	
 	DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+}
+
+void Player::SetPosition(int x, int y)
+{
 }

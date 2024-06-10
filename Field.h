@@ -11,6 +11,10 @@ public:
 	~Field();
 	void Update() override;
 	void Draw() override;
+
+	int CollisionRight(int x, int y);
+	int CollisionDown(int x, int y);
 private:
 	int hImage;
+
 };
