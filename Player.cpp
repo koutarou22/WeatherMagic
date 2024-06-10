@@ -43,7 +43,7 @@ void Player::Update()
 		if (flameCounter);
 	}
 
-	if (CheckHitKey(KEY_INPUT_D))
+	if (CheckHitKey(KEY_INPUT_D)|| CheckHitKey(KEY_INPUT_RIGHT))
 	{
 		transform_.position_.x += MOVE_SPEED;
 		if (++flameCounter >= 8)
@@ -52,7 +52,7 @@ void Player::Update()
 			flameCounter = 0;
 		}
 	}
-	else if (CheckHitKey(KEY_INPUT_A))
+	else if (CheckHitKey(KEY_INPUT_A)|| CheckHitKey(KEY_INPUT_LEFT))
 	{
 		transform_.position_.x -= MOVE_SPEED;
 		if (++flameCounter >= 8)
