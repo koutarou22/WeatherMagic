@@ -14,6 +14,9 @@
     <Filter Include="01Engine\ResourceManager">
       <UniqueIdentifier>{bedee914-5063-4c08-95bb-79c861b4969c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Chara">
+      <UniqueIdentifier>{80b1a4ab-64ad-438b-9086-cda56f153863}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\GameObject.cpp">
@@ -35,10 +38,17 @@
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="TestScene.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Stone.cpp" />
-    <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Bird.cpp">
+      <Filter>リソース ファイル\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>リソース ファイル\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>リソース ファイル\Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GameObject.h">
@@ -60,9 +70,16 @@
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="TestScene.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Stone.h" />
-    <ClInclude Include="Bird.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Bird.h">
+      <Filter>リソース ファイル\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>リソース ファイル\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
+      <Filter>リソース ファイル\Chara</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

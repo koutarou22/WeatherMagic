@@ -1,15 +1,14 @@
-#include "Bird.h"
-#include <assert.h>
+#include "Slime.h"
 
-Bird::Bird(GameObject* scene)
+Slime::Slime(GameObject* scene)
 {
-	hImage = LoadGraph("Assets/bird.png");
+	hImage = LoadGraph("Assets/slime.png");
 	assert(hImage > 0);
 	transform_.position_.x = 800.0f;
 	transform_.position_.y = 580.0f;
 }
 
-Bird::~Bird()
+Slime::~Slime()
 {
 	if (hImage > 0)
 	{
@@ -17,11 +16,11 @@ Bird::~Bird()
 	}
 }
 
-void Bird::Update()
+void Slime::Update()
 {
 }
 
-void Bird::Draw()
+void Slime::Draw()
 {
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;

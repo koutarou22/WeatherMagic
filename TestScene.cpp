@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Bird.h"
 #include "Field.h"
+#include "Slime.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -15,6 +16,7 @@ void TestScene::Initialize()
 	Instantiate<Field>(this);
 	Instantiate<Player>(this);
 	Instantiate<Bird>(this);
+	Instantiate<Slime>(this);
 }
 
 //更新
