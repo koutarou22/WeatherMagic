@@ -1,5 +1,6 @@
 #include "Field.h"
 #include <assert.h>
+#include "Engine/CsvReader.h"
 //#include "Camera.h"
 #include"Player.h"
 #include "Bird.h"
@@ -8,8 +9,6 @@ namespace
 	const int WIDTH = 112;
 	const int HEIGHT = 22;
 };
-
-
 
 const int Map[HEIGHT][WIDTH] = {
 {18,19,255,255,18,19,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255},
@@ -38,7 +37,7 @@ const int Map[HEIGHT][WIDTH] = {
 
 Field::Field(GameObject* scene)
 {
-	hImage = LoadGraph("Assets/bgchar.png");
+	hImage = LoadGraph("Assets/tilemap.png");
 	assert(hImage > 0);
 
 	for (int h = 0; h < HEIGHT; h++)
