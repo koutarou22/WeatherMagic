@@ -38,6 +38,11 @@ const int Map[HEIGHT][WIDTH] = {
 
 Field::Field(GameObject* scene)
 {
+	CsvReader csv;
+	bool ret = csv.Load("Assets/stage1.csv");
+	assert(ret);
+
+
 	hImage = LoadGraph("Assets/tilemap.png");
 	assert(hImage > 0);
 

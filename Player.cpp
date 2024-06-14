@@ -1,7 +1,8 @@
-#include "Player.h"
 #include <DxLib.h>
 #include <assert.h>
-#include"Stone.h"
+#include "Player.h"
+#include "Stone.h"
+#include "Camera.h"
 #include "Bird.h"
 #include "Field.h"
 
@@ -107,14 +108,21 @@ void Player::Update()
 		Stone* st = Instantiate<Stone>(GetParent());
 		st->SetPosition(transform_.position_);
 	}
-
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	cam->SetValue(cam->GetValue() + 2 );
 }
 
 void Player::Draw()
 {
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
-	
+
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr)
+	{
+		x += cam->GetValue();
+	}
+
 	DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 }
 
