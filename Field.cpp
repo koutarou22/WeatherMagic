@@ -4,6 +4,7 @@
 //#include "Camera.h"
 #include"Player.h"
 #include "Bird.h"
+#include "Camera.h"
 namespace
 {
 	const int WIDTH = 112;
@@ -83,17 +84,24 @@ void Field::Update()
 
 void Field::Draw()
 {
-	int scrool = 0;
-	//Camera* cam = GetOarent()->FinedGameObjuct<Field>()
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr)
+	{
+		int scroll = cam->GetValue(); // カメラのスクロール値を取得
+
 		for (int y = 0; y < HEIGHT; y++)
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
 				int chip = Map[y][x];
-				DrawRectGraph(x * 32, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage, TRUE);
-	
+				if (chip != 255) // 空のタイルは描画しない
+				{
+					// スクロール値を適用して背景タイルを描画
+					DrawRectGraph((x * 32) - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage, TRUE);
+				}
 			}
 		}
+	}
 }
 
 int Field::CollisionRight(int x, int y)

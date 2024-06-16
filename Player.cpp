@@ -109,7 +109,10 @@ void Player::Update()
 		st->SetPosition(transform_.position_);
 	}
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-	cam->SetValue(cam->GetValue() + 2 );
+	
+	if (cam != nullptr) {
+		cam->GetPlayerPos(this);
+	}
 }
 
 void Player::Draw()
@@ -118,9 +121,8 @@ void Player::Draw()
 	int y = (int)transform_.position_.y;
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-	if (cam != nullptr)
-	{
-		x += cam->GetValue();
+	if (cam != nullptr) {
+		x -= cam->GetValue(); // カメラの値を減算してプレイヤーの位置を調整
 	}
 
 	DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
