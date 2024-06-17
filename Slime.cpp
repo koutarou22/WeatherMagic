@@ -1,6 +1,13 @@
 #include "Slime.h"
 #include "Camera.h"
 
+namespace
+{
+	const float MOVE_SPEED = 2.5f;
+	const float GROUND = 590.0f;
+	const float JUMP_HEIGHT = 64.0f * 1.0f;
+	const float GRAVITY = 9.8f / 60.0f;
+};
 Slime::Slime(GameObject* scene)
 {
 	hImage = LoadGraph("Assets/slime.png");
@@ -19,8 +26,38 @@ Slime::~Slime()
 
 void Slime::Update()
 {
-	Camera* cam = GetParent()->FindGameObject<Camera>();
-	cam->SetValue(cam->GetValue() - 0.5);
+	if (CheckHitKey(KEY_INPUT_SPACE))
+	{
+		//PictFlame = 80;
+
+		//animFrame = (animFrame + 1) % 4;
+		if (prevSpaceKey == false)
+		{
+			if (onGround)
+			{
+				
+				Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
+				onGround = false;
+				
+			}
+		}
+		prevSpaceKey = true;
+	}
+	else
+	{
+		prevSpaceKey = false;
+	}
+
+	Jump_P += GRAVITY; //速度 += 加速度
+	transform_.position_.y -= Jump_P; //座標 += 速度
+	transform_.position_.x -= Jump_P;
+	if (transform_.position_.y >= GROUND)//地面についたら速度を元に戻す、戻さないと貫通する恐れあり
+	{
+		transform_.position_.y = GROUND;
+		Jump_P = 0.0f;
+		onGround = true;
+	}
+
 }
 
 void Slime::Draw()

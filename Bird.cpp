@@ -3,8 +3,8 @@
 
 Bird::Bird(GameObject* scene)
 {
-	hImage = LoadGraph("Assets/bird.png");
-	assert(hImage > 0);
+	//hImage = LoadGraph("Assets/bird.png");
+	//assert(hImage > 0);
 	transform_.position_.x = 800.0f;
 	transform_.position_.y = 580.0f;
 }
@@ -25,5 +25,5 @@ void Bird::Draw()
 {
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
-	DrawRectGraph(x, y, 0, 0, 64, 64, hImage, TRUE);
+	//DrawRectGraph(x, y, 0, 0, 64, 64, hImage, TRUE);
 }
