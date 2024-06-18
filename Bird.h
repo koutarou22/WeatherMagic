@@ -11,6 +11,7 @@ public:
 	~Bird();
 	void Update() override;
 	void Draw() override;
+	void SetPosition(int x, int y);
 private:
 	int hImage;
 };

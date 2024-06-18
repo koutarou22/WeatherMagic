@@ -10,7 +10,7 @@ namespace
 {
 	const float MOVE_SPEED = 2.5f;
 	const float GROUND = 580.0f;
-	const float JUMP_HEIGHT = 64.0f * 1.0f;
+	const float JUMP_HEIGHT = 64.0f *4.0f;
 	const float GRAVITY = 9.8f / 60.0f;
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop)
@@ -51,6 +51,15 @@ void Player::Update()
 			animFrame = (animFrame + 1) % 4;//if•¶‚ðŽg‚í‚È‚¢Å“K‰ð
 			flameCounter = 0;
 		}
+		int hitX = transform_.position_.x + 50;
+		int hitY = transform_.position_.y + 63;
+
+		if (pField != nullptr)
+		{
+			int push = pField->CollisionRight(hitX, hitY);
+			transform_.position_.x -= push;
+		}
+
 	}
 	else if (CheckHitKey(KEY_INPUT_A)|| CheckHitKey(KEY_INPUT_LEFT))
 	{
