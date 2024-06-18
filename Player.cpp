@@ -51,14 +51,14 @@ void Player::Update()
 			animFrame = (animFrame + 1) % 4;//if•¶‚ðŽg‚í‚È‚¢Å“K‰ð
 			flameCounter = 0;
 		}
-		int hitX = transform_.position_.x + 50;
+		int hitX = transform_.position_.x + 43;
 		int hitY = transform_.position_.y + 63;
 
-		if (pField != nullptr)
+		/*if (pField != nullptr)
 		{
 			int push = pField->CollisionRight(hitX, hitY);
 			transform_.position_.x -= push;
-		}
+		}*/
 
 	}
 	else if (CheckHitKey(KEY_INPUT_A)|| CheckHitKey(KEY_INPUT_LEFT))
