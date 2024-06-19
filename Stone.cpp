@@ -17,6 +17,7 @@ Stone::~Stone()
 
 void Stone::Update()
 {
+	transform_.position_.x += 1.0;
 	if (--timer <= 0)
 	{
 		KillMe();

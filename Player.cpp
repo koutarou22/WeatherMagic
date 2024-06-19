@@ -8,10 +8,12 @@
 
 namespace
 {
-	const float MOVE_SPEED = 2.5f;
-	const float GROUND = 580.0f;
-	const float JUMP_HEIGHT = 64.0f *4.0f;
+	const float MOVE_SPEED = 4.5f;
+	const float GROUND = 600.0f;
+	const float JUMP_HEIGHT = 64.0f * 3.0f;
 	const float GRAVITY = 9.8f / 60.0f;
+
+	int DebugPush;
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop)
 {
@@ -51,15 +53,16 @@ void Player::Update()
 			animFrame = (animFrame + 1) % 4;//if文を使わない最適解
 			flameCounter = 0;
 		}
-		int hitX = transform_.position_.x + 43;
+		int hitX = transform_.position_.x + 50;
 		int hitY = transform_.position_.y + 63;
 
-		/*if (pField != nullptr)
+		if (pField != nullptr)
 		{
 			int push = pField->CollisionRight(hitX, hitY);
-			transform_.position_.x -= push;
-		}*/
 
+			DebugPush = push;
+			transform_.position_.x -= push;
+		}
 	}
 	else if (CheckHitKey(KEY_INPUT_A)|| CheckHitKey(KEY_INPUT_LEFT))
 	{
@@ -69,7 +72,16 @@ void Player::Update()
 			animFrame = (animFrame + 1) % 4;//if文を使わない最適解
 			flameCounter = 0;
 		}
+		int hitX = transform_.position_.x + 50;
+		int hitY = transform_.position_.y + 63;
 
+		if (pField != nullptr)
+		{
+			int push = pField->CollisionRight(hitX, hitY);
+
+			DebugPush = push;
+			transform_.position_.x -= DebugPush;
+		}
 	}
 	else
 	{
@@ -103,12 +115,29 @@ void Player::Update()
 	Jump_P += GRAVITY; //速度 += 加速度
 	transform_.position_.y += Jump_P; //座標 += 速度
 
-	if (transform_.position_.y >= GROUND)//地面についたら速度を元に戻す、戻さないと貫通する恐れあり
+
+	if (pField != nullptr)
 	{
-		transform_.position_.y = GROUND;
-		Jump_P = 0.0f;
-		onGround = true;
+		int pushR = pField->CollisionDown(transform_.position_.x + 50, transform_.position_.y + 63);
+		int pushL = pField->CollisionDown(transform_.position_.x + 14, transform_.position_.y + 63);
+		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
+		if (push >= 1) {
+			transform_.position_.y -= push - 1;
+			Jump_P = 0.0f;
+			onGround = true;
+		}
+		else {
+			onGround = false;
+		}
+
 	}
+	//拡張性はない
+	//if (transform_.position_.y >= GROUND)//地面についたら速度を元に戻す、戻さないと貫通する恐れあり
+	//{
+	//	transform_.position_.y = GROUND;
+	//	Jump_P = 0.0f;
+	//	onGround = true;
+	//}
 
 	//------------------------------------------------------------------------------------------
 
@@ -131,12 +160,18 @@ void Player::Draw()
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr) {
-		x -= cam->GetValue(); // カメラの値を減算してプレイヤーの位置を調整
+		x -= cam->GetValue(); 
 	}
 
 	DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+	// プレイヤーの座標を画面に表示
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
+	DrawFormatString(0, 20, GetColor(255, 255, 255), "Pushされた値: %d", DebugPush);
+	
 }
 
 void Player::SetPosition(int x, int y)
 {
+	transform_.position_.x = x;
+	transform_.position_.y = y;
 }

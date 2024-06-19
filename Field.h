@@ -26,11 +26,11 @@ public:
 	/// <param name="y">Y座標</param>
 	/// <returns>めり込んだ量（ドット）</returns>
 	int CollisionDown(int x, int y);
-	
+	bool IsWallBlock(int x, int y);
+
 private:
 	int hImage;
 	int hBackGround;
-	bool IsWallBlock(int x, int y);
 	
 	int* Map;
 	int width;
