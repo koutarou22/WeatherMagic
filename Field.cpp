@@ -120,6 +120,24 @@ int Field::CollisionDown(int x, int y)
     return 0;
 }
 
+int Field::CollisionLeft(int x, int y)
+{
+	if (IsWallBlock(x - 1, y))
+	{
+		return 32 - (x % 32);
+	}
+	return 0;
+}
+
+int Field::CollisionUp(int x, int y)
+{
+	if (IsWallBlock(x, y-1))
+	{
+		return 32 - (y % 32);
+	}
+	return 0;
+}
+
 bool Field::IsWallBlock(int x, int y)
 {
 	int chipX = x / 32;

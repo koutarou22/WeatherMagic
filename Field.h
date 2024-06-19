@@ -12,6 +12,7 @@ public:
 	void Reset();
 	void Update() override;
 	void Draw() override;
+
 	/// <summary>
 	/// 右側の点が当たっているか調べる
 	/// </summary>
@@ -26,6 +27,21 @@ public:
 	/// <param name="y">Y座標</param>
 	/// <returns>めり込んだ量（ドット）</returns>
 	int CollisionDown(int x, int y);
+	/// <summary>
+	/// 左の点が当たっているか調べる
+	/// </summary>
+	/// <param name="x">x座標</param>
+	/// <param name="y">y座標</param>
+	/// <returns>めり込んだ量</returns>
+	int CollisionLeft(int x, int y);
+
+	/// <summary>
+	/// 上の点があたっているか調べる
+	/// </summary>
+	/// <param name="x">x座標</param>
+	/// <param name="y">y座標</param>
+	/// <returns>めり込んだ量</returns>
+	int CollisionUp(int x, int y);
 	bool IsWallBlock(int x, int y);
 
 private:

@@ -13,6 +13,11 @@ namespace
 	const float JUMP_HEIGHT = 64.0f * 3.0f;
 	const float GRAVITY = 9.8f / 60.0f;
 
+	int hitX;
+	int hitY;
+
+	
+
 	int DebugPush;
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop)
@@ -53,8 +58,8 @@ void Player::Update()
 			animFrame = (animFrame + 1) % 4;//if文を使わない最適解
 			flameCounter = 0;
 		}
-		int hitX = transform_.position_.x + 50;
-		int hitY = transform_.position_.y + 63;
+	    hitX = transform_.position_.x + 50;
+	    hitY = transform_.position_.y + 63;
 
 		if (pField != nullptr)
 		{
@@ -72,15 +77,13 @@ void Player::Update()
 			animFrame = (animFrame + 1) % 4;//if文を使わない最適解
 			flameCounter = 0;
 		}
-		int hitX = transform_.position_.x + 50;
-		int hitY = transform_.position_.y + 63;
 
+		hitX = transform_.position_.x;
+	    hitY = transform_.position_.y + 63; // プレイヤーの足元のY座標
 		if (pField != nullptr)
 		{
-			int push = pField->CollisionRight(hitX, hitY);
-
-			DebugPush = push;
-			transform_.position_.x -= DebugPush;
+			int push = pField->CollisionLeft(hitX, hitY);
+			transform_.position_.x += push; 
 		}
 	}
 	else
@@ -102,6 +105,7 @@ void Player::Update()
 				Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
 				onGround = false;
 			}
+			
 		}
 		prevSpaceKey = true;
 	}
@@ -115,6 +119,17 @@ void Player::Update()
 	Jump_P += GRAVITY; //速度 += 加速度
 	transform_.position_.y += Jump_P; //座標 += 速度
 
+	if (!onGround && pField != nullptr)
+	{
+		hitX = transform_.position_.x + 32;
+		hitY = transform_.position_.y;
+
+		int push = pField->CollisionUp(hitX, hitY);
+		if (push > 0) {
+			Jump_P = 0.0f;
+			transform_.position_.y += push;
+		}
+	}
 
 	if (pField != nullptr)
 	{
