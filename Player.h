@@ -1,17 +1,23 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Weather.h"
 
 /// <summary>
 /// プレイヤーキャラ
 /// </summary>
+/// 
 class Player : public GameObject
 {
 public:
+
+
 	Player(GameObject* scene);
 	~Player();
 	void Update() override;
 	void Draw() override;
 	void SetPosition(int x, int y);
+
+	void WeatherEffects(Weather* weather);
 	
 private:
 	int hImage;
@@ -26,7 +32,7 @@ private:
 	int PictFlame;
 	int flameCounter;
 
-
+	float WeatherSpeed_;//MOVE_SPEEDとWeatherの値を合わせ格納する用の変数
 	enum State
 	{
 		S_WaIk = 0,

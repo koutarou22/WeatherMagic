@@ -11,7 +11,11 @@ public:
 	~Bird();
 	void Update() override;
 	void Draw() override;
+	//‰~‚Ì“–‚½‚è”»’è‚ð‚·‚é
 	void SetPosition(int x, int y);
+	bool ColliderCircle(float x, float y, float r);
+
 private:
+	float sinAngle;
 	int hImage;
 };

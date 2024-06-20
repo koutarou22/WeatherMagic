@@ -142,6 +142,8 @@
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Stone.cpp" />
     <ClCompile Include="TestScene.cpp" />
+    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Weather.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bird.h" />
@@ -157,6 +159,8 @@
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Stone.h" />
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="Time.h" />
+    <ClInclude Include="Weather.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

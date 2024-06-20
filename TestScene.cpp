@@ -19,6 +19,7 @@ void TestScene::Initialize()
 	Instantiate<Player>(this);
 	Instantiate<Bird>(this);
 	Instantiate<Slime>(this);
+	Instantiate<Weather>(this);
 }
 
 //XV

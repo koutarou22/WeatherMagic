@@ -17,6 +17,12 @@
     <Filter Include="リソース ファイル\Chara">
       <UniqueIdentifier>{80b1a4ab-64ad-438b-9086-cda56f153863}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Stage">
+      <UniqueIdentifier>{0389b8f6-4874-4cc9-9160-8cb6a22caf84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Gimc">
+      <UniqueIdentifier>{c7b3dc85-2ff9-4b09-ba10-7513d9e6eed1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\GameObject.cpp">
@@ -38,8 +44,6 @@
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="TestScene.cpp" />
-    <ClCompile Include="Stone.cpp" />
-    <ClCompile Include="Field.cpp" />
     <ClCompile Include="Bird.cpp">
       <Filter>リソース ファイル\Chara</Filter>
     </ClCompile>
@@ -48,6 +52,19 @@
     </ClCompile>
     <ClCompile Include="Slime.cpp">
       <Filter>リソース ファイル\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Camera.cpp">
+      <Filter>リソース ファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Field.cpp">
+      <Filter>リソース ファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Weather.cpp">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClCompile>
+    <ClCompile Include="Stone.cpp">
+      <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,8 +87,6 @@
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="TestScene.h" />
-    <ClInclude Include="Stone.h" />
-    <ClInclude Include="Field.h" />
     <ClInclude Include="Bird.h">
       <Filter>リソース ファイル\Chara</Filter>
     </ClInclude>
@@ -81,6 +96,18 @@
     <ClInclude Include="Slime.h">
       <Filter>リソース ファイル\Chara</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Time.h" />
+    <ClInclude Include="Camera.h">
+      <Filter>リソース ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Field.h">
+      <Filter>リソース ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Weather.h">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClInclude>
+    <ClInclude Include="Stone.h">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

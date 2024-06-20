@@ -17,6 +17,7 @@ private:
 	bool onGround;//ínñ Ç…Ç¢ÇÈÇÃÇ©ÅH
 
 	float Jump_P = 0.0f;
+	float sinAngle;
 
 };
 
