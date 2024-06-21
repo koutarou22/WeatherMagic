@@ -5,17 +5,21 @@
 namespace
 {
 	const float MOVE_SPEED = 2.5f;
-	const float GROUND = 590.0f;
+	/*const float GROUND = 595.0f;*/
 	const float JUMP_HEIGHT = 64.0f * 1.0f;
 	const float GRAVITY = 9.8f / 60.0f;
-	float horizontalSpeed;
+
+	int hitX = 0;
+	int hitY = 0;
+
+	int direction = 1;
 };
 Slime::Slime(GameObject* scene)
 {
 	hImage = LoadGraph("Assets/slime.png");
 	assert(hImage > 0);
 	transform_.position_.x = 800.0f;
-	transform_.position_.y = 590.0f;
+	transform_.position_.y = 400.0f;
 }
 
 Slime::~Slime()
@@ -29,16 +33,66 @@ Slime::~Slime()
 void Slime::Update()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
+	Weather* pWeather = GetParent()->FindGameObject<Weather>();
+
+	if (pWeather != nullptr)
+	{
+		WeatherEffects(pWeather); // 天候関数を呼び出す
+	}
+
+	transform_.position_.x -= WeatherSpeed_ * direction;
+
+	if (pField != nullptr)
+	{
+		if (pField->CollisionLeft(hitX,hitY) && direction == -1)
+		{
+			direction = 1;
+		}
+		else if (pField->CollisionRight(hitX, hitY) && direction == 1)
+		{
+			direction = -1;
+		}
+	}
+
+	//---------------衝突判定(左)--------------------------------
+	hitX = transform_.position_.x;
+	hitY = transform_.position_.y + 54; 
+	if (pField != nullptr)
+	{
+		int push = pField->CollisionLeft(hitX, hitY);
+		transform_.position_.x += push;
+
+		if (pField->CollisionLeft(hitX, hitY) && direction == -1)
+		{
+			direction = 1;
+		}
+	}
+	//-----------------------------------------------------------
+
+	//---------------衝突判定(右)--------------------------------
+	hitX = transform_.position_.x + 50;
+	hitY = transform_.position_.y + 54;
+
+	if (pField != nullptr)
+	{
+		int push = pField->CollisionRight(hitX, 0);
+		transform_.position_.x -= push;
+
+		if (pField->CollisionRight(hitX, hitY) && direction == 1)
+		{
+			direction = -1;
+		}
+	}
+	//----------------------------------------------------------
+
 	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
+		
 		if (prevSpaceKey == false)
 		{
 			if (onGround)
 			{
-				// 水平方向の初速度を設定
-				horizontalSpeed = MOVE_SPEED;
-				// ジャンプ開始時の角度を0にリセット
-				sinAngle = 0.0f;
+				Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
 				onGround = false;
 			}
 		}
@@ -49,43 +103,30 @@ void Slime::Update()
 		prevSpaceKey = false;
 	}
 
-	// ジャンプ中の場合、サイン関数を使用してY座標を更新
-	if (!onGround)
-	{
-		// サイン関数によるY座標の計算
-		float sinValue = sinf(sinAngle * DX_PI_F / -180.0f);
-		transform_.position_.y = 500.0f + sinValue * 50.0f;
-		// 角度を増加させることで、サイン関数の値を変化させる
-		sinAngle += 3.0f;
-		// 水平方向の座標の更新
-		transform_.position_.x += horizontalSpeed;
-	}
-
-	// 地面との衝突判定
-	if (pField != nullptr)
-	{
-		int pushR = pField->CollisionDown(transform_.position_.x + 50, transform_.position_.y + 63);
-		int pushL = pField->CollisionDown(transform_.position_.x + 14, transform_.position_.y + 63);
-		int push = max(pushR, pushL);
-		if (push >= 1) {
-			transform_.position_.y -= push - 1;
-			onGround = true;
-			// 地面に着地したら水平方向の速度をリセット
-			horizontalSpeed = 0.0f;
-		}
-		else {
-			onGround = false;
-		}
-	}
+	//-------------------+++加速のプログラムは基礎の基礎+++-------------------
 
 	Jump_P += GRAVITY; //速度 += 加速度
 	transform_.position_.y += Jump_P; //座標 += 速度
 
+	//---------------衝突判定(上)--------------------------------
+	if (!onGround && pField != nullptr)
+	{
+		hitX = transform_.position_.x + 32;
+		hitY = transform_.position_.y;
 
+		int push = pField->CollisionUp(hitX, hitY);
+		if (push > 0) {
+			Jump_P = 0.0f;
+			transform_.position_.y += push;
+		}
+	}
+	//-----------------------------------------------------------
+
+	//---------------衝突判定(下)--------------------------------
 	if (pField != nullptr)
 	{
-		int pushR = pField->CollisionDown(transform_.position_.x + 50, transform_.position_.y + 63);
-		int pushL = pField->CollisionDown(transform_.position_.x + 14, transform_.position_.y + 63);
+		int pushR = pField->CollisionDown(transform_.position_.x + 50, transform_.position_.y + 54);
+		int pushL = pField->CollisionDown(transform_.position_.x + 14, transform_.position_.y + 54);
 		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
 		if (push >= 1) {
 			transform_.position_.y -= push - 1;
@@ -95,8 +136,8 @@ void Slime::Update()
 		else {
 			onGround = false;
 		}
-
 	}
+	//-----------------------------------------------------------
 
 }
 
@@ -111,4 +152,26 @@ void Slime::Draw()
 		x -= cam->GetValue();
 	}
 	DrawRectGraph(x, y, 0, 0, 64, 64, hImage, TRUE);
+	DrawFormatString(0, 90, GetColor(255, 255, 255), "スライムがぶつかった時: %d", direction);
+	
+}
+
+void Slime::WeatherEffects(Weather* weather)
+{
+	WeatherState WeatherState = weather->GetWeatherState();
+	float WeatherEffect = weather->GetWeatherChange();
+
+	if (WeatherState == Rainy)
+	{
+		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); // 雨の日は速度を減少させる
+		/*RainHappening_ = transform_.rotate_.x += 2.0f;
+		RainHappening_ = transform_.rotate_.y += 2.0f;*/
+
+		//transform_.scale_.x *= 1.0f + WeatherEffect; // x方向のスケールを増加
+		//transform_.scale_.y *= 1.0f + WeatherEffect; // y方向のスケールを増加
+	}
+	else
+	{
+		WeatherSpeed_ = MOVE_SPEED; // 通常の速度
+	}
 }

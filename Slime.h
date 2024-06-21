@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Player.h"
+#include "Weather.h"
 /// <summary>
 /// ƒXƒ‰ƒCƒ€
 /// </summary>
@@ -11,6 +12,8 @@ public:
 	~Slime();
 	void Update() override;
 	void Draw() override;
+
+	void WeatherEffects(Weather* weather);
 private:
 	int hImage;
 	bool prevSpaceKey;
@@ -18,6 +21,9 @@ private:
 
 	float Jump_P = 0.0f;
 	float sinAngle;
+
+	float WeatherSpeed_;
+	float RainHappening_;
 
 };
 

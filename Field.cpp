@@ -36,7 +36,7 @@ void Field::Reset()
 	assert(ret);
 
 	width = csv.GetWidth(0);
-	height = 22;  //csv.GetHeight();
+	height =csv.GetHeight();
 	Map = new int[width * height];
 
 	for (int h = 0; h < height; h++)
@@ -96,6 +96,9 @@ void Field::Draw()
 				{
 					// スクロール値を適用して背景タイルを描画
 					DrawRectGraph((x * 32) - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage, TRUE);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128); // 半透明に設定
+					DrawBox((x * 32) - scroll, y * 32, (x * 32 + 32) - scroll, y * 32 + 32, GetColor(255, 0, 0), TRUE); // 当たり判定の領域を赤色で描画
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 透明度を元に戻す
 				}
 			}
 		}
@@ -155,5 +158,6 @@ bool Field::IsWallBlock(int x, int y)
 		 return true;
 		 break;
 	};
+
 	return false;
 }
