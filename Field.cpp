@@ -4,22 +4,35 @@
 #include "Bird.h"
 #include "Camera.h"
 #include "Engine/CsvReader.h"
+#include "Slime.h"
 
 
 //switch文のcaseの数字はcsv内の値を示している
 Field::Field(GameObject* scene) :GameObject(scene)
 {
-	hImage = LoadGraph("Assets/bgchar.png");
-	assert(hImage > 0);
+	Map = nullptr;//まずここでMapでnullいれとく
+	hImage_ = LoadGraph("Assets/bgchar.png");
+	assert(hImage_ > 0);
+
+	hBackGround_ = LoadGraph("Assets/bg4.png");
+	assert(hBackGround_ > 0);
 
 	Reset();
 }
 
 Field::~Field()
 {
-	if (hImage > 0)
+	if (hImage_ > 0)
 	{
-		DeleteGraph(hImage);
+		DeleteGraph(hImage_);
+	}
+	if (hBackGround_ > 0)
+	{
+		DeleteGraph(hBackGround_);
+	}
+	if (Map != nullptr)
+	{
+		delete[] Map;//Mapは動的配列なので[]をつける
 	}
 }
 
@@ -32,47 +45,55 @@ void Field::Reset()
 	}
 
 	CsvReader csv;
-	bool ret = csv.Load("Assets/stage1.csv");
+	bool ret = csv.Load("Assets/stage6.csv");
 	assert(ret);
 
-	width = csv.GetWidth(0);
-	height =csv.GetHeight();
+	width = csv.GetWidth();
+	height = 22/*csv.GetHeight()*/;
 	Map = new int[width * height];
 
-	for (int h = 0; h < height; h++)
-	{
-		if (csv.GetString(0, h) == "")
-		{
-			height = h;
-			break;
-		}
-		for (int w = 0; w < width; w++)
-		{
-			Map[h * width + w] = csv.GetInt(w,h);
-		}
-	}
+	//for (int h = 0; h < height; h++)
+	//{
+	//	if (csv.GetString(0, h) == "")
+	//	{
+	//		height = h;
+	//		break;
+	//	}
+	//	for (int w = 0; w < width; w++)
+	//	{
+	//		Map[h * width + w] = csv.GetInt(w,h);
+	//	}
+	//}
 
-	for (int h = 0; h < height; h++)
-    {
-		for (int w = 0; w < width; w++)
-		{
-			switch (csv.GetInt(w, h + height + 1))
+	for (int h = 0; h < height; h++) {
+		for (int w = 0; w < width; w++) {
+			switch (csv.GetInt(w, h/* + height + 1*/))
 			{
 			case 0:
 			{
-				Player * pPlayer = GetParent()->FindGameObject<Player>();
+				Player* pPlayer = GetParent()->FindGameObject<Player>();
 				pPlayer->SetPosition(w * 32, h * 32);
 			}
-				break;
+			break;
 			case 1:
 			{
 				Bird* pBird = Instantiate<Bird>(GetParent());
 				pBird->SetPosition(w * 32, h * 32);
 			}
-		    break;
+			break;
+			case 2:
+			{
+				Slime* pSlime = Instantiate<Slime>(GetParent());
+				pSlime->SetPosition(w * 32, h * 32);
 			}
+			break;
+			default:
+				break;
+			}
+			Map[h * width + w] = csv.GetValue(w, h);
 		}
 	}
+
 }	
 
 void Field::Update()
@@ -82,27 +103,26 @@ void Field::Update()
 
 void Field::Draw()
 {
+	
+	int screenWidth, screenHeight, colorBitDepth;
+	GetScreenState(&screenWidth, &screenHeight, &colorBitDepth);
+
+	// 画面全体に背景画像を描画
+	DrawExtendGraph(0, 0, screenWidth, screenHeight, hBackGround_, FALSE); 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr)
 	{
-		int scroll = cam->GetValue(); // カメラのスクロール値を取得
-
+	    scroll = cam->GetValue(); // カメラのスクロール値を取得
+	}
 		for (int y = 0; y < height; y++)
 		{
 			for (int x = 0; x < width; x++)
 			{
 				int chip = Map[y * width + x];
-				if (chip != 255) // 空のタイルは描画しない
-				{
-					// スクロール値を適用して背景タイルを描画
-					DrawRectGraph((x * 32) - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage, TRUE);
-					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128); // 半透明に設定
-					DrawBox((x * 32) - scroll, y * 32, (x * 32 + 32) - scroll, y * 32 + 32, GetColor(255, 0, 0), TRUE); // 当たり判定の領域を赤色で描画
-					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // 透明度を元に戻す
-				}
+		    	DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);//0
 			}
 		}
-	}
+	
 }
 
 int Field::CollisionRight(int x, int y)
@@ -156,7 +176,7 @@ bool Field::IsWallBlock(int x, int y)
 	 case 34:
 	 case 35:
 		 return true;
-		 break;
+		 
 	};
 
 	return false;

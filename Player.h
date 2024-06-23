@@ -18,10 +18,12 @@ public:
 	void SetPosition(int x, int y);
 
 	void WeatherEffects(Weather* weather);
-	
+	void Jump();
+	int GetHp();
 private:
 	int hImage;
 	GameObject* sceneTop;
+
 	bool prevSpaceKey;
 	bool onGround;//地面にいるのか？
 
@@ -32,7 +34,13 @@ private:
 	int PictFlame;
 	int flameCounter;
 
+	float NDTIME_; //無敵時間
+	int Hp_ = 3;
+	int hitCount;
+
 	float WeatherSpeed_;//MOVE_SPEEDとWeatherの値を合わせ格納する用の変数
+	bool  WeatherSwitch;//高速で天候が切り替わらないようにする対策
+
 	enum State
 	{
 		S_WaIk = 0,

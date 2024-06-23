@@ -1,20 +1,39 @@
 #include "Weather.h"
 
-void Weather::Update() 
+void Weather::Initialize()
+{
+    hImage_Sunny = LoadGraph("Assets/Sky.png");
+    assert(hImage_Sunny > 0);
+    hImage_Rainy = LoadGraph("Assets/Rain.png");
+    assert(hImage_Rainy > 0);
+}
+
+void Weather::Update()
 {
 
 }
 
-void Weather::Draw() {
+void Weather::Draw() 
+{
+    int alpha = 24;  // 透明度を半分に設定
+
+    SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+
     // 天候に応じた描画処理
-    switch (weather_) {
+    switch (weather_) 
+    {
     case Sunny:
         DrawFormatString(500, 10, GetColor(255, 255, 0), "天候: 晴れ 『元気！』");
+        DrawGraph(0, 0, hImage_Sunny, TRUE);  // 晴れ
         break;
     case Rainy:
         DrawFormatString(500, 10, GetColor(255, 255, 0), "天候: 雨　『地面がぬかるむ..』");
+        DrawGraph(0, 0, hImage_Rainy, TRUE);  // 雨
         break;
     }
+
+    // 描画モードを元に戻す
+    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 float Weather::GetWeatherChange()

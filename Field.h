@@ -45,9 +45,9 @@ public:
 	bool IsWallBlock(int x, int y);
 
 private:
-	int hImage;
-	int hBackGround;
-	
+	int hImage_;
+	int hBackGround_;
+	int scroll;
 	int* Map;
 	int width;
 	int height;

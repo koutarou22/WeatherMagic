@@ -23,6 +23,9 @@
     <Filter Include="リソース ファイル\Gimc">
       <UniqueIdentifier>{c7b3dc85-2ff9-4b09-ba10-7513d9e6eed1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\UI">
+      <UniqueIdentifier>{69fc9686-f35e-4aa0-b830-576313ca0d0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\GameObject.cpp">
@@ -66,6 +69,9 @@
     <ClCompile Include="Stone.cpp">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
+    <ClCompile Include="Hp.cpp" />
+    <ClCompile Include="GameOverScene.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GameObject.h">
@@ -109,5 +115,8 @@
     <ClInclude Include="Stone.h">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
+    <ClInclude Include="Hp.h" />
+    <ClInclude Include="GameOverScene.h" />
+    <ClInclude Include="TitleScene.h" />
   </ItemGroup>
 </Project>
