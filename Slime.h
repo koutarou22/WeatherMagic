@@ -33,7 +33,9 @@ private:
 	float WeatherSpeed_;
 	float RainHappening_;
 
-	bool Reverse_;
+	bool Reverse_ = false;
+	int direction = 1;
+
 	
 
 };

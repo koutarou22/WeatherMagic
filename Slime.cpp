@@ -13,8 +13,6 @@ namespace
 	int hitX = 0;
 	int hitY = 0;
 
-	int direction = 1;
-
 };
 Slime::Slime(GameObject* parent, float x, float y): GameObject(parent, "Slime")
 {

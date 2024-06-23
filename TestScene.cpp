@@ -19,7 +19,10 @@ void TestScene::Initialize()
 	Instantiate<Field>(this);
 	Instantiate<Camera>(this);
 	Instantiate<Slime>(this);
-	/*Instantiate<Slime>(this, 100, 200);*/
+	Slime* slime1 = Instantiate<Slime>(this);
+	slime1->SetPosition(3000, 0); // 初期座標 (0,0) を指定
+	Slime* slime2 = Instantiate<Slime>(this);
+	slime2->SetPosition(3400, 200); // 初期座標 (100,200) を指定
 	Instantiate<Hp>(this);
 	Instantiate<Player>(this);
 	
