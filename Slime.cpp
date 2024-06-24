@@ -23,7 +23,7 @@ Slime::Slime(GameObject* scene)
 {
 	hImage = LoadGraph("Assets/slime.png");
 	assert(hImage > 0);
-	transform_.position_.x = 500.0f;
+	transform_.position_.x = 1200.0f;
 	transform_.position_.y = 600.0f;
 	
 }
@@ -166,8 +166,8 @@ void Slime::Draw()
 
     DrawExtendGraph(x, y, x + 64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
 
-	DrawFormatString(0, 90, GetColor(255, 255, 255), "スライムがぶつかった時: %d", direction);
-	DrawCircle(x + 32.0f * transform_.scale_.x, y + 32.0f * transform_.scale_.y, 32.0f * transform_.scale_.x, GetColor(255, 0, 0), FALSE);
+	//DrawFormatString(0, 90, GetColor(255, 255, 255), "スライムがぶつかった時: %d", direction);
+	//DrawCircle(x + 32.0f * transform_.scale_.x, y + 32.0f * transform_.scale_.y, 32.0f * transform_.scale_.x, GetColor(255, 0, 0), FALSE);
 	//DrawBox(rectX, rectY, rectX + rectW, rectY + rectH, GetColor(255, 0, 0), FALSE);
 }
 

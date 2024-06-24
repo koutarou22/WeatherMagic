@@ -15,7 +15,7 @@ namespace
 {
 	const float MOVE_SPEED = 4.5f;
 	const float GROUND = 600.0f;
-	const float JUMP_HEIGHT = 64.0f * 1.5f;
+	const float JUMP_HEIGHT = 64.0f * 1.45f;
 	const float GRAVITY = 9.8f / 60.0f;
 
 	int hitX;
@@ -49,7 +49,7 @@ void Player::Update()
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 
 	if (hp == nullptr) {
-		// HPオブジェクトが見つからない場合のエラーハンドリング...
+		
 		return;
 	}
 
@@ -203,11 +203,11 @@ void Player::Update()
 	//}
 	//------------------------------------------------------------------------------------------
 
-	if (CheckHitKey(KEY_INPUT_M))
+	/*if (CheckHitKey(KEY_INPUT_M))
 	{
 		Stone* st = Instantiate<Stone>(GetParent());
 		st->SetPosition(transform_.position_);
-	}
+	}*/
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 
@@ -247,25 +247,26 @@ void Player::Update()
 					if (Hp_ <= 0)
 					{
 						KillMe();
-						Hp_ = 3; // 念のためリセット
+						//Hp_ = 3; // 念のためリセット
 					}
 					// ダメージを受けたら一定時間無敵になる
 					NDTIME_ = 1.0f; // 1秒間無敵
+					if (transform_.position_.y > GROUND + 200)
+					{
+						KillMe();
+					}
 				}
+				
 			}
 		}
 	}
 
-	if (transform_.position_.y > GROUND +200)
-	{
-		KillMe();
-	}
-
-	if (transform_.position_.y > GROUND || Hp_ <= 0)
+	if (transform_.position_.y > GROUND || Hp_ == 0)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
 	}
+
 }
 
 void Player::Draw()
@@ -282,9 +283,10 @@ void Player::Draw()
     DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 	
 	// プレイヤーの座標を画面に表示
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
-	DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
+	//DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
+//	DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
+	//DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
+	DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
 }
 
 void Player::SetPosition(int x, int y)
