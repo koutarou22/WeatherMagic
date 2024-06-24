@@ -23,7 +23,7 @@ namespace
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop),WeatherSpeed_(MOVE_SPEED),Hp_(3), NDTIME_(1.0f)
 {
-	hImage = LoadGraph("Assets/aoi.png");
+	hImage = LoadGraph("Assets/magic.png");
 	assert(hImage > 0);
 	transform_.position_.x = 100.0f;
 	transform_.position_.y = GROUND;
@@ -58,20 +58,20 @@ void Player::Update()
 		WeatherEffects(pWeather); // 天候関数を呼び出す
 	}
 
-	if (state == S_Cry)
+	/*if (state == S_Cry)
 	{
 		flameCounter++;
 		if (flameCounter);
-	}
+	}*/
 
 	if (CheckHitKey(KEY_INPUT_D) || CheckHitKey(KEY_INPUT_RIGHT))
 	{
 		transform_.position_.x += WeatherSpeed_;
-		if (++flameCounter >= 8)
-		{
-			animFrame = (animFrame + 1) % 4;//if文を使わない最適解
-			flameCounter = 0;
-		}
+		//if (++flameCounter >= 8)
+		//{
+		//	animFrame = (animFrame + 1) % 4;//if文を使わない最適解
+		//	flameCounter = 0;
+		//}
 
 		//---------------衝突判定(右)--------------------------------
 		hitX = transform_.position_.x + 50;
@@ -89,12 +89,12 @@ void Player::Update()
 	{
 
 		transform_.position_.x -= WeatherSpeed_;
-		if (++flameCounter >= 8)
-		{
-			animFrame = (animFrame + 1) % 4;//if文を使わない最適解
-			flameCounter = 0;
+		//if (++flameCounter >= 8)
+		//{
+		//	animFrame = (animFrame + 1) % 4;//if文を使わない最適解
+		//	flameCounter = 0;
 
-		}
+		//}
 
 		//---------------衝突判定(左)--------------------------------
 		hitX = transform_.position_.x;
@@ -107,18 +107,18 @@ void Player::Update()
 		}
 		//-----------------------------------------------------------
 	}
-	else
-	{
-		animFrame = 0;
-		flameCounter = 0;
-	}
+	//else
+	//{
+	//	animFrame = 0;
+	//	flameCounter = 0;
+	//}
 
 
 	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
 		PictFlame = 80;
 
-		animFrame = (animFrame + 1) % 4;
+		/*animFrame = (animFrame + 1) % 4;*/
 		if (prevSpaceKey == false)
 		{
 			if (onGround)

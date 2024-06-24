@@ -12,9 +12,9 @@ SceneManager::SceneManager(GameObject* parent)
 
 void SceneManager::Initialize()
 {
-	currentSceneID_ = SCENE_ID_TEST;
+	currentSceneID_ = SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;
-	Instantiate<TestScene>(this);
+	Instantiate<TitleScene>(this);
 }
 
 void SceneManager::Update()
