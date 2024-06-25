@@ -26,6 +26,9 @@
     <Filter Include="リソース ファイル\UI">
       <UniqueIdentifier>{69fc9686-f35e-4aa0-b830-576313ca0d0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Scene">
+      <UniqueIdentifier>{ad92ea05-5851-4cbe-be24-019a79fe2d91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\GameObject.cpp">
@@ -46,7 +49,6 @@
     <ClCompile Include="Engine\Transform.cpp">
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Bird.cpp">
       <Filter>リソース ファイル\Chara</Filter>
     </ClCompile>
@@ -56,7 +58,6 @@
     <ClCompile Include="Slime.cpp">
       <Filter>リソース ファイル\Chara</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp" />
     <ClCompile Include="Camera.cpp">
       <Filter>リソース ファイル\Stage</Filter>
     </ClCompile>
@@ -66,12 +67,24 @@
     <ClCompile Include="Weather.cpp">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
-    <ClCompile Include="Stone.cpp">
+    <ClCompile Include="Magic.cpp">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
-    <ClCompile Include="Hp.cpp" />
-    <ClCompile Include="GameOverScene.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="Hp.cpp">
+      <Filter>リソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverScene.cpp">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GameObject.h">
@@ -92,7 +105,6 @@
     <ClInclude Include="Engine\Transform.h">
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene.h" />
     <ClInclude Include="Bird.h">
       <Filter>リソース ファイル\Chara</Filter>
     </ClInclude>
@@ -102,7 +114,6 @@
     <ClInclude Include="Slime.h">
       <Filter>リソース ファイル\Chara</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h" />
     <ClInclude Include="Camera.h">
       <Filter>リソース ファイル\Stage</Filter>
     </ClInclude>
@@ -112,11 +123,23 @@
     <ClInclude Include="Weather.h">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
-    <ClInclude Include="Stone.h">
+    <ClInclude Include="Magic.h">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
-    <ClInclude Include="Hp.h" />
-    <ClInclude Include="GameOverScene.h" />
-    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Hp.h">
+      <Filter>リソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverScene.h">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,6 +6,8 @@
 /// プレイヤーキャラ
 /// </summary>
 /// 
+/// 
+
 class Player : public GameObject
 {
 public:
@@ -48,5 +50,7 @@ private:
 	};
 	State state;
 
-	
+
+	int hitX;
+	int hitY;
 };

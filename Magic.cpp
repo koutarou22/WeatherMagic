@@ -1,13 +1,13 @@
-#include "Stone.h"
+#include "Magic.h"
 #include <assert.h>
 
-Stone::Stone(GameObject* scene) : GameObject(scene)
+Magic::Magic(GameObject* scene) : GameObject(scene)
 {
-	hImage = LoadGraph("Assets/stone.png");
+	hImage = LoadGraph("Assets/Magic.png");
 	assert(hImage > 0);
 }
 
-Stone::~Stone()
+Magic::~Magic()
 {
 	if (hImage > 0)
 	{
@@ -15,7 +15,7 @@ Stone::~Stone()
 	}
 }
 
-void Stone::Update()
+void Magic::Update()
 {
 	transform_.position_.x += 1.0;
 	if (--timer <= 0)
@@ -24,14 +24,14 @@ void Stone::Update()
 	}
 }
 
-void Stone::Draw()
+void Magic::Draw()
 {
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
 	DrawGraph(x, y, hImage, TRUE);
 }
 
-void Stone::SetPosition(XMFLOAT3 pos)
+void Magic::SetPosition(XMFLOAT3 pos)
 {
 	transform_.position_ = pos;
 	timer = 90;

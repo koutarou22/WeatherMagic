@@ -2,7 +2,6 @@
 #include <assert.h>
 #include"Weather.h"
 #include "Player.h"
-#include "Stone.h"
 #include "Camera.h"
 #include "Bird.h"
 #include "Field.h"
@@ -10,6 +9,7 @@
 #include "Slime.h"
 #include "HP.h" 
 #include "Engine/SceneManager.h"
+#include "Magic.h"
 
 namespace
 {
@@ -17,9 +17,6 @@ namespace
 	const float GROUND = 600.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
 	const float GRAVITY = 9.8f / 60.0f;
-
-	int hitX;
-	int hitY;
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop),WeatherSpeed_(MOVE_SPEED),Hp_(3), NDTIME_(1.0f)
 {
@@ -81,7 +78,7 @@ void Player::Update()
 		{
 			int push = pField->CollisionRight(hitX, hitY);
 			transform_.position_.x -= push;
-			//message = "右側の壁に触れました！"; // メッセージを設定
+			
 		}
 		//----------------------------------------------------------
 	}
@@ -103,7 +100,7 @@ void Player::Update()
 		{
 			int push = pField->CollisionLeft(hitX, hitY);
 			transform_.position_.x += push;
-			//	message = "左側の壁に触れました！"; // メッセージを設定
+			
 		}
 		//-----------------------------------------------------------
 	}
@@ -148,7 +145,7 @@ void Player::Update()
 		if (push > 0) {
 			Jump_P = 0.0f;
 			transform_.position_.y += push;
-			//message = "天井に触れました！"; // メッセージを設定
+			
 		}
 	}
 	//-----------------------------------------------------------
@@ -159,11 +156,11 @@ void Player::Update()
 		int pushR = pField->CollisionDown(transform_.position_.x + 50, transform_.position_.y + 63);
 		int pushL = pField->CollisionDown(transform_.position_.x + 14, transform_.position_.y + 63);
 		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
-		if (push >= 1) {
+		if (push >= 1)
+		{
 			transform_.position_.y -= push - 1;
 			Jump_P = 0.0f;
 			onGround = true;
-			//message = "地面に触れました！"; // メッセージを設定
 		}
 		else {
 			onGround = false;
@@ -175,16 +172,19 @@ void Player::Update()
 	{
 		if (!WeatherSwitch && pWeather != nullptr)
 		{
-			printf("Nキーが押されました。\n");
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
 			// 天候を切り替える
-			if (WeatherState == Sunny) {
-				printf("雨が降ってきた..\n");
-				pWeather->SetWeather(Rainy);
+			if (WeatherState == Sunny)//現在晴れなら
+			{
+				pWeather->SetWeather(Rainy);//雨に
 			}
-			else {
-				printf("晴れた！\n");
+			else if (WeatherState == Rainy)
+			{
+				pWeather->SetWeather(Gale);
+			}
+			else 
+			{
 				pWeather->SetWeather(Sunny);
 			}
 		}
@@ -203,11 +203,11 @@ void Player::Update()
 	//}
 	//------------------------------------------------------------------------------------------
 
-	/*if (CheckHitKey(KEY_INPUT_M))
+	if (CheckHitKey(KEY_INPUT_M))
 	{
-		Stone* st = Instantiate<Stone>(GetParent());
-		st->SetPosition(transform_.position_);
-	}*/
+		Magic* mg = Instantiate<Magic>(GetParent());
+		mg ->SetPosition(transform_.position_);
+	}
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 
@@ -220,7 +220,7 @@ void Player::Update()
 	{
 		NDTIME_ -= 0.016f; 
 	}
-
+	//-----------------スライムとの接触判定-----------------------------
 	for (Slime* pSlime : pSlimes)
 	{
 		Weather* pWeather = GetParent()->FindGameObject<Weather>();
@@ -260,7 +260,9 @@ void Player::Update()
 			}
 		}
 	}
+	//----------------------------------------------------------------------------------
 
+	//死亡したらゲームオーバー画面へ
 	if (transform_.position_.y > GROUND || Hp_ == 0)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
@@ -300,19 +302,25 @@ void Player::WeatherEffects(Weather* weather)
 	WeatherState WeatherState = weather->GetWeatherState();
 	float WeatherEffect = weather->GetWeatherChange();
 
-	if (WeatherState == Rainy)
-	{
-		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); 
-	}
-	else
+	if (WeatherState == Sunny)
 	{
 		WeatherSpeed_ = MOVE_SPEED;
 	}
+	else if (WeatherState == Rainy)
+	{
+		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); 
+	}
+	else if (WeatherState == Gale)
+	{
+		WeatherSpeed_ = MOVE_SPEED *  WeatherEffect;
+		WeatherSpeed_ = JUMP_HEIGHT *  WeatherEffect;
+	}
+	
 }
 
 void Player::Jump()
 {
-	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT ); // プレイヤーをジャンプさせる
+	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // プレイヤーをジャンプさせる
 	onGround = false;
 }
 

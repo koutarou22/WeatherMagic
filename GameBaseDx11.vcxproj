@@ -142,7 +142,7 @@
     <ClCompile Include="Hp.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Slime.cpp" />
-    <ClCompile Include="Stone.cpp" />
+    <ClCompile Include="Magic.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -162,7 +162,7 @@
     <ClInclude Include="Hp.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Slime.h" />
-    <ClInclude Include="Stone.h" />
+    <ClInclude Include="Magic.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TitleScene.h" />

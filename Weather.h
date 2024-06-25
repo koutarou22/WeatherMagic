@@ -5,8 +5,8 @@ enum WeatherState
 {
 	Sunny,//°‚ê‚Ì“ú
 	Rainy,//‰J‚Ì“ú
+	Gale,//‹­•—(“VŒó‚©‚±‚ê...?)
 };
-
 class Weather:public GameObject
 {
 public:

@@ -2,13 +2,13 @@
 #include "Engine/GameObject.h"
 
 /// <summary>
-/// プレイヤーが投げる石
+/// プレイヤーが放つ魔法
 /// </summary>
-class Stone : public GameObject
+class Magic : public GameObject
 {
 public:
-	Stone(GameObject* scene);
-	~Stone();
+	Magic(GameObject* scene);
+	~Magic();
 	void Update() override;
 	void Draw() override;
 	void SetPosition(XMFLOAT3 pos);
