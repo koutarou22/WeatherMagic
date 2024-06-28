@@ -42,7 +42,8 @@ private:
 
 	float WeatherSpeed_;//MOVE_SPEED‚ÆWeather‚Ì’l‚ğ‡‚í‚¹Ši”[‚·‚é—p‚Ì•Ï”
 	bool  WeatherSwitch;//‚‘¬‚Å“VŒó‚ªØ‚è‘Ö‚í‚ç‚È‚¢‚æ‚¤‚É‚·‚é‘Îô
-
+	bool CoolDown;
+	int MagicPoint;
 	enum State
 	{
 		S_WaIk = 0,
@@ -53,4 +54,5 @@ private:
 
 	int hitX;
 	int hitY;
+	Player* player_;
 };

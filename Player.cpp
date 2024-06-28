@@ -205,8 +205,12 @@ void Player::Update()
 
 	if (CheckHitKey(KEY_INPUT_M))
 	{
-		Magic* mg = Instantiate<Magic>(GetParent());
-		mg ->SetPosition(transform_.position_);
+		if (!CoolDown && MagicPoint < 3 )
+		{
+			Magic* mg = Instantiate<Magic>(GetParent());
+			mg->SetPosition(transform_.position_.x,transform_.position_.y);
+		}
+		
 	}
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();

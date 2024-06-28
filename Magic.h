@@ -11,8 +11,9 @@ public:
 	~Magic();
 	void Update() override;
 	void Draw() override;
-	void SetPosition(XMFLOAT3 pos);
+	void SetPosition(int x, int y);
 private:
-	int hImage;
-	int timer;
+	int hImage_;
+	int timer_;
+	
 };

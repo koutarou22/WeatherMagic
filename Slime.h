@@ -17,6 +17,9 @@ public:
 
 	void WeatherEffects(Weather* weather);
 	//bool ColliderCircle(float x, float y, float r);
+	void ScaleX();
+	void ScaleY();
+
 	bool ColliderRect(float x, float y, float w, float h);
 	void SetPosition(int x, int y);
 	float x;
@@ -32,11 +35,8 @@ private:
 
 	float WeatherSpeed_;
 	float RainHappening_;
-
+	float ScaleEffect_;
 	bool Reverse_ = false;
 	int direction = 1;
-
-	
-
 };
 
