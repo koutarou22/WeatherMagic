@@ -42,7 +42,6 @@ void Rock::Update()
 
 	if (pPlayer != nullptr)
 	{
-		
 		if (IsHitPlayer(pPlayer))
 		{
 			PushOutPlayer(pPlayer);
@@ -50,18 +49,6 @@ void Rock::Update()
 	}
 	if (pWeather != nullptr)
 	{
-		
-			//// プレイヤーがRockの上にいるかどうかを判定
-			//if (pPlayer->GetPosition().y + pPlayer->GetHeight() <= transform_.position_.y)
-			//{
-			//	// プレイヤーがRockの上にいる場合、プレイヤーをRockの上に移動
-			//	pPlayer->SetPosition(pPlayer->GetPosition().x, transform_.position_.y - pPlayer->GetHeight());
-			//}
-			//else
-			//{
-			//	// プレイヤーがRockの下にいる場合、プレイヤーを「つぶす」
-			//	pPlayer->Kill();
-			//}
 		WeatherEffects(pWeather); // 天候関数を呼び出す
 	}
 

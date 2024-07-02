@@ -6,7 +6,6 @@
 #include "Engine/CsvReader.h"
 #include "Slime.h"
 
-
 //switch•¶‚Ìcase‚Ì”š‚Ícsv“à‚Ì’l‚ğ¦‚µ‚Ä‚¢‚é
 Field::Field(GameObject* scene) :GameObject(scene)
 {
