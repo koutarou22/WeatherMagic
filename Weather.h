@@ -28,6 +28,7 @@ private:
 	WeatherState weather_;
     int hImage_Sunny;
 	int hImage_Rainy;
+	int hImage_Wind;
     float WeatherChange_; // 天候に応じた移動速度用数値
 };
 

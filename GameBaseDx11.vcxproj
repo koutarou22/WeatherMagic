@@ -141,6 +141,7 @@
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Hp.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Rock.cpp" />
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Magic.cpp" />
     <ClCompile Include="TestScene.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="Hp.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Rock.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Magic.h" />
     <ClInclude Include="TestScene.h" />

@@ -47,3 +47,9 @@ void Magic::SetPosition(int x, int y)
 	transform_.position_.y = y;
 	timer_ = 90;
 }
+
+void Magic::Setposition(XMFLOAT3 pos)
+{
+	transform_.position_ = pos;
+	timer_ = 90;
+}

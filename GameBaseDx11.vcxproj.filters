@@ -29,6 +29,9 @@
     <Filter Include="リソース ファイル\Scene">
       <UniqueIdentifier>{ad92ea05-5851-4cbe-be24-019a79fe2d91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Chara\Enemy">
+      <UniqueIdentifier>{0d700ca0-6adc-4820-802e-117b66c75cd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\GameObject.cpp">
@@ -49,13 +52,7 @@
     <ClCompile Include="Engine\Transform.cpp">
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Bird.cpp">
-      <Filter>リソース ファイル\Chara</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>リソース ファイル\Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Slime.cpp">
       <Filter>リソース ファイル\Chara</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
@@ -85,6 +82,15 @@
     <ClCompile Include="GameOverScene.cpp">
       <Filter>リソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Rock.cpp">
+      <Filter>リソース ファイル\Chara\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Bird.cpp">
+      <Filter>リソース ファイル\Chara\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>リソース ファイル\Chara\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GameObject.h">
@@ -105,13 +111,7 @@
     <ClInclude Include="Engine\Transform.h">
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Bird.h">
-      <Filter>リソース ファイル\Chara</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>リソース ファイル\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Slime.h">
       <Filter>リソース ファイル\Chara</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
@@ -140,6 +140,15 @@
     </ClInclude>
     <ClInclude Include="GameOverScene.h">
       <Filter>リソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock.h">
+      <Filter>リソース ファイル\Chara\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Bird.h">
+      <Filter>リソース ファイル\Chara\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
+      <Filter>リソース ファイル\Chara\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void SetPosition(int x, int y);
+	void Setposition(XMFLOAT3 pos);
 private:
 	int hImage_;
 	int timer_;

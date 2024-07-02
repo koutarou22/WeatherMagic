@@ -176,49 +176,10 @@ void Slime::WeatherEffects(Weather* weather)
 	WeatherState WeatherState = weather->GetWeatherState();
 	float WeatherEffect = weather->GetWeatherChange();
 
-	if (WeatherState == Rainy)
-	{
-		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); // 雨の日は速度を減少させる
-
-		// スライムのスケールが1.5倍未満の場合、スケールを徐々に増加させる
-		if (transform_.scale_.x < 1.5f) {
-		    ScaleEffect_ = transform_.scale_.x;
-			transform_.scale_.x += 0.01f; // x方向のスケールを徐々に増加させる
-			transform_.position_.y -= (transform_.scale_.x - ScaleEffect_) * 32; // 位置を上に移動
-		}
-		if (transform_.scale_.y < 1.5f) {
-			ScaleEffect_ = transform_.scale_.y;
-			transform_.scale_.y += 0.01f; // y方向のスケールを徐々に増加させる
-			transform_.position_.y -= (transform_.scale_.y - ScaleEffect_) * 32; // 位置を上に移動
-		}
-	}
-	else if (WeatherState == Gale)
-	{
-
-	}
-	else
-	{
-		WeatherSpeed_ = MOVE_SPEED; // 通常の速度
-		// スライムのスケールが1.0より大きい場合、スケールを徐々に減少させる
-		if (transform_.scale_.x > 1.0f) {
-			ScaleEffect_ = transform_.scale_.x;
-			transform_.scale_.x -= 0.01f; // x方向のスケールを徐々に減少させる
-			transform_.position_.y += (ScaleEffect_ - transform_.scale_.x) * 32; // 位置を下に移動
-		}
-		if (transform_.scale_.y > 1.0f) {
-			ScaleEffect_ = transform_.scale_.y;
-			transform_.scale_.y -= 0.01f; // y方向のスケールを徐々に減少させる
-			transform_.position_.y += (ScaleEffect_ - transform_.scale_.y) * 32; // 位置を下に移動
-		}
-	}
+	RainScale(WeatherState, transform_, WeatherSpeed_, MOVE_SPEED, WeatherEffect, ScaleEffect_);
 
 }
-void Slime::ScaleX()
-{
-}
-void Slime::ScaleY()
-{
-}
+
 //
 //bool Slime::ColliderCircle(float x, float y, float r)
 //{
@@ -265,5 +226,61 @@ void Slime::SetPosition(int x, int y)
 {
 	transform_.position_.x = x;
 	transform_.position_.y = y;
+}
+
+void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_)
+{
+	if (state == Rainy)
+	{
+		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); // 雨の日は速度を減少させる
+
+		
+		if (transform_.scale_.x < 1.5f)
+		{
+			ScaleEffect_ = transform_.scale_.x;
+			transform_.scale_.x += 0.01f;
+			transform_.position_.y -= (transform_.scale_.x - ScaleEffect_) * 32;
+		}
+		if (transform_.scale_.y < 1.5f) {
+			ScaleEffect_ = transform_.scale_.y;
+			transform_.scale_.y += 0.01f; // y方向のスケールを徐々に増加させる
+			transform_.position_.y -= (transform_.scale_.y - ScaleEffect_) * 32; // 位置を上に移動
+		}
+	}
+	else 
+	{
+		WeatherSpeed_ = MOVE_SPEED; // 通常の速度
+		// スライムのスケールが1.0より大きい場合、スケールを徐々に減少させる
+		if (transform_.scale_.x > 1.0f) {
+			ScaleEffect_ = transform_.scale_.x;
+			transform_.scale_.x -= 0.01f; // x方向のスケールを徐々に減少させる
+			transform_.position_.y += (ScaleEffect_ - transform_.scale_.x) * 32; // 位置を下に移動
+		}
+		if (transform_.scale_.y > 1.0f) {
+			ScaleEffect_ = transform_.scale_.y;
+			transform_.scale_.y -= 0.01f; // y方向のスケールを徐々に減少させる
+			transform_.position_.y += (ScaleEffect_ - transform_.scale_.y) * 32; // 位置を下に移動
+		}
+	 
+	}
+
+	if (state == Gale)
+	{
+		if (CheckHitKey(KEY_INPUT_RIGHT))
+		{
+			transform_.position_.x += 4.0f;
+			Reverse_ = true;
+		}
+		else if (CheckHitKey(KEY_INPUT_LEFT))
+		{
+			transform_.position_.x -= 4.0f;
+			Reverse_ = false;
+		}
+		else if (CheckHitKey(KEY_INPUT_UP))
+		{
+			transform_.position_.y -= 5.0f;
+		}
+	}
+	
 }
 

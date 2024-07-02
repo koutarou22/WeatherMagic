@@ -6,6 +6,7 @@
 #include "Slime.h"
 #include "Camera.h"
 #include "Engine/SceneManager.h"
+#include "Rock.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -27,6 +28,7 @@ void TestScene::Initialize()
 	slime3->SetPosition(2300, 0);
 	Instantiate<Hp>(this);
 	Instantiate<Player>(this);
+	Instantiate<Rock>(this);
 	
 	
 	//Instantiate<Bird>(this);

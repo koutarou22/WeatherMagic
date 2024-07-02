@@ -17,13 +17,14 @@ public:
 
 	void WeatherEffects(Weather* weather);
 	//bool ColliderCircle(float x, float y, float r);
-	void ScaleX();
-	void ScaleY();
 
 	bool ColliderRect(float x, float y, float w, float h);
 	void SetPosition(int x, int y);
 	float x;
 	float y;
+
+	void RainScale(WeatherState state, Transform& transform,
+		float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_);
 	
 private:
 	int hImage;

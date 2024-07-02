@@ -16,7 +16,7 @@ namespace
 	const float MOVE_SPEED = 4.5f;
 	const float GROUND = 600.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
-	const float GRAVITY = 9.8f / 60.0f;
+    float GRAVITY = 9.8f / 60.0f;
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop),WeatherSpeed_(MOVE_SPEED),Hp_(3), NDTIME_(1.0f)
 {
@@ -61,7 +61,7 @@ void Player::Update()
 		if (flameCounter);
 	}*/
 
-	if (CheckHitKey(KEY_INPUT_D) || CheckHitKey(KEY_INPUT_RIGHT))
+	if (CheckHitKey(KEY_INPUT_D) /*|| CheckHitKey(KEY_INPUT_RIGHT)*/)
 	{
 		transform_.position_.x += WeatherSpeed_;
 		//if (++flameCounter >= 8)
@@ -82,7 +82,7 @@ void Player::Update()
 		}
 		//----------------------------------------------------------
 	}
-	else if (CheckHitKey(KEY_INPUT_A) || CheckHitKey(KEY_INPUT_LEFT))
+	else if (CheckHitKey(KEY_INPUT_A) /*|| CheckHitKey(KEY_INPUT_LEFT)*/)
 	{
 
 		transform_.position_.x -= WeatherSpeed_;
@@ -205,12 +205,9 @@ void Player::Update()
 
 	if (CheckHitKey(KEY_INPUT_M))
 	{
-		if (!CoolDown && MagicPoint < 3 )
-		{
-			Magic* mg = Instantiate<Magic>(GetParent());
-			mg->SetPosition(transform_.position_.x,transform_.position_.y);
-		}
-		
+	    Magic* mg = Instantiate<Magic>(GetParent());
+	    //mg->SetPosition(transform_.position_.x,transform_.position_.y);
+	    mg->Setposition(transform_.position_);
 	}
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
@@ -234,7 +231,7 @@ void Player::Update()
 			if (transform_.position_.y + 64.0f <= pSlime->GetPosition().y + (64.0f * pSlime->GetScale().y) / 2) // ƒvƒŒƒCƒ„[‚ªƒXƒ‰ƒCƒ€‚Ìã•”‚É‚ ‚é
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
-				float RainBound = 0.5; // •’Ê‚ÌƒWƒƒƒ“ƒv
+				float RainBound = 0.5; // ‰J‚Ì“ú‚É”­¶‚·‚éƒXƒ‰ƒCƒ€‚Ì’e«
 				if (WeatherState == Rainy)
 				{
 					RainBound = 3.5f; // ‰J‚ÌŽž‚Ì‚ÝƒWƒƒƒ“ƒv—Í‚ð2.5”{
@@ -254,7 +251,7 @@ void Player::Update()
 						//Hp_ = 3; // ”O‚Ì‚½‚ßƒŠƒZƒbƒg
 					}
 					// ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚çˆê’èŽžŠÔ–³“G‚É‚È‚é
-					NDTIME_ = 1.0f; // 1•bŠÔ–³“G
+					NDTIME_ = 3.0f;
 					if (transform_.position_.y > GROUND + 200)
 					{
 						KillMe();
@@ -316,8 +313,8 @@ void Player::WeatherEffects(Weather* weather)
 	}
 	else if (WeatherState == Gale)
 	{
-		WeatherSpeed_ = MOVE_SPEED *  WeatherEffect;
-		WeatherSpeed_ = JUMP_HEIGHT *  WeatherEffect;
+		WeatherSpeed_ = MOVE_SPEED;
+
 	}
 	
 }

@@ -7,11 +7,13 @@ void Weather::Initialize()
     assert(hImage_Sunny > 0);
     hImage_Rainy = LoadGraph("Assets/Rain.png");
     assert(hImage_Rainy > 0);
+    hImage_Wind = LoadGraph("Assets/Wind.png");
+    assert(hImage_Wind > 0);
 }
 
 void Weather::Update()
 {
-
+   
 }
 
 void Weather::Draw() 
@@ -33,7 +35,7 @@ void Weather::Draw()
     case Gale:
         DrawFormatString(500, 10, GetColor(255, 255, 255), "事象: 強風　『敵が(自分も)吹っ飛ぶ！』");
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-       // DrawGraph(0, 0, hImage_Rainy, TRUE);  // 強風の画像とかあるんか？
+        DrawGraph(0, 0, hImage_Wind, TRUE);  // 強風の画像とかあるんか？
         break;
     }
 
