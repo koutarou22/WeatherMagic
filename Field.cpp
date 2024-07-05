@@ -68,26 +68,29 @@ void Field::Reset()
 	{
 		for (int w = 0; w < width; w++)
 		{
-			switch (csv.GetInt(w, h/* + height + 1*/))
+			switch (csv.GetInt(w, h /*+ height + 1*/))
 			{
 			case 0:
 			{
 				Player* pPlayer = GetParent()->FindGameObject<Player>();
 				pPlayer->SetPosition(w * 32, h * 32);
+				break;
 			}
-			break;
+			
 			case 1:
 			{
 				Bird* pBird = Instantiate<Bird>(GetParent());
 				pBird->SetPosition(w * 32, h * 32);
+				break;
 			}
-			break;
+			
 			case 2:
 			{
 				Slime* pSlime = Instantiate<Slime>(GetParent());
 				pSlime->SetPosition(w * 32, h * 32);
+
 			}
-			break;
+			
 			default:
 				break;
 			}

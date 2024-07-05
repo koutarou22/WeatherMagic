@@ -18,7 +18,10 @@ TestScene::TestScene(GameObject * parent)
 //‰Šú‰»
 void TestScene::Initialize()
 {
+	
 	Instantiate<Field>(this);
+	Field* pFailed = Instantiate<Field>(this);
+	pFailed->Reset();
 	Instantiate<Camera>(this);
 	Instantiate<Slime>(this);
 	Instantiate<Ghost>(this);

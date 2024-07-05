@@ -297,7 +297,7 @@ void Player::Draw()
     DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 	
 	// プレイヤーの座標を画面に表示
-	//DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
 //	DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
 	//DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
 	DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
