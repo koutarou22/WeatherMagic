@@ -1,23 +1,13 @@
 #pragma once
 #include"Engine/GameObject.h"
-#include "Player.h"
-#include "Magic.h"
-/// <summary>
-/// ÉJÉÅÉâ
-/// </summary>
 class Camera : public GameObject
 {
 public:
-	Camera(GameObject* parent):GameObject(parent){ value_ = 0; }
-	~Camera() {};
-	void GetPlayerPos(Player* _player) { player_ = _player; }
-	void GetPlayerPos(Magic* _magic) { magic_ = _magic; }
-	void Update();
-	void SetValue(int v) { value_ = v; }
-	int GetValue() { return value_; }
+	Camera(GameObject* parent) :GameObject(parent) { value = 0; }
+	~Camera() {}
+	void SetValue(int v) { value = v; }
+	int GetValue() { return value; }
 private:
-	Player* player_;
-	Magic* magic_;
-	int value_;
+	int value;
 };
 

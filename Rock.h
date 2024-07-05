@@ -11,8 +11,6 @@ public:
 	void Draw() override;
 	void SetPosition(int x, int y);
 	void WeatherEffects(Weather* weather);
-	bool IsHitPlayer(Player* player);
-	void PushOutPlayer(Player* player);
 private:
 	
 	int hImage_;

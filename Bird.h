@@ -18,4 +18,5 @@ public:
 private:
 	float sinAngle;
 	int hImage;
+
 };

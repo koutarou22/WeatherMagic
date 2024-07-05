@@ -91,6 +91,9 @@
     <ClCompile Include="Slime.cpp">
       <Filter>リソース ファイル\Chara\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>リソース ファイル\Chara\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GameObject.h">
@@ -132,9 +135,6 @@
     <ClInclude Include="Time.h">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene.h">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="TestScene.h">
       <Filter>リソース ファイル\Scene</Filter>
     </ClInclude>
@@ -148,6 +148,12 @@
       <Filter>リソース ファイル\Chara\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Slime.h">
+      <Filter>リソース ファイル\Chara\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
       <Filter>リソース ファイル\Chara\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

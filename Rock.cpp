@@ -40,13 +40,6 @@ void Rock::Update()
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	Player* pPlayer = GetParent()->FindGameObject<Player>();
 
-	if (pPlayer != nullptr)
-	{
-		if (IsHitPlayer(pPlayer))
-		{
-			PushOutPlayer(pPlayer);
-		}
-	}
 	if (pWeather != nullptr)
 	{
 		WeatherEffects(pWeather); // 天候関数を呼び出す
@@ -150,56 +143,4 @@ void Rock::WeatherEffects(Weather* weather)
 		}
 	}
 	
-}
-
-bool Rock::IsHitPlayer(Player*player)
-{
-
-	// Playerの矩形の情報
-	float PX = player->GetPosition().x;
-	float PY = player->GetPosition().y;
-	float PW = player->GetWidth();
-	float PH = player->GetHeight();
-
-	// Rockの矩形の情報
-	float rockX = transform_.position_.x;
-	float rockY = transform_.position_.y;
-	float rockW = 64.0f * transform_.scale_.x; // スケールを適用
-	float rockH = 64.0f * transform_.scale_.y; // スケールを適用
-
-	// 矩形の衝突判定
-	if (rockX < PX + PW && rockX + rockW > PX && rockY < PY + PH && rockY + rockH > PY)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void Rock::PushOutPlayer(Player* player)
-{
-	// Rockの中心位置
-	float rockCenterX = transform_.position_.x + (64.0f * transform_.scale_.x) / 2;
-	float rockCenterY = transform_.position_.y + (64.0f * transform_.scale_.y) / 2;
-
-	// Playerの中心位置
-	float playerCenterX = player->GetPosition().x + player->GetWidth() / 2;
-	float playerCenterY = player->GetPosition().y + player->GetHeight() / 2;
-
-	// RockとPlayerの中心間の距離
-	float dx = playerCenterX - rockCenterX;
-	float dy = playerCenterY - rockCenterY;
-
-	// 押し出す方向（単位ベクトル）
-	float length = sqrt(dx * dx + dy * dy);
-	float dirX = dx / length;
-	float dirY = dy / length;
-
-	// 押し出す力（ここでは一定値を使用）
-	float pushPower = 10.0f;
-
-	// Playerの位置を調整
-	player->SetPosition(player->GetPosition().x + dirX * pushPower, player->GetPosition().y + dirY * pushPower);
 }

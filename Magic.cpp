@@ -22,10 +22,10 @@ void Magic::Update()
 {
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-	if (cam != nullptr)
+	/*if (cam != nullptr)
 	{
 		cam->GetPlayerPos(this);
-	}
+	}*/
 
 	transform_.position_.x += 5.5f;
 	if (--timer_ <= 0)

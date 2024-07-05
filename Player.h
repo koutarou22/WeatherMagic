@@ -23,15 +23,6 @@ public:
 	void Jump();
 	int GetHp();
 
-	float GetWidth() const {
-		// プレイヤーの幅を返す
-		return 64.0f * transform_.scale_.x;
-	}
-
-	float GetHeight() const {
-		// プレイヤーの高さを返す
-		return 64.0f * transform_.scale_.y;
-	}
 private:
 	int hImage;
 	GameObject* sceneTop;

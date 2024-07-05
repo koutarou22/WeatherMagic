@@ -13,7 +13,7 @@ Field::Field(GameObject* scene) :GameObject(scene)
 	hImage_ = LoadGraph("Assets/bgchar.png");
 	assert(hImage_ > 0);
 
-	hBackGround_ = LoadGraph("Assets/bg4.png");
+	hBackGround_ = LoadGraph("Assets/bg5.png");
 	assert(hBackGround_ > 0);
 
 	Reset();
@@ -44,7 +44,7 @@ void Field::Reset()
 	}
 
 	CsvReader csv;
-	bool ret = csv.Load("Assets/stage6.csv");
+	bool ret = csv.Load("Assets/stage7.csv");
 	assert(ret);
 
 	width = csv.GetWidth();
@@ -64,8 +64,10 @@ void Field::Reset()
 	//	}
 	//}
 
-	for (int h = 0; h < height; h++) {
-		for (int w = 0; w < width; w++) {
+	for (int h = 0; h < height; h++)
+	{
+		for (int w = 0; w < width; w++)
+		{
 			switch (csv.GetInt(w, h/* + height + 1*/))
 			{
 			case 0:
@@ -108,19 +110,21 @@ void Field::Draw()
 
 	// ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ð•`‰æ
 	DrawExtendGraph(0, 0, screenWidth, screenHeight, hBackGround_, FALSE); 
+	int scroll = 0;
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr)
 	{
-	    scroll = cam->GetValue(); // ƒJƒƒ‰‚ÌƒXƒNƒ[ƒ‹’l‚ðŽæ“¾
+		scroll = cam->GetValue();
 	}
-		for (int y = 0; y < height; y++)
+
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
 		{
-			for (int x = 0; x < width; x++)
-			{
-				int chip = Map[y * width + x];
-		    	DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);//0
-			}
+			int chip = Map[y * width + x];
+			DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
 		}
+	}
 	
 }
 

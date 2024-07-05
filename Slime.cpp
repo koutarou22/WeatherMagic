@@ -147,6 +147,7 @@ if (pField != nullptr)
 		else {
 			onGround = false;
 		}
+
 	}
 	//-----------------------------------------------------------
 
@@ -208,8 +209,8 @@ bool Slime::ColliderRect(float x, float y, float w, float h)
 	// 自分の矩形の情報
 	float myX = transform_.position_.x;
 	float myY = transform_.position_.y;
-	float myW = 64.0f * transform_.scale_.x; // スケールを適用
-	float myH = 64.0f * transform_.scale_.y; // スケールを適用
+	float myW = 64.0f * transform_.scale_.x; 
+	float myH = 64.0f * transform_.scale_.y; 
 
 	// 矩形の衝突判定
 	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
@@ -243,23 +244,23 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 		}
 		if (transform_.scale_.y < 1.5f) {
 			ScaleEffect_ = transform_.scale_.y;
-			transform_.scale_.y += 0.01f; // y方向のスケールを徐々に増加させる
-			transform_.position_.y -= (transform_.scale_.y - ScaleEffect_) * 32; // 位置を上に移動
+			transform_.scale_.y += 0.01f; 
+			transform_.position_.y -= (transform_.scale_.y - ScaleEffect_) * 32;
 		}
 	}
 	else 
 	{
-		WeatherSpeed_ = MOVE_SPEED; // 通常の速度
-		// スライムのスケールが1.0より大きい場合、スケールを徐々に減少させる
+		WeatherSpeed_ = MOVE_SPEED; 
+		
 		if (transform_.scale_.x > 1.0f) {
 			ScaleEffect_ = transform_.scale_.x;
-			transform_.scale_.x -= 0.01f; // x方向のスケールを徐々に減少させる
-			transform_.position_.y += (ScaleEffect_ - transform_.scale_.x) * 32; // 位置を下に移動
+			transform_.scale_.x -= 0.01f; 
+			transform_.position_.y += (ScaleEffect_ - transform_.scale_.x) * 32; 
 		}
 		if (transform_.scale_.y > 1.0f) {
 			ScaleEffect_ = transform_.scale_.y;
-			transform_.scale_.y -= 0.01f; // y方向のスケールを徐々に減少させる
-			transform_.position_.y += (ScaleEffect_ - transform_.scale_.y) * 32; // 位置を下に移動
+			transform_.scale_.y -= 0.01f; 
+			transform_.position_.y += (ScaleEffect_ - transform_.scale_.y) * 32; 
 		}
 	 
 	}
@@ -276,7 +277,7 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 			transform_.position_.x -= 4.0f;
 			Reverse_ = false;
 		}
-		else if (CheckHitKey(KEY_INPUT_UP))
+		else if (CheckHitKeyAll(KEY_INPUT_UP))
 		{
 			transform_.position_.y -= 5.0f;
 		}

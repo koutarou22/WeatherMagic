@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Engine/SceneManager.h"
 #include "Rock.h"
+#include "Ghost.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -20,12 +21,7 @@ void TestScene::Initialize()
 	Instantiate<Field>(this);
 	Instantiate<Camera>(this);
 	Instantiate<Slime>(this);
-	Slime* slime1 = Instantiate<Slime>(this);
-	slime1->SetPosition(3000, 0); // 初期座標 (0,0) を指定
-	Slime* slime2 = Instantiate<Slime>(this);
-	slime2->SetPosition(3400, 200); // 初期座標 (100,200) を指定
-	Slime* slime3 = Instantiate<Slime>(this);
-	slime3->SetPosition(2300, 0);
+	Instantiate<Ghost>(this);
 	Instantiate<Hp>(this);
 	Instantiate<Player>(this);
 	Instantiate<Rock>(this);

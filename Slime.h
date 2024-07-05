@@ -32,11 +32,9 @@ private:
 	bool onGround;//ínñ Ç…Ç¢ÇÈÇÃÇ©ÅH
 
 	float Jump_P = 0.0f;
-	float sinAngle;
-
-	float WeatherSpeed_;
-	float RainHappening_;
-	float ScaleEffect_;
+	float WeatherSpeed_ = 0.0f;
+	float RainHappening_ = 0.0f;
+	float ScaleEffect_ = 0.0f;
 	bool Reverse_ = false;
 	int direction = 1;
 };

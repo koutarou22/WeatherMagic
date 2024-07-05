@@ -210,12 +210,6 @@ void Player::Update()
 	    mg->Setposition(transform_.position_);
 	}
 
-	Camera* cam = GetParent()->FindGameObject<Camera>();
-
-	if (cam != nullptr) {
-		cam->GetPlayerPos(this);
-	}
-
 	// –³“GŽžŠÔ‚ÌXV
 	if (NDTIME_ > 0.0f)
 	{
@@ -259,6 +253,23 @@ void Player::Update()
 				}
 				
 			}
+		}
+
+
+		//ƒJƒƒ‰‚Ìˆ—
+		Camera* cam = GetParent()->FindGameObject<Camera>();
+		int xR = (int)transform_.position_.x - cam->GetValue();
+		int xL = (int)transform_.position_.x + cam->GetValue();
+		if (xR >600)
+		{
+			xR = 600;
+			cam->SetValue((int)transform_.position_.x - xR);
+		}
+
+		if (xL > 600)
+		{
+			xL = 600;
+			cam->SetValue((int)transform_.position_.x - xL);
 		}
 	}
 	//----------------------------------------------------------------------------------
