@@ -94,6 +94,12 @@
     <ClCompile Include="Ghost.cpp">
       <Filter>リソース ファイル\Chara\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyMagic.cpp">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearScene.cpp">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GameObject.h">
@@ -155,6 +161,12 @@
     </ClInclude>
     <ClInclude Include="Ghost.h">
       <Filter>リソース ファイル\Chara\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyMagic.h">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClInclude>
+    <ClInclude Include="ClearScene.h">
+      <Filter>リソース ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

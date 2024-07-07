@@ -5,8 +5,6 @@
 /// <summary>
 /// プレイヤーキャラ
 /// </summary>
-/// 
-/// 
 
 class Player : public GameObject
 {
@@ -20,16 +18,18 @@ public:
 	void SetPosition(int x, int y);
 
 	void WeatherEffects(Weather* weather);
+
+	void DamageHp();
 	void Jump();
 	int GetHp();
-
+	
 private:
 	int hImage;
 	GameObject* sceneTop;
 
 	bool prevSpaceKey;
 	bool onGround;//地面にいるのか？
-
+	bool damaged = false;
 	float Jump_P = 0.0f;
 
 	int animType;//状況
@@ -43,7 +43,7 @@ private:
 
 	float WeatherSpeed_;//MOVE_SPEEDとWeatherの値を合わせ格納する用の変数
 	bool  WeatherSwitch;//高速で天候が切り替わらないようにする対策
-	bool CoolDown;
+	int	  CoolDownMagic_ = 0;
 	int MagicPoint;
 	enum State
 	{
@@ -51,8 +51,8 @@ private:
 		S_Cry,
 	};
 	State state;
-
-
+	int timer_ = 90;
+	int WeatherTime_ = 90;
 	int hitX;
 	int hitY;
 	Player* player_;

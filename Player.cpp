@@ -10,6 +10,7 @@
 #include "HP.h" 
 #include "Engine/SceneManager.h"
 #include "Magic.h"
+#include "Ghost.h"
 
 namespace
 {
@@ -55,6 +56,11 @@ void Player::Update()
 		WeatherEffects(pWeather); // 天候関数を呼び出す
 	}
 
+	if (transform_.position_.x < 0)
+	{
+		transform_.position_.x = 0;
+	}
+
 	/*if (state == S_Cry)
 	{
 		flameCounter++;
@@ -73,6 +79,7 @@ void Player::Update()
 		//---------------衝突判定(右)--------------------------------
 		hitX = transform_.position_.x + 50;
 		hitY = transform_.position_.y + 63;
+
 
 		if (pField != nullptr)
 		{
@@ -174,19 +181,20 @@ void Player::Update()
 		{
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
-			// 天候を切り替える
+			// 次に切り替える天候を決定
 			if (WeatherState == Sunny)//現在晴れなら
 			{
-				pWeather->SetWeather(Rainy);//雨に
+				pWeather->SetNextWeather(Rainy);//次は雨に
 			}
 			else if (WeatherState == Rainy)
 			{
-				pWeather->SetWeather(Gale);
+				pWeather->SetNextWeather(Gale);//次は強風に
 			}
-			else 
+			else
 			{
-				pWeather->SetWeather(Sunny);
+				pWeather->SetNextWeather(Sunny);//次は晴れに
 			}
+			WeatherTime_= 60; // 60フレーム後に天候を切り替える（1秒後、フレームレートが60fpsの場合）
 		}
 		WeatherSwitch = true;
 	}
@@ -194,6 +202,18 @@ void Player::Update()
 	{
 		WeatherSwitch = false;
 	}
+
+	if (WeatherTime_ > 0)
+	{
+		WeatherTime_--;
+		
+		if (WeatherTime_ == 0)
+		{
+			pWeather->SetWeather(pWeather->GetNextWeather());
+		}
+	}
+
+
 	//拡張性はない
 	//if (transform_.position_.y >= GROUND)//地面についたら速度を元に戻す、戻さないと貫通する恐れあり
 	//{
@@ -205,23 +225,34 @@ void Player::Update()
 
 	if (CheckHitKey(KEY_INPUT_M))
 	{
-	    Magic* mg = Instantiate<Magic>(GetParent());
-	    //mg->SetPosition(transform_.position_.x,transform_.position_.y);
-	    mg->Setposition(transform_.position_);
+		if (CoolDownMagic_ <= 0)
+		{
+			Magic* mg = Instantiate<Magic>(GetParent());
+			//mg->SetPosition(transform_.position_.x,transform_.position_.y);
+			mg->SetPosition(transform_.position_);
+			VECTOR dir = { 1.0f, 0.0f };
+			mg->SetDirection(dir);
+			mg->SetSpeed(10.0f);
+			CoolDownMagic_ = timer_;
+		}
+	}
+	if (CoolDownMagic_ > 0)
+	{
+		CoolDownMagic_--;
 	}
 
 	// 無敵時間の更新
+	// 無敵時間の更新
 	if (NDTIME_ > 0.0f)
 	{
-		NDTIME_ -= 0.016f; 
+		NDTIME_ -= 0.016f;
 	}
-	//-----------------スライムとの接触判定-----------------------------
+
+	////-----------------スライムとの接触判定-----------------------------
 	for (Slime* pSlime : pSlimes)
 	{
-		Weather* pWeather = GetParent()->FindGameObject<Weather>();
 		if (pSlime->ColliderRect(transform_.position_.x, transform_.position_.y, 64.0f, 64.0f))
 		{
-			Hp* hp = (Hp*)FindObject("Hp");
 			if (transform_.position_.y + 64.0f <= pSlime->GetPosition().y + (64.0f * pSlime->GetScale().y) / 2) // プレイヤーがスライムの上部にある
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
@@ -246,21 +277,15 @@ void Player::Update()
 					}
 					// ダメージを受けたら一定時間無敵になる
 					NDTIME_ = 3.0f;
-					if (transform_.position_.y > GROUND + 200)
-					{
-						KillMe();
-					}
 				}
-				
 			}
 		}
-
 
 		//カメラの処理
 		Camera* cam = GetParent()->FindGameObject<Camera>();
 		int xR = (int)transform_.position_.x - cam->GetValue();
 		int xL = (int)transform_.position_.x + cam->GetValue();
-		if (xR >600)
+		if (xR > 600)
 		{
 			xR = 600;
 			cam->SetValue((int)transform_.position_.x - xR);
@@ -271,16 +296,48 @@ void Player::Update()
 			xL = 600;
 			cam->SetValue((int)transform_.position_.x - xL);
 		}
-	}
-	//----------------------------------------------------------------------------------
 
-	//死亡したらゲームオーバー画面へ
-	if (transform_.position_.y > GROUND || Hp_ == 0)
-	{
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
-	}
 
+		//----------------------------------------------------------------------------------
+		//std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
+		//for(Ghost* pGhost : pGhosts)
+		//{
+		//	if (pGhost->ColliderCircle(transform_.position_.x + 32.0f, transform_.position_.y + 32.0f, 20.0f))
+		//	{
+		//		if (NDTIME_ <= 0.0f)
+		//		{
+		//			hp->DamageHp();
+		//			Hp_--;
+		//			if (Hp_ <= 0)
+		//			{
+		//				KillMe();
+		//				Hp_ = 3; // 念のためリセット
+		//			}
+		//			 ダメージを受けたら一定時間無敵になる
+		//			NDTIME_ = 3.0f;
+		//		}
+		//	}
+		//}
+		//死亡したらゲームオーバー画面へ
+		if (transform_.position_.y > GROUND || Hp_ == 0)
+		{
+			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+			pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
+		}
+		//特定のタイルに触れたらクリアSceneへ
+		if (pField != nullptr)
+		{
+			int playerX = (int)transform_.position_.x;
+			int playerY = (int)transform_.position_.y;
+
+			if (pField->IsHitClear(playerX, playerY))
+			{
+
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+			}
+		}
+	}
 }
 
 void Player::Draw()
@@ -298,8 +355,8 @@ void Player::Draw()
 	
 	// プレイヤーの座標を画面に表示
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
-//	DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
-	//DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
+	DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
+	DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
 	DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
 }
 

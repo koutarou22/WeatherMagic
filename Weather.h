@@ -17,15 +17,17 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void SetWeather(WeatherState _state) { weather_ = _state ; }//外部から天候情報を変更できる
-    float GetWeather(){ return WeatherChange_; }//天候を変化させたときの影響を与える数値を持ってこれる
-
+	void SetWeather(WeatherState _state) { weather_ = _state ; }
+	void SetNextWeather(WeatherState _state) { NextWeather_ = _state; }
+    float GetWeather(){ return WeatherChange_; }
+	WeatherState GetNextWeather() const { return NextWeather_; } 
 	WeatherState GetWeatherState() const { return weather_; }
 
 	float GetWeatherChange();
 
 private:
 	WeatherState weather_;
+	WeatherState NextWeather_;
     int hImage_Sunny;
 	int hImage_Rainy;
 	int hImage_Wind;

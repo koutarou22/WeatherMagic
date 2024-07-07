@@ -9,7 +9,7 @@ namespace
 	const float GROUND = 595.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.0f;
 	const float GRAVITY = 9.8f / 60.0f;
-
+	static const int SCREEN_WIDTH = 1280;
 	int hitX = 0;
 	int hitY = 0;
 
@@ -58,7 +58,6 @@ void Slime::Update()
 		Reverse_ = true;
 	}
 
-	// 反転フラグが立っている場合、移動方向を反転
 	if (Reverse_)
 	{
 		direction *= -1;
@@ -150,7 +149,22 @@ if (pField != nullptr)
 
 	}
 	//-----------------------------------------------------------
-
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	//if (cam != nullptr)
+	//{
+	//	x -= cam->GetValue();
+	//}
+	if (x > SCREEN_WIDTH)//即値、マジックナンバー
+		return;
+	else if (x < -64)
+	{
+		KillMe();
+		return;
+	}
+	if (transform_.position_.y > GROUND + 20)
+	{
+		KillMe();
+	}
 }
 
 void Slime::Draw()
@@ -167,6 +181,8 @@ void Slime::Draw()
 
     DrawExtendGraph(x, y, x + 64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
 
+	//Debug用
+	// 
 	//DrawFormatString(0, 90, GetColor(255, 255, 255), "スライムがぶつかった時: %d", direction);
 	//DrawCircle(x + 32.0f * transform_.scale_.x, y + 32.0f * transform_.scale_.y, 32.0f * transform_.scale_.x, GetColor(255, 0, 0), FALSE);
 	//DrawBox(rectX, rectY, rectX + rectW, rectY + rectH, GetColor(255, 0, 0), FALSE);

@@ -20,24 +20,30 @@ Magic::~Magic()
 
 void Magic::Update()
 {
-
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-	/*if (cam != nullptr)
+	if (cam != nullptr)
 	{
-		cam->GetPlayerPos(this);
-	}*/
+		transform_.position_.x += direction_.x * speed_;
+		transform_.position_.y += direction_.y * speed_;
 
-	transform_.position_.x += 5.5f;
-	if (--timer_ <= 0)
-	{
-		KillMe();
+		if (--timer_ <= 0)
+		{
+			KillMe();
+		}
 	}
+	
 }
 
 void Magic::Draw()
 {
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
+
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr) {
+		x -= cam->GetValue();
+	}
+
 	DrawGraph(x, y, hImage_, TRUE);
 }
 
@@ -48,7 +54,7 @@ void Magic::SetPosition(int x, int y)
 	timer_ = 90;
 }
 
-void Magic::Setposition(XMFLOAT3 pos)
+void Magic::SetPosition(XMFLOAT3 pos)
 {
 	transform_.position_ = pos;
 	timer_ = 90;

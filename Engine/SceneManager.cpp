@@ -3,6 +3,7 @@
 #include"../TitleScene.h"
 #include "../TestScene.h"
 #include "../GameOverScene.h"
+#include "../ClearScene.h"
 
 
 SceneManager::SceneManager(GameObject* parent)
@@ -28,6 +29,7 @@ void SceneManager::Update()
 		case SCENE_ID_TEST: Instantiate<TestScene>(this); break;
 		case SCENE_ID_GAMEOVER: Instantiate<GameOverScene>(this); break;
 		case SCENE_ID_TITLE: Instantiate<TitleScene>(this); break;
+		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this); break;
 		}
 		currentSceneID_ = nextSceneID_;
 	}

@@ -43,6 +43,7 @@ public:
 	/// <returns>ÇﬂÇËçûÇÒÇæó </returns>
 	int CollisionUp(int x, int y);
 	bool IsWallBlock(int x, int y);
+	bool IsHitClear(int x, int y);
 
 private:
 	int hImage_;

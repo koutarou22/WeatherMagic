@@ -5,12 +5,15 @@
 #include "Camera.h"
 #include "Engine/CsvReader.h"
 #include "Slime.h"
+#include "Ghost.h"
 
 //switch•¶‚Ìcase‚Ì”Žš‚Ícsv“à‚Ì’l‚ðŽ¦‚µ‚Ä‚¢‚é
 Field::Field(GameObject* scene) :GameObject(scene)
 {
 	Map = nullptr;//‚Ü‚¸‚±‚±‚ÅMap‚Ånull‚¢‚ê‚Æ‚­
+	//hImage_ = LoadGraph("Assets/bgchar.png");
 	hImage_ = LoadGraph("Assets/bgchar.png");
+	
 	assert(hImage_ > 0);
 
 	hBackGround_ = LoadGraph("Assets/bg5.png");
@@ -44,7 +47,7 @@ void Field::Reset()
 	}
 
 	CsvReader csv;
-	bool ret = csv.Load("Assets/stage7.csv");
+	bool ret = csv.Load("Assets/stage8(in).csv");
 	assert(ret);
 
 	width = csv.GetWidth();
@@ -79,8 +82,8 @@ void Field::Reset()
 			
 			case 1:
 			{
-				Bird* pBird = Instantiate<Bird>(GetParent());
-				pBird->SetPosition(w * 32, h * 32);
+				Ghost* pGhost = Instantiate<Ghost>(GetParent());
+				pGhost->SetPosition(w * 32, h * 32);
 				break;
 			}
 			
@@ -183,6 +186,49 @@ bool Field::IsWallBlock(int x, int y)
 	 case 35:
 		 return true;
 		 
+	};
+
+	return false;
+}
+
+bool Field::IsHitClear(int x, int y)
+{
+	int chipX = x / 32;
+	int chipY = y / 32;
+	switch (Map[chipY * width + chipX])
+	{
+	case 128://’n–Ê
+	case 129:
+	case 130:
+	case 131:
+	case 132:
+	case 133:
+	case 144:
+	case 145:
+	case 146:
+	case 147:
+	case 148:
+	case 149:
+	case 160:
+	case 161:
+	case 162:
+	case 163:
+	case 164:
+	case 165:
+	case 176:
+	case 177:
+	case 178:
+	case 179:
+	case 180:
+	case 181:
+	case 192:
+	case 193:
+	case 194:
+	case 195:
+	case 196:
+	case 197:
+		return true;
+
 	};
 
 	return false;

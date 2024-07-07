@@ -23,12 +23,12 @@ void GameOverScene::Update()
 
 void GameOverScene::Draw()
 {
-    // ゲームオーバーのテキストを描画
+   
     DrawString(0, 0, "GAME OVER", GetColor(255, 255, 255));
     DrawString(0, 20, "Press SPACE to return to title", GetColor(255, 255, 255));
 }
 
 void GameOverScene::Release()
 {
-    // ゲームオーバーシーンの解放処理...
+    
 }

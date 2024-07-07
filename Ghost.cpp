@@ -1,44 +1,81 @@
 #include "Ghost.h"
 #include <assert.h>
 #include "Camera.h"
+#include "EnemyMagic.h"
 
 namespace
 {
 	static const int SCREEN_WIDTH = 1280;
 }
+
 Ghost::Ghost(GameObject* scene)
 {
-	hImage = LoadGraph("Assets/Ghost.png");
-	assert(hImage > 0);
+	hImage_ = LoadGraph("Assets/Ghost.png");
+	assert(hImage_ > 0);
 	transform_.position_.x = 900.0f;
 	transform_.position_.y = 780.0f;
+	transform_.scale_.x = 2.0f;
+	transform_.scale_.y = 2.0f;
+
+	flameCounter_ = 0;
+	animeType_ = 0;
+	animeFrame_ = 0;
 }
 
 Ghost::~Ghost()
 {
-	if (hImage > 0)
+	if (hImage_ > 0)
 	{
-		DeleteGraph(hImage);
+		DeleteGraph(hImage_);
 	}
 }
 
 void Ghost::Update()
 {
-	int x = (int)transform_.position_.x;
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-	//if (cam != nullptr)
-	//{
-	//	x -= cam->GetValue();
-	//}
-	//if (x > SCREEN_WIDTH)//即値、マジックナンバー
-	//	return;
-	//else if (x < -64)
-	//{
-	//	KillMe();
-	//	return;
-	//}
-	//transform_.position_.x -= 1.0f;
-	//sinAngle += 3.0f;
+
+	if (++flameCounter_ >= 24)
+	{
+		animeFrame_ = (animeFrame_ + 1) % 4;//if文を使わない最適解
+		flameCounter_ = 0;
+	}
+
+	if (transform_.position_.x >= cam->GetValue() && transform_.position_.x <= cam->GetValue() + SCREEN_WIDTH)
+	{
+		if (CoolDownAttack_ <= 0)
+		{
+			EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
+			emg->SetPosition(transform_.position_);
+			VECTOR dir = { -1.0f,0.0f };
+			emg->SetDirection(dir);
+			emg->SetSpeed(2.5f);
+
+			CoolDownAttack_ = 120; 
+		}
+	}
+
+	// 毎フレームごとにクールダウンタイマーを減らす
+	if (CoolDownAttack_ > 0)
+	{
+		CoolDownAttack_--;
+	}
+
+	int x = (int)transform_.position_.x;
+
+	
+	if (cam != nullptr)
+	{
+		x -= cam->GetValue();
+	}
+	if (x > SCREEN_WIDTH)//即値、マジックナンバー
+		return;
+	else if (x < -64)
+	{
+		KillMe();
+		return;
+	}
+	transform_.position_.y -= 1.0f;
+	sinAngle += 3.0f;
 	float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
 	transform_.position_.y = 500.0f + sinValue * 50.0f;
 }
@@ -47,8 +84,23 @@ void Ghost::Draw()
 {
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
-	DrawRectGraph(x, y, 0, 0, 42,42, hImage, TRUE);
-	DrawCircle(x + 32.0f, y + 32.0f, 32.0f, GetColor(255, 0, 0), 0);
+
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr)
+	{
+		x -= cam->GetValue();
+	}
+	//今回は正面を向いてもらうだけでいいんで、一番上の三列のみ回す
+	// スプライトのサイズを計算
+	int spriteWidth = 256 / 3;
+	int spriteHeight = 344 / 4;
+
+	int frameX = animeFrame_ % 3;
+
+	// スプライトを描画
+	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
+
+	DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 32.0f, GetColor(255, 0, 0), 0);
 }
 
 void Ghost::SetPosition(int x, int y)
@@ -69,4 +121,24 @@ bool Ghost::ColliderCircle(float x, float y, float r)
 	if (sqrt(dx * dx + dy * dy) < (r + myR) * (r + myR))
 		return true;
 	return false;
+}
+
+bool Ghost::ColliderRect(float x, float y, float w, float h)
+{
+	// x,y,w,hが相手の矩形の情報
+	// 自分の矩形の情報
+	float myX = transform_.position_.x;
+	float myY = transform_.position_.y;
+	float myW = 64.0f * transform_.scale_.x;
+	float myH = 64.0f * transform_.scale_.y;
+
+	// 矩形の衝突判定
+	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

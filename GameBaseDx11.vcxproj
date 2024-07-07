@@ -131,6 +131,8 @@
   <ItemGroup>
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ClearScene.cpp" />
+    <ClCompile Include="EnemyMagic.cpp" />
     <ClCompile Include="Engine\CsvReader.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="Engine\Main.cpp" />
@@ -153,6 +155,8 @@
   <ItemGroup>
     <ClInclude Include="Bird.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ClearScene.h" />
+    <ClInclude Include="EnemyMagic.h" />
     <ClInclude Include="Engine\CsvReader.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Global.h" />
