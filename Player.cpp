@@ -184,17 +184,17 @@ void Player::Update()
 			// 次に切り替える天候を決定
 			if (WeatherState == Sunny)//現在晴れなら
 			{
-				pWeather->SetNextWeather(Rainy);//次は雨に
+				pWeather->SetWeather(Rainy);//次は雨に
 			}
 			else if (WeatherState == Rainy)
 			{
-				pWeather->SetNextWeather(Gale);//次は強風に
+				pWeather->SetWeather(Gale);//次は強風に
 			}
 			else
 			{
-				pWeather->SetNextWeather(Sunny);//次は晴れに
+				pWeather->SetWeather(Sunny);//次は晴れに
 			}
-			WeatherTime_= 60; // 60フレーム後に天候を切り替える（1秒後、フレームレートが60fpsの場合）
+			WeatherTime_= 60; 
 		}
 		WeatherSwitch = true;
 	}
@@ -203,15 +203,15 @@ void Player::Update()
 		WeatherSwitch = false;
 	}
 
-	if (WeatherTime_ > 0)
-	{
-		WeatherTime_--;
-		
-		if (WeatherTime_ == 0)
-		{
-			pWeather->SetWeather(pWeather->GetNextWeather());
-		}
-	}
+	//if (WeatherTime_ > 0)
+	//{
+	//	WeatherTime_--;
+	//	
+	//	if (WeatherTime_ == 0)
+	//	{
+	//		pWeather->SetWeather(pWeather->GetNextWeather());
+	//	}
+	//}
 
 
 	//拡張性はない
@@ -232,7 +232,7 @@ void Player::Update()
 			mg->SetPosition(transform_.position_);
 			VECTOR dir = { 1.0f, 0.0f };
 			mg->SetDirection(dir);
-			mg->SetSpeed(10.0f);
+			mg->SetSpeed(5.5f);
 			CoolDownMagic_ = timer_;
 		}
 	}
@@ -241,7 +241,7 @@ void Player::Update()
 		CoolDownMagic_--;
 	}
 
-	// 無敵時間の更新
+	
 	// 無敵時間の更新
 	if (NDTIME_ > 0.0f)
 	{
@@ -275,7 +275,7 @@ void Player::Update()
 						KillMe();
 						//Hp_ = 3; // 念のためリセット
 					}
-					// ダメージを受けたら一定時間無敵になる
+					
 					NDTIME_ = 3.0f;
 				}
 			}
@@ -313,7 +313,7 @@ void Player::Update()
 		//				KillMe();
 		//				Hp_ = 3; // 念のためリセット
 		//			}
-		//			 ダメージを受けたら一定時間無敵になる
+		//			// ダメージを受けたら一定時間無敵になる
 		//			NDTIME_ = 3.0f;
 		//		}
 		//	}
@@ -382,7 +382,6 @@ void Player::WeatherEffects(Weather* weather)
 	else if (WeatherState == Gale)
 	{
 		WeatherSpeed_ = MOVE_SPEED;
-
 	}
 	
 }

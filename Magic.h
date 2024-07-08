@@ -16,6 +16,7 @@ public:
 	void SetPosition(XMFLOAT3 pos);
 	void SetDirection(VECTOR _direction) { direction_ = _direction; }
 	void SetSpeed(float _speed) { speed_ = _speed; }
+	bool ColliderCircle(float x, float y, float r);
 private:
 	int hImage_;
 	int timer_;

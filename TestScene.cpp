@@ -27,7 +27,7 @@ void TestScene::Initialize()
 	Instantiate<Ghost>(this);
 	Instantiate<Hp>(this);
 	Instantiate<Player>(this);
-	Instantiate<Rock>(this);
+	//Instantiate<Rock>(this);
 	
 	
 	//Instantiate<Bird>(this);

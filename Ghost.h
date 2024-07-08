@@ -14,7 +14,7 @@ public:
 	//‰~‚Ì“–‚½‚è”»’è‚ð‚·‚é
 	void SetPosition(int x, int y);
 	bool ColliderCircle(float x, float y, float r);
-	bool ColliderRect(float x, float y, float w, float h);
+	//bool ColliderRect(float x, float y, float w, float h);
 private:
 	float sinAngle;
 	int hImage_;

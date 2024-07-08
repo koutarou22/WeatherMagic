@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Camera.h"
 #include "EnemyMagic.h"
+#include "Magic.h"
 
 namespace
 {
@@ -50,7 +51,7 @@ void Ghost::Update()
 			emg->SetDirection(dir);
 			emg->SetSpeed(2.5f);
 
-			CoolDownAttack_ = 120; 
+			CoolDownAttack_ = 180; 
 		}
 	}
 
@@ -78,6 +79,16 @@ void Ghost::Update()
 	sinAngle += 3.0f;
 	float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
 	transform_.position_.y = 500.0f + sinValue * 50.0f;
+
+
+	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
+	for(Magic* pMagic : pMagics)
+	{
+		if (pMagic->ColliderCircle(transform_.position_.x + 16.0f, transform_.position_.y + 16.0f, 20.0f))
+		{
+		   KillMe();	
+		}
+	}
 }
 
 void Ghost::Draw()
@@ -123,22 +134,22 @@ bool Ghost::ColliderCircle(float x, float y, float r)
 	return false;
 }
 
-bool Ghost::ColliderRect(float x, float y, float w, float h)
-{
-	// x,y,w,hが相手の矩形の情報
-	// 自分の矩形の情報
-	float myX = transform_.position_.x;
-	float myY = transform_.position_.y;
-	float myW = 64.0f * transform_.scale_.x;
-	float myH = 64.0f * transform_.scale_.y;
-
-	// 矩形の衝突判定
-	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
+//bool Ghost::ColliderRect(float x, float y, float w, float h)
+//{
+//	// x,y,w,hが相手の矩形の情報
+//	// 自分の矩形の情報
+//	float myX = transform_.position_.x;
+//	float myY = transform_.position_.y;
+//	float myW = 64.0f * transform_.scale_.x;
+//	float myH = 64.0f * transform_.scale_.y;
+//
+//	// 矩形の衝突判定
+//	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//		return false;
+//	}
+//}

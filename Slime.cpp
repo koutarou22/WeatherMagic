@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Field.h"
+#include "Magic.h"
 
 namespace
 {
@@ -153,18 +154,27 @@ if (pField != nullptr)
 	//if (cam != nullptr)
 	//{
 	//	x -= cam->GetValue();
+	////}
+	//if (x > SCREEN_WIDTH)//即値、マジックナンバー
+	//	return;
+	//else if (x < -64)
+	//{
+	//	KillMe();
+	//	return;
 	//}
-	if (x > SCREEN_WIDTH)//即値、マジックナンバー
-		return;
-	else if (x < -64)
-	{
-		KillMe();
-		return;
-	}
 	if (transform_.position_.y > GROUND + 20)
 	{
 		KillMe();
 	}
+
+	//std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
+	//for (Magic* pMagic : pMagics)
+	//{
+	//	if (pMagic->ColliderCircle(transform_.position_.x + 16.0f, transform_.position_.y + 16.0f, 20.0f))
+	//	{
+	//		KillMe();
+	//	}
+	//}
 }
 
 void Slime::Draw()

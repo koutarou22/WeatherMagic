@@ -52,14 +52,13 @@ void EnemyMagic::Draw()
 		x -= cam->GetValue();
 	}
 	int spriteWidth = 64;
-	int spriteHeight = 68;
+	int spriteHeight = 70;
 
 	int frameX = animeFrame_ % 3; // 横に3つの画像があるため
 
-	// スプライトを描画
 	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
 
-	DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 32.0f, GetColor(255, 0, 0), 0);
+	//DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 16.0f, GetColor(255, 0, 0), 0);
 	DrawGraph(x, y, hImage_, TRUE);
 }
 
