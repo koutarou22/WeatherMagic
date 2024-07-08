@@ -55,7 +55,6 @@ void Ghost::Update()
 		}
 	}
 
-	// 毎フレームごとにクールダウンタイマーを減らす
 	if (CoolDownAttack_ > 0)
 	{
 		CoolDownAttack_--;
@@ -84,9 +83,15 @@ void Ghost::Update()
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
 	for(Magic* pMagic : pMagics)
 	{
-		if (pMagic->ColliderCircle(transform_.position_.x + 16.0f, transform_.position_.y + 16.0f, 20.0f))
+		//解説　見ればわかると思うがこれは『Magic』と『Ghost』の距離を求めている
+		float dx = pMagic->GetPosition().x - (transform_.position_.x + 16.0f);//Mgの座標X - Ghの座標X
+		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);//Mgの座標Y - Ghの座標Y
+		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
+
+		if(distance <= 20.0f)
 		{
 		   KillMe();	
+		   break;
 		}
 	}
 }

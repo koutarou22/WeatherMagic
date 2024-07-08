@@ -47,8 +47,6 @@ void Slime::Update()
 		WeatherEffects(pWeather); // 天候関数を呼び出す
 	}
 
-	transform_.position_.x += WeatherSpeed_ * direction;
-
 	// 衝突判定と反転フラグの設定
 	if (pField->CollisionLeft(hitX, hitY) && direction == -1)
 	{
@@ -96,24 +94,38 @@ if (pField != nullptr)
 }
 //----------------------------------------------------------
 
-	//if (CheckHitKey(KEY_INPUT_SPACE))
-	//{
-	//	
-	//	if (prevSpaceKey == false)
-	//	{
-	//		if (onGround)
-	//		{
-	//			Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
-	//			onGround = false;
-	//		}
-	//	}
-	//	prevSpaceKey = true;
-	//}
-	//else
-	//{
-	//	prevSpaceKey = false;
-	//}
+	if(CoolGround_Now <= 0)
+	{
+		
+		if (prevSpaceKey == false)
+		{
+			if (onGround)
+			{
+				Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
+				
+				onGround = false;
+				
+			}
 
+		}
+		prevSpaceKey = true;
+		CoolGround_Now = 180;
+	}
+	else
+	{
+		prevSpaceKey = false;
+	}
+
+	if (!onGround)
+	{
+		transform_.position_.x += WeatherSpeed_ * direction;
+	}
+
+	if (CoolGround_Now > 0)
+	{
+		CoolGround_Now--;
+	}
+	
 	//-------------------+++加速のプログラムは基礎の基礎+++-------------------
 
 	Jump_P += GRAVITY; //速度 += 加速度
@@ -167,14 +179,20 @@ if (pField != nullptr)
 		KillMe();
 	}
 
-	//std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
-	//for (Magic* pMagic : pMagics)
-	//{
-	//	if (pMagic->ColliderCircle(transform_.position_.x + 16.0f, transform_.position_.y + 16.0f, 20.0f))
-	//	{
-	//		KillMe();
-	//	}
-	//}
+	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
+	for (Magic* pMagic : pMagics)
+	{
+		//解説　見ればわかると思うがこれは『Magic』と『Slime』の距離を求めている
+		float dx = pMagic->GetPosition().x - (transform_.position_.x + 10.0f);//Mgの座標X - Slの座標X
+		float dy = pMagic->GetPosition().y - (transform_.position_.y + 10.0f);//Mgの座標Y - Slの座標Y
+		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
+
+		if (distance <= 20.0f)
+		{
+			KillMe();
+			break;
+		}
+	}
 }
 
 void Slime::Draw()
@@ -262,7 +280,7 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); // 雨の日は速度を減少させる
 
 		
-		if (transform_.scale_.x < 1.5f)
+		if (transform_.scale_.x < 1.5f)//大きさが1.5で止まるように
 		{
 			ScaleEffect_ = transform_.scale_.x;
 			transform_.scale_.x += 0.01f;

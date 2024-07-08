@@ -31,6 +31,8 @@ private:
 	bool prevSpaceKey;
 	bool onGround;//ínñ Ç…Ç¢ÇÈÇÃÇ©ÅH
 
+	int Timer_ = 90;
+	int CoolGround_Now = 0;
 	float Jump_P = 0.0f;
 	float WeatherSpeed_ = 0.0f;
 	float RainHappening_ = 0.0f;
