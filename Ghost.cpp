@@ -49,7 +49,7 @@ void Ghost::Update()
 			emg->SetPosition(transform_.position_);
 			VECTOR dir = { -1.0f,0.0f };
 			emg->SetDirection(dir);
-			emg->SetSpeed(2.5f);
+			emg->SetSpeed(3.5f);
 
 			CoolDownAttack_ = 180; 
 		}

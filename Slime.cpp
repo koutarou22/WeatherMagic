@@ -206,8 +206,18 @@ void Slime::Draw()
 	{
 		x -= cam->GetValue();
 	}
+	
+	if (direction == -1)
+	{
+		DrawExtendGraph(x, y, x + 64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
+		
+	}
 
-    DrawExtendGraph(x, y, x + 64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
+	if (direction == 1)
+	{
+		DrawExtendGraph(x, y, x + 64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
+		DrawTurnGraph(x, y, hImage, FALSE);
+	}
 
 	//Debug—p
 	// 
