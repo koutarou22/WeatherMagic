@@ -8,6 +8,7 @@
 #include "Engine/SceneManager.h"
 #include "Rock.h"
 #include "Ghost.h"
+#include "Damage.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -26,6 +27,7 @@ void TestScene::Initialize()
 	Instantiate<Slime>(this);
 	Instantiate<Ghost>(this);
 	Instantiate<Hp>(this);
+	Instantiate<Damage>(this);
 	Instantiate<Player>(this);
 	//Instantiate<Rock>(this);
 	

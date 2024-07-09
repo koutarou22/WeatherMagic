@@ -9,7 +9,7 @@ class Slime : public GameObject
 {
 public:
 
-	Slime(GameObject* parent, float x, float y);
+
 	Slime(GameObject* scene);
 	~Slime();
 	void Update() override;
@@ -31,6 +31,11 @@ private:
 	bool prevSpaceKey;
 	bool onGround;//ínñ Ç…Ç¢ÇÈÇÃÇ©ÅH
 
+	int flameCounter_;
+	int animeFrame_;
+
+
+	int WindTimer_ = 300;
 	int Timer_ = 90;
 	int CoolGround_Now = 0;
 	float Jump_P = 0.0f;

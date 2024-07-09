@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Field.h"
 #include "Magic.h"
+#include "Damage.h"
 
 namespace
 {
@@ -15,17 +16,13 @@ namespace
 	int hitY = 0;
 
 };
-Slime::Slime(GameObject* parent, float x, float y): GameObject(parent, "Slime")
-{
-	this->x = x;
-	this->y = y;
-}
+
 Slime::Slime(GameObject* scene)
 {
 	hImage = LoadGraph("Assets/slime.png");
 	assert(hImage > 0);
-	transform_.position_.x = 1200.0f;
-	transform_.position_.y = 600.0f;
+	/*transform_.position_.x = 1200.0f;
+	transform_.position_.y = 600.0f;*/
 	
 }
 
@@ -61,6 +58,12 @@ void Slime::Update()
 	{
 		direction *= -1;
 		Reverse_ = false;
+	}
+
+	if (++flameCounter_ >= 24)
+	{
+		animeFrame_ = (animeFrame_ + 1) % 4;//if文を使わない最適解
+		flameCounter_ = 0;
 	}
 
 	//---------------衝突判定(左)--------------------------------
@@ -162,22 +165,18 @@ if (pField != nullptr)
 
 	}
 	//-----------------------------------------------------------
-	Camera* cam = GetParent()->FindGameObject<Camera>();
+	//Camera* cam = GetParent()->FindGameObject<Camera>();
 	//if (cam != nullptr)
 	//{
 	//	x -= cam->GetValue();
-	////}
-	//if (x > SCREEN_WIDTH)//即値、マジックナンバー
-	//	return;
-	//else if (x < -64)
-	//{
-	//	KillMe();
-	//	return;
 	//}
+
 	if (transform_.position_.y > GROUND + 20)
 	{
 		KillMe();
 	}
+
+	
 
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
 	for (Magic* pMagic : pMagics)
@@ -189,6 +188,8 @@ if (pField != nullptr)
 
 		if (distance <= 20.0f)
 		{
+			Damage* dam = Instantiate<Damage>(GetParent());
+			dam->SetPosition(transform_.position_);
 			KillMe();
 			break;
 		}
@@ -206,17 +207,19 @@ void Slime::Draw()
 	{
 		x -= cam->GetValue();
 	}
-	
+	int spriteWidth = 256;
+	int spriteHeight = 43;
+
+	int frameX = animeFrame_ % 3; // 横に3つの画像があるため
+
 	if (direction == -1)
 	{
-		DrawExtendGraph(x, y, x + 64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
+		DrawExtendGraph(x, y, x +64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
 		
 	}
-
 	if (direction == 1)
 	{
-		DrawExtendGraph(x, y, x + 64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
-		DrawTurnGraph(x, y, hImage, FALSE);
+		DrawExtendGraph(x, y, x + 64* transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
 	}
 
 	//Debug用
@@ -321,20 +324,29 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 
 	if (state == Gale)
 	{
-		if (CheckHitKey(KEY_INPUT_RIGHT))
+		
+			if (CheckHitKey(KEY_INPUT_RIGHT))
+			{
+				 transform_.position_.x += 4.0f;
+				 Reverse_ = true;
+				WindTimer_ = 300;
+			}
+			else if (CheckHitKey(KEY_INPUT_LEFT))
+			{
+				transform_.position_.x -= 4.0f;
+				Reverse_ = false;
+			}
+			else if (CheckHitKeyAll(KEY_INPUT_UP))
+			{
+				transform_.position_.y -= 5.0f;
+			}
+
+	
+		if (WindTimer_ > 0)
 		{
-			transform_.position_.x += 4.0f;
-			Reverse_ = true;
+			WindTimer_--;
 		}
-		else if (CheckHitKey(KEY_INPUT_LEFT))
-		{
-			transform_.position_.x -= 4.0f;
-			Reverse_ = false;
-		}
-		else if (CheckHitKeyAll(KEY_INPUT_UP))
-		{
-			transform_.position_.y -= 5.0f;
-		}
+
 	}
 	
 }

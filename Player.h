@@ -31,6 +31,7 @@ private:
 	bool onGround;//地面にいるのか？
 	bool damaged = false;
 	float Jump_P = 0.0f;
+	int Flash_Count;
 
 	int animType;//状況
 	int animFrame;//駒
@@ -38,12 +39,13 @@ private:
 	int flameCounter;
 
 	float NDTIME_; //無敵時間
+	int	  CoolDownMagic_ = 0;
 	int Hp_ = 3;
 	int hitCount;
 
 	float WeatherSpeed_;//MOVE_SPEEDとWeatherの値を合わせ格納する用の変数
 	bool  WeatherSwitch;//高速で天候が切り替わらないようにする対策
-	int	  CoolDownMagic_ = 0;
+	
 	int MagicPoint;
 	enum State
 	{

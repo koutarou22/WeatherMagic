@@ -132,6 +132,7 @@
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ClearScene.cpp" />
+    <ClCompile Include="Damage.cpp" />
     <ClCompile Include="EnemyMagic.cpp" />
     <ClCompile Include="Engine\CsvReader.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Bird.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ClearScene.h" />
+    <ClInclude Include="Damage.h" />
     <ClInclude Include="EnemyMagic.h" />
     <ClInclude Include="Engine\CsvReader.h" />
     <ClInclude Include="Engine\GameObject.h" />

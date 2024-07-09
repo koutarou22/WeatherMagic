@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "EnemyMagic.h"
 #include "Magic.h"
+#include "Damage.h"
 
 namespace
 {
@@ -50,6 +51,7 @@ void Ghost::Update()
 			VECTOR dir = { -1.0f,0.0f };
 			emg->SetDirection(dir);
 			emg->SetSpeed(3.5f);
+			
 
 			CoolDownAttack_ = 180; 
 		}
@@ -63,17 +65,17 @@ void Ghost::Update()
 	int x = (int)transform_.position_.x;
 
 	
-	if (cam != nullptr)
-	{
-		x -= cam->GetValue();
-	}
-	if (x > SCREEN_WIDTH)//即値、マジックナンバー
-		return;
-	else if (x < -64)
-	{
-		KillMe();
-		return;
-	}
+	//if (cam != nullptr)
+	//{
+	//	x -= cam->GetValue();
+	//}
+	//if (x > SCREEN_WIDTH)//即値、マジックナンバー
+	//	return;
+	//else if (x < -64)
+	//{
+	//	KillMe();
+	//	return;
+	//}
 	transform_.position_.y -= 1.0f;
 	sinAngle += 3.0f;
 	float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);

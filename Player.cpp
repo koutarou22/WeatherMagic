@@ -11,6 +11,8 @@
 #include "Engine/SceneManager.h"
 #include "Magic.h"
 #include "Ghost.h"
+#include "EnemyMagic.h"
+#include "Damage.h"
 
 namespace
 {
@@ -19,7 +21,7 @@ namespace
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
     float GRAVITY = 9.8f / 60.0f;
 };
-Player::Player(GameObject* parent) : GameObject(sceneTop),WeatherSpeed_(MOVE_SPEED),Hp_(3), NDTIME_(1.0f)
+Player::Player(GameObject* parent) : GameObject(sceneTop),WeatherSpeed_(MOVE_SPEED),Hp_(3), NDTIME_(2.0f),Flash_Count(0)
 {
 	hImage = LoadGraph("Assets/magic.png");
 	assert(hImage > 0);
@@ -56,6 +58,7 @@ void Player::Update()
 		WeatherEffects(pWeather); // 天候関数を呼び出す
 	}
 
+	//画面外に行かないようにする処理
 	if (transform_.position_.x < 0)
 	{
 		transform_.position_.x = 0;
@@ -273,7 +276,6 @@ void Player::Update()
 					if (Hp_ <= 0)
 					{
 						KillMe();
-						//Hp_ = 3; // 念のためリセット
 					}
 					
 					NDTIME_ = 3.0f;
@@ -281,6 +283,7 @@ void Player::Update()
 			}
 		}
 
+		Damage* pDamage = GetParent()->FindGameObject<Damage>();
 		//カメラの処理
 		Camera* cam = GetParent()->FindGameObject<Camera>();
 		int xR = (int)transform_.position_.x - cam->GetValue();
@@ -297,27 +300,63 @@ void Player::Update()
 			cam->SetValue((int)transform_.position_.x - xL);
 		}
 
-
 		//----------------------------------------------------------------------------------
-		//std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
-		//for(Ghost* pGhost : pGhosts)
-		//{
-		//	if (pGhost->ColliderCircle(transform_.position_.x + 32.0f, transform_.position_.y + 32.0f, 20.0f))
-		//	{
-		//		if (NDTIME_ <= 0.0f)
-		//		{
-		//			hp->DamageHp();
-		//			Hp_--;
-		//			if (Hp_ <= 0)
-		//			{
-		//				KillMe();
-		//				Hp_ = 3; // 念のためリセット
-		//			}
-		//			// ダメージを受けたら一定時間無敵になる
-		//			NDTIME_ = 3.0f;
-		//		}
-		//	}
-		//}
+
+		//2点間の距離の便利さを身に染みて実感しました
+		std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
+		for (EnemyMagic* pEnemyMagic : pEMagics)
+		{
+			//解説　見ればわかると思うがこれは『EnemyMagic』と『Slime』の距離を求めている
+			float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 12.0f);//Mgの座標X - Slの座標X
+			float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 12.0f);//Mgの座標Y - Slの座標Y
+			float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
+
+			if (distance <= 20.0f)
+			{
+				if (NDTIME_ <= 0.0f)
+				{
+					
+					hp->DamageHp();
+					Hp_--;
+
+					if (Hp_ <= 0)
+					{
+						KillMe();
+						break;
+					}
+
+					NDTIME_ = 2.0f;
+				}
+				break;
+			}
+		}
+
+		std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
+		for (Ghost* pGhost : pGhosts)
+		{
+			float dx = pGhost->GetPosition().x - (transform_.position_.x + 10.0f);
+			float dy = pGhost->GetPosition().y - (transform_.position_.y + 10.0f);
+
+			float distance = sqrt(dx * dx + dy + dy);
+
+			if (distance <= 10.0f)
+			{
+				if (NDTIME_ <= 0.0f)
+				{
+					hp->DamageHp();
+					Hp_--;
+					if (Hp_ <= 0)
+					{
+						KillMe();
+						break;
+					}
+
+					NDTIME_ = 3.0f;
+				}
+				break;
+			}
+		}
+
 		//死亡したらゲームオーバー画面へ
 		if (transform_.position_.y > GROUND || Hp_ == 0)
 		{
@@ -332,7 +371,6 @@ void Player::Update()
 
 			if (pField->IsHitClear(playerX, playerY))
 			{
-
 				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 			}
@@ -349,9 +387,21 @@ void Player::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue(); 
 	}
-
-    // 通常の描画処理...
-    DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+	
+	if (NDTIME_ <= 0.0f)
+	{
+		DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+	}
+	else
+	{
+		if (Flash_Count % 24 == 0)
+		{
+			DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+		}
+	}
+	
+	++Flash_Count;
+   
 	
 	// プレイヤーの座標を画面に表示
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
