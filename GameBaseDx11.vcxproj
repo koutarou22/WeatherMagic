@@ -143,6 +143,7 @@
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="HealItem.cpp" />
     <ClCompile Include="Hp.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Rock.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="Ghost.h" />
+    <ClInclude Include="HealItem.h" />
     <ClInclude Include="Hp.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rock.h" />

@@ -133,7 +133,7 @@ bool Ghost::ColliderCircle(float x, float y, float r)
 	//©•ª‚Ì‰~‚Ìî•ñ
 	float myCenterX = transform_.position_.x + 32.0f;
 	float myCenterY = transform_.position_.y + 32.0f;
-	float myR = 24.0f;
+	float myR = 30.0f;
 	float dx = myCenterX - x;
 	float dy = myCenterY - y;
 	if (sqrt(dx * dx + dy * dy) < (r + myR) * (r + myR))

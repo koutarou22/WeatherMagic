@@ -165,11 +165,11 @@ if (pField != nullptr)
 
 	}
 	//-----------------------------------------------------------
-	//Camera* cam = GetParent()->FindGameObject<Camera>();
-	//if (cam != nullptr)
-	//{
-	//	x -= cam->GetValue();
-	//}
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr)
+	{
+		x -= cam->GetValue();
+	}
 
 	if (transform_.position_.y > GROUND + 20)
 	{
@@ -266,8 +266,8 @@ bool Slime::ColliderRect(float x, float y, float w, float h)
 	// ©•ª‚Ì‹éŒ`‚Ìî•ñ
 	float myX = transform_.position_.x;
 	float myY = transform_.position_.y;
-	float myW = 64.0f * transform_.scale_.x; 
-	float myH = 64.0f * transform_.scale_.y; 
+	float myW = 64.0f ; 
+	float myH = 64.0f ; 
 
 	// ‹éŒ`‚ÌÕ“Ë”»’è
 	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
