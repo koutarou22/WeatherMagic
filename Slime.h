@@ -29,12 +29,14 @@ public:
 private:
 	int hImage;
 	bool prevSpaceKey;
+	bool PressKey_R = false;
+	bool PressKey_L = false;
 	bool onGround;//ínñ Ç…Ç¢ÇÈÇÃÇ©ÅH
 
 	int flameCounter_;
 	int animeFrame_;
 
-
+	int StunTimer_;
 	int WindTimer_ = 300;
 	int Timer_ = 90;
 	int CoolGround_Now = 0;

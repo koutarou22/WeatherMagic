@@ -6,6 +6,8 @@
 #include "Engine/CsvReader.h"
 #include "Slime.h"
 #include "Ghost.h"
+#include "HealItem.h"
+#include "Rock.h"
 
 //switch•¶‚Ìcase‚Ì”š‚Ícsv“à‚Ì’l‚ğ¦‚µ‚Ä‚¢‚é
 Field::Field(GameObject* scene) :GameObject(scene)
@@ -47,7 +49,7 @@ void Field::Reset()
 	}
 
 	CsvReader csv;
-	bool ret = csv.Load("Assets/stage8(in).csv");
+	bool ret = csv.Load("Assets/stage9(in).csv");
 	assert(ret);
 
 	width = csv.GetWidth();
@@ -91,7 +93,21 @@ void Field::Reset()
 			{
 				Slime* pSlime = Instantiate<Slime>(GetParent());
 				pSlime->SetPosition(w * 32, h * 32);
+				break;
 
+			}
+			case 3:
+			{
+				Rock* pRock = Instantiate<Rock>(GetParent());
+				pRock->SetPosition(w * 32, h * 32);
+				break;
+			}
+
+			case 4:
+			{
+				HealItem* pHeal = Instantiate<HealItem>(GetParent());
+				pHeal->SetPosition(w * 32, h * 32);
+				break;
 			}
 			
 			default:

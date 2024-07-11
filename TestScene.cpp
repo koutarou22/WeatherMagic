@@ -9,6 +9,8 @@
 #include "Rock.h"
 #include "Ghost.h"
 #include "Damage.h"
+#include "HealItem.h"
+#include "MpItem.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -20,16 +22,18 @@ TestScene::TestScene(GameObject * parent)
 void TestScene::Initialize()
 {
 	
-	Instantiate<Field>(this);
+	/*Instantiate<Field>(this);*/
 	Field* pFailed = Instantiate<Field>(this);
 	pFailed->Reset();
 	Instantiate<Camera>(this);
-	Instantiate<Slime>(this);
-	Instantiate<Ghost>(this);
+	//Instantiate<Slime>(this);
+	//Instantiate<Ghost>(this);
 	Instantiate<Hp>(this);
-	Instantiate<Damage>(this);
+	//Instantiate<Damage>(this);
 	Instantiate<Player>(this);
+	//Instantiate<HealItem>(this);
 	//Instantiate<Rock>(this);
+	Instantiate<MpItem>(this);
 	
 	
 	//Instantiate<Bird>(this);

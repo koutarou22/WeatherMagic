@@ -34,6 +34,14 @@ void Hp::DamageHp()
     }
 }
 
+void Hp::HeelHp()
+{
+    if (Wide_ > 0)
+    {
+        Wide_++;
+    }
+}
+
 void Hp::Draw()
 {
     // 画面のサイズを取得

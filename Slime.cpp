@@ -23,7 +23,8 @@ Slime::Slime(GameObject* scene)
 	assert(hImage > 0);
 	/*transform_.position_.x = 1200.0f;
 	transform_.position_.y = 600.0f;*/
-	
+	StunTimer_ = 0;
+
 }
 
 Slime::~Slime()
@@ -97,7 +98,7 @@ if (pField != nullptr)
 }
 //----------------------------------------------------------
 
-	if(CoolGround_Now <= 0)
+	if(CoolGround_Now <= 0 && StunTimer_ <= 0)
 	{
 		
 		if (prevSpaceKey == false)
@@ -112,16 +113,37 @@ if (pField != nullptr)
 
 		}
 		prevSpaceKey = true;
-		CoolGround_Now = 180;
+		CoolGround_Now = 240;
 	}
 	else
 	{
 		prevSpaceKey = false;
 	}
 
-	if (!onGround)
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr)
 	{
-		transform_.position_.x += WeatherSpeed_ * direction;
+		x -= cam->GetValue();
+	}
+
+
+	if (cam != nullptr)
+	{
+		// カメラの位置を取得
+		int camX = cam->GetValue();
+
+		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
+		{
+			if (!onGround)
+			{
+				transform_.position_.x += WeatherSpeed_ * direction;
+			}
+		}
+	}
+	
+	if (StunTimer_ > 0)
+	{
+		StunTimer_--;
 	}
 
 	if (CoolGround_Now > 0)
@@ -165,23 +187,17 @@ if (pField != nullptr)
 
 	}
 	//-----------------------------------------------------------
-	Camera* cam = GetParent()->FindGameObject<Camera>();
-	if (cam != nullptr)
-	{
-		x -= cam->GetValue();
-	}
+
 
 	if (transform_.position_.y > GROUND + 20)
 	{
 		KillMe();
 	}
 
-	
-
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
 	for (Magic* pMagic : pMagics)
 	{
-		//解説　見ればわかると思うがこれは『Magic』と『Slime』の距離を求めている
+		//解説『Magic』と『Slime』の距離を求めている
 		float dx = pMagic->GetPosition().x - (transform_.position_.x + 10.0f);//Mgの座標X - Slの座標X
 		float dy = pMagic->GetPosition().y - (transform_.position_.y + 10.0f);//Mgの座標Y - Slの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
@@ -190,7 +206,7 @@ if (pField != nullptr)
 		{
 			Damage* dam = Instantiate<Damage>(GetParent());
 			dam->SetPosition(transform_.position_);
-			KillMe();
+			StunTimer_ = 300;
 			break;
 		}
 	}
@@ -224,7 +240,7 @@ void Slime::Draw()
 
 	//Debug用
 	// 
-	//DrawFormatString(0, 90, GetColor(255, 255, 255), "スライムがぶつかった時: %d", direction);
+	DrawFormatString(0, 90, GetColor(255, 255, 255), "スライムがぶつかった時: %d", WindTimer_);
 	//DrawCircle(x + 32.0f * transform_.scale_.x, y + 32.0f * transform_.scale_.y, 32.0f * transform_.scale_.x, GetColor(255, 0, 0), FALSE);
 	//DrawBox(rectX, rectY, rectX + rectW, rectY + rectH, GetColor(255, 0, 0), FALSE);
 }
@@ -237,28 +253,6 @@ void Slime::WeatherEffects(Weather* weather)
 	RainScale(WeatherState, transform_, WeatherSpeed_, MOVE_SPEED, WeatherEffect, ScaleEffect_);
 
 }
-
-//
-//bool Slime::ColliderCircle(float x, float y, float r)
-//{
-//	float CenterX = transform_.position_.x + 32.0f * transform_.scale_.x;
-//	float CenterY = transform_.position_.y + 32.0f * transform_.scale_.y;
-//	float dx = CenterX - x;
-//	float dy = CenterY - y;
-//	float dSqrts = dx * dx + dy * dy;
-//
-//	float myR = (32.0f + r) * transform_.scale_.x; // スケールを適用
-//	float rSqrt = myR * myR;
-//	//float rSqrt = sqrt(myR * myR);
-//	if (dSqrts <= rSqrt)
-//	{
-//		return true;
-//	}
-//	else
-//	{
-//		return false;
-//	}
-//}
 
 bool Slime::ColliderRect(float x, float y, float w, float h)
 {
@@ -324,30 +318,51 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 
 	if (state == Gale)
 	{
-		
+		if (!PressKey_R && !PressKey_L && WindTimer_ <= 0)
+		{
 			if (CheckHitKey(KEY_INPUT_RIGHT))
 			{
-				 transform_.position_.x += 4.0f;
-				 Reverse_ = true;
+				Reverse_ = true;
 				WindTimer_ = 300;
+				PressKey_R = true;
 			}
 			else if (CheckHitKey(KEY_INPUT_LEFT))
 			{
-				transform_.position_.x -= 4.0f;
 				Reverse_ = false;
+				WindTimer_ = 300;
+				PressKey_L = true;
 			}
-			else if (CheckHitKeyAll(KEY_INPUT_UP))
-			{
-				transform_.position_.y -= 5.0f;
-			}
-
-	
-		if (WindTimer_ > 0)
-		{
-			WindTimer_--;
+				/*else if (CheckHitKey(KEY_INPUT_UP))
+				{
+					WindTimer_ = 300;
+					PressKey_ = true;
+				}*/
 		}
 
+		if (WindTimer_ > 0)
+		{
+			if (PressKey_R)
+			{
+				transform_.position_.x += 4.0f;
+			}
+			else if (PressKey_L)
+			{
+				transform_.position_.x -= 4.0f;
+			}
+				/*else if (CheckHitKey(KEY_INPUT_UP))
+				{
+					transform_.position_.y -= 5.0f;
+				}*/
+
+			WindTimer_--;
+			if (WindTimer_ == 0)
+			{
+				PressKey_R = false;
+				PressKey_L = false;
+			}
+		}
 	}
+
 	
 }
 

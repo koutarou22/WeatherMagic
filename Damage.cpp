@@ -1,7 +1,7 @@
 #include "Damage.h"
 #include "Camera.h"
 
-Damage::Damage(GameObject* parent) :GameObject(parent, "Hp"), hImage_(-1), Timer_(90)
+Damage::Damage(GameObject* parent) :GameObject(parent, "Damage"), hImage_(-1), Timer_(90)
 {
 	hImage_ = LoadGraph("Assets/Damage.png");
 	assert(hImage_ >= 0);

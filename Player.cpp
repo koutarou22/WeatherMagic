@@ -13,6 +13,9 @@
 #include "Ghost.h"
 #include "EnemyMagic.h"
 #include "Damage.h"
+#include "HealItem.h"
+#include "Buffs.h"
+#include "MpItem.h"
 
 namespace
 {
@@ -31,6 +34,9 @@ Player::Player(GameObject* parent) : GameObject(sceneTop),WeatherSpeed_(MOVE_SPE
 	flameCounter = 0;
 	animType = 0;
 	animFrame = 0;
+
+
+	MagicPoint_ = 0;
 }
 
 Player::~Player()
@@ -160,6 +166,7 @@ void Player::Update()
 	}
 	//-----------------------------------------------------------
 
+	
 	//---------------衝突判定(下)--------------------------------
 	if (pField != nullptr)
 	{
@@ -228,7 +235,7 @@ void Player::Update()
 
 	if (CheckHitKey(KEY_INPUT_M))
 	{
-		if (CoolDownMagic_ <= 0)
+		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
 		{
 			Magic* mg = Instantiate<Magic>(GetParent());
 			//mg->SetPosition(transform_.position_.x,transform_.position_.y);
@@ -237,6 +244,7 @@ void Player::Update()
 			mg->SetDirection(dir);
 			mg->SetSpeed(5.5f);
 			CoolDownMagic_ = timer_;
+			MagicPoint_--;
 		}
 	}
 	if (CoolDownMagic_ > 0)
@@ -276,6 +284,10 @@ void Player::Update()
 					if (Hp_ <= 0)
 					{
 						KillMe();
+					}
+					if (Hp_ > 3)
+					{
+						Hp_--;
 					}
 					
 					NDTIME_ = 3.0f;
@@ -357,6 +369,46 @@ void Player::Update()
 			}
 		}
 
+		std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
+		for (HealItem* pHeal : pHeals)
+		{
+			float dx = pHeal->GetPosition().x - (transform_.position_.x + 10.0f);
+			float dy = pHeal->GetPosition().y - (transform_.position_.y + 10.0f);
+
+			float distance = sqrt(dx * dx + dy + dy);
+
+			if (distance <= 10.0f)
+			{
+				if (Hp_ < 3) 
+				{
+					hp->HeelHp();
+					Hp_++;
+				}
+				break;
+			}
+		}
+		std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
+		for (MpItem* pMp : pMps)
+		{
+			float dx = pMp->GetPosition().x - (transform_.position_.x + 16.0f);
+			float dy = pMp->GetPosition().y - (transform_.position_.y + 16.0f);
+
+			float distance = sqrt(dx * dx + dy + dy);
+
+			if (distance <= 20.0f)
+			{
+				if (MagicPoint_ < 10)
+				{
+					MagicPoint_ += 5;
+					if (MagicPoint_ > 10) 
+					{
+						MagicPoint_ = 10; 
+					}
+				}
+				break; 
+			}
+		}
+
 		//死亡したらゲームオーバー画面へ
 		if (transform_.position_.y > GROUND || Hp_ == 0)
 		{
@@ -408,6 +460,7 @@ void Player::Draw()
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
 	DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
 	DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
+	DrawFormatString(1100, 20, GetColor(255, 255, 255), "現在打てる魔法: %d", MagicPoint_);
 }
 
 void Player::SetPosition(int x, int y)
@@ -420,10 +473,12 @@ void Player::WeatherEffects(Weather* weather)
 {
 	WeatherState WeatherState = weather->GetWeatherState();
 	float WeatherEffect = weather->GetWeatherChange();
+	//Buffs*pBuff = GetParent()->FindGameObject<Buffs>();
 
 	if (WeatherState == Sunny)
 	{
 		WeatherSpeed_ = MOVE_SPEED;
+		//pBuff->SetPosition(transform_.position_);
 	}
 	else if (WeatherState == Rainy)
 	{

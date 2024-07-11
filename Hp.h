@@ -25,4 +25,5 @@ public:
 	void Release() override;
 
 	void DamageHp();//Player‚Å‘€ì‚µ‚½‚¢
+	void HeelHp();
 };

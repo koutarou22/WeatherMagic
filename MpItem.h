@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
-class HealItem :public GameObject
+class MpItem :public GameObject
 {
 private:
 	int hImage_;
@@ -11,8 +11,8 @@ private:
 	int flameCounter_;
 public:
 
-	HealItem(GameObject* parent);
-	~HealItem();
+	MpItem(GameObject* parent);
+	~MpItem();
 	//èâä˙âª
 	void Initialize() override;
 
@@ -26,5 +26,6 @@ public:
 	void SetPosition(int x, int y);
 	void SetPosition(XMFLOAT3 pos);
 	bool ColliderCircle(float x, float y, float r);
+	bool Judgement_ = false;
 };
 

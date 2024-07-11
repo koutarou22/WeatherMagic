@@ -46,7 +46,10 @@ private:
 	float WeatherSpeed_;//MOVE_SPEEDとWeatherの値を合わせ格納する用の変数
 	bool  WeatherSwitch;//高速で天候が切り替わらないようにする対策
 	
-	int MagicPoint;
+	int MagicPoint_;//打てる魔法の回数
+	
+
+	//int MAGIC_COUNT = 0;
 	enum State
 	{
 		S_WaIk = 0,
