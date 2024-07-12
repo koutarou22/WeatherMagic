@@ -68,6 +68,11 @@ void Rock::Update()
 	Jump_P += GRAVITY; //速度 += 加速度
 	transform_.position_.y += Jump_P; //座標 += 速度
 
+	if (transform_.position_.y > 600)
+	{
+		transform_.position_.y = 600;
+	}
+
 	//---------------衝突判定(上)--------------------------------
 	if (!onGround && pField != nullptr)
 	{
@@ -131,16 +136,54 @@ void Rock::WeatherEffects(Weather* weather)
 
 	if (WeatherState == Gale)
 	{
-		if (CheckHitKey(KEY_INPUT_RIGHT))
+		if (!PressKey_R && !PressKey_L && WindTimer_ <= 0)
 		{
-			transform_.position_.x += 0.5f;
-
+			if (CheckHitKey(KEY_INPUT_RIGHT))
+			{
+				WindTimer_ = 300;
+				PressKey_R = true;
+			}
+			else if (CheckHitKey(KEY_INPUT_LEFT))
+			{
+				
+				WindTimer_ = 300;
+				PressKey_L = true;
+			}
+		
 		}
-		else if (CheckHitKey(KEY_INPUT_LEFT))
+
+		if (WindTimer_ > 0)
 		{
-			transform_.position_.x -= 0.5f;
-			
+			if (PressKey_R)
+			{
+				transform_.position_.x += 1.5f;
+			}
+			else if (PressKey_L)
+			{
+				transform_.position_.x -= 1.5f;
+			}
+			/*else if (CheckHitKey(KEY_INPUT_UP))
+			{
+				transform_.position_.y -= 5.0f;
+			}*/
+
+			WindTimer_--;
+			if (WindTimer_ == 0)
+			{
+				PressKey_R = false;
+				PressKey_L = false;
+			}
 		}
 	}
 	
 }
+//
+//int Rock::CollisionUp(int x, int y)
+//{
+//
+//	/*if (IsWallBlock(x, y - 1))
+//	{
+//	  return 32 - (y % 32);
+//	}
+//		return 0;*/
+//}

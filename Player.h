@@ -47,7 +47,9 @@ private:
 	bool  WeatherSwitch;//‚‘¬‚Å“VŒó‚ªØ‚è‘Ö‚í‚ç‚È‚¢‚æ‚¤‚É‚·‚é‘Îô
 	
 	int MagicPoint_;//‘Å‚Ä‚é–‚–@‚Ì‰ñ”
-	
+
+	bool IsHitOneCount_;
+	bool DebugLog_;
 
 	//int MAGIC_COUNT = 0;
 	enum State

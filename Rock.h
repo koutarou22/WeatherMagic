@@ -11,8 +11,12 @@ public:
 	void Draw() override;
 	void SetPosition(int x, int y);
 	void WeatherEffects(Weather* weather);
+	//int CollisionUp(int x, int y);
 private:
-	
+	bool PressKey_R = false;
+	bool PressKey_L = false;
+	int WindTimer_ = 300;
+
 	int hImage_;
 	float Jump_P = 0.0f;
 	bool onGround;//ínñ Ç…Ç¢ÇÈÇÃÇ©ÅH

@@ -24,7 +24,7 @@ namespace
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
     float GRAVITY = 9.8f / 60.0f;
 };
-Player::Player(GameObject* parent) : GameObject(sceneTop),WeatherSpeed_(MOVE_SPEED),Hp_(3), NDTIME_(2.0f),Flash_Count(0)
+Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED), Hp_(3), NDTIME_(2.0f), Flash_Count(0), IsHitOneCount_(false),DebugLog_(false)
 {
 	hImage = LoadGraph("Assets/magic.png");
 	assert(hImage > 0);
@@ -337,7 +337,7 @@ void Player::Update()
 						break;
 					}
 
-					NDTIME_ = 2.0f;
+					NDTIME_ = 2.0f;//個々の数値で無敵時間がきまる
 				}
 				break;
 			}
@@ -372,8 +372,8 @@ void Player::Update()
 		std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
 		for (HealItem* pHeal : pHeals)
 		{
-			float dx = pHeal->GetPosition().x - (transform_.position_.x + 10.0f);
-			float dy = pHeal->GetPosition().y - (transform_.position_.y + 10.0f);
+			float dx = pHeal->GetPosition().x - (transform_.position_.x /*+ 10.0f*/);
+			float dy = pHeal->GetPosition().y - (transform_.position_.y /*+ 10.0f*/);
 
 			float distance = sqrt(dx * dx + dy + dy);
 
@@ -384,28 +384,37 @@ void Player::Update()
 					hp->HeelHp();
 					Hp_++;
 				}
+				pHeal->KillMe();
 				break;
 			}
 		}
 		std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
 		for (MpItem* pMp : pMps)
 		{
-			float dx = pMp->GetPosition().x - (transform_.position_.x + 16.0f);
-			float dy = pMp->GetPosition().y - (transform_.position_.y + 16.0f);
+			float dx = pMp->GetPosition().x - (transform_.position_.x/* + 16.0f*/);
+			float dy = pMp->GetPosition().y - (transform_.position_.y/* + 16.0f*/);
 
 			float distance = sqrt(dx * dx + dy + dy);
 
-			if (distance <= 20.0f)
+			if (distance <= 10.0f)
 			{
-				if (MagicPoint_ < 10)
+				IsHitOneCount_ = true;
+				if (IsHitOneCount_ = true)
 				{
 					MagicPoint_ += 5;
-					if (MagicPoint_ > 10) 
+
+					if (MagicPoint_ >100)
 					{
-						MagicPoint_ = 10; 
+						MagicPoint_ = 100;
 					}
+
+					pMp->KillMe();
+					break;
 				}
-				break; 
+			}
+			else
+			{
+				IsHitOneCount_ = false;
 			}
 		}
 
@@ -427,6 +436,15 @@ void Player::Update()
 				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 			}
 		}
+	}
+
+	if (CheckHitKey(KEY_INPUT_Q))
+	{
+		DebugLog_ = true;
+	}
+	else
+	{
+		DebugLog_ = false;
 	}
 }
 
@@ -454,13 +472,18 @@ void Player::Draw()
 	
 	++Flash_Count;
    
-	
-	// プレイヤーの座標を画面に表示
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
-	DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
-	DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
-	DrawFormatString(1100, 20, GetColor(255, 255, 255), "現在打てる魔法: %d", MagicPoint_);
+	if (DebugLog_ == false)
+	{
+
+	}
+	else if(DebugLog_ == true)
+	{
+		DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
+		DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
+		DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
+		DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
+		DrawFormatString(1100, 20, GetColor(255, 255, 255), "現在打てる魔法: %d", MagicPoint_);
+	}
 }
 
 void Player::SetPosition(int x, int y)
@@ -490,7 +513,6 @@ void Player::WeatherEffects(Weather* weather)
 	}
 	
 }
-
 void Player::Jump()
 {
 	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // プレイヤーをジャンプさせる
