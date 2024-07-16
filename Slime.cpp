@@ -19,7 +19,7 @@ namespace
 
 Slime::Slime(GameObject* scene)
 {
-	hImage = LoadGraph("Assets/slime.png");
+	hImage = LoadGraph("Assets/slime_run2.png");
 	assert(hImage > 0);
 	/*transform_.position_.x = 1200.0f;
 	transform_.position_.y = 600.0f;*/
@@ -223,19 +223,21 @@ void Slime::Draw()
 	{
 		x -= cam->GetValue();
 	}
-	int spriteWidth = 256;
-	int spriteHeight = 43;
 
-	int frameX = animeFrame_ % 3; // ‰¡‚É3‚Â‚Ì‰æ‘œ‚ª‚ ‚é‚½‚ß
+	int SWidth = 512 / 6; 
+	int SHeight = 86; 
 
-	if (direction == -1)
-	{
-		DrawExtendGraph(x, y, x +64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
-		
-	}
+	int frameX = animeFrame_ % 6; 
+	int hFrame = DerivationGraph(frameX, 0, SWidth, SHeight, hImage);
+
 	if (direction == 1)
 	{
-		DrawExtendGraph(x, y, x + 64* transform_.scale_.x, y + 64 * transform_.scale_.y, hImage, TRUE);
+		DrawRectExtendGraph(x, y, x + SWidth * transform_.scale_.x, y + SHeight * transform_.scale_.y, frameX, 0, SWidth, SHeight, hImage, TRUE);
+	}
+	else if (direction == -1)
+	{
+		// DrawModiGraph‚ðŽg—p‚µ‚Ä‰æ‘œ‚ð”½“]
+		DrawModiGraph(x + SWidth * transform_.scale_.x, y, x, y, x, y + SHeight * transform_.scale_.y, x + SWidth * transform_.scale_.x, y + SHeight * transform_.scale_.y, hFrame, TRUE);
 	}
 
 	//Debug—p
@@ -322,21 +324,16 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 		{
 			if (CheckHitKey(KEY_INPUT_RIGHT))
 			{
-				Reverse_ = true;
 				WindTimer_ = 300;
+				Reverse_ = true;
 				PressKey_R = true;
 			}
 			else if (CheckHitKey(KEY_INPUT_LEFT))
 			{
-				Reverse_ = false;
 				WindTimer_ = 300;
+				Reverse_ = false;
 				PressKey_L = true;
 			}
-				/*else if (CheckHitKey(KEY_INPUT_UP))
-				{
-					WindTimer_ = 300;
-					PressKey_ = true;
-				}*/
 		}
 
 		if (WindTimer_ > 0)
@@ -349,10 +346,6 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 			{
 				transform_.position_.x -= 4.0f;
 			}
-				/*else if (CheckHitKey(KEY_INPUT_UP))
-				{
-					transform_.position_.y -= 5.0f;
-				}*/
 
 			WindTimer_--;
 			if (WindTimer_ == 0)

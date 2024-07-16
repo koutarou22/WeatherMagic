@@ -49,6 +49,12 @@ Player::~Player()
 
 void Player::Update()
 {
+
+	rect.x = transform_.position_.x;
+	rect.y = transform_.position_.y;
+	rect.w = 64 * 2;  // ‰æ‘œ‚Ì•‚ğ“ñ”{‚É
+	rect.h = 64 * 2;  // ‰æ‘œ‚Ì‚‚³‚ğ“ñ”{‚É
+
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	std::list<Slime*> pSlimes = GetParent()->FindGameObjects<Slime>();
@@ -213,15 +219,6 @@ void Player::Update()
 		WeatherSwitch = false;
 	}
 
-	//if (WeatherTime_ > 0)
-	//{
-	//	WeatherTime_--;
-	//	
-	//	if (WeatherTime_ == 0)
-	//	{
-	//		pWeather->SetWeather(pWeather->GetNextWeather());
-	//	}
-	//}
 
 
 	//Šg’£«‚Í‚È‚¢

@@ -6,6 +6,14 @@
 /// プレイヤーキャラ
 /// </summary>
 
+struct RECT {
+	int x;
+	int y;
+	int w;
+	int h;
+};
+
+
 class Player : public GameObject
 {
 public:
@@ -22,6 +30,8 @@ public:
 	void DamageHp();
 	void Jump();
 	int GetHp();
+
+	RECT Rect;
 	
 private:
 	int hImage;
@@ -63,4 +73,5 @@ private:
 	int hitX;
 	int hitY;
 	Player* player_;
+
 };

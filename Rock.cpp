@@ -12,7 +12,6 @@ namespace
 
 	int hitX = 0;
 	int hitY = 0;
-
 };
 
 Rock::Rock(GameObject* scene)
@@ -103,6 +102,7 @@ void Rock::Update()
 		}
 	}
 	//-----------------------------------------------------------
+	 
 }
 
 void Rock::Draw()
@@ -147,7 +147,7 @@ void Rock::WeatherEffects(Weather* weather)
 			{
 				
 				WindTimer_ = 300;
-				PressKey_L = true;
+				PressKey_L = false;
 			}
 		
 		}
@@ -177,13 +177,9 @@ void Rock::WeatherEffects(Weather* weather)
 	}
 	
 }
-//
-//int Rock::CollisionUp(int x, int y)
-//{
-//
-//	/*if (IsWallBlock(x, y - 1))
-//	{
-//	  return 32 - (y % 32);
-//	}
-//		return 0;*/
-//}
+
+bool Rock::IsColliding(const Rect& a, const Rect& b)
+{
+	return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+

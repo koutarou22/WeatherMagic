@@ -3,7 +3,7 @@
 
 Damage::Damage(GameObject* parent) :GameObject(parent, "Damage"), hImage_(-1), Timer_(90)
 {
-	hImage_ = LoadGraph("Assets/Damage.png");
+	hImage_ = LoadGraph("Assets/Confusion2.png");
 	assert(hImage_ >= 0);
 }
 
@@ -21,11 +21,12 @@ void Damage::Initialize()
 
 void Damage::Update()
 {
+
 	//Instantiate<Damage>(this);
 	if (Timer_ <= 0)
 	{
 		KillMe();
-		Timer_ = 180;
+		Timer_ = 300;
 	}
 
 	if (Timer_ > 0)
@@ -37,8 +38,8 @@ void Damage::Update()
 
 void Damage::Draw()
 {
-	int x = (int)transform_.position_.x;
-	int y = (int)transform_.position_.y;
+	int x = (int)transform_.position_.x+10;
+	int y = (int)transform_.position_.y-20;
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr) {

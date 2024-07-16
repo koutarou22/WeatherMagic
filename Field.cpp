@@ -185,23 +185,34 @@ int Field::CollisionUp(int x, int y)
 	}
 	return 0;
 }
+bool Rock::IsColliding(const Rect& a, const Rect& b)
+{
+	return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
 
 bool Field::IsWallBlock(int x, int y)
 {
 	int chipX = x / 32;
 	int chipY = y / 32;
- 	switch (Map[chipY * width + chipX])
+	switch (Map[chipY * width + chipX])
 	{
-	 case 16://’n–Ê
-	 case 17:
-	 case 18:
-	 case 19:
-	 case 32:
-	 case 33:
-	 case 34:
-	 case 35:
-		 return true;
-		 
+	case 3:
+	/*	Rect pointRect = { x, y, 1, 1 };
+		Rock* pRock = GetParent()->FindGameObject<Rock>();
+		if (pRock != nullptr && IsColliding(pointRect, pRock->rect)) {
+			return true;
+		}
+		break;*/
+	case 16://’n–Ê
+	case 17:
+	case 18:
+	case 19:
+	case 32:
+	case 33:
+	case 34:
+	case 35:
+		return true;
+		break;
 	};
 
 	return false;
@@ -249,3 +260,5 @@ bool Field::IsHitClear(int x, int y)
 
 	return false;
 }
+
+

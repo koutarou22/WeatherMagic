@@ -44,7 +44,7 @@ public:
 	int CollisionUp(int x, int y);
 	bool IsWallBlock(int x, int y);
 	bool IsHitClear(int x, int y);
-
+	//bool IsColliding(const Rect& a, const Rect& b);
 private:
 	int hImage_;
 	int hBackGround_;
