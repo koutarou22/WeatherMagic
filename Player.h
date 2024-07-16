@@ -5,13 +5,13 @@
 /// <summary>
 /// プレイヤーキャラ
 /// </summary>
-
-struct RECT {
-	int x;
-	int y;
-	int w;
-	int h;
-};
+//
+//struct RECT {
+//	int x;
+//	int y;
+//	int w;
+//	int h;
+//};
 
 
 class Player : public GameObject
@@ -31,14 +31,16 @@ public:
 	void Jump();
 	int GetHp();
 
-	RECT Rect;
+	//RECT Rect;
 	
 private:
 	int hImage;
 	GameObject* sceneTop;
 
 	bool prevSpaceKey;
-	bool onGround;//地面にいるのか？
+	bool onGround;
+	bool onRock;
+	bool onFiled;
 	bool damaged = false;
 	float Jump_P = 0.0f;
 	int Flash_Count;

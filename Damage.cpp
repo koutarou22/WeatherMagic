@@ -26,7 +26,7 @@ void Damage::Update()
 	if (Timer_ <= 0)
 	{
 		KillMe();
-		Timer_ = 300;
+		Timer_ = 540;
 	}
 
 	if (Timer_ > 0)

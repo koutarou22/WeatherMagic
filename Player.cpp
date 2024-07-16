@@ -16,6 +16,7 @@
 #include "HealItem.h"
 #include "Buffs.h"
 #include "MpItem.h"
+#include "Rock.h"
 
 namespace
 {
@@ -49,15 +50,11 @@ Player::~Player()
 
 void Player::Update()
 {
-
-	rect.x = transform_.position_.x;
-	rect.y = transform_.position_.y;
-	rect.w = 64 * 2;  // 画像の幅を二倍に
-	rect.h = 64 * 2;  // 画像の高さを二倍に
-
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	std::list<Slime*> pSlimes = GetParent()->FindGameObjects<Slime>();
+	Rock* pRock = GetParent()->FindGameObject<Rock>();
+
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 
 	if (hp == nullptr) {
@@ -75,6 +72,10 @@ void Player::Update()
 	{
 		transform_.position_.x = 0;
 	}
+	if (Jump_P > 20.0f) {
+		Jump_P = 20.0f; // 落下速度が最大値を超えないように制限
+	}
+
 
 	/*if (state == S_Cry)
 	{
@@ -103,6 +104,22 @@ void Player::Update()
 			
 		}
 		//----------------------------------------------------------
+
+	//---------------岩の衝突判定(右)--------------------------------
+		hitX = transform_.position_.x + 32;
+		hitY = transform_.position_.y + 32;
+
+		std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+		for (Rock* pRock : pRocks)
+		{
+			if (pRock != nullptr)
+			{
+				int push = pRock->CollisionRight(pRocks, hitX, hitY);
+				transform_.position_.x -= push;
+			}
+		}
+		//----------------------------------------------------------
+
 	}
 	else if (CheckHitKey(KEY_INPUT_A) /*|| CheckHitKey(KEY_INPUT_LEFT)*/)
 	{
@@ -125,6 +142,20 @@ void Player::Update()
 			
 		}
 		//-----------------------------------------------------------
+
+		hitX = transform_.position_.x ;
+		hitY = transform_.position_.y + 63;
+
+		std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+		for (Rock* pRock : pRocks)
+		{
+			if (pRock != nullptr)
+			{
+				int push = pRock->CollisionLeft(pRocks, hitX, hitY);
+				transform_.position_.x += push;
+			}
+		}
+		//----------------------------------------------------------
 	}
 	//else
 	//{
@@ -190,6 +221,29 @@ void Player::Update()
 		}
 	}
 	//-----------------------------------------------------------
+
+
+	////---------------岩の衝突判定(下)--------------------------------
+	//std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+	//for (Rock* pRock : pRocks)
+	//{
+	//	if (pRock != nullptr)
+	//	{
+	//		int pushR = pRock->CollisionDown(pRocks,transform_.position_.x + 50, transform_.position_.y + 63);
+	//		int pushL = pRock->CollisionDown(pRocks,transform_.position_.x + 14, transform_.position_.y + 63);
+	//		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
+	//		if (push >= 1)
+	//		{
+	//			transform_.position_.y -= push - 1;
+	//			Jump_P = 0.0f;
+	//			onGround = true;
+	//		}
+	//		else {
+	//			onGround = false;
+	//		}
+	//	}
+	//}
+	////-----------------------------------------------------------
 
 	if (CheckHitKey(KEY_INPUT_N))
 	{
@@ -292,7 +346,7 @@ void Player::Update()
 			}
 		}
 
-		Damage* pDamage = GetParent()->FindGameObject<Damage>();
+		//Damage* pDamage = GetParent()->FindGameObject<Damage>();
 		//カメラの処理
 		Camera* cam = GetParent()->FindGameObject<Camera>();
 		int xR = (int)transform_.position_.x - cam->GetValue();
@@ -346,7 +400,7 @@ void Player::Update()
 			float dx = pGhost->GetPosition().x - (transform_.position_.x + 10.0f);
 			float dy = pGhost->GetPosition().y - (transform_.position_.y + 10.0f);
 
-			float distance = sqrt(dx * dx + dy + dy);
+			float distance = sqrt(dx * dx + dy * dy);
 
 			if (distance <= 10.0f)
 			{
@@ -372,7 +426,7 @@ void Player::Update()
 			float dx = pHeal->GetPosition().x - (transform_.position_.x /*+ 10.0f*/);
 			float dy = pHeal->GetPosition().y - (transform_.position_.y /*+ 10.0f*/);
 
-			float distance = sqrt(dx * dx + dy + dy);
+			float distance = sqrt(dx * dx + dy * dy);
 
 			if (distance <= 10.0f)
 			{
@@ -385,13 +439,39 @@ void Player::Update()
 				break;
 			}
 		}
+
+		//std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+		//for (Rock* pRock : pRocks)
+		//{
+		//	float dx = pRock->GetPosition().x+60 - (transform_.position_.x + 70.0f);
+		//	float dy = pRock->GetPosition().y - (transform_.position_.y + 30.0f);
+
+		//	float distance = sqrt(dx * dx + dy * dy);
+
+		//	if (distance <= 40.0f) 
+		//	{
+		//		if (dy < 0)
+		//		{
+		//			transform_.position_.y += WeatherSpeed_;
+		//			WeatherSpeed_ = 0;
+		//		}
+		//		else
+		//		{
+		//			transform_.position_.y = 510.0f;
+		//			onGround = false;
+		//		}
+		//	}
+		//}
+
+
+
 		std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
 		for (MpItem* pMp : pMps)
 		{
 			float dx = pMp->GetPosition().x - (transform_.position_.x/* + 16.0f*/);
 			float dy = pMp->GetPosition().y - (transform_.position_.y/* + 16.0f*/);
 
-			float distance = sqrt(dx * dx + dy + dy);
+			float distance = sqrt(dx * dx + dy * dy);
 
 			if (distance <= 10.0f)
 			{
@@ -400,9 +480,9 @@ void Player::Update()
 				{
 					MagicPoint_ += 5;
 
-					if (MagicPoint_ >100)
+					if (MagicPoint_ >20)
 					{
-						MagicPoint_ = 100;
+						MagicPoint_ = 20;
 					}
 
 					pMp->KillMe();
@@ -481,6 +561,7 @@ void Player::Draw()
 		DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
 		DrawFormatString(1100, 20, GetColor(255, 255, 255), "現在打てる魔法: %d", MagicPoint_);
 	}
+
 }
 
 void Player::SetPosition(int x, int y)

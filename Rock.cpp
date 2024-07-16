@@ -16,12 +16,15 @@ namespace
 
 Rock::Rock(GameObject* scene)
 {
-	hImage_ = LoadGraph("Assets/Rock.png");
+	hImage_ = LoadGraph("Assets/Rockmin.png");
 	assert(hImage_ > 0);
-	transform_.position_.x = 30.0f;
-	transform_.position_.y = 300.0f;
-	transform_.scale_.x += 2.0;
-	transform_.scale_.y += 2.0;
+	transform_.position_.x = 200.0f;
+	transform_.position_.y = 600.0f;
+	//transform_.scale_.x += 2.0;
+	//transform_.scale_.y += 2.0;
+
+	hitX = transform_.position_.x + 32;
+	hitY = transform_.position_.y + 32;
 
 }
 
@@ -44,6 +47,14 @@ void Rock::Update()
 		WeatherEffects(pWeather); // 天候関数を呼び出す
 	}
 
+
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr)
+	{
+		x -= cam->GetValue();
+	}
+
+
 	//---------------衝突判定(左)--------------------------------
 	hitX = transform_.position_.x + 18;
 	hitY = transform_.position_.y + 54;
@@ -55,8 +66,8 @@ void Rock::Update()
 	//-----------------------------------------------------------
 
 //---------------衝突判定(右)--------------------------------
-	hitX = transform_.position_.x + 50;
-	hitY = transform_.position_.y + 54;
+	hitX = transform_.position_.x + 32;
+	hitY = transform_.position_.y + 32;
 
 	if (pField != nullptr)
 	{
@@ -118,6 +129,7 @@ void Rock::Draw()
 	}
 
 	DrawExtendGraph(x, y, x + 64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage_, TRUE);
+	DrawBox(hitX, hitY, hitX +54, hitY + 64, GetColor(255, 0, 0), FALSE);
 
 	
 	//DrawBox(rectX, rectY, rectX + rectW, rectY + rectH, GetColor(255, 0, 0), FALSE);
@@ -147,7 +159,7 @@ void Rock::WeatherEffects(Weather* weather)
 			{
 				
 				WindTimer_ = 300;
-				PressKey_L = false;
+				PressKey_L = true;
 			}
 		
 		}
@@ -178,8 +190,67 @@ void Rock::WeatherEffects(Weather* weather)
 	
 }
 
-bool Rock::IsColliding(const Rect& a, const Rect& b)
+
+bool Rock::IsRockPosition(std::list<Rock*> rocks, int x, int y)
 {
-	return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+	for (Rock* rock : rocks)
+	{
+		if (rock->GetPosition().x == x  && rock->GetPosition().y == y)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
+
+int Rock::CollisionRight(std::list<Rock*> rocks, int x, int y)
+{
+	if (IsRockPosition(rocks, x + 1, y))
+	{
+		return (x + 1) % 32 + 1;
+	}
+	return 0;
+}
+
+int Rock::CollisionLeft(std::list<Rock*> rocks, int x, int y)
+{
+	if (IsRockPosition(rocks, x - 1, y))
+	{
+		return 32 - (x % 32);
+	}
+	return 0;
+}
+
+int Rock::CollisionDown(std::list<Rock*> rocks, int x, int y)
+{
+	if (IsRockPosition(rocks, x, y + 1))
+	{
+		return (y + 1) % 32 + 1;
+	}
+	return 0;
+}
+
+
+
+//bool Rock::ColliderRect(float x, float y, float w, float h)
+//{
+//	// x,y,w,hが相手の矩形の情報
+//	// 自分の矩形の情報
+//	float myX = transform_.position_.x;
+//	float myY = transform_.position_.y;
+//	float myW = 64.0f;
+//	float myH = 64.0f;
+//
+//	// 矩形の衝突判定
+//	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//		return false;
+//	}
+//}
+
 

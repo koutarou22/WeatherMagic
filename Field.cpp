@@ -145,6 +145,14 @@ void Field::Draw()
 		{
 			int chip = Map[y * width + x];
 			DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
+			if (IsWallBlock(x * 32, y * 32)) {
+				// 当たり判定が存在するブロックを赤く描画
+				DrawBox(x * 32 - scroll, y * 32, (x + 1) * 32 - scroll, (y + 1) * 32, GetColor(255, 0, 0), FALSE);
+			}
+			//else {
+			//	// それ以外のブロックを通常通り描画
+			//	DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
+			//}
 		}
 	}
 	
@@ -185,24 +193,14 @@ int Field::CollisionUp(int x, int y)
 	}
 	return 0;
 }
-bool Rock::IsColliding(const Rect& a, const Rect& b)
-{
-	return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-}
 
 bool Field::IsWallBlock(int x, int y)
 {
 	int chipX = x / 32;
 	int chipY = y / 32;
+
 	switch (Map[chipY * width + chipX])
 	{
-	case 3:
-	/*	Rect pointRect = { x, y, 1, 1 };
-		Rock* pRock = GetParent()->FindGameObject<Rock>();
-		if (pRock != nullptr && IsColliding(pointRect, pRock->rect)) {
-			return true;
-		}
-		break;*/
 	case 16://地面
 	case 17:
 	case 18:
@@ -217,6 +215,20 @@ bool Field::IsWallBlock(int x, int y)
 
 	return false;
 }
+
+//bool Field::IsRockBlock(int x, int y)
+//{
+//	int chipX = x / 32;
+//	int chipY = y / 32;
+//	switch (Map[chipY * width + chipX])
+//	{
+//	case 3:
+//		return true;
+//
+//	};
+//
+//	return false;
+//}
 
 bool Field::IsHitClear(int x, int y)
 {
