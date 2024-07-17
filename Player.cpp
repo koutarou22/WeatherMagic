@@ -105,20 +105,20 @@ void Player::Update()
 		}
 		//----------------------------------------------------------
 
-	//---------------岩の衝突判定(右)--------------------------------
-		hitX = transform_.position_.x + 32;
-		hitY = transform_.position_.y + 32;
+	////---------------岩の衝突判定(右)--------------------------------
+	//	hitX = transform_.position_.x + 32;
+	//	hitY = transform_.position_.y + 32;
 
-		std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
-		for (Rock* pRock : pRocks)
-		{
-			if (pRock != nullptr)
-			{
-				int push = pRock->CollisionRight(pRocks, hitX, hitY);
-				transform_.position_.x -= push;
-			}
-		}
-		//----------------------------------------------------------
+	//	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+	//	for (Rock* pRock : pRocks)
+	//	{
+	//		if (pRock != nullptr)
+	//		{
+	//			int push = pRock->CollisionRight(pRocks, hitX, hitY);
+	//			transform_.position_.x -= push;
+	//		}
+	//	}
+	//	//----------------------------------------------------------
 
 	}
 	else if (CheckHitKey(KEY_INPUT_A) /*|| CheckHitKey(KEY_INPUT_LEFT)*/)
@@ -142,20 +142,6 @@ void Player::Update()
 			
 		}
 		//-----------------------------------------------------------
-
-		hitX = transform_.position_.x ;
-		hitY = transform_.position_.y + 63;
-
-		std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
-		for (Rock* pRock : pRocks)
-		{
-			if (pRock != nullptr)
-			{
-				int push = pRock->CollisionLeft(pRocks, hitX, hitY);
-				transform_.position_.x += push;
-			}
-		}
-		//----------------------------------------------------------
 	}
 	//else
 	//{
@@ -440,29 +426,37 @@ void Player::Update()
 			}
 		}
 
-		//std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
-		//for (Rock* pRock : pRocks)
-		//{
-		//	float dx = pRock->GetPosition().x+60 - (transform_.position_.x + 70.0f);
-		//	float dy = pRock->GetPosition().y - (transform_.position_.y + 30.0f);
+		std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+		for (Rock* pRock : pRocks)
+		{
+			float dx = pRock->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
+			float dy = pRock->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
 
-		//	float distance = sqrt(dx * dx + dy * dy);
+			float distance = sqrt(dx * dx + dy * dy);
 
-		//	if (distance <= 40.0f) 
-		//	{
-		//		if (dy < 0)
-		//		{
-		//			transform_.position_.y += WeatherSpeed_;
-		//			WeatherSpeed_ = 0;
-		//		}
-		//		else
-		//		{
-		//			transform_.position_.y = 510.0f;
-		//			onGround = false;
-		//		}
-		//	}
-		//}
-
+			if (distance <= 60.0f)
+			{
+				if (dx < 0) 
+				{
+					int push = 3;
+					transform_.position_.x += push; // プレイヤーを右に移動
+				}
+				else if (dx > 0) // 岩の左側から接触
+				{
+					int push = 3;
+					transform_.position_.x -= push; // プレイヤーを左に移動
+				}
+				else if (dy < 0)
+				{
+					transform_.position_.y = pRock->GetPosition().y - 32;
+					WeatherSpeed_ = 0;
+				}
+				else
+				{
+					WeatherSpeed_ = MOVE_SPEED;
+				}
+			}
+		}
 
 
 		std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
@@ -548,7 +542,12 @@ void Player::Draw()
 	}
 	
 	++Flash_Count;
-   
+	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+	for (Rock* pRock : pRocks)
+	{
+		// 当たり判定の範囲を描画
+		DrawCircle(pRock->GetPosition().x + 32, pRock->GetPosition().y + 32, 40.0f, GetColor(255, 0, 0));
+	}
 	if (DebugLog_ == false)
 	{
 
@@ -560,6 +559,7 @@ void Player::Draw()
 		DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
 		DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
 		DrawFormatString(1100, 20, GetColor(255, 255, 255), "現在打てる魔法: %d", MagicPoint_);
+		
 	}
 
 }

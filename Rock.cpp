@@ -143,6 +143,7 @@ void Rock::SetPosition(int x, int y)
 
 void Rock::WeatherEffects(Weather* weather)
 {
+	Field* pField = GetParent()->FindGameObject<Field>();
 	WeatherState WeatherState = weather->GetWeatherState();
 	float WeatherEffect = weather->GetWeatherChange();
 
@@ -166,6 +167,7 @@ void Rock::WeatherEffects(Weather* weather)
 
 		if (WindTimer_ > 0)
 		{
+		
 			if (PressKey_R)
 			{
 				transform_.position_.x += 1.5f;
@@ -191,66 +193,66 @@ void Rock::WeatherEffects(Weather* weather)
 }
 
 
-bool Rock::IsRockPosition(std::list<Rock*> rocks, int x, int y)
-{
-	for (Rock* rock : rocks)
-	{
-		if (rock->GetPosition().x == x  && rock->GetPosition().y == y)
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-int Rock::CollisionRight(std::list<Rock*> rocks, int x, int y)
-{
-	if (IsRockPosition(rocks, x + 1, y))
-	{
-		return (x + 1) % 32 + 1;
-	}
-	return 0;
-}
-
-int Rock::CollisionLeft(std::list<Rock*> rocks, int x, int y)
-{
-	if (IsRockPosition(rocks, x - 1, y))
-	{
-		return 32 - (x % 32);
-	}
-	return 0;
-}
-
-int Rock::CollisionDown(std::list<Rock*> rocks, int x, int y)
-{
-	if (IsRockPosition(rocks, x, y + 1))
-	{
-		return (y + 1) % 32 + 1;
-	}
-	return 0;
-}
-
-
-
-//bool Rock::ColliderRect(float x, float y, float w, float h)
+//bool Rock::IsRockPosition(std::list<Rock*> rocks, int x, int y)
 //{
-//	// x,y,w,hが相手の矩形の情報
-//	// 自分の矩形の情報
-//	float myX = transform_.position_.x;
-//	float myY = transform_.position_.y;
-//	float myW = 64.0f;
-//	float myH = 64.0f;
+//	for (Rock* rock : rocks)
+//	{
+//		if (rock->GetPosition().x == x  && rock->GetPosition().y == y)
+//		{
+//			return true;
+//		}
+//	}
 //
-//	// 矩形の衝突判定
-//	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
-//	{
-//		return true;
-//	}
-//	else
-//	{
-//		return false;
-//	}
+//	return false;
 //}
+
+//int Rock::CollisionRight(std::list<Rock*> rocks, int x, int y)
+//{
+//	if (IsRockPosition(rocks, x + 1, y))
+//	{
+//		return (x + 1) % 32 + 1;
+//	}
+//	return 0;
+//}
+//
+//int Rock::CollisionLeft(std::list<Rock*> rocks, int x, int y)
+//{
+//	if (IsRockPosition(rocks, x - 1, y))
+//	{
+//		return 32 - (x % 32);
+//	}
+//	return 0;
+//}
+//
+//int Rock::CollisionDown(std::list<Rock*> rocks, int x, int y)
+//{
+//	if (IsRockPosition(rocks, x, y + 1))
+//	{
+//		return (y + 1) % 32 + 1;
+//	}
+//	return 0;
+//}
+
+
+
+bool Rock::ColliderRect(float x, float y, float w, float h)
+{
+	// x,y,w,hが相手の矩形の情報
+	// 自分の矩形の情報
+	float myX = transform_.position_.x;
+	float myY = transform_.position_.y;
+	float myW = 64.0f;
+	float myH = 64.0f;
+
+	// 矩形の衝突判定
+	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 

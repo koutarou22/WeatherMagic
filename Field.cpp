@@ -116,13 +116,23 @@ void Field::Reset()
 			Map[h * width + w] = csv.GetValue(w, h);
 		}
 	}
-
+	//Update();
 }	
 
 void Field::Update()
 {
-	
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (IsWallBlock(x+1, y)) 
+			{
+				MoveRockRight(x, y);
+			}
+		}
+	}
 }
+
 
 void Field::Draw()
 {
@@ -145,14 +155,10 @@ void Field::Draw()
 		{
 			int chip = Map[y * width + x];
 			DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
-			if (IsWallBlock(x * 32, y * 32)) {
-				// 当たり判定が存在するブロックを赤く描画
+			if (IsWallBlock(x * 32, y * 32)) 
+			{
 				DrawBox(x * 32 - scroll, y * 32, (x + 1) * 32 - scroll, (y + 1) * 32, GetColor(255, 0, 0), FALSE);
 			}
-			//else {
-			//	// それ以外のブロックを通常通り描画
-			//	DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
-			//}
 		}
 	}
 	
@@ -201,6 +207,7 @@ bool Field::IsWallBlock(int x, int y)
 
 	switch (Map[chipY * width + chipX])
 	{
+	//case 3://new
 	case 16://地面
 	case 17:
 	case 18:
@@ -216,19 +223,16 @@ bool Field::IsWallBlock(int x, int y)
 	return false;
 }
 
-//bool Field::IsRockBlock(int x, int y)
-//{
-//	int chipX = x / 32;
-//	int chipY = y / 32;
-//	switch (Map[chipY * width + chipX])
-//	{
-//	case 3:
-//		return true;
-//
-//	};
-//
-//	return false;
-//}
+void Field::MoveRockRight(int x, int y)
+{
+	if (!IsWallBlock(x + 1, y))
+	{
+			
+		Map[y * width + x] = 255; 
+		Map[y * width + (x + 4)] = 3; 
+	}
+	
+}
 
 bool Field::IsHitClear(int x, int y)
 {
@@ -272,5 +276,3 @@ bool Field::IsHitClear(int x, int y)
 
 	return false;
 }
-
-

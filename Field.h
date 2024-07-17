@@ -43,9 +43,16 @@ public:
 	/// <returns>ÇﬂÇËçûÇÒÇæó </returns>
 	int CollisionUp(int x, int y);
 	bool IsWallBlock(int x, int y);
-	//bool IsRockBlock(int x, int y);
+	bool IsRockBlock(int x, int y);
 	bool IsHitClear(int x, int y);
+
+
+
+	void MoveRockRight(int x, int y);
+
 	//bool IsColliding(const Rect& a, const Rect& b);
+
+	RECT RectRock;
 private:
 	int hImage_;
 	int hBackGround_;

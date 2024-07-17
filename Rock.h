@@ -13,14 +13,19 @@ public:
 	void SetPosition(int x, int y);
 	void WeatherEffects(Weather* weather);
 	//int CollisionUp(int x, int y);
-	//bool ColliderRect(float x, float y, float w, float h);
+
+	/// <summary>
+	///ŽlŠp‚Ì“–‚½‚è”»’è
+	/// </summary>
+	/// <returns></returns>
+	bool ColliderRect(float x, float y, float w, float h);
 
 	//bool IsColliding(const Rect& a, const Rect& b);
 	
-	bool IsRockPosition(std::list<Rock*> rocks, int x, int y);
+	/*bool IsRockPosition(std::list<Rock*> rocks, int x, int y);
 	int CollisionRight(std::list<Rock*> rocks, int x, int y);
 	int CollisionLeft(std::list<Rock*> rocks, int x, int y);
-	int CollisionDown(std::list<Rock*> rocks, int x, int y);
+	int CollisionDown(std::list<Rock*> rocks, int x, int y);*/
 	float x;
 	float y;
 	

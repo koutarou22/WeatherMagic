@@ -32,7 +32,7 @@ void TestScene::Initialize()
 	//Instantiate<Damage>(this);
 	Instantiate<Player>(this);
 	//Instantiate<HealItem>(this);
-	Instantiate<Rock>(this);
+	//Instantiate<Rock>(this);
 	Instantiate<MpItem>(this);
 	
 	
