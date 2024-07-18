@@ -9,23 +9,40 @@ void Weather::Initialize()
     assert(hImage_Rainy > 0);
     hImage_Wind = LoadGraph("Assets/Wind.png");
     assert(hImage_Wind > 0);
+
+    hImage_Book = LoadGraph("Assets/Book.png");
+    assert(hImage_Book > 0);
 }
 
 void Weather::Update()
 {
-   
+    if (++flameCounter_ >= 24)
+    {
+        if (animeFrame_ < 3) 
+        {
+            animeFrame_ = (animeFrame_ + 1) % 4; //if文を使わない最適解
+        }
+        flameCounter_ = 0;
+    }
 }
 
 void Weather::Draw() 
 {
-    int alpha = 24;  // 透明度を半分に設定
+    int alpha = 24; 
+    int SBookW = 128/3;
+    int SBookH = 175/4;
+    int AnimeS = animeFrame_ % 4 * SBookH;
+
 
     switch (weather_)
     {
     case Sunny:
         DrawFormatString(500, 10, GetColor(255, 255, 0), "天候: 晴れ 『変化なし』");
+        DrawRectGraph(480, 10, 0, AnimeS, SBookW, SBookH, hImage_Book, TRUE);
+
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
         DrawGraph(0, 0, hImage_Sunny, TRUE);  // 晴れ
+       
         break;
     case Rainy:
         DrawFormatString(500, 10, GetColor(0, 0, 0), "天候: 雨　『地面がぬかるむ..』-移動速度DOWN  +スライム巨大化");
@@ -43,6 +60,12 @@ void Weather::Draw()
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
     DrawFormatString(0, 80, GetColor(0, 0, 255), "今どの天候呼んでる？: %d", weather_);
+}
+
+void Weather::SetPosition(int x, int y)
+{
+    transform_.position_.x = x;
+    transform_.position_.y = y;
 }
 
 float Weather::GetWeatherChange()

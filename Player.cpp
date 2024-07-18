@@ -356,8 +356,8 @@ void Player::Update()
 		for (EnemyMagic* pEnemyMagic : pEMagics)
 		{
 			//解説　見ればわかると思うがこれは『EnemyMagic』と『Slime』の距離を求めている
-			float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 12.0f);//Mgの座標X - Slの座標X
-			float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 12.0f);//Mgの座標Y - Slの座標Y
+			float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
+			float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
 			float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
 
 			if (distance <= 20.0f)
@@ -383,12 +383,12 @@ void Player::Update()
 		std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
 		for (Ghost* pGhost : pGhosts)
 		{
-			float dx = pGhost->GetPosition().x - (transform_.position_.x + 10.0f);
-			float dy = pGhost->GetPosition().y - (transform_.position_.y + 10.0f);
+			float dx = pGhost->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
+			float dy = pGhost->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
 
 			float distance = sqrt(dx * dx + dy * dy);
 
-			if (distance <= 10.0f)
+			if (distance <= 40.0f)
 			{
 				if (NDTIME_ <= 0.0f)
 				{
@@ -409,12 +409,12 @@ void Player::Update()
 		std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
 		for (HealItem* pHeal : pHeals)
 		{
-			float dx = pHeal->GetPosition().x - (transform_.position_.x /*+ 10.0f*/);
-			float dy = pHeal->GetPosition().y - (transform_.position_.y /*+ 10.0f*/);
+			float dx = pHeal->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
+			float dy = pHeal->GetPosition().y - (transform_.position_.y/* + 32.0f*/);
 
 			float distance = sqrt(dx * dx + dy * dy);
 
-			if (distance <= 10.0f)
+			if (distance <= 20.0f)
 			{
 				if (Hp_ < 3) 
 				{
@@ -436,38 +436,43 @@ void Player::Update()
 
 			if (distance <= 60.0f)
 			{
-				if (dx < 0) 
+				//<= 32.0fの意味は横との接触の幅を制限している
+				if (dy < 0 && abs(dx)<= 32.0f) //岩の上に乗る
+				{
+					transform_.position_.y = pRock->GetPosition().y - 64 ; // プレイヤーを上に移動
+					WeatherSpeed_ = 0;
+					onGround = true;
+				}
+				else if (dy > 0 && abs(dx)<= 32.0f) //岩の下にぶつかる
 				{
 					int push = 3;
+					transform_.position_.y = pRock->GetPosition().y + push; // プレイヤーを下に移動
+					WeatherSpeed_ = MOVE_SPEED;
+				}
+				else if (dx < 0) // 岩の右側の衝突判定
+				{
+					int push = 1;
 					transform_.position_.x += push; // プレイヤーを右に移動
 				}
-				else if (dx > 0) // 岩の左側から接触
+				else if (dx > 0) // 岩の左側の衝突判定
 				{
-					int push = 3;
+					int push = 1;
 					transform_.position_.x -= push; // プレイヤーを左に移動
-				}
-				else if (dy < 0)
-				{
-					transform_.position_.y = pRock->GetPosition().y - 32;
-					WeatherSpeed_ = 0;
-				}
-				else
-				{
-					WeatherSpeed_ = MOVE_SPEED;
 				}
 			}
 		}
 
 
+
 		std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
 		for (MpItem* pMp : pMps)
 		{
-			float dx = pMp->GetPosition().x - (transform_.position_.x/* + 16.0f*/);
-			float dy = pMp->GetPosition().y - (transform_.position_.y/* + 16.0f*/);
+			float dx = pMp->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
+			float dy = pMp->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
 
 			float distance = sqrt(dx * dx + dy * dy);
 
-			if (distance <= 10.0f)
+			if (distance <= 20.0f)
 			{
 				IsHitOneCount_ = true;
 				if (IsHitOneCount_ = true)
@@ -542,12 +547,8 @@ void Player::Draw()
 	}
 	
 	++Flash_Count;
-	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
-	for (Rock* pRock : pRocks)
-	{
-		// 当たり判定の範囲を描画
-		DrawCircle(pRock->GetPosition().x + 32, pRock->GetPosition().y + 32, 40.0f, GetColor(255, 0, 0));
-	}
+
+	DrawFormatString(1100, 20, GetColor(255, 255, 255), "現在打てる魔法: %d", MagicPoint_);
 	if (DebugLog_ == false)
 	{
 
@@ -558,7 +559,7 @@ void Player::Draw()
 		DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
 		DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
 		DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
-		DrawFormatString(1100, 20, GetColor(255, 255, 255), "現在打てる魔法: %d", MagicPoint_);
+		
 		
 	}
 
@@ -579,7 +580,6 @@ void Player::WeatherEffects(Weather* weather)
 	if (WeatherState == Sunny)
 	{
 		WeatherSpeed_ = MOVE_SPEED;
-		//pBuff->SetPosition(transform_.position_);
 	}
 	else if (WeatherState == Rainy)
 	{

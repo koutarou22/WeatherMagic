@@ -4,6 +4,7 @@
 #include "Field.h"
 #include "Magic.h"
 #include "Damage.h"
+#include "Rock.h"
 
 namespace
 {
@@ -14,6 +15,10 @@ namespace
 	static const int SCREEN_WIDTH = 1280;
 	int hitX = 0;
 	int hitY = 0;
+
+	int SWidth = 512 / 6;
+	int SHeight = 86;
+
 
 };
 
@@ -210,6 +215,47 @@ if (pField != nullptr)
 			break;
 		}
 	}
+
+	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+	for (Rock* pRock : pRocks)
+	{
+		float dx = pRock->GetPosition().x + 32 - (transform_.position_.x + SWidth / 2.0f);
+		float dy = pRock->GetPosition().y + 32 - (transform_.position_.y + SHeight / 2.0f);
+
+		
+		float distance = sqrt(dx * dx + dy * dy);
+		int push;
+
+		if (distance <= 60.0f)
+		{
+			if (dy < 0 && abs(dx) <= 32) //岩の上に乗る
+			{
+				transform_.position_.y = pRock->GetPosition().y - SHeight; // スライムを上に移動
+				WeatherSpeed_ = 0;
+				onGround = true; // スライムは岩の上にいるので、地面にいるとみなす
+			}
+			else if (dy > 0 && abs(dx) <= 32) //岩の下にぶつかる
+			{
+				push = 3;
+				transform_.position_.y = pRock->GetPosition().y + push; // スライムを下に移動
+				WeatherSpeed_ = MOVE_SPEED;
+			}
+			else if (dx < 0 && direction == -1) // 岩の右側の衝突判定
+			{
+				push = 1;
+				transform_.position_.x += push; 
+				Reverse_ = true; 
+			}
+			else if (dx > 0 && direction == 1) // 岩の左側の衝突判定
+			{
+				push = 1;
+				transform_.position_.x -= push;
+				Reverse_ = true; 
+			}
+			
+		}
+	}
+
 }
 
 void Slime::Draw()
@@ -224,9 +270,7 @@ void Slime::Draw()
 		x -= cam->GetValue();
 	}
 
-	int SWidth = 512 / 6; 
-	int SHeight = 86; 
-
+	
 	int frameX = animeFrame_ % 6; 
 	int hFrame = DerivationGraph(frameX, 0, SWidth, SHeight, hImage);
 
