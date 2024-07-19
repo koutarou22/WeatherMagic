@@ -6,14 +6,6 @@
 /// プレイヤーキャラ
 /// </summary>
 //
-//struct RECT {
-//	int x;
-//	int y;
-//	int w;
-//	int h;
-//};
-
-
 class Player : public GameObject
 {
 public:
@@ -27,6 +19,8 @@ public:
 
 	void WeatherEffects(Weather* weather);
 
+	int SetMp() { return MagicPoint_; }
+	void GetMagicMP(int _Mp) { MagicPoint_ = _Mp; }//ほかのクラスでも共有するため用
 	void DamageHp();
 	void Jump();
 	int GetHp();

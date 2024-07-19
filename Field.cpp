@@ -13,7 +13,7 @@
 Field::Field(GameObject* scene) :GameObject(scene)
 {
 	Map = nullptr;//‚Ü‚¸‚±‚±‚ÅMap‚Ånull‚¢‚ê‚Æ‚­
-	//hImage_ = LoadGraph("Assets/bgchar.png");
+	//hImage_ = LoadGraph("Assets/tilemap.png");
 	hImage_ = LoadGraph("Assets/bgchar.png");
 	
 	assert(hImage_ > 0);
@@ -155,10 +155,10 @@ void Field::Draw()
 		{
 			int chip = Map[y * width + x];
 			DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
-			if (IsWallBlock(x * 32, y * 32)) 
+			/*if (IsWallBlock(x * 32, y * 32)) 
 			{
 				DrawBox(x * 32 - scroll, y * 32, (x + 1) * 32 - scroll, (y + 1) * 32, GetColor(255, 0, 0), FALSE);
-			}
+			}*/
 		}
 	}
 	
@@ -224,14 +224,7 @@ bool Field::IsWallBlock(int x, int y)
 }
 
 void Field::MoveRockRight(int x, int y)
-{
-	if (!IsWallBlock(x + 1, y))
-	{
-			
-		Map[y * width + x] = 255; 
-		Map[y * width + (x + 4)] = 3; 
-	}
-	
+{	
 }
 
 bool Field::IsHitClear(int x, int y)

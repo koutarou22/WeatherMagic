@@ -10,7 +10,7 @@ MpItem::MpItem(GameObject* parent) :GameObject(parent, "MpItem"), hImage_(-1)
 	assert(hImage_ > 0);
 
 	transform_.position_.x = 200;
-	transform_.position_.y = 500;
+	transform_.position_.y = 560;
 	flameCounter_ = 0;
 	animeType_ = 0;
 	animeFrame_ = 0;

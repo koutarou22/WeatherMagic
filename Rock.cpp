@@ -78,9 +78,9 @@ void Rock::Update()
 	Jump_P += GRAVITY; //速度 += 加速度
 	transform_.position_.y += Jump_P; //座標 += 速度
 
-	if (transform_.position_.y > 600)
+	if (transform_.position_.y > 635)
 	{
-		transform_.position_.y = 600;
+		transform_.position_.y = 635;
 	}
 
 	//---------------衝突判定(上)--------------------------------

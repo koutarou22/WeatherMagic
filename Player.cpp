@@ -472,7 +472,7 @@ void Player::Update()
 
 			float distance = sqrt(dx * dx + dy * dy);
 
-			if (distance <= 20.0f)
+			if (distance <= 30.0f)
 			{
 				IsHitOneCount_ = true;
 				if (IsHitOneCount_ = true)
@@ -547,7 +547,7 @@ void Player::Draw()
 	}
 	
 	++Flash_Count;
-
+	DrawFormatString(0, 110, GetColor(255, 255, 255), "ジャンプしてる？:%d", onGround);
 	DrawFormatString(1100, 20, GetColor(255, 255, 255), "現在打てる魔法: %d", MagicPoint_);
 	if (DebugLog_ == false)
 	{
@@ -555,11 +555,11 @@ void Player::Draw()
 	}
 	else if(DebugLog_ == true)
 	{
+		
 		DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
 		DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
 		DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
 		DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
-		
 		
 	}
 
@@ -591,6 +591,7 @@ void Player::WeatherEffects(Weather* weather)
 	}
 	
 }
+
 void Player::Jump()
 {
 	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // プレイヤーをジャンプさせる

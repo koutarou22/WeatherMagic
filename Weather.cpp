@@ -37,7 +37,7 @@ void Weather::Draw()
     switch (weather_)
     {
     case Sunny:
-        DrawFormatString(500, 10, GetColor(255, 255, 0), "天候: 晴れ 『変化なし』");
+        DrawFormatString(500, 10, GetColor(255, 255, 0), "天候: 晴れ 『変化なし』消費Mp0");
         DrawRectGraph(480, 10, 0, AnimeS, SBookW, SBookH, hImage_Book, TRUE);
 
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
@@ -45,12 +45,12 @@ void Weather::Draw()
        
         break;
     case Rainy:
-        DrawFormatString(500, 10, GetColor(0, 0, 0), "天候: 雨　『地面がぬかるむ..』-移動速度DOWN  +スライム巨大化");
+        DrawFormatString(500, 10, GetColor(100, 149, 237), "天候: 雨　『地面がぬかるむ..』-移動速度DOWN  +スライム巨大化");
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
         DrawGraph(0, 0, hImage_Rainy, TRUE);  // 雨
         break;
     case Gale:
-        DrawFormatString(500, 10, GetColor(255, 255, 255), "事象: 強風　『敵が(自分も)吹っ飛ぶ！』");
+        DrawFormatString(500, 10, GetColor(0, 250, 154), "事象: 強風　『敵が(自分も)吹っ飛ぶ！』 消費Mp 4");
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
         DrawGraph(0, 0, hImage_Wind, TRUE);  // 強風の画像とかあるんか？
         break;

@@ -11,6 +11,8 @@ Hp::Hp(GameObject* parent)
 void Hp::Initialize()
 {
     Wide_ = 3;
+    hImage_ = LoadGraph("Assets/HP.png");
+    assert(hImage_ >= 0);
 }
 
 void Hp::Update()
@@ -20,8 +22,7 @@ void Hp::Update()
 
     transform_.scale_ = XMFLOAT3(0.9, 0.9, 0.9);
 
-    hImage_ = LoadGraph("Assets/HP.png");
-    assert(hImage_ >= 0);
+
 
     transform_.position_ = XMFLOAT3(-0.85, 0.88, 0);
 }

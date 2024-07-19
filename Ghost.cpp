@@ -53,7 +53,7 @@ void Ghost::Update()
 			emg->SetSpeed(3.5f);
 			
 
-			CoolDownAttack_ = 180; 
+			CoolDownAttack_ = 300; 
 		}
 	}
 
