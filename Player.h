@@ -19,15 +19,20 @@ public:
 
 	void WeatherEffects(Weather* weather);
 
-	int SetMp() { return MagicPoint_; }
-	void GetMagicMP(int _Mp) { MagicPoint_ = _Mp; }//ほかのクラスでも共有するため用
+	int GetMp() { return MagicPoint_; }
+	void SetMagicMP(int _Mp) { MagicPoint_ = _Mp; }//ほかのクラスでも共有するため用
 	void DamageHp();
 	void Jump();
 	int GetHp();
+	// MagicPoint_を増やすメソッド
+	void MagicUp(int _PMp);
 
-	//RECT Rect;
+	void MagicDown(int _MMp);
+
 	
+
 private:
+	int MagicPoint_;//打てる魔法の回数
 	int hImage;
 	GameObject* sceneTop;
 
@@ -46,14 +51,13 @@ private:
 
 	float NDTIME_; //無敵時間
 	int	  CoolDownMagic_ = 0;
-	int Hp_ = 3;
+	int Hp_;
 	int hitCount;
 
 	float WeatherSpeed_;//MOVE_SPEEDとWeatherの値を合わせ格納する用の変数
 	bool  WeatherSwitch;//高速で天候が切り替わらないようにする対策
 	
-	int MagicPoint_;//打てる魔法の回数
-
+	
 	bool IsHitOneCount_;
 	bool DebugLog_;
 
@@ -68,6 +72,5 @@ private:
 	int WeatherTime_ = 90;
 	int hitX;
 	int hitY;
-	Player* player_;
 
 };

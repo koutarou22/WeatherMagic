@@ -15,10 +15,9 @@ Field::Field(GameObject* scene) :GameObject(scene)
 	Map = nullptr;//‚Ü‚¸‚±‚±‚ÅMap‚Ånull‚¢‚ê‚Æ‚­
 	//hImage_ = LoadGraph("Assets/tilemap.png");
 	hImage_ = LoadGraph("Assets/bgchar.png");
-	
 	assert(hImage_ > 0);
 
-	hBackGround_ = LoadGraph("Assets/bg5.png");
+	hBackGround_ = LoadGraph("Assets/Slide1.jpg");
 	assert(hBackGround_ > 0);
 
 	Reset();
@@ -121,18 +120,7 @@ void Field::Reset()
 
 void Field::Update()
 {
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			if (IsWallBlock(x+1, y)) 
-			{
-				MoveRockRight(x, y);
-			}
-		}
-	}
 }
-
 
 void Field::Draw()
 {

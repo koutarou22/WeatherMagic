@@ -5,6 +5,7 @@
 #include "Magic.h"
 #include "Damage.h"
 #include "Rock.h"
+#include <iostream>
 
 namespace
 {
@@ -261,6 +262,7 @@ if (pField != nullptr)
 void Slime::Draw()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
+	Player* pPlayer = GetParent()->FindGameObject<Player>();
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
 
@@ -298,6 +300,8 @@ void Slime::WeatherEffects(Weather* weather)
 
 	RainScale(WeatherState, transform_, WeatherSpeed_, MOVE_SPEED, WeatherEffect, ScaleEffect_);
 
+	GaleEffect(WeatherState);
+
 }
 
 bool Slime::ColliderRect(float x, float y, float w, float h)
@@ -328,7 +332,7 @@ void Slime::SetPosition(int x, int y)
 
 void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_)
 {
-	Player* pPlayer = GetParent()->FindGameObject<Player>();
+	
 	if (state == Rainy)
 	{
 		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); // 雨の日は速度を減少させる
@@ -361,45 +365,65 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 			transform_.position_.y += (ScaleEffect_ - transform_.scale_.y) * 32; 
 		}
 	}
+	
+}
 
-	if (state == Gale)
+
+static bool RightKeyPressed = false;
+	static bool LeftKeyPressed = false;
+
+	void Slime::GaleEffect(WeatherState state)
 	{
-		if (!PressKey_R && !PressKey_L && WindTimer_ <= 0)
+		Player* pPlayer = GetParent()->FindGameObject<Player>();
+		if (state == Gale)
 		{
-			if (CheckHitKey(KEY_INPUT_RIGHT))
+			int MpVanish = pPlayer->GetMp(); // プレイヤーの現在のMPを取得
+			if (!PressKey_R && !PressKey_L && WindTimer_ <= 0)
 			{
-				WindTimer_ = 300;
-				Reverse_ = true;
-				PressKey_R = true;
-			}
-			else if (CheckHitKey(KEY_INPUT_LEFT))
-			{
-				WindTimer_ = 300;
-				Reverse_ = false;
-				PressKey_L = true;
-			}
-		}
-
-		if (WindTimer_ > 0)
-		{
-			if (PressKey_R)
-			{
-				transform_.position_.x += 4.0f;
-			}
-			else if (PressKey_L)
-			{
-				transform_.position_.x -= 4.0f;
+				if (CheckHitKey(KEY_INPUT_RIGHT))
+				{
+					pPlayer->MagicDown(4); // 右キーが押されたときにMPを4減らす
+					WindTimer_ = 300;
+					PressKey_R = true;
+				}
+				else if (CheckHitKey(KEY_INPUT_LEFT))
+				{
+					pPlayer->MagicDown(4); // 左キーが押されたときにMPを4減らす
+					WindTimer_ = 300;
+					PressKey_L = true;
+				}
 			}
 
-			WindTimer_--;
-			if (WindTimer_ == 0)
+			if (WindTimer_ > 0)
 			{
-				PressKey_R = false;
-				PressKey_L = false;
+				if (PressKey_R)
+				{
+					transform_.position_.x += 1.5f; // 右キーが押されたときにスライムを右に移動
+				}
+				else if (PressKey_L)
+				{
+					transform_.position_.x -= 1.5f; // 左キーが押されたときにスライムを左に移動
+				}
+
+				WindTimer_--;
+				if (WindTimer_ == 0)
+				{
+					PressKey_R = false;
+					PressKey_L = false;
+				}
 			}
 		}
 	}
 
-	
-}
+
+
+
+
+
+
+
+
+
+
+
 

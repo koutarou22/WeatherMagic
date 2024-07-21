@@ -20,7 +20,7 @@ void Hp::Update()
     //bagImage_ = LoadGraph("Image/BackImage.png");
     //assert(bagImage_ >= 0);
 
-    transform_.scale_ = XMFLOAT3(0.9, 0.9, 0.9);
+    transform_.scale_ = XMFLOAT3(1.0, 1.0, 1.0);
 
 
 

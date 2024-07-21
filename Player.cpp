@@ -3,9 +3,7 @@
 #include"Weather.h"
 #include "Player.h"
 #include "Camera.h"
-#include "Bird.h"
 #include "Field.h"
-#include "Time.h"
 #include "Slime.h"
 #include "HP.h" 
 #include "Engine/SceneManager.h"
@@ -14,9 +12,9 @@
 #include "EnemyMagic.h"
 #include "Damage.h"
 #include "HealItem.h"
-#include "Buffs.h"
 #include "MpItem.h"
 #include "Rock.h"
+#include <iostream>
 
 namespace
 {
@@ -24,6 +22,7 @@ namespace
 	const float GROUND = 600.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
     float GRAVITY = 9.8f / 60.0f;
+	const int MAX_MAGIC_POINT = 100;
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED), Hp_(3), NDTIME_(2.0f), Flash_Count(0), IsHitOneCount_(false),DebugLog_(false)
 {
@@ -36,8 +35,9 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	animType = 0;
 	animFrame = 0;
 
+	Hp_ = 5;
 
-	MagicPoint_ = 0;
+	MagicPoint_ = 10;
 }
 
 Player::~Player()
@@ -104,22 +104,6 @@ void Player::Update()
 			
 		}
 		//----------------------------------------------------------
-
-	////---------------岩の衝突判定(右)--------------------------------
-	//	hitX = transform_.position_.x + 32;
-	//	hitY = transform_.position_.y + 32;
-
-	//	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
-	//	for (Rock* pRock : pRocks)
-	//	{
-	//		if (pRock != nullptr)
-	//		{
-	//			int push = pRock->CollisionRight(pRocks, hitX, hitY);
-	//			transform_.position_.x -= push;
-	//		}
-	//	}
-	//	//----------------------------------------------------------
-
 	}
 	else if (CheckHitKey(KEY_INPUT_A) /*|| CheckHitKey(KEY_INPUT_LEFT)*/)
 	{
@@ -202,34 +186,12 @@ void Player::Update()
 			Jump_P = 0.0f;
 			onGround = true;
 		}
-		else {
+		else 
+		{
 			onGround = false;
 		}
 	}
 	//-----------------------------------------------------------
-
-
-	////---------------岩の衝突判定(下)--------------------------------
-	//std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
-	//for (Rock* pRock : pRocks)
-	//{
-	//	if (pRock != nullptr)
-	//	{
-	//		int pushR = pRock->CollisionDown(pRocks,transform_.position_.x + 50, transform_.position_.y + 63);
-	//		int pushL = pRock->CollisionDown(pRocks,transform_.position_.x + 14, transform_.position_.y + 63);
-	//		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
-	//		if (push >= 1)
-	//		{
-	//			transform_.position_.y -= push - 1;
-	//			Jump_P = 0.0f;
-	//			onGround = true;
-	//		}
-	//		else {
-	//			onGround = false;
-	//		}
-	//	}
-	//}
-	////-----------------------------------------------------------
 
 	if (CheckHitKey(KEY_INPUT_N))
 	{
@@ -258,8 +220,6 @@ void Player::Update()
 	{
 		WeatherSwitch = false;
 	}
-
-
 
 	//拡張性はない
 	//if (transform_.position_.y >= GROUND)//地面についたら速度を元に戻す、戻さないと貫通する恐れあり
@@ -420,6 +380,7 @@ void Player::Update()
 				{
 					hp->HeelHp();
 					Hp_++;
+					DrawFormatString(transform_.position_.x, transform_.position_.y - 50, GetColor(255, 255, 255), "HP+1");
 				}
 				pHeal->KillMe();
 				break;
@@ -474,23 +435,16 @@ void Player::Update()
 
 			if (distance <= 30.0f)
 			{
-				IsHitOneCount_ = true;
-				if (IsHitOneCount_ = true)
+				if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
 				{
-					MagicPoint_ += 5;
-
-					if (MagicPoint_ >20)
-					{
-						MagicPoint_ = 20;
-					}
-
-					pMp->KillMe();
-					break;
+					MagicUp(5);
+					IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
 				}
+				pMp->KillMe();
 			}
 			else
 			{
-				IsHitOneCount_ = false;
+				IsHitOneCount_ = false; // アイテムが範囲外になったらIsHitOneCount_をfalseにリセット
 			}
 		}
 
@@ -547,8 +501,17 @@ void Player::Draw()
 	}
 	
 	++Flash_Count;
-	DrawFormatString(0, 110, GetColor(255, 255, 255), "ジャンプしてる？:%d", onGround);
-	DrawFormatString(1100, 20, GetColor(255, 255, 255), "現在打てる魔法: %d", MagicPoint_);
+	
+
+	if (MagicPoint_ == 0)
+	{
+		DrawFormatString(0, 60, GetColor(255, 69, 0), "Mp: %d /20", MagicPoint_);//0なら赤に
+	}
+	else
+	{
+		DrawFormatString(0, 60, GetColor(30, 144, 255), "Mp: %d /20", MagicPoint_);//それ以外なら青に
+	}
+
 	if (DebugLog_ == false)
 	{
 
@@ -556,11 +519,13 @@ void Player::Draw()
 	else if(DebugLog_ == true)
 	{
 		
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
-		DrawFormatString(0, 20, GetColor(255, 255, 255), "Hp_: %d", Hp_);
-		DrawFormatString(0, 40, GetColor(255, 255, 255), "NDTIME_: %f", NDTIME_);
-		DrawFormatString(1100, 5, GetColor(255, 255, 255), "Nキーで天候変化");
+	//	DrawFormatString(1100, 5, GetColor(0, 0, 0), "Nキーで天候変化");
+
+		DrawFormatString(960, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
+		DrawFormatString(1100, 40, GetColor(255, 69, 0), "現在HP: %d", Hp_);
+		DrawFormatString(1100, 60, GetColor(255, 215, 0), "無敵時間: %f", NDTIME_);
 		
+		DrawFormatString(1100, 80, GetColor(46, 139, 87), "地面判定:%d", onGround);
 	}
 
 }
@@ -602,3 +567,28 @@ int Player::GetHp()
 {
  	return Hp_;
 }
+
+void Player::MagicUp(int _PMp)
+{
+	MagicPoint_ += _PMp;
+	
+	if (MagicPoint_ > MAX_MAGIC_POINT)
+	{
+		MagicPoint_ = MAX_MAGIC_POINT;
+	}
+}
+
+void Player::MagicDown(int _MMp)
+{
+	std::cout << "Before MagicDown: " << MagicPoint_ << std::endl;
+
+	MagicPoint_ -= _MMp;
+
+	if (MagicPoint_ < 0)
+	{
+		MagicPoint_ = 0;
+	}
+
+	std::cout << "After MagicDown: " << MagicPoint_ << std::endl;
+}
+

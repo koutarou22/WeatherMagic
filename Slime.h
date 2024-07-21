@@ -25,6 +25,7 @@ public:
 
 	void RainScale(WeatherState state, Transform& transform,
 		float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_);
+	void GaleEffect(WeatherState  state);
 	
 private:
 	int hImage;
@@ -32,6 +33,9 @@ private:
 	bool PressKey_R = false;
 	bool PressKey_L = false;
 	bool onGround;//ínñ Ç…Ç¢ÇÈÇÃÇ©ÅH
+	bool PressRight;
+	bool PressLeft;
+
 
 	int flameCounter_;
 	int animeFrame_;
@@ -40,6 +44,8 @@ private:
 	int WindTimer_ = 300;
 	int Timer_ = 90;
 	int CoolGround_Now = 0;
+	bool CheckPressRight;
+	bool CheckPressLeft;
 	float Jump_P = 0.0f;
 	float WeatherSpeed_ = 0.0f;
 	float RainHappening_ = 0.0f;
