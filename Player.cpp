@@ -38,6 +38,9 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	Hp_ = 5;
 
 	MagicPoint_ = 10;
+
+	Hp_GetFlag = false;
+	Hp_GetFlag = false;
 }
 
 Player::~Player()
@@ -376,14 +379,41 @@ void Player::Update()
 
 			if (distance <= 20.0f)
 			{
+				Hp_GetFlag = true;
 				if (Hp_ < 3) 
 				{
 					hp->HeelHp();
 					Hp_++;
-					DrawFormatString(transform_.position_.x, transform_.position_.y - 50, GetColor(255, 255, 255), "HP+1");
+					
 				}
 				pHeal->KillMe();
 				break;
+			}
+			
+		}
+
+
+		std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
+		for (MpItem* pMp : pMps)
+		{
+			float dx = pMp->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
+			float dy = pMp->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
+
+			float distance = sqrt(dx * dx + dy * dy);
+
+			if (distance <= 30.0f)
+			{
+				if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
+				{
+					MagicUp(5);
+					IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
+					Mp_GetFlag = true;
+				}
+				pMp->KillMe();
+			}
+			else
+			{
+				IsHitOneCount_ = false; // アイテムが範囲外になったらIsHitOneCount_をfalseにリセット
 			}
 		}
 
@@ -425,28 +455,6 @@ void Player::Update()
 
 
 
-		std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
-		for (MpItem* pMp : pMps)
-		{
-			float dx = pMp->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
-			float dy = pMp->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
-
-			float distance = sqrt(dx * dx + dy * dy);
-
-			if (distance <= 30.0f)
-			{
-				if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
-				{
-					MagicUp(5);
-					IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
-				}
-				pMp->KillMe();
-			}
-			else
-			{
-				IsHitOneCount_ = false; // アイテムが範囲外になったらIsHitOneCount_をfalseにリセット
-			}
-		}
 
 		//死亡したらゲームオーバー画面へ
 		if (transform_.position_.y > GROUND || Hp_ == 0)
@@ -502,7 +510,22 @@ void Player::Draw()
 	
 	++Flash_Count;
 	
+	if (Hp_GetFlag == true)
+	{
+		Camera* cam = GetParent()->FindGameObject<Camera>();
+		if (cam != nullptr) {
+			x -= cam->GetValue();
+		}
 
+		DrawFormatString(transform_.position_.x, transform_.position_.y - 50, GetColor(255, 255, 255), "HP+1");
+		UIGetTimer = 90;
+	}
+	else if (UIGetTimer >= 0)
+	{
+		UIGetTimer--;
+	}
+	
+	
 	if (MagicPoint_ == 0)
 	{
 		DrawFormatString(0, 60, GetColor(255, 69, 0), "Mp: %d /20", MagicPoint_);//0なら赤に

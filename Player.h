@@ -57,7 +57,9 @@ private:
 	float WeatherSpeed_;//MOVE_SPEED‚ÆWeather‚Ì’l‚ğ‡‚í‚¹Ši”[‚·‚é—p‚Ì•Ï”
 	bool  WeatherSwitch;//‚‘¬‚Å“VŒó‚ªØ‚è‘Ö‚í‚ç‚È‚¢‚æ‚¤‚É‚·‚é‘Îô
 	
-	
+	int UIGetTimer;
+	bool Hp_GetFlag;
+	bool Mp_GetFlag;
 	bool IsHitOneCount_;
 	bool DebugLog_;
 
