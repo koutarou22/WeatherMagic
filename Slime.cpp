@@ -40,15 +40,17 @@ Slime::~Slime()
 		DeleteGraph(hImage);
 	}
 }
+bool HitWeather = true;
 
 void Slime::Update()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 
-	if (pWeather != nullptr)
+	if (pWeather != nullptr )
 	{
 		WeatherEffects(pWeather); // 天候関数を呼び出す
+		HitWeather = false;
 	}
 
 	// 衝突判定と反転フラグの設定
@@ -179,8 +181,8 @@ if (pField != nullptr)
 	//---------------衝突判定(下)--------------------------------
 	if (pField != nullptr)
 	{
-		int pushR = pField->CollisionDown(transform_.position_.x + 50 * transform_.scale_.x, transform_.position_.y + 54 * transform_.scale_.y);
-		int pushL = pField->CollisionDown(transform_.position_.x + 14 * transform_.scale_.x, transform_.position_.y + 54 * transform_.scale_.y);
+		int pushR = pField->CollisionDown(transform_.position_.x + 25 * transform_.scale_.x, transform_.position_.y + 54 * transform_.scale_.y);
+		int pushL = pField->CollisionDown(transform_.position_.x + 10 * transform_.scale_.x, transform_.position_.y + 54 * transform_.scale_.y);
 		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
 		if (push >= 1) {
 			transform_.position_.y -= push - 1;
@@ -298,10 +300,9 @@ void Slime::WeatherEffects(Weather* weather)
 	WeatherState WeatherState = weather->GetWeatherState();
 	float WeatherEffect = weather->GetWeatherChange();
 
+	HitWeather = true;
 	RainScale(WeatherState, transform_, WeatherSpeed_, MOVE_SPEED, WeatherEffect, ScaleEffect_);
-
 	GaleEffect(WeatherState);
-
 }
 
 bool Slime::ColliderRect(float x, float y, float w, float h)
@@ -369,52 +370,53 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 }
 
 
-static bool RightKeyPressed = false;
-	static bool LeftKeyPressed = false;
+bool wasKeyPressed_R = false;
+bool wasKeyPressed_L = false;
 
-	void Slime::GaleEffect(WeatherState state)
+void Slime::GaleEffect(WeatherState state)
+{
+	
+	if (state == Gale)
 	{
+		
 		Player* pPlayer = GetParent()->FindGameObject<Player>();
-		if (state == Gale)
+		int MpVanish = pPlayer->GetMp(); // プレイヤーの現在のMPを取得
+		if (!PressKey_R && !PressKey_L && WindTimer_ <= 0)
 		{
-			int MpVanish = pPlayer->GetMp(); // プレイヤーの現在のMPを取得
-			if (!PressKey_R && !PressKey_L && WindTimer_ <= 0)
+			if (CheckHitKey(KEY_INPUT_RIGHT))
 			{
-				if (CheckHitKey(KEY_INPUT_RIGHT))
-				{
-					pPlayer->MagicDown(4); // 右キーが押されたときにMPを4減らす
-					WindTimer_ = 300;
-					PressKey_R = true;
-				}
-				else if (CheckHitKey(KEY_INPUT_LEFT))
-				{
-					pPlayer->MagicDown(4); // 左キーが押されたときにMPを4減らす
-					WindTimer_ = 300;
-					PressKey_L = true;
-				}
+				pPlayer->MagicDown(4); // 右キーが押されたときにMPを4減らす
+				WindTimer_ = 300;
+				PressKey_R = true;
+			}
+			else if (CheckHitKey(KEY_INPUT_LEFT))
+			{
+				pPlayer->MagicDown(4); // 左キーが押されたときにMPを4減らす
+				WindTimer_ = 300;
+				PressKey_L = true;
+			}
+		}
+
+		if (WindTimer_ > 0)
+		{
+			if (PressKey_R)
+			{
+				transform_.position_.x += 1.5f; // 右キーが押されたときにスライムを右に移動
+			}
+			else if (PressKey_L)
+			{
+				transform_.position_.x -= 1.5f; // 左キーが押されたときにスライムを左に移動
 			}
 
-			if (WindTimer_ > 0)
+			WindTimer_--;
+			if (WindTimer_ == 0)
 			{
-				if (PressKey_R)
-				{
-					transform_.position_.x += 1.5f; // 右キーが押されたときにスライムを右に移動
-				}
-				else if (PressKey_L)
-				{
-					transform_.position_.x -= 1.5f; // 左キーが押されたときにスライムを左に移動
-				}
-
-				WindTimer_--;
-				if (WindTimer_ == 0)
-				{
-					PressKey_R = false;
-					PressKey_L = false;
-				}
+				PressKey_R = false;
+				PressKey_L = false;
 			}
 		}
 	}
-
+}
 
 
 

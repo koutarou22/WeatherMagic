@@ -17,7 +17,7 @@ Field::Field(GameObject* scene) :GameObject(scene)
 	hImage_ = LoadGraph("Assets/bgchar.png");
 	assert(hImage_ > 0);
 
-	hBackGround_ = LoadGraph("Assets/Slide1.jpg");
+	hBackGround_ = LoadGraph("Assets/bg5.png");
 	assert(hBackGround_ > 0);
 
 	Reset();
@@ -120,6 +120,40 @@ void Field::Reset()
 
 void Field::Update()
 {
+	//Weather* pWeather = GetParent()->FindGameObject<Weather>();
+	//if (pWeather != nullptr)
+	//{
+	//	WeatherEffects(pWeather); // 天候関数を呼び出す
+	//}
+
+
+	//if (CheckHitKey(KEY_INPUT_N))
+	//{
+	//	if (!WeatherSwitch && pWeather != nullptr)
+	//	{
+	//		// 現在の天候状態を取得
+	//		WeatherState WeatherState = pWeather->GetWeatherState();
+	//		// 次に切り替える天候を決定
+	//		if (WeatherState == Sunny)//現在晴れなら
+	//		{
+	//			pWeather->SetWeather(Rainy);//次は雨に
+	//		}
+	//		else if (WeatherState == Rainy)
+	//		{
+	//			pWeather->SetWeather(Gale);//次は強風に
+	//		}
+	//		else
+	//		{
+	//			pWeather->SetWeather(Sunny);//次は晴れに
+	//		}
+	//		WeatherTime_ = 60;
+	//	}
+	//	WeatherSwitch = true;
+	//}
+	//else
+	//{
+	//	WeatherSwitch = false;
+	//}
 }
 
 void Field::Draw()

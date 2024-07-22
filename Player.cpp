@@ -37,10 +37,12 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 
 	Hp_ = 5;
 
-	MagicPoint_ = 10;
+	MagicPoint_ = 100;
 
 	Hp_GetFlag = false;
 	Hp_GetFlag = false;
+
+	
 }
 
 Player::~Player()
@@ -407,12 +409,14 @@ void Player::Update()
 				{
 					MagicUp(5);
 					IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
-					Mp_GetFlag = true;
+					
 				}
 				pMp->KillMe();
+				Mp_GetFlag = true;
 			}
 			else
 			{
+				Mp_GetFlag = false;
 				IsHitOneCount_ = false; // アイテムが範囲外になったらIsHitOneCount_をfalseにリセット
 			}
 		}
@@ -510,22 +514,24 @@ void Player::Draw()
 	
 	++Flash_Count;
 	
-	if (Hp_GetFlag == true)
-	{
-		Camera* cam = GetParent()->FindGameObject<Camera>();
-		if (cam != nullptr) {
-			x -= cam->GetValue();
-		}
 
-		DrawFormatString(transform_.position_.x, transform_.position_.y - 50, GetColor(255, 255, 255), "HP+1");
-		UIGetTimer = 90;
-	}
-	else if (UIGetTimer >= 0)
-	{
-		UIGetTimer--;
-	}
-	
-	
+	//if (Mp_GetFlag == true)
+	//{
+	//	if (UIGetTimer <= 0)
+	//	{
+	//		DrawFormatString(x + 13, y - 30, GetColor(255, 255, 255), "MP+5");
+	//		UIGetTimer = 300;
+	//	}
+	//	UIGetTimer--;
+	//}
+	//else if (UIGetTimer <= 0)
+	//{
+	//	Mp_GetFlag = false;
+	//}
+
+	//
+
+	DrawFormatString(100, 60, GetColor(30, 144, 255), "UI:%d", UIGetTimer);//それ以外なら青に
 	if (MagicPoint_ == 0)
 	{
 		DrawFormatString(0, 60, GetColor(255, 69, 0), "Mp: %d /20", MagicPoint_);//0なら赤に
@@ -559,7 +565,7 @@ void Player::SetPosition(int x, int y)
 	transform_.position_.y = y;
 }
 
-void Player::WeatherEffects(Weather* weather)
+void Player::WeatherEffects (Weather* weather)
 {
 	WeatherState WeatherState = weather->GetWeatherState();
 	float WeatherEffect = weather->GetWeatherChange();
@@ -613,5 +619,5 @@ void Player::MagicDown(int _MMp)
 	}
 
 	std::cout << "After MagicDown: " << MagicPoint_ << std::endl;
-}
+ }
 

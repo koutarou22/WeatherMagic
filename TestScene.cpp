@@ -11,6 +11,7 @@
 #include "Damage.h"
 #include "HealItem.h"
 #include "MpItem.h"
+#include "WeatherIcon.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -39,6 +40,7 @@ void TestScene::Initialize()
 	//Instantiate<Bird>(this);
 
 	Instantiate<Weather>(this);
+	//Instantiate<WeatherIcon>(this);
 }
 
 //更新

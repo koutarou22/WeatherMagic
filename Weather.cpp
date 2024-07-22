@@ -10,8 +10,16 @@ void Weather::Initialize()
     hImage_Wind = LoadGraph("Assets/Wind.png");
     assert(hImage_Wind > 0);
 
-    hImage_Book = LoadGraph("Assets/Book.png");
-    assert(hImage_Book > 0);
+    //---------------UI--------------------------------------
+    hImage_SIcon = LoadGraph("Assets/Sun.png");
+    assert(hImage_SIcon > 0);
+    hImage_RIcon = LoadGraph("Assets/Rain1.png");
+    assert(hImage_RIcon > 0);
+    hImage_WIcon = LoadGraph("Assets/Gale.png");
+    assert(hImage_WIcon > 0);
+
+    //hImage_Book = LoadGraph("Assets/Book.png");
+    //assert(hImage_Book > 0);
 }
 
 void Weather::Update()
@@ -37,23 +45,27 @@ void Weather::Draw()
     switch (weather_)
     {
     case Sunny:
-        DrawFormatString(500, 10, GetColor(255, 255, 0), "天候: 晴れ 『変化なし』消費Mp0");
-        DrawRectGraph(480, 10, 0, AnimeS, SBookW, SBookH, hImage_Book, TRUE);
-
+        // DrawRectGraph(480, 5, 0, AnimeS, SBookW, SBookH, hImage_Book, TRUE);
+        DrawFormatString(580, 10, GetColor(255, 255, 0), "天候: 晴れ 『変化なし』消費Mp0");
+        DrawGraph(500, 0, hImage_SIcon, TRUE);  // 晴れ
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
         DrawGraph(0, 0, hImage_Sunny, TRUE);  // 晴れ
-       
         break;
+
     case Rainy:
-        DrawFormatString(500, 10, GetColor(100, 149, 237), "天候: 雨　『地面がぬかるむ..』-移動速度DOWN  +スライム巨大化");
+        DrawFormatString(580, 10, GetColor(100, 149, 237), "天候: 雨　『地面がぬかるむ..』-移動速度DOWN  +スライム巨大化");
+        DrawGraph(500, 0, hImage_RIcon, TRUE);  // 晴れ
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
         DrawGraph(0, 0, hImage_Rainy, TRUE);  // 雨
         break;
+
     case Gale:
-        DrawFormatString(500, 10, GetColor(0, 250, 154), "事象: 強風　『敵が(自分も)吹っ飛ぶ！』 消費Mp 4");
+        DrawFormatString(580, 10, GetColor(0, 250, 154), "事象: 強風　『敵が(自分も)吹っ飛ぶ！』 消費Mp 4");
+        DrawGraph(500, 0, hImage_WIcon, TRUE);  // 晴れ
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
         DrawGraph(0, 0, hImage_Wind, TRUE);  // 強風の画像とかあるんか？
         break;
+
     }
 
     // 描画モードを元に戻す

@@ -26,13 +26,18 @@ public:
 	WeatherState GetWeatherState() const { return weather_; }
 
 	float GetWeatherChange();
-
-private:
 	WeatherState weather_;
+private:
+	
 	WeatherState NextWeather_;
     int hImage_Sunny;
 	int hImage_Rainy;
 	int hImage_Wind;
+
+	int hImage_SIcon;
+	int hImage_RIcon;
+	int hImage_WIcon;
+
 
 	int hImage_Book;
     float WeatherChange_; // 天候に応じた移動速度用数値

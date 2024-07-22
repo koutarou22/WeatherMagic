@@ -23,14 +23,17 @@
     <Filter Include="リソース ファイル\Gimc">
       <UniqueIdentifier>{c7b3dc85-2ff9-4b09-ba10-7513d9e6eed1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="リソース ファイル\UI">
-      <UniqueIdentifier>{69fc9686-f35e-4aa0-b830-576313ca0d0f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="リソース ファイル\Scene">
       <UniqueIdentifier>{ad92ea05-5851-4cbe-be24-019a79fe2d91}</UniqueIdentifier>
     </Filter>
     <Filter Include="リソース ファイル\Chara\Enemy">
       <UniqueIdentifier>{0d700ca0-6adc-4820-802e-117b66c75cd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Stage\UI">
+      <UniqueIdentifier>{69fc9686-f35e-4aa0-b830-576313ca0d0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Chara\Player">
+      <UniqueIdentifier>{9607281f-646b-4060-8421-dab8d5a6f477}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,9 +55,6 @@
     <ClCompile Include="Engine\Transform.cpp">
       <Filter>01Engine\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>リソース ファイル\Chara</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>リソース ファイル\Stage</Filter>
     </ClCompile>
@@ -68,7 +68,7 @@
       <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
     <ClCompile Include="Hp.cpp">
-      <Filter>リソース ファイル\UI</Filter>
+      <Filter>リソース ファイル\Stage\UI</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>リソース ファイル\Scene</Filter>
@@ -101,10 +101,16 @@
       <Filter>リソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Damage.cpp">
-      <Filter>リソース ファイル\UI</Filter>
+      <Filter>リソース ファイル\Stage\UI</Filter>
     </ClCompile>
     <ClCompile Include="HealItem.cpp">
       <Filter>リソース ファイル\Gimc</Filter>
+    </ClCompile>
+    <ClCompile Include="Buffs.cpp" />
+    <ClCompile Include="MpItem.cpp" />
+    <ClCompile Include="WeatherIcon.cpp" />
+    <ClCompile Include="Player.cpp">
+      <Filter>リソース ファイル\Chara\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,9 +132,6 @@
     <ClInclude Include="Engine\Transform.h">
       <Filter>01Engine\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>リソース ファイル\Chara</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>リソース ファイル\Stage</Filter>
     </ClInclude>
@@ -142,7 +145,7 @@
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
     <ClInclude Include="Hp.h">
-      <Filter>リソース ファイル\UI</Filter>
+      <Filter>リソース ファイル\Stage\UI</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>リソース ファイル\Gimc</Filter>
@@ -175,10 +178,16 @@
       <Filter>リソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Damage.h">
-      <Filter>リソース ファイル\UI</Filter>
+      <Filter>リソース ファイル\Stage\UI</Filter>
     </ClInclude>
     <ClInclude Include="HealItem.h">
       <Filter>リソース ファイル\Gimc</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffs.h" />
+    <ClInclude Include="MpItem.h" />
+    <ClInclude Include="WeatherIcon.h" />
+    <ClInclude Include="Player.h">
+      <Filter>リソース ファイル\Chara\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
