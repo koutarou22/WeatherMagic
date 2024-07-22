@@ -12,6 +12,7 @@ public:
 	void Draw() override;
 	void SetPosition(int x, int y);
 	void WeatherEffects(Weather* weather);
+	void GaleEffect(WeatherState state);
 	//int CollisionUp(int x, int y);
 
 	/// <summary>
@@ -20,12 +21,6 @@ public:
 	/// <returns></returns>
 	bool ColliderRect(float x, float y, float w, float h);
 
-	//bool IsColliding(const Rect& a, const Rect& b);
-	
-	/*bool IsRockPosition(std::list<Rock*> rocks, int x, int y);
-	int CollisionRight(std::list<Rock*> rocks, int x, int y);
-	int CollisionLeft(std::list<Rock*> rocks, int x, int y);
-	int CollisionDown(std::list<Rock*> rocks, int x, int y);*/
 	float x;
 	float y;
 	

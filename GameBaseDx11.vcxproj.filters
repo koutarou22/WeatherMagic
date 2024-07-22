@@ -141,9 +141,6 @@
     <ClInclude Include="Weather.h">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
-    <ClInclude Include="Magic.h">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClInclude>
     <ClInclude Include="Hp.h">
       <Filter>リソース ファイル\Stage\UI</Filter>
     </ClInclude>
@@ -188,6 +185,9 @@
     <ClInclude Include="WeatherIcon.h" />
     <ClInclude Include="Player.h">
       <Filter>リソース ファイル\Chara\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Magic.h">
+      <Filter>リソース ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

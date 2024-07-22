@@ -147,9 +147,16 @@ void Rock::WeatherEffects(Weather* weather)
 	WeatherState WeatherState = weather->GetWeatherState();
 	float WeatherEffect = weather->GetWeatherChange();
 
-	if (WeatherState == Gale)
+	GaleEffect(WeatherState);
+}
+
+void Rock::GaleEffect(WeatherState state)
+{
+	if (state == Gale)
 	{
-		if (!PressKey_R && !PressKey_L && WindTimer_ <= 0)
+		Player* pPlayer = GetParent()->FindGameObject<Player>();
+		int MpVanish = pPlayer->GetMp();
+		if (WindTimer_ <= 0 && MpVanish >= 4)
 		{
 			if (CheckHitKey(KEY_INPUT_RIGHT))
 			{
@@ -158,16 +165,13 @@ void Rock::WeatherEffects(Weather* weather)
 			}
 			else if (CheckHitKey(KEY_INPUT_LEFT))
 			{
-				
 				WindTimer_ = 300;
 				PressKey_L = true;
 			}
-		
 		}
 
 		if (WindTimer_ > 0)
 		{
-		
 			if (PressKey_R)
 			{
 				transform_.position_.x += 1.5f;
@@ -176,10 +180,6 @@ void Rock::WeatherEffects(Weather* weather)
 			{
 				transform_.position_.x -= 1.5f;
 			}
-			/*else if (CheckHitKey(KEY_INPUT_UP))
-			{
-				transform_.position_.y -= 5.0f;
-			}*/
 
 			WindTimer_--;
 			if (WindTimer_ == 0)
@@ -189,7 +189,6 @@ void Rock::WeatherEffects(Weather* weather)
 			}
 		}
 	}
-	
 }
 
 

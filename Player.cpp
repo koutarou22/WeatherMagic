@@ -22,7 +22,10 @@ namespace
 	const float GROUND = 600.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
     float GRAVITY = 9.8f / 60.0f;
-	const int MAX_MAGIC_POINT = 100;
+	const int MAX_MAGIC_POINT = 20;
+	const int MAX_DAMAGE_HP = 5;
+	
+ 
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED), Hp_(3), NDTIME_(2.0f), Flash_Count(0), IsHitOneCount_(false),DebugLog_(false)
 {
@@ -37,11 +40,11 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 
 	Hp_ = 5;
 
-	MagicPoint_ = 100;
+	MagicPoint_ = 10;
 
 	Hp_GetFlag = false;
 	Hp_GetFlag = false;
-
+	StringUi_Up = transform_.position_.y;
 	
 }
 
@@ -62,8 +65,8 @@ void Player::Update()
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 
-	if (hp == nullptr) {
-		
+	if (hp == nullptr) 
+	{
 		return;
 	}
 
@@ -226,6 +229,39 @@ void Player::Update()
 		WeatherSwitch = false;
 	}
 
+
+	if (pWeather != nullptr && pWeather->GetWeatherState() == Gale)
+	{
+		if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ <= 0)
+		{
+			if(MagicPoint_ >= 4)
+			MagicDown(4); 
+			GaleTime_ = 300;
+		}
+	}
+
+	if (GaleTime_ > 0)
+	{
+		GaleTime_--;
+	}
+
+	if (pWeather != nullptr && pWeather->GetWeatherState() == Rainy)
+	{
+		if (RainTime_ <= 0)
+		{
+			if (MagicPoint_ > 0)
+			{
+				MagicDown(1);
+				RainTime_ = 420;
+			}
+		}
+	}
+
+	if (RainTime_ > 0)
+	{
+		RainTime_--;
+	}
+
 	//拡張性はない
 	//if (transform_.position_.y >= GROUND)//地面についたら速度を元に戻す、戻さないと貫通する恐れあり
 	//{
@@ -270,7 +306,7 @@ void Player::Update()
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
 				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
-				if (WeatherState == Rainy)
+				if (WeatherState == Rainy && MagicPoint_ > 0)
 				{
 					RainBound = 3.5f; // 雨の時のみジャンプ力を2.5倍
 				}
@@ -282,20 +318,23 @@ void Player::Update()
 				if (NDTIME_ <= 0.0f)
 				{
 					hp->DamageHp();
-					Hp_--;
+					HpDown(1);
 					if (Hp_ <= 0)
 					{
 						KillMe();
 					}
 					if (Hp_ > 3)
 					{
-						Hp_--;
+						HpDown(1);
 					}
-					
+
 					NDTIME_ = 3.0f;
+					break; // ダメージを与えた後にループを抜ける
 				}
 			}
 		}
+	}
+
 
 		//Damage* pDamage = GetParent()->FindGameObject<Damage>();
 		//カメラの処理
@@ -331,7 +370,7 @@ void Player::Update()
 				{
 					
 					hp->DamageHp();
-					Hp_--;
+					HpDown(1);
 
 					if (Hp_ <= 0)
 					{
@@ -358,7 +397,7 @@ void Player::Update()
 				if (NDTIME_ <= 0.0f)
 				{
 					hp->DamageHp();
-					Hp_--;
+					HpDown(1);
 					if (Hp_ <= 0)
 					{
 						KillMe();
@@ -382,13 +421,15 @@ void Player::Update()
 			if (distance <= 20.0f)
 			{
 				Hp_GetFlag = true;
-				if (Hp_ < 3) 
+				if (Hp_ < 5) 
 				{
 					hp->HeelHp();
 					Hp_++;
-					
 				}
 				pHeal->KillMe();
+				Hp_GetFlag = true;
+				UIGetTimer = 60;
+				StringUi_Up = transform_.position_.y;
 				break;
 			}
 			
@@ -409,14 +450,14 @@ void Player::Update()
 				{
 					MagicUp(5);
 					IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
-					
 				}
 				pMp->KillMe();
 				Mp_GetFlag = true;
+				UIGetTimer = 60;
+				StringUi_Up = transform_.position_.y;
 			}
 			else
 			{
-				Mp_GetFlag = false;
 				IsHitOneCount_ = false; // アイテムが範囲外になったらIsHitOneCount_をfalseにリセット
 			}
 		}
@@ -432,13 +473,13 @@ void Player::Update()
 			if (distance <= 60.0f)
 			{
 				//<= 32.0fの意味は横との接触の幅を制限している
-				if (dy < 0 && abs(dx)<= 32.0f) //岩の上に乗る
+				if (dy < 0 && abs(dx) <= 32.0f) //岩の上に乗る
 				{
-					transform_.position_.y = pRock->GetPosition().y - 64 ; // プレイヤーを上に移動
+					transform_.position_.y = pRock->GetPosition().y - 64; // プレイヤーを上に移動
 					WeatherSpeed_ = 0;
 					onGround = true;
 				}
-				else if (dy > 0 && abs(dx)<= 32.0f) //岩の下にぶつかる
+				else if (dy > 0 && abs(dx) <= 32.0f) //岩の下にぶつかる
 				{
 					int push = 3;
 					transform_.position_.y = pRock->GetPosition().y + push; // プレイヤーを下に移動
@@ -456,9 +497,6 @@ void Player::Update()
 				}
 			}
 		}
-
-
-
 
 		//死亡したらゲームオーバー画面へ
 		if (transform_.position_.y > GROUND || Hp_ == 0)
@@ -478,7 +516,6 @@ void Player::Update()
 				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 			}
 		}
-	}
 
 	if (CheckHitKey(KEY_INPUT_Q))
 	{
@@ -494,6 +531,8 @@ void Player::Draw()
 {
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
+
+	int displayY = y - 30;
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr) {
@@ -515,21 +554,34 @@ void Player::Draw()
 	++Flash_Count;
 	
 
-	//if (Mp_GetFlag == true)
-	//{
-	//	if (UIGetTimer <= 0)
-	//	{
-	//		DrawFormatString(x + 13, y - 30, GetColor(255, 255, 255), "MP+5");
-	//		UIGetTimer = 300;
-	//	}
-	//	UIGetTimer--;
-	//}
-	//else if (UIGetTimer <= 0)
-	//{
-	//	Mp_GetFlag = false;
-	//}
+	if (Mp_GetFlag == true)
+    {
+        if (UIGetTimer > 0)
+        {
+           DrawFormatString(x + 13, StringUi_Up, GetColor(255, 255, 255), "MP+5");
+		   StringUi_Up -= 1;
+           UIGetTimer--;
+        }
+        else
+        {
+           Mp_GetFlag = false;
+        }
+    }
 
-	//
+
+	if (Hp_GetFlag == true)
+	{
+		if (UIGetTimer > 0)
+		{
+			DrawFormatString(x + 13, StringUi_Up, GetColor(255, 255, 255), "Hp+1");
+			StringUi_Up -= 1;
+			UIGetTimer--;
+		}
+		else
+		{
+			Hp_GetFlag = false;
+		}
+	}
 
 	DrawFormatString(100, 60, GetColor(30, 144, 255), "UI:%d", UIGetTimer);//それ以外なら青に
 	if (MagicPoint_ == 0)
@@ -577,7 +629,14 @@ void Player::WeatherEffects (Weather* weather)
 	}
 	else if (WeatherState == Rainy)
 	{
-		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); 
+		if (MagicPoint_ > 0)
+		{
+			WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect);
+		}
+		else
+		{
+			WeatherSpeed_ = MOVE_SPEED;
+		}
 	}
 	else if (WeatherState == Gale)
 	{
@@ -609,15 +668,26 @@ void Player::MagicUp(int _PMp)
 
 void Player::MagicDown(int _MMp)
 {
-	std::cout << "Before MagicDown: " << MagicPoint_ << std::endl;
-
 	MagicPoint_ -= _MMp;
 
 	if (MagicPoint_ < 0)
 	{
 		MagicPoint_ = 0;
 	}
+}
 
-	std::cout << "After MagicDown: " << MagicPoint_ << std::endl;
- }
+void Player::HpUp(int _PHp)
+{
+	Hp_ += _PHp;
+
+	if (Hp_ < MAX_DAMAGE_HP)
+	{
+		Hp_ > MAX_DAMAGE_HP;
+	}
+}
+
+void Player::HpDown(int _MHp)
+{
+	Hp_ -= _MHp;
+}
 

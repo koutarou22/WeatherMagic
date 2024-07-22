@@ -47,7 +47,7 @@ void Slime::Update()
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 
-	if (pWeather != nullptr )
+	if (pWeather != nullptr)
 	{
 		WeatherEffects(pWeather); // 天候関数を呼び出す
 		HitWeather = false;
@@ -302,8 +302,10 @@ void Slime::WeatherEffects(Weather* weather)
 
 	HitWeather = true;
 	RainScale(WeatherState, transform_, WeatherSpeed_, MOVE_SPEED, WeatherEffect, ScaleEffect_);
+	
 	GaleEffect(WeatherState);
 }
+
 
 bool Slime::ColliderRect(float x, float y, float w, float h)
 {
@@ -333,8 +335,10 @@ void Slime::SetPosition(int x, int y)
 
 void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_)
 {
-	
-	if (state == Rainy)
+	Player* pPlayer = GetParent()->FindGameObject<Player>();
+	int MpVanish = pPlayer->GetMp();
+
+	if (state == Rainy && MpVanish > 0)
 	{
 		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); // 雨の日は速度を減少させる
 
@@ -353,6 +357,7 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 	}
 	else 
 	{
+
 		WeatherSpeed_ = MOVE_SPEED; 
 		
 		if (transform_.scale_.x > 1.0f) {
@@ -375,23 +380,19 @@ bool wasKeyPressed_L = false;
 
 void Slime::GaleEffect(WeatherState state)
 {
-	
 	if (state == Gale)
 	{
-		
 		Player* pPlayer = GetParent()->FindGameObject<Player>();
-		int MpVanish = pPlayer->GetMp(); // プレイヤーの現在のMPを取得
-		if (!PressKey_R && !PressKey_L && WindTimer_ <= 0)
+		int MpVanish = pPlayer->GetMp(); 
+		if (WindTimer_ <= 0 && MpVanish >= 4)
 		{
 			if (CheckHitKey(KEY_INPUT_RIGHT))
 			{
-				pPlayer->MagicDown(4); // 右キーが押されたときにMPを4減らす
 				WindTimer_ = 300;
 				PressKey_R = true;
 			}
 			else if (CheckHitKey(KEY_INPUT_LEFT))
 			{
-				pPlayer->MagicDown(4); // 左キーが押されたときにMPを4減らす
 				WindTimer_ = 300;
 				PressKey_L = true;
 			}
@@ -401,11 +402,11 @@ void Slime::GaleEffect(WeatherState state)
 		{
 			if (PressKey_R)
 			{
-				transform_.position_.x += 1.5f; // 右キーが押されたときにスライムを右に移動
+				transform_.position_.x += 1.5f;
 			}
 			else if (PressKey_L)
 			{
-				transform_.position_.x -= 1.5f; // 左キーが押されたときにスライムを左に移動
+				transform_.position_.x -= 1.5f;
 			}
 
 			WindTimer_--;
@@ -417,6 +418,7 @@ void Slime::GaleEffect(WeatherState state)
 		}
 	}
 }
+
 
 
 

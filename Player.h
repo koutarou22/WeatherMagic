@@ -26,8 +26,9 @@ public:
 	int GetHp();
 	// MagicPoint_‚ğ‘‚â‚·ƒƒ\ƒbƒh
 	void MagicUp(int _PMp);
-
 	void MagicDown(int _MMp);
+	void HpUp(int _PHp);
+	void HpDown(int _MHp);
 
 	
 
@@ -72,7 +73,10 @@ private:
 	State state;
 	int timer_ = 90;
 	int WeatherTime_ = 90;
+	int GaleTime_ = 0;
+	int RainTime_ = 0;
 	int hitX;
 	int hitY;
 
+	int StringUi_Up;
 };

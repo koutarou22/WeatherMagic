@@ -25,7 +25,7 @@ public:
 
 	void RainScale(WeatherState state, Transform& transform,
 		float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_);
-	void GaleEffect(WeatherState  state);
+	void GaleEffect(WeatherState state);
 	
 private:
 	int hImage;

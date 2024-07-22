@@ -30,14 +30,19 @@ public:
 private:
 	
 	WeatherState NextWeather_;
-    int hImage_Sunny;
-	int hImage_Rainy;
-	int hImage_Wind;
+    int hImage_Sunny;//晴れのエフェクト
+	int hImage_Rainy;//雨のエフェクト
+	int hImage_Wind;//風のエフェクト
 
-	int hImage_SIcon;
-	int hImage_RIcon;
-	int hImage_WIcon;
+	int hImage_SIcon;//晴れのアイコン
+	int hImage_RIcon;//雨のアイコン
+	int hImage_WIcon;//風のアイコン
 
+	int hImage_RainyNoMp;//Mpが使えない時の差し替え用(雨)
+	int hImage_WindNoMp;//Mpが使えない時の差し替え用(風)
+
+	bool RainOnChecker;
+	bool WindOnChecker;
 
 	int hImage_Book;
     float WeatherChange_; // 天候に応じた移動速度用数値
