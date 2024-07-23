@@ -23,25 +23,13 @@ TestScene::TestScene(GameObject * parent)
 //初期化
 void TestScene::Initialize()
 {
-	
-	/*Instantiate<Field>(this);*/
-	Field* pFailed = Instantiate<Field>(this);
-	pFailed->Reset();
-	Instantiate<Camera>(this);
-	//Instantiate<Slime>(this);
-	//Instantiate<Ghost>(this);
-	Instantiate<Hp>(this);
-	//Instantiate<Damage>(this);
-	Instantiate<Player>(this);
-	//Instantiate<HealItem>(this);
-	//Instantiate<Rock>(this);
-	Instantiate<MpItem>(this);
-	//Instantiate<ClearFlag>(this);
-	
-	//Instantiate<Bird>(this);
-
-	Instantiate<Weather>(this);
-	//Instantiate<WeatherIcon>(this);
+    Field* pField = Instantiate<Field>(this);
+    pField->Reset(); // Reset() メソッドを呼び出す
+    Instantiate<Camera>(this);
+    Instantiate<Hp>(this);
+    Instantiate<Player>(this);
+    Instantiate<MpItem>(this);
+    Instantiate<Weather>(this);
 }
 
 //更新

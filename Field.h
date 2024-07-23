@@ -43,14 +43,16 @@ public:
 	/// <returns>めり込んだ量</returns>
 	int CollisionUp(int x, int y);
 	bool IsWallBlock(int x, int y);
-	bool IsRockBlock(int x, int y);
 	bool IsHitClear(int x, int y);
 
-	void MoveRockRight(int x, int y);
+	/// <summary>
+	/// ステージロード用
+	/// </summary>
+	/// <param name="StageNumber"></param>
+	void LoadStage(int StageNumber);
 
-	//bool IsColliding(const Rect& a, const Rect& b);
+	void NextLoadStage();
 
-	RECT RectRock;
 private:
 	int hImage_;
 	int hBackGround_;
@@ -59,4 +61,5 @@ private:
 	int width;
 	int height;
 
+	int NowStage_;//現在のステージ番号を保管する用
 };

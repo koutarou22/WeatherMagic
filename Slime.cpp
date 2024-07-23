@@ -336,6 +336,10 @@ void Slime::SetPosition(int x, int y)
 void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_)
 {
 	Player* pPlayer = GetParent()->FindGameObject<Player>();
+	if (pPlayer == nullptr) {
+		return;
+	}
+
 	int MpVanish = pPlayer->GetMp();
 
 	if (state == Rainy && MpVanish > 0)
@@ -383,6 +387,9 @@ void Slime::GaleEffect(WeatherState state)
 	if (state == Gale)
 	{
 		Player* pPlayer = GetParent()->FindGameObject<Player>();
+		if (pPlayer == nullptr) {
+			return;
+		}
 		int MpVanish = pPlayer->GetMp(); 
 		if (WindTimer_ <= 0 && MpVanish >= 4)
 		{

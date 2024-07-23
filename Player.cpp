@@ -29,14 +29,14 @@ namespace
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED), Hp_(3), NDTIME_(2.0f), Flash_Count(0), IsHitOneCount_(false),DebugLog_(false)
 {
-	hImage = LoadGraph("Assets/magic.png");
+	hImage = LoadGraph("Assets/Wizard.png");
 	assert(hImage > 0);
 	transform_.position_.x = 100.0f;
 	transform_.position_.y = GROUND;
 	onGround = true;
 	flameCounter = 0;
 	animType = 0;
-	animFrame = 0;
+	animeFrame = 0;
 
 	Hp_ = 5;
 
@@ -45,7 +45,17 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	Hp_GetFlag = false;
 	Hp_GetFlag = false;
 	StringUi_Up = transform_.position_.y;
+
+	soundHandle = LoadSoundMem("Assets/jump06.mp3");
+	assert(soundHandle != -1);
 	
+	RainHandle = LoadSoundMem("Assets/雨が降る2.mp3");
+	assert(RainHandle != -1);
+
+	WindHandle = LoadSoundMem("Assets/風が吹く1.mp3");
+	assert(WindHandle != -1);
+
+
 }
 
 Player::~Player()
@@ -66,8 +76,7 @@ void Player::Update()
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 
 	SetFontSize(15);
-
-
+	
 	if (hp == nullptr) 
 	{
 		return;
@@ -76,6 +85,30 @@ void Player::Update()
 	if (pWeather != nullptr)
 	{
 		WeatherEffects(pWeather); // 天候関数を呼び出す
+	}
+
+	//if (++flameCounter_ >= 24)
+	//{
+	//	if (animeFrame_ < 3)
+	//	{
+	//		animeFrame_ = (animeFrame_ + 1) % 4; //if文を使わない最適解
+	//	}
+	//	flameCounter_ = 0;
+	//}
+
+	if (++flameCounter >= 24)
+	{
+		if (animeFrame < 8)
+		{
+			animeFrame = (animeFrame + 1) % 8; // 8フレームのアニメーション
+		}
+		flameCounter = 0;
+
+		// アニメーションが一周したら死亡アニメーションに切り替える
+		if (animeFrame == 0)
+		{
+			KillMe();
+		}
 	}
 
 	//画面外に行かないようにする処理
@@ -97,11 +130,11 @@ void Player::Update()
 	if (CheckHitKey(KEY_INPUT_D) /*|| CheckHitKey(KEY_INPUT_RIGHT)*/)
 	{
 		transform_.position_.x += WeatherSpeed_;
-		//if (++flameCounter >= 8)
-		//{
-		//	animFrame = (animFrame + 1) % 4;//if文を使わない最適解
-		//	flameCounter = 0;
-		//}
+		if (++flameCounter >= 24)
+		{
+			animeFrame = (animeFrame + 1) % 2;//if文を使わない最適解
+			flameCounter = 0;
+		}
 
 		//---------------衝突判定(右)--------------------------------
 		hitX = transform_.position_.x + 50;
@@ -120,12 +153,11 @@ void Player::Update()
 	{
 
 		transform_.position_.x -= WeatherSpeed_;
-		//if (++flameCounter >= 8)
-		//{
-		//	animFrame = (animFrame + 1) % 4;//if文を使わない最適解
-		//	flameCounter = 0;
-
-		//}
+		if (++flameCounter >= 24)
+		{
+			animeFrame = (animeFrame + 1) % 2;//if文を使わない最適解
+			flameCounter = 0;
+		}
 
 		//---------------衝突判定(左)--------------------------------
 		hitX = transform_.position_.x;
@@ -138,11 +170,11 @@ void Player::Update()
 		}
 		//-----------------------------------------------------------
 	}
-	//else
-	//{
-	//	animFrame = 0;
-	//	flameCounter = 0;
-	//}
+	else
+	{
+		animeFrame = 0;
+		flameCounter = 0;
+	}
 
 
 	if (CheckHitKey(KEY_INPUT_SPACE))
@@ -155,6 +187,7 @@ void Player::Update()
 			if (onGround)
 			{
 				Jump();
+				
 			}
 		}
 		prevSpaceKey = true;
@@ -218,10 +251,12 @@ void Player::Update()
 			else if (WeatherState == Rainy)
 			{
 				pWeather->SetWeather(Gale);//次は強風に
+				StopSoundMem(RainHandle);
 			}
 			else
 			{
 				pWeather->SetWeather(Sunny);//次は晴れに
+				StopSoundMem(WindHandle);
 			}
 			WeatherTime_= 60; 
 		}
@@ -237,6 +272,7 @@ void Player::Update()
 	{
 		if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ <= 0)
 		{
+			PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
 			if(MagicPoint_ >= 4)
 			MagicDown(4); 
 			GaleTime_ = 300;
@@ -245,6 +281,7 @@ void Player::Update()
 
 	if (GaleTime_ > 0)
 	{
+		
 		GaleTime_--;
 	}
 
@@ -254,8 +291,10 @@ void Player::Update()
 		{
 			if (MagicPoint_ > 0)
 			{
+
 				MagicDown(1);
 				RainTime_ = 420;
+				PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK); // 音声を再生
 			}
 		}
 	}
@@ -294,11 +333,26 @@ void Player::Update()
 	}
 
 	
+
 	// 無敵時間の更新
 	if (NDTIME_ > 0.0f)
 	{
 		NDTIME_ -= 0.016f;
 	}
+
+	//if (isDead_)
+	//{
+	//	// 死亡アニメーションの更新
+	//	if (deathAnimationFrame_ < deathAnimationDuration_)
+	//	{
+	//		deathAnimationFrame_++;
+	//	}
+	//	else
+	//	{
+	//		KillMe(); // 死亡アニメーションが完了したらキャラクターを削除
+	//	}
+	//	return;
+	//}
 
 	////-----------------スライムとの接触判定-----------------------------
 	for (Slime* pSlime : pSlimes)
@@ -502,12 +556,13 @@ void Player::Update()
 		}
 
 		//死亡したらゲームオーバー画面へ
-		if (transform_.position_.y > GROUND || Hp_ == 0)
+		if (transform_.position_.y > GROUND || Hp_ == 0 )
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
 		}
-		//特定のタイルに触れたらクリアSceneへ
+		
+
 		if (pField != nullptr)
 		{
 			int playerX = (int)transform_.position_.x;
@@ -515,8 +570,7 @@ void Player::Update()
 
 			if (pField->IsHitClear(playerX, playerY))
 			{
-				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+				pField->NextLoadStage(); // 次のステージをロード
 			}
 		}
 
@@ -544,13 +598,13 @@ void Player::Draw()
 	
 	if (NDTIME_ <= 0.0f)
 	{
-		DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+		DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 	}
 	else
 	{
 		if (Flash_Count % 24 == 0)
 		{
-			DrawRectGraph(x, y, animFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 		}
 	}
 	
@@ -654,6 +708,7 @@ void Player::Jump()
 {
 	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // プレイヤーをジャンプさせる
 	onGround = false;
+	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
 }
 
 int Player::GetHp()

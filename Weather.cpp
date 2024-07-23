@@ -84,7 +84,7 @@ void Weather::Draw()
             DrawFormatString(0, 130, GetColor(255, 255, 0), "効果:『変化なし』");
             DrawFormatString(0, 140, GetColor(255, 255, 0), "消費Mp0");*/
             DrawGraph(0, 110, hImage_StateSun, TRUE);
-            DrawGraph(500, 0, hImage_SIcon, TRUE);  // 晴れ
+            DrawGraph(600, 0, hImage_SIcon, TRUE);  // 晴れ
             SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
             DrawGraph(0, 0, hImage_Sunny, TRUE);  // 晴れ
             break;
@@ -96,8 +96,8 @@ void Weather::Draw()
             DrawGraph(0, 110, hImage_StateRain, TRUE);
             if (pPlayer->GetMp() > 0)
             {
-                DrawGraph(500, 0, hImage_RIcon, TRUE);  // 雨
-                DrawFormatString(580, 38, GetColor(100, 149, 237), "常時消費Mp1");
+                DrawGraph(600, 0, hImage_RIcon, TRUE);  // 雨
+              //  DrawFormatString(580, 38, GetColor(100, 149, 237), "常時消費Mp1");
                 SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
                 DrawGraph(0, 0, hImage_Rainy, TRUE);  // 雨
                 RainOnChecker = false;
@@ -118,8 +118,8 @@ void Weather::Draw()
             DrawGraph(0, 110, hImage_StateWind, TRUE);
             if (pPlayer->GetMp() > 3)
             {
-                DrawGraph(500, 0, hImage_WIcon, TRUE);
-                DrawFormatString(575, 41, GetColor(0, 250, 154), "消費Mp 4");
+                DrawGraph(600, 0, hImage_WIcon, TRUE);
+               // DrawFormatString(575, 41, GetColor(0, 250, 154), "消費Mp 4");
                 SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
                 DrawGraph(0, 0, hImage_Wind, TRUE);
                 WindOnChecker = false;
@@ -128,7 +128,7 @@ void Weather::Draw()
             {
                 WindOnChecker = true;
                 DrawGraph(500, 0, hImage_WindNoMp, TRUE);
-                DrawFormatString(575, 41, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
+                DrawFormatString(600, 100, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
             }
             break;
         }

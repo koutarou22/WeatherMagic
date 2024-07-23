@@ -11,18 +11,17 @@
 #include "MpItem.h"
 #include "ClearFlag.h"
 
-//switch文のcaseの数字はcsv内の値を示している
-Field::Field(GameObject* scene) :GameObject(scene)
+Field::Field(GameObject* scene) : GameObject(scene)
 {
-	Map = nullptr;//まずここでMapでnullいれとく
-	//hImage_ = LoadGraph("Assets/tilemap.png");
+	Map = nullptr; // まずここでMapでnullいれとく
 	hImage_ = LoadGraph("Assets/bgchar.png");
 	assert(hImage_ > 0);
 
 	hBackGround_ = LoadGraph("Assets/bg5.png");
 	assert(hBackGround_ > 0);
 
-	Reset();
+	NowStage_ = 1; 
+	Reset(); // Reset() メソッドを有効にする
 }
 
 Field::~Field()
@@ -43,100 +42,103 @@ Field::~Field()
 
 void Field::Reset()
 {
-	if (Map != nullptr)
-	{
-		delete[] Map;
-		Map = nullptr;
-	}
+	LoadStage(NowStage_);
+	//if (Map != nullptr)
+	//{
+	//	delete[] Map;
+	//	Map = nullptr;
+	//}
 
-	CsvReader csv;
-	bool ret = csv.Load("Assets/New_Stage2.csv");
-	assert(ret);
+	//CsvReader csv;
+	//bool ret = csv.Load("Assets/New_Stage2.csv");
+	//assert(ret);
 
-	width = csv.GetWidth();
-	height = 22/*csv.GetHeight()*/;
-	Map = new int[width * height];
+	//width = csv.GetWidth();
+	//height = 22/*csv.GetHeight()*/;
+	//Map = new int[width * height];
+
+	////for (int h = 0; h < height; h++)
+	////{
+	////	if (csv.GetString(0, h) == "")
+	////	{
+	////		height = h;
+	////		break;
+	////	}
+	////	for (int w = 0; w < width; w++)
+	////	{
+	////		Map[h * width + w] = csv.GetInt(w,h);
+	////	}
+	////}
 
 	//for (int h = 0; h < height; h++)
 	//{
-	//	if (csv.GetString(0, h) == "")
-	//	{
-	//		height = h;
-	//		break;
-	//	}
 	//	for (int w = 0; w < width; w++)
 	//	{
-	//		Map[h * width + w] = csv.GetInt(w,h);
+	//		switch (csv.GetInt(w, h /*+ height + 1*/))
+	//		{
+	//		case 0:
+	//		{
+	//			Player* pPlayer = GetParent()->FindGameObject<Player>();
+	//			pPlayer->SetPosition(w * 32, h * 32);
+	//			break;
+	//		}
+	//		
+	//		case 1:
+	//		{
+	//			Ghost* pGhost = Instantiate<Ghost>(GetParent());
+	//			pGhost->SetPosition(w * 32, h * 32);
+	//			break;
+	//		}
+	//		
+	//		case 2:
+	//		{
+	//			Slime* pSlime = Instantiate<Slime>(GetParent());
+	//			pSlime->SetPosition(w * 32, h * 32);
+	//			break;
+
+	//		}
+	//		case 3:
+	//		{
+	//			Rock* pRock = Instantiate<Rock>(GetParent());
+	//			pRock->SetPosition(w * 32, h * 32);
+	//			break;
+	//		}
+
+	//		case 4:
+	//		{
+	//			HealItem* pHeal = Instantiate<HealItem>(GetParent());
+	//			pHeal->SetPosition(w * 32, h * 32);
+	//			break;
+	//		}
+
+	//		case 5:
+	//		{
+	//			MpItem* pMp = Instantiate<MpItem>(GetParent());
+	//			pMp->SetPosition(w * 32, h * 32);
+	//			break;
+	//		}
+
+	//		case 6:
+	//		{
+	//			ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
+	//			pClear->SetPosition(w * 32, h * 32);
+	//			break;
+	//		}
+	//		
+	//		default:
+	//			break;
+	//		}
+	//		Map[h * width + w] = csv.GetValue(w, h);
 	//	}
 	//}
+	////Update();
 
-	for (int h = 0; h < height; h++)
-	{
-		for (int w = 0; w < width; w++)
-		{
-			switch (csv.GetInt(w, h /*+ height + 1*/))
-			{
-			case 0:
-			{
-				Player* pPlayer = GetParent()->FindGameObject<Player>();
-				pPlayer->SetPosition(w * 32, h * 32);
-				break;
-			}
-			
-			case 1:
-			{
-				Ghost* pGhost = Instantiate<Ghost>(GetParent());
-				pGhost->SetPosition(w * 32, h * 32);
-				break;
-			}
-			
-			case 2:
-			{
-				Slime* pSlime = Instantiate<Slime>(GetParent());
-				pSlime->SetPosition(w * 32, h * 32);
-				break;
 
-			}
-			case 3:
-			{
-				Rock* pRock = Instantiate<Rock>(GetParent());
-				pRock->SetPosition(w * 32, h * 32);
-				break;
-			}
-
-			case 4:
-			{
-				HealItem* pHeal = Instantiate<HealItem>(GetParent());
-				pHeal->SetPosition(w * 32, h * 32);
-				break;
-			}
-
-			case 5:
-			{
-				MpItem* pMp = Instantiate<MpItem>(GetParent());
-				pMp->SetPosition(w * 32, h * 32);
-				break;
-			}
-
-			case 6:
-			{
-				ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
-				pClear->SetPosition(w * 32, h * 32);
-				break;
-			}
-			
-			default:
-				break;
-			}
-			Map[h * width + w] = csv.GetValue(w, h);
-		}
-	}
-	//Update();
 }	
 
 void Field::Update()
 {
-	
+
 }
 
 void Field::Draw()
@@ -228,10 +230,6 @@ bool Field::IsWallBlock(int x, int y)
 	return false;
 }
 
-void Field::MoveRockRight(int x, int y)
-{	
-}
-
 bool Field::IsHitClear(int x, int y)
 {
 	int chipX = x / 32;
@@ -244,4 +242,104 @@ bool Field::IsHitClear(int x, int y)
 	};
 
 	return false;
+}
+
+void Field::LoadStage(int StageNumber)
+{
+	if (Map != nullptr)
+	{
+		delete[] Map;
+		Map = nullptr;
+	}
+
+	CsvReader csv;
+	bool ret = false;
+
+	switch (StageNumber)
+	{
+	case 1:
+		ret = csv.Load("Assets/New_Stage1.csv");
+		break;
+	case 2:
+		ret = csv.Load("Assets/New_Stage2.csv");
+		break;
+	default:
+		assert(false); // 未知のステージ番号
+		StageNumber = 1;
+		break;
+	}
+
+	assert(ret);
+
+	width = csv.GetWidth();
+	height = 22;
+	Map = new int[width * height];
+
+	for (int h = 0; h < height; h++)
+	{
+			for (int w = 0; w < width; w++)
+			{
+				switch (csv.GetInt(w, h /*+ height + 1*/))
+				{
+				case 0:
+				{
+					Player* pPlayer = GetParent()->FindGameObject<Player>();
+					pPlayer->SetPosition(w * 32, h * 32);
+					break;
+				}
+				
+				case 1:
+				{
+					Ghost* pGhost = Instantiate<Ghost>(GetParent());
+					pGhost->SetPosition(w * 32, h * 32);
+					break;
+				}
+				
+				case 2:
+				{
+					Slime* pSlime = Instantiate<Slime>(GetParent());
+					pSlime->SetPosition(w * 32, h * 32);
+					break;
+
+				}
+				case 3:
+				{
+					Rock* pRock = Instantiate<Rock>(GetParent());
+					pRock->SetPosition(w * 32, h * 32);
+					break;
+				}
+
+				case 4:
+				{
+					HealItem* pHeal = Instantiate<HealItem>(GetParent());
+					pHeal->SetPosition(w * 32, h * 32);
+					break;
+				}
+
+				case 5:
+				{
+					MpItem* pMp = Instantiate<MpItem>(GetParent());
+					pMp->SetPosition(w * 32, h * 32);
+					break;
+				}
+
+				case 6:
+				{
+					ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
+					pClear->SetPosition(w * 32, h * 32);
+			    	break;
+		     	}
+				
+				default:
+				break;
+			}
+			Map[h * width + w] = csv.GetValue(w, h);
+	     }
+	}
+}
+
+void Field::NextLoadStage()
+{
+	NowStage_+1; // ステージ番号を増やす
+	LoadStage(NowStage_); // 次のステージをロード
 }

@@ -1,4 +1,6 @@
 #pragma once
+#include <DxLib.h>
+#include <assert.h>
 #include "Engine/GameObject.h"
 #include "Weather.h"
 
@@ -30,13 +32,18 @@ public:
 	void HpUp(int _PHp);
 	void HpDown(int _MHp);
 
-	
+	void StartDethAnimation();
+	bool IsDead() const { return isDead_; }
 
 private:
 	int MagicPoint_;//打てる魔法の回数
 	int hImage;
+	int hImage_cont;
+	int hImage_miss;
+	int deathAnimationFrame_ = 0;
+	int deathAnimationDuration_ = 60; // 死亡アニメーションのフレーム数
 	GameObject* sceneTop;
-
+	bool isDead_ = false;
 	bool prevSpaceKey;
 	bool onGround;
 	bool onRock;
@@ -46,9 +53,14 @@ private:
 	int Flash_Count;
 
 	int animType;//状況
-	int animFrame;//駒
+	int animeFrame;//駒
 	int PictFlame;
 	int flameCounter;
+	
+	bool animationPlayed = false;
+	int deathAnimFrame = 0;
+	int deathFlameCounter = 0;
+
 
 	float NDTIME_; //無敵時間
 	int	 CoolDownMagic_ = 0;
@@ -79,4 +91,10 @@ private:
 	int hitY;
 
 	int StringUi_Up;
+
+	int soundHandle;
+	int RainHandle;
+	int WindHandle;
+
+	
 };

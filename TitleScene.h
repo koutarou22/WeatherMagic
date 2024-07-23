@@ -5,6 +5,9 @@ class TitleScene : public GameObject
 {
 private:
 	int hImage_;
+	int charImage_;
+	int spaceImage_;
+	int soundHandle;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
@@ -21,5 +24,6 @@ public:
 
 	//開放
 	void Release() override;
+
 };
 
