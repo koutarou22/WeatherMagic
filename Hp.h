@@ -5,6 +5,7 @@ class Hp :
 {
 private:
 	int hImage_;
+	int BgImage_;
 	//int bagImage_;
 	int Wide_ = 3;//‘Ì—Í
 

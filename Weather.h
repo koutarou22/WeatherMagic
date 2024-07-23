@@ -41,6 +41,12 @@ private:
 	int hImage_RainyNoMp;//Mpが使えない時の差し替え用(雨)
 	int hImage_WindNoMp;//Mpが使えない時の差し替え用(風)
 
+	int hImage_StateSun;
+	int hImage_StateWind;
+	int hImage_StateRain;
+
+	int BgImage_;
+
 	bool RainOnChecker;
 	bool WindOnChecker;
 

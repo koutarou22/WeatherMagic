@@ -65,7 +65,7 @@ void Player::Update()
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 
-	SetFontSize(20);
+	SetFontSize(15);
 
 
 	if (hp == nullptr) 
@@ -303,9 +303,9 @@ void Player::Update()
 	////-----------------スライムとの接触判定-----------------------------
 	for (Slime* pSlime : pSlimes)
 	{
-		if (pSlime->ColliderRect(transform_.position_.x, transform_.position_.y, 64.0f, 64.0f))
+		if (pSlime->ColliderRect(transform_.position_.x + pSlime->GetScale().x, transform_.position_.y + pSlime->GetScale().y, 64.0f, 64.0f))
 		{
-			if (transform_.position_.y + 64.0f <= pSlime->GetPosition().y + (64.0f * pSlime->GetScale().y) / 2) // プレイヤーがスライムの上部にある
+			if (transform_.position_.y + 64.0f <= pSlime->GetPosition().y + (64.0f * pSlime->GetScale().y) / 2+20) // プレイヤーがスライムの上部にある
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
 				float RainBound = 0.5; // 雨の日に発生するスライムの弾性

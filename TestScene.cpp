@@ -12,6 +12,7 @@
 #include "HealItem.h"
 #include "MpItem.h"
 #include "WeatherIcon.h"
+#include "ClearFlag.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -35,7 +36,7 @@ void TestScene::Initialize()
 	//Instantiate<HealItem>(this);
 	//Instantiate<Rock>(this);
 	Instantiate<MpItem>(this);
-	
+	//Instantiate<ClearFlag>(this);
 	
 	//Instantiate<Bird>(this);
 

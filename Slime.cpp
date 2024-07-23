@@ -76,8 +76,8 @@ void Slime::Update()
 	}
 
 	//---------------Õ“Ë”»’è(¶)--------------------------------
-	hitX = transform_.position_.x + 18;
-	hitY = transform_.position_.y + 54; 
+	hitX = transform_.position_.x + 9;
+	hitY = transform_.position_.y /*+ 19*/; 
 	if (pField != nullptr)
 	{
 		int push = pField->CollisionLeft(hitX, hitY);
@@ -181,7 +181,7 @@ if (pField != nullptr)
 	//---------------Õ“Ë”»’è(‰º)--------------------------------
 	if (pField != nullptr)
 	{
-		int pushR = pField->CollisionDown(transform_.position_.x + 25 * transform_.scale_.x, transform_.position_.y + 54 * transform_.scale_.y);
+		int pushR = pField->CollisionDown(transform_.position_.x + 25 * transform_.scale_.x, transform_.position_.y + 64 * transform_.scale_.y);
 		int pushL = pField->CollisionDown(transform_.position_.x + 10 * transform_.scale_.x, transform_.position_.y + 54 * transform_.scale_.y);
 		int push = max(pushR, pushL);//‚Q‚Â‚Ì‘«Œ³‚Ì‚ß‚è‚±‚Ý‚Ì‘å‚«‚¢‚Ù‚¤
 		if (push >= 1) {

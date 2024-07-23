@@ -8,6 +8,8 @@
 #include "Ghost.h"
 #include "HealItem.h"
 #include "Rock.h"
+#include "MpItem.h"
+#include "ClearFlag.h"
 
 //switch文のcaseの数字はcsv内の値を示している
 Field::Field(GameObject* scene) :GameObject(scene)
@@ -48,7 +50,7 @@ void Field::Reset()
 	}
 
 	CsvReader csv;
-	bool ret = csv.Load("Assets/stage9(in).csv");
+	bool ret = csv.Load("Assets/New_Stage2.csv");
 	assert(ret);
 
 	width = csv.GetWidth();
@@ -108,6 +110,20 @@ void Field::Reset()
 				pHeal->SetPosition(w * 32, h * 32);
 				break;
 			}
+
+			case 5:
+			{
+				MpItem* pMp = Instantiate<MpItem>(GetParent());
+				pMp->SetPosition(w * 32, h * 32);
+				break;
+			}
+
+			case 6:
+			{
+				ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
+				pClear->SetPosition(w * 32, h * 32);
+				break;
+			}
 			
 			default:
 				break;
@@ -120,40 +136,7 @@ void Field::Reset()
 
 void Field::Update()
 {
-	//Weather* pWeather = GetParent()->FindGameObject<Weather>();
-	//if (pWeather != nullptr)
-	//{
-	//	WeatherEffects(pWeather); // 天候関数を呼び出す
-	//}
-
-
-	//if (CheckHitKey(KEY_INPUT_N))
-	//{
-	//	if (!WeatherSwitch && pWeather != nullptr)
-	//	{
-	//		// 現在の天候状態を取得
-	//		WeatherState WeatherState = pWeather->GetWeatherState();
-	//		// 次に切り替える天候を決定
-	//		if (WeatherState == Sunny)//現在晴れなら
-	//		{
-	//			pWeather->SetWeather(Rainy);//次は雨に
-	//		}
-	//		else if (WeatherState == Rainy)
-	//		{
-	//			pWeather->SetWeather(Gale);//次は強風に
-	//		}
-	//		else
-	//		{
-	//			pWeather->SetWeather(Sunny);//次は晴れに
-	//		}
-	//		WeatherTime_ = 60;
-	//	}
-	//	WeatherSwitch = true;
-	//}
-	//else
-	//{
-	//	WeatherSwitch = false;
-	//}
+	
 }
 
 void Field::Draw()
@@ -255,36 +238,7 @@ bool Field::IsHitClear(int x, int y)
 	int chipY = y / 32;
 	switch (Map[chipY * width + chipX])
 	{
-	case 128://地面
-	case 129:
-	case 130:
-	case 131:
-	case 132:
-	case 133:
-	case 144:
-	case 145:
-	case 146:
-	case 147:
-	case 148:
-	case 149:
-	case 160:
-	case 161:
-	case 162:
-	case 163:
-	case 164:
-	case 165:
-	case 176:
-	case 177:
-	case 178:
-	case 179:
-	case 180:
-	case 181:
-	case 192:
-	case 193:
-	case 194:
-	case 195:
-	case 196:
-	case 197:
+	case 6:
 		return true;
 
 	};

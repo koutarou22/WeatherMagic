@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Camera.h"
 #include "Player.h"
+#include "Ghost.h"
 
 Magic::Magic(GameObject* scene) : GameObject(scene)
 {

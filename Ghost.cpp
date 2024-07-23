@@ -42,19 +42,30 @@ void Ghost::Update()
 		flameCounter_ = 0;
 	}
 
-	if (transform_.position_.x >= cam->GetValue() && transform_.position_.x <= cam->GetValue() + SCREEN_WIDTH)
+	if (cam != nullptr)
 	{
-		if (CoolDownAttack_ <= 0)
+		// ƒJƒƒ‰‚ÌˆÊ’u‚ðŽæ“¾
+		int camX = cam->GetValue();
+		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
-			EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
-			emg->SetPosition(transform_.position_);
-			VECTOR dir = { -1.0f,0.0f };
-			emg->SetDirection(dir);
-			emg->SetSpeed(3.5f);
-			
+			if (CoolDownAttack_ <= 0)
+			{
+				EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
+				emg->SetPosition(transform_.position_);
+				VECTOR dir = { -1.0f,0.0f };
+				emg->SetDirection(dir);
+				emg->SetSpeed(3.5f);
 
-			CoolDownAttack_ = 300; 
+
+				CoolDownAttack_ = 300;
+			}
+
+			transform_.position_.y -= 1.0f;
+			sinAngle += 3.0f;
+			float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
+			transform_.position_.y = 500.0f + sinValue * 50.0f;
 		}
+		
 	}
 
 	if (CoolDownAttack_ > 0)
@@ -76,10 +87,7 @@ void Ghost::Update()
 	//	KillMe();
 	//	return;
 	//}
-	transform_.position_.y -= 1.0f;
-	sinAngle += 3.0f;
-	float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
-	transform_.position_.y = 500.0f + sinValue * 50.0f;
+	
 
 
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
@@ -95,6 +103,7 @@ void Ghost::Update()
 		   KillMe();	
 		   break;
 		}
+		
 	}
 }
 

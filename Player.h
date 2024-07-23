@@ -51,7 +51,7 @@ private:
 	int flameCounter;
 
 	float NDTIME_; //–³“GŽžŠÔ
-	int	  CoolDownMagic_ = 0;
+	int	 CoolDownMagic_ = 0;
 	int Hp_;
 	int hitCount;
 

@@ -107,10 +107,15 @@
       <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
     <ClCompile Include="Buffs.cpp" />
-    <ClCompile Include="MpItem.cpp" />
     <ClCompile Include="WeatherIcon.cpp" />
     <ClCompile Include="Player.cpp">
       <Filter>リソース ファイル\Chara\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearFlag.cpp">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClCompile>
+    <ClCompile Include="MpItem.cpp">
+      <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +144,9 @@
       <Filter>リソース ファイル\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Weather.h">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClInclude>
+    <ClInclude Include="Magic.h">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
     <ClInclude Include="Hp.h">
@@ -181,13 +189,15 @@
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
     <ClInclude Include="Buffs.h" />
-    <ClInclude Include="MpItem.h" />
     <ClInclude Include="WeatherIcon.h" />
     <ClInclude Include="Player.h">
       <Filter>リソース ファイル\Chara\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Magic.h">
-      <Filter>リソース ファイル\Scene</Filter>
+    <ClInclude Include="ClearFlag.h">
+      <Filter>リソース ファイル\Gimc</Filter>
+    </ClInclude>
+    <ClInclude Include="MpItem.h">
+      <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

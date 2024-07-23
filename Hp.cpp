@@ -2,8 +2,7 @@
 #include "Hp.h"
 #include "Player.h"
 
-Hp::Hp(GameObject* parent)
-    :GameObject(parent, "Hp"), hImage_(-1), Wide_(3) /*bagImage_(-1)*/
+Hp::Hp(GameObject* parent):GameObject(parent, "Hp"), hImage_(-1),BgImage_(-1), Wide_(3) /*bagImage_(-1)*/
 {
 
 }
@@ -13,6 +12,9 @@ void Hp::Initialize()
     Wide_ = 3;
     hImage_ = LoadGraph("Assets/HP.png");
     assert(hImage_ >= 0);
+
+    BgImage_ = LoadGraph("Assets/HpFrame.png");
+    assert(BgImage_ >= 0);
 }
 
 void Hp::Update()
@@ -21,10 +23,7 @@ void Hp::Update()
     //assert(bagImage_ >= 0);
 
     transform_.scale_ = XMFLOAT3(1.0, 1.0, 1.0);
-
-
-
-    transform_.position_ = XMFLOAT3(-0.85, 0.88, 0);
+    transform_.position_ = XMFLOAT3(-0.85, -4, 0);
 }
 
 void Hp::DamageHp()
@@ -55,6 +54,8 @@ void Hp::Draw()
     float heartWidth = 50.0f;  // ハートの画像の幅に合わせて調整
     Player* player = GetParent()->FindGameObject<Player>();  // Playerオブジェクトを取得
 
+    DrawGraph(0,-15, BgImage_, TRUE);
+
     if (player != nullptr && player->GetHp() > 0)
     {
 
@@ -65,6 +66,7 @@ void Hp::Draw()
         }
 
     }
+  
 }
 
 void Hp::Release()

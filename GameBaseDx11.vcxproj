@@ -132,6 +132,7 @@
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Buffs.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ClearFlag.cpp" />
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Damage.cpp" />
     <ClCompile Include="EnemyMagic.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Bird.h" />
     <ClInclude Include="Buffs.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ClearFlag.h" />
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Damage.h" />
     <ClInclude Include="EnemyMagic.h" />
