@@ -65,6 +65,9 @@ void Player::Update()
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 
+	SetFontSize(20);
+
+
 	if (hp == nullptr) 
 	{
 		return;
@@ -555,25 +558,27 @@ void Player::Draw()
 	
 
 	if (Mp_GetFlag == true)
-    {
-        if (UIGetTimer > 0)
-        {
-           DrawFormatString(x + 13, StringUi_Up, GetColor(255, 255, 255), "MP+5");
-		   StringUi_Up -= 1;
-           UIGetTimer--;
-        }
-        else
-        {
-           Mp_GetFlag = false;
-        }
-    }
-
+	{
+		if (UIGetTimer > 0)
+		{
+			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "MP+5");
+			StringUi_Up -= 1;
+			UIGetTimer--;
+		}
+		else
+		{
+			Mp_GetFlag = false;
+		}
+	}
 
 	if (Hp_GetFlag == true)
 	{
 		if (UIGetTimer > 0)
 		{
-			DrawFormatString(x + 13, StringUi_Up, GetColor(255, 255, 255), "Hp+1");
+			SetFontSize(24);
+			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "Hp+2");
+
+			SetFontSize(20);
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}

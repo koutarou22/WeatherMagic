@@ -54,7 +54,6 @@ void Weather::Draw()
 
     if (pPlayer == nullptr)
     {
-        // pPlayerがnullptrの場合のエラーハンドリング
         DrawFormatString(0, 0, GetColor(255, 0, 0), "Error: Player not found!");
         return;
     }
@@ -68,18 +67,24 @@ void Weather::Draw()
         switch (weather_)
         {
         case Sunny:
-            DrawFormatString(580, 10, GetColor(255, 255, 0), "天候: 晴れ 『変化なし』消費Mp0");
+            DrawFormatString(580, 0, GetColor(255, 255, 0), "天候: 晴れ");
+            DrawFormatString(580, 18,GetColor(255, 255, 0), "効果:『変化なし』");
+            DrawFormatString(580, 38, GetColor(255, 255, 0), "消費Mp0");
+
             DrawGraph(500, 0, hImage_SIcon, TRUE);  // 晴れ
             SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
             DrawGraph(0, 0, hImage_Sunny, TRUE);  // 晴れ
             break;
 
         case Rainy:
-            DrawFormatString(580, 10, GetColor(100, 149, 237), "天候: 雨　『地面がぬかるむ..』-移動速度DOWN  +スライム巨大化");
+            DrawFormatString(580, 0, GetColor(100, 149, 237), "天候: 雨");
+            DrawFormatString(580, 18, GetColor(100, 149, 237), "効果:『移動速度低下 +一部の敵に変化』");
+
             DrawGraph(500, 0, hImage_RIcon, TRUE);  // 雨
 
             if (pPlayer->GetMp() > 0)
             {
+                DrawFormatString(580, 38, GetColor(100, 149, 237), "常時消費Mp1");
                 SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
                 DrawGraph(0, 0, hImage_Rainy, TRUE);  // 雨
                 RainOnChecker = false;
@@ -87,24 +92,27 @@ void Weather::Draw()
             else
             {
                 RainOnChecker = true;
-                DrawFormatString(580, 30, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
+                DrawFormatString(580, 38, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
             }
             break;
 
         case Gale:
-            DrawFormatString(580, 10, GetColor(0, 250, 154), "事象: 強風　『敵が(自分も)吹っ飛ぶ！』 消費Mp 4");
+            DrawFormatString(580, 3, GetColor(0, 250, 154), "事象: 強風");
+            DrawFormatString(580, 24, GetColor(0, 250, 154), "効果:『敵が吹っ飛ぶ！』");
+          
             DrawGraph(500, 0, hImage_WIcon, TRUE);
 
-            if (pPlayer->GetMp() > 4)
+            if (pPlayer->GetMp() > 3)
             {
+                DrawFormatString(575, 41, GetColor(0, 250, 154), "消費Mp 4");
                 SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-                DrawGraph(0, 0, hImage_Wind, TRUE);  // 強風
+                DrawGraph(0, 0, hImage_Wind, TRUE);
                 WindOnChecker = false;
             }
             else
             {
                 WindOnChecker = true;
-                DrawFormatString(580, 30, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
+                DrawFormatString(575, 41, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
             }
             break;
         }
