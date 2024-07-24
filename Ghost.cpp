@@ -35,6 +35,7 @@ Ghost::~Ghost()
 void Ghost::Update()
 {
 	Camera* cam = GetParent()->FindGameObject<Camera>();
+	
 
 	if (++flameCounter_ >= 24)
 	{
@@ -51,6 +52,10 @@ void Ghost::Update()
 			if (CoolDownAttack_ <= 0)
 			{
 				EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
+				if (emg == nullptr)
+				{
+					return;
+				}
 				emg->SetPosition(transform_.position_);
 				VECTOR dir = { -1.0f,0.0f };
 				emg->SetDirection(dir);
@@ -65,7 +70,6 @@ void Ghost::Update()
 			float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
 			transform_.position_.y = 500.0f + sinValue * 50.0f;
 		}
-		
 	}
 
 	if (CoolDownAttack_ > 0)
@@ -127,7 +131,7 @@ void Ghost::Draw()
 	// スプライトを描画
 	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
 
-	DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 32.0f, GetColor(255, 0, 0), 0);
+	//DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 32.0f, GetColor(255, 0, 0), 0);
 }
 
 void Ghost::SetPosition(int x, int y)

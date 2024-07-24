@@ -237,6 +237,7 @@ bool Field::IsHitClear(int x, int y)
 	switch (Map[chipY * width + chipX])
 	{
 	case 6:
+	case 200:
 		return true;
 
 	};
@@ -264,7 +265,7 @@ void Field::LoadStage(int StageNumber)
 		ret = csv.Load("Assets/New_Stage2.csv");
 		break;
 	default:
-		assert(false); // 未知のステージ番号
+		//assert(false); // 未知のステージ番号
 		StageNumber = 1;
 		break;
 	}
@@ -340,6 +341,6 @@ void Field::LoadStage(int StageNumber)
 
 void Field::NextLoadStage()
 {
-	NowStage_+1; // ステージ番号を増やす
+	NowStage_++; // ステージ番号を増やす
 	LoadStage(NowStage_); // 次のステージをロード
 }

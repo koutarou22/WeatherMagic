@@ -105,8 +105,8 @@ void Weather::Draw()
             else
             {
                 RainOnChecker = true;
-                DrawGraph(500, 0, hImage_RainyNoMp, TRUE);  // 雨
-                DrawFormatString(580, 38, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
+                DrawGraph(600, 0, hImage_RainyNoMp, TRUE);  // 雨
+                DrawFormatString(580, 48, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
             }
             break;
 
@@ -127,8 +127,8 @@ void Weather::Draw()
             else
             {
                 WindOnChecker = true;
-                DrawGraph(500, 0, hImage_WindNoMp, TRUE);
-                DrawFormatString(600, 100, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
+                DrawGraph(600, 0, hImage_WindNoMp, TRUE);
+                DrawFormatString(580, 48, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
             }
             break;
         }
@@ -138,7 +138,7 @@ void Weather::Draw()
     // 描画モードを元に戻す
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-    DrawFormatString(0, 80, GetColor(0, 0, 255), "今どの天候呼んでる？: %d", weather_);
+  //  DrawFormatString(0, 80, GetColor(0, 0, 255), "今どの天候呼んでる？: %d", weather_);
 }
 
 

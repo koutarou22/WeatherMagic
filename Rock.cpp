@@ -12,6 +12,7 @@ namespace
 
 	int hitX = 0;
 	int hitY = 0;
+	static const int SCREEN_WIDTH = 1280;
 };
 
 Rock::Rock(GameObject* scene)
@@ -152,43 +153,54 @@ void Rock::WeatherEffects(Weather* weather)
 
 void Rock::GaleEffect(WeatherState state)
 {
-	if (state == Gale)
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr)
 	{
-		Player* pPlayer = GetParent()->FindGameObject<Player>();
-		int MpVanish = pPlayer->GetMp();
-		if (WindTimer_ <= 0 && MpVanish >= 4)
+		// ƒJƒƒ‰‚ÌˆÊ’u‚ðŽæ“¾
+		int camX = cam->GetValue();
+		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
-			if (CheckHitKey(KEY_INPUT_RIGHT))
+			if (state == Gale)
 			{
-				WindTimer_ = 300;
-				PressKey_R = true;
-			}
-			else if (CheckHitKey(KEY_INPUT_LEFT))
-			{
-				WindTimer_ = 300;
-				PressKey_L = true;
+				Player* pPlayer = GetParent()->FindGameObject<Player>();
+				int MpVanish = pPlayer->GetMp();
+				if (WindTimer_ <= 0 && MpVanish >= 4)
+				{
+					if (CheckHitKey(KEY_INPUT_RIGHT))
+					{
+						WindTimer_ = 300;
+						PressKey_R = true;
+					}
+					else if (CheckHitKey(KEY_INPUT_LEFT))
+					{
+						WindTimer_ = 300;
+						PressKey_L = true;
+					}
+				}
+
+				if (WindTimer_ > 0)
+				{
+					if (PressKey_R)
+					{
+						transform_.position_.x += 0.6f;
+					}
+					else if (PressKey_L)
+					{
+						transform_.position_.x -= 0.6f;
+					}
+
+					WindTimer_--;
+					if (WindTimer_ == 0)
+					{
+						PressKey_R = false;
+						PressKey_L = false;
+					}
+				}
 			}
 		}
 
-		if (WindTimer_ > 0)
-		{
-			if (PressKey_R)
-			{
-				transform_.position_.x += 1.5f;
-			}
-			else if (PressKey_L)
-			{
-				transform_.position_.x -= 1.5f;
-			}
-
-			WindTimer_--;
-			if (WindTimer_ == 0)
-			{
-				PressKey_R = false;
-				PressKey_L = false;
-			}
-		}
 	}
+	
 }
 
 

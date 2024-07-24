@@ -55,6 +55,8 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	WindHandle = LoadSoundMem("Assets/風が吹く1.mp3");
 	assert(WindHandle != -1);
 
+	GetItemSound = LoadSoundMem("Assets/poka01.mp3");
+	assert(GetItemSound != -1);
 
 }
 
@@ -75,7 +77,7 @@ void Player::Update()
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 
-	SetFontSize(15);
+	SetFontSize(24);
 	
 	if (hp == nullptr) 
 	{
@@ -247,11 +249,13 @@ void Player::Update()
 			if (WeatherState == Sunny)//現在晴れなら
 			{
 				pWeather->SetWeather(Rainy);//次は雨に
+				StopSoundMem(WindHandle);
 			}
 			else if (WeatherState == Rainy)
 			{
 				pWeather->SetWeather(Gale);//次は強風に
 				StopSoundMem(RainHandle);
+				StopSoundMem(WindHandle);
 			}
 			else
 			{
@@ -272,10 +276,10 @@ void Player::Update()
 	{
 		if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ <= 0)
 		{
-			PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
 			if(MagicPoint_ >= 4)
 			MagicDown(4); 
 			GaleTime_ = 300;
+			PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
 		}
 	}
 
@@ -560,6 +564,7 @@ void Player::Update()
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
+			StopSoundMem(WindHandle);
 		}
 		
 
@@ -570,7 +575,8 @@ void Player::Update()
 
 			if (pField->IsHitClear(playerX, playerY))
 			{
-				pField->NextLoadStage(); // 次のステージをロード
+				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 			}
 		}
 
@@ -641,8 +647,13 @@ void Player::Draw()
 			Hp_GetFlag = false;
 		}
 	}
+	DrawFormatString(1100, 0, GetColor(0, 0, 0), "A = →");
+	DrawFormatString(1100, 30, GetColor(0, 0, 0), "D = ←");
+	DrawFormatString(1100, 60, GetColor(0, 0, 0), "SPACE = Jump");
+	DrawFormatString(1100, 90, GetColor(0, 0, 0), "N =天候変化");
+	DrawFormatString(1100, 120, GetColor(0, 0, 0), "M =魔法攻撃 -1 ");
 
-	DrawFormatString(100, 60, GetColor(30, 144, 255), "UI:%d", UIGetTimer);//それ以外なら青に
+	//DrawFormatString(100, 60, GetColor(30, 144, 255), "UI:%d", UIGetTimer);//それ以外なら青に
 	if (MagicPoint_ == 0)
 	{
 		DrawFormatString(0, 60, GetColor(255, 69, 0), "Mp: %d /20", MagicPoint_);//0なら赤に
@@ -719,7 +730,7 @@ int Player::GetHp()
 void Player::MagicUp(int _PMp)
 {
 	MagicPoint_ += _PMp;
-	
+	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
 	if (MagicPoint_ > MAX_MAGIC_POINT)
 	{
 		MagicPoint_ = MAX_MAGIC_POINT;
@@ -739,7 +750,7 @@ void Player::MagicDown(int _MMp)
 void Player::HpUp(int _PHp)
 {
 	Hp_ += _PHp;
-
+	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); // 音声を再生
 	if (Hp_ < MAX_DAMAGE_HP)
 	{
 		Hp_ > MAX_DAMAGE_HP;

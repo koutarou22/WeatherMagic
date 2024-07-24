@@ -89,7 +89,7 @@ void HealItem::Draw()
 	int SHeight = 127;
 	int frameX = animeFrame_ % 4;
 	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hImage_, TRUE);
-	DrawCircle(x +63.0f, y + 63.0f, 24.0f, GetColor(255, 0, 0), 0);
+	//DrawCircle(x +63.0f, y + 63.0f, 24.0f, GetColor(255, 0, 0), 0);
 }
 
 void HealItem::Release()

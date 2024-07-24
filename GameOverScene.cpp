@@ -4,7 +4,8 @@
 
 GameOverScene::GameOverScene(GameObject* parent) : GameObject(parent, "GameOverScene")
 {
-    // コンストラクタの実装...
+    hImage_ = LoadGraph("Assets/GAME OVER.png");
+    assert(hImage_ > 0);
 }
 
 void GameOverScene::Initialize()
@@ -23,9 +24,9 @@ void GameOverScene::Update()
 
 void GameOverScene::Draw()
 {
-   
-    DrawString(0, 0, "GAME OVER", GetColor(255, 255, 255));
-    DrawString(0, 20, "Press SPACE to return to title", GetColor(255, 255, 255));
+    DrawGraph(0, 0, hImage_, TRUE);
+  /*  DrawString(0, 0, "GAME OVER", GetColor(255, 255, 255));
+    DrawString(0, 20, "Press SPACE to return to title", GetColor(255, 255, 255));*/
 }
 
 void GameOverScene::Release()

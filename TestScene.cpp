@@ -28,7 +28,7 @@ void TestScene::Initialize()
     Instantiate<Camera>(this);
     Instantiate<Hp>(this);
     Instantiate<Player>(this);
-    Instantiate<MpItem>(this);
+   // Instantiate<MpItem>(this);
     Instantiate<Weather>(this);
 }
 

@@ -95,6 +95,7 @@ private:
 	int soundHandle;
 	int RainHandle;
 	int WindHandle;
+	int GetItemSound;
 
 	
 };
