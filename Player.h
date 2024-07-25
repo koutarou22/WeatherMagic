@@ -40,8 +40,7 @@ private:
 	int hImage;
 	int hImage_cont;
 	int hImage_miss;
-	int deathAnimationFrame_ = 0;
-	int deathAnimationDuration_ = 60; // 死亡アニメーションのフレーム数
+	
 	GameObject* sceneTop;
 	bool isDead_ = false;
 	bool prevSpaceKey;
@@ -56,11 +55,6 @@ private:
 	int animeFrame;//駒
 	int PictFlame;
 	int flameCounter;
-	
-	bool animationPlayed = false;
-	int deathAnimFrame = 0;
-	int deathFlameCounter = 0;
-
 
 	float NDTIME_; //無敵時間
 	int	 CoolDownMagic_ = 0;
@@ -75,6 +69,7 @@ private:
 	bool Mp_GetFlag;
 	bool IsHitOneCount_;
 	bool DebugLog_;
+	bool StatusFlag_;
 
 	//int MAGIC_COUNT = 0;
 	enum State
@@ -85,7 +80,7 @@ private:
 	State state;
 	int timer_ = 90;
 	int WeatherTime_ = 90;
-	int GaleTime_ = 0;
+	int GaleTime_ = 300;
 	int RainTime_ = 0;
 	int hitX;
 	int hitY;
@@ -96,6 +91,7 @@ private:
 	int RainHandle;
 	int WindHandle;
 	int GetItemSound;
+	int MagicSound;
 
 	
 };

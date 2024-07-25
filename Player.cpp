@@ -58,6 +58,9 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	GetItemSound = LoadSoundMem("Assets/poka01.mp3");
 	assert(GetItemSound != -1);
 
+	MagicSound = LoadSoundMem("Assets/8bit_magic1.mp3");
+	assert(MagicSound != -1);
+
 }
 
 Player::~Player()
@@ -98,20 +101,20 @@ void Player::Update()
 	//	flameCounter_ = 0;
 	//}
 
-	if (++flameCounter >= 24)
-	{
-		if (animeFrame < 8)
-		{
-			animeFrame = (animeFrame + 1) % 8; // 8フレームのアニメーション
-		}
-		flameCounter = 0;
+	//if (++flameCounter >= 24)
+	//{
+	//	if (animeFrame < 8)
+	//	{
+	//		animeFrame = (animeFrame + 1) % 8; // 8フレームのアニメーション
+	//	}
+	//	flameCounter = 0;
 
-		// アニメーションが一周したら死亡アニメーションに切り替える
-		if (animeFrame == 0)
-		{
-			KillMe();
-		}
-	}
+	//	// アニメーションが一周したら死亡アニメーションに切り替える
+	//	if (animeFrame == 0)
+	//	{
+	//		KillMe();
+	//	}
+	//}
 
 	//画面外に行かないようにする処理
 	if (transform_.position_.x < 0)
@@ -271,42 +274,47 @@ void Player::Update()
 		WeatherSwitch = false;
 	}
 
-
-	if (pWeather != nullptr && pWeather->GetWeatherState() == Gale)
+	if (pWeather != nullptr) 
 	{
-		if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ <= 0)
+		if (pWeather->GetWeatherState() == Gale) 
 		{
-			if(MagicPoint_ >= 4)
-			MagicDown(4); 
-			GaleTime_ = 300;
-			PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
-		}
-	}
-
-	if (GaleTime_ > 0)
-	{
-		
-		GaleTime_--;
-	}
-
-	if (pWeather != nullptr && pWeather->GetWeatherState() == Rainy)
-	{
-		if (RainTime_ <= 0)
-		{
-			if (MagicPoint_ > 0)
+			if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ == 0) 
 			{
-
-				MagicDown(1);
-				RainTime_ = 420;
-				PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK); // 音声を再生
+				if (RainTime_ <= 0)
+				{
+					if (MagicPoint_ >= 4)
+					{
+						MagicDown(4);
+						GaleTime_ = 300;
+						PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
+					}
+				}
 			}
 		}
+		if (GaleTime_ > 0)
+		{
+			GaleTime_--;
+		}
+		
+
+		if (pWeather->GetWeatherState() == Rainy) 
+		{
+			if (RainTime_ <= 0) 
+			{
+				if (MagicPoint_ > 0)
+				{
+					MagicDown(1);
+					RainTime_ = 420;
+					PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK);
+				}
+			}
+		}
+		if (RainTime_ > 0)
+		{
+			RainTime_--;
+		}
 	}
 
-	if (RainTime_ > 0)
-	{
-		RainTime_--;
-	}
 
 	//拡張性はない
 	//if (transform_.position_.y >= GROUND)//地面についたら速度を元に戻す、戻さないと貫通する恐れあり
@@ -329,6 +337,8 @@ void Player::Update()
 			mg->SetSpeed(5.5f);
 			CoolDownMagic_ = timer_;
 			MagicPoint_--;
+
+			PlaySoundMem(MagicSound, DX_PLAYTYPE_BACK);
 		}
 	}
 	if (CoolDownMagic_ > 0)
@@ -577,6 +587,7 @@ void Player::Update()
 			{
 				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+				StopSoundMem(WindHandle);
 			}
 		}
 
@@ -587,6 +598,15 @@ void Player::Update()
 	else
 	{
 		DebugLog_ = false;
+	}
+	
+	if (CheckHitKey(KEY_INPUT_K))
+	{
+		StatusFlag_ = true;
+	}
+	else
+	{
+		StatusFlag_ = false;
 	}
 }
 
@@ -621,7 +641,8 @@ void Player::Draw()
 	{
 		if (UIGetTimer > 0)
 		{
-			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "MP+5");
+			DrawFormatString(x, StringUi_Up, GetColor(255,255,255), "MP+5");
+			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); // 音声を再生
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}
@@ -635,10 +656,8 @@ void Player::Draw()
 	{
 		if (UIGetTimer > 0)
 		{
-			SetFontSize(24);
-			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "Hp+2");
-
-			SetFontSize(20);
+			DrawFormatString(x, StringUi_Up, GetColor(255,255,255), "Hp+2");
+			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}
@@ -647,38 +666,35 @@ void Player::Draw()
 			Hp_GetFlag = false;
 		}
 	}
-	DrawFormatString(1100, 0, GetColor(0, 0, 0), "A = →");
-	DrawFormatString(1100, 30, GetColor(0, 0, 0), "D = ←");
-	DrawFormatString(1100, 60, GetColor(0, 0, 0), "SPACE = Jump");
-	DrawFormatString(1100, 90, GetColor(0, 0, 0), "N =天候変化");
-	DrawFormatString(1100, 120, GetColor(0, 0, 0), "M =魔法攻撃 -1 ");
 
-	//DrawFormatString(100, 60, GetColor(30, 144, 255), "UI:%d", UIGetTimer);//それ以外なら青に
+	
 	if (MagicPoint_ == 0)
 	{
-		DrawFormatString(0, 60, GetColor(255, 69, 0), "Mp: %d /20", MagicPoint_);//0なら赤に
+		DrawFormatString(0, 60, GetColor(255, 69, 0), "MP: %d /20", MagicPoint_);//0なら赤に
 	}
 	else
 	{
-		DrawFormatString(0, 60, GetColor(30, 144, 255), "Mp: %d /20", MagicPoint_);//それ以外なら青に
+		DrawFormatString(0, 60, GetColor(30, 144, 255), "MP: %d /20", MagicPoint_);//それ以外なら青に
 	}
 
-	if (DebugLog_ == false)
+    if(DebugLog_ == true)
 	{
-
+		DrawFormatString(920, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
+		DrawFormatString(1050, 40, GetColor(255, 69, 0), "現在HP: %d", Hp_);
+		DrawFormatString(1050, 60, GetColor(255, 215, 0), "無敵時間: %f", NDTIME_);	
+		DrawFormatString(1050, 80, GetColor(46, 139, 87), "地面判定:%d", onGround);
 	}
-	else if(DebugLog_ == true)
+
+	if (StatusFlag_ == true)
 	{
-		
-	//	DrawFormatString(1100, 5, GetColor(0, 0, 0), "Nキーで天候変化");
-
-		DrawFormatString(960, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
-		DrawFormatString(1100, 40, GetColor(255, 69, 0), "現在HP: %d", Hp_);
-		DrawFormatString(1100, 60, GetColor(255, 215, 0), "無敵時間: %f", NDTIME_);
-		
-		DrawFormatString(1100, 80, GetColor(46, 139, 87), "地面判定:%d", onGround);
+		DrawFormatString(1100, 0, GetColor(255, 255, 255), "A = →");
+		DrawFormatString(1100, 30, GetColor(255, 255, 255), "D = ←");
+		DrawFormatString(1100, 60, GetColor(255, 255, 355), "SPACE = Jump");
+		DrawFormatString(1100, 90, GetColor(0, 255, 0), "N =天候変化");
+		DrawFormatString(1100, 120, GetColor(0, 0, 255), "M =魔法攻撃 -1 ");
 	}
 
+	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
 }
 
 void Player::SetPosition(int x, int y)
@@ -750,7 +766,7 @@ void Player::MagicDown(int _MMp)
 void Player::HpUp(int _PHp)
 {
 	Hp_ += _PHp;
-	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); // 音声を再生
+	
 	if (Hp_ < MAX_DAMAGE_HP)
 	{
 		Hp_ > MAX_DAMAGE_HP;

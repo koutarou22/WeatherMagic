@@ -47,6 +47,11 @@ void Slime::Update()
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 
+	if (WindTimer_ > 0)
+	{
+		WindTimer_--;
+	}
+
 	if (pWeather != nullptr)
 	{
 		WeatherEffects(pWeather); // 天候関数を呼び出す
@@ -290,7 +295,7 @@ void Slime::Draw()
 
 	//Debug用
 	// 
-	//DrawFormatString(0, 90, GetColor(255, 255, 255), "スライムがぶつかった時: %d", WindTimer_);
+	//DrawFormatString(0, 90, GetColor(255, 255, 255), "スライムの風: %d", WindTimer_);
 	//DrawCircle(x + 32.0f * transform_.scale_.x, y + 32.0f * transform_.scale_.y, 32.0f * transform_.scale_.x, GetColor(255, 0, 0), FALSE);
 	//DrawBox(rectX, rectY, rectX + rectW, rectY + rectH, GetColor(255, 0, 0), FALSE);
 }
