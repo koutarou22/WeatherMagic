@@ -3,7 +3,7 @@
 #include "Player.h"
 
 /// <summary>
-/// プレイヤーが放つ魔法
+/// プレイヤーが放つ魔法クラス
 /// </summary>
 class Magic : public GameObject
 {

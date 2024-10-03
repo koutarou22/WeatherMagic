@@ -3,6 +3,10 @@
 #include"Player.h"
 #include "Weather.h"
 
+/// <summary>
+/// プレイヤーが乗れる用の石の情報
+/// ※要修正する予定
+/// </summary>
 class Rock :public GameObject
 {
 public:

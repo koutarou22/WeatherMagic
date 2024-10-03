@@ -1,7 +1,8 @@
 #include "time.h"
 #include <Windows.h>
 
-namespace {
+namespace 
+{
 	LARGE_INTEGER freq;
 	LARGE_INTEGER current;
 	float deltaTime;

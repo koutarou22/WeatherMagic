@@ -1,7 +1,7 @@
 #pragma once
 #include"Engine/GameObject.h"
 /// <summary>
-/// エネミーが放つ魔法
+/// 敵が打ってくる魔法の情報
 /// </summary>
 class EnemyMagic:public GameObject
 {

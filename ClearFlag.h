@@ -1,6 +1,9 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+/// <summary>
+/// 触れるとクリアできるオブジェクトの情報(やってることは回復アイテムとほぼ同じ)
+/// </summary>
 class ClearFlag :public GameObject
 {
 private:

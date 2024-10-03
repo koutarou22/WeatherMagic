@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Weather.h"
 /// <summary>
-/// スライム
+/// スライムの情報
 /// </summary>
 class Slime : public GameObject
 {

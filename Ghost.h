@@ -2,7 +2,7 @@
 #include "Engine/GameObject.h"
 
 /// <summary>
-/// ’eŠÛ‚ğ”ò‚Î‚µ‚Ä‚­‚é‚¨‰»‚¯ŒN
+/// ’eŠÛ‚ğ”ò‚Î‚µ‚Ä‚­‚é‚¨‰»‚¯‚Ìî•ñ
 /// </summary>
 class Ghost : public GameObject
 {

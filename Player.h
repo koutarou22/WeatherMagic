@@ -5,9 +5,8 @@
 #include "Weather.h"
 
 /// <summary>
-/// プレイヤーキャラ
+/// プレイヤーキャラの情報
 /// </summary>
-//
 class Player : public GameObject
 {
 public:

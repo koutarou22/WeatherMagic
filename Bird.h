@@ -2,7 +2,7 @@
 #include "Engine/GameObject.h"
 
 /// <summary>
-/// 鳥（敵）
+/// 鳥（敵）現在の使ってない
 /// </summary>
 class Bird : public GameObject
 {

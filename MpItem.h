@@ -1,10 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
+/// <summary>
+/// Mp‰ñ•œƒAƒCƒeƒ€‚Ìî•ñ
+/// </summary>
 class MpItem :public GameObject
 {
 private:
 	int hImage_;
-
 	int animeType_;//ó‹µ
 	int animeFrame_;//‹î
 	int PictFlame_;

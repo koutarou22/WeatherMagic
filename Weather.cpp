@@ -77,12 +77,7 @@ void Weather::Draw()
         switch (weather_)
         {
         case Sunny:
-            /*DrawFormatString(580, 0, GetColor(255, 255, 0), "天候: 晴れ");
-            DrawFormatString(580, 18,GetColor(255, 255, 0), "効果:『変化なし』");
-            DrawFormatString(580, 38, GetColor(255, 255, 0), "消費Mp0");*/
-           /* DrawFormatString(0, 120, GetColor(255, 255, 0), "天候: 晴れ");
-            DrawFormatString(0, 130, GetColor(255, 255, 0), "効果:『変化なし』");
-            DrawFormatString(0, 140, GetColor(255, 255, 0), "消費Mp0");*/
+           
             DrawGraph(0, 110, hImage_StateSun, TRUE);
             DrawGraph(600, 0, hImage_SIcon, TRUE);  // 晴れ
             SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);

@@ -1,6 +1,9 @@
 #pragma once
 #include"Engine/GameObject.h"
 
+/// <summary>
+/// 天候を操作するクラス
+/// </summary>
 enum WeatherState
 {
 	Sunny,//晴れの日
@@ -29,6 +32,7 @@ public:
 	WeatherState weather_;
 private:
 	
+	//ここかっこ悪いなぁ
 	WeatherState NextWeather_;
     int hImage_Sunny;//晴れのエフェクト
 	int hImage_Rainy;//雨のエフェクト

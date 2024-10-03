@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
+/// <summary>
+/// Hp‰ñ•œƒAƒCƒeƒ€‚Ìî•ñ
+/// </summary>
 class HealItem :public GameObject
 {
 private:
