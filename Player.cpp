@@ -92,30 +92,6 @@ void Player::Update()
 		WeatherEffects(pWeather); // 天候関数を呼び出す
 	}
 
-	//if (++flameCounter_ >= 24)
-	//{
-	//	if (animeFrame_ < 3)
-	//	{
-	//		animeFrame_ = (animeFrame_ + 1) % 4; //if文を使わない最適解
-	//	}
-	//	flameCounter_ = 0;
-	//}
-
-	//if (++flameCounter >= 24)
-	//{
-	//	if (animeFrame < 8)
-	//	{
-	//		animeFrame = (animeFrame + 1) % 8; // 8フレームのアニメーション
-	//	}
-	//	flameCounter = 0;
-
-	//	// アニメーションが一周したら死亡アニメーションに切り替える
-	//	if (animeFrame == 0)
-	//	{
-	//		KillMe();
-	//	}
-	//}
-
 	//画面外に行かないようにする処理
 	if (transform_.position_.x < 0)
 	{

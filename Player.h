@@ -31,7 +31,6 @@ public:
 	void HpUp(int _PHp);
 	void HpDown(int _MHp);
 
-	void StartDethAnimation();
 	bool IsDead() const { return isDead_; }
 
 private:

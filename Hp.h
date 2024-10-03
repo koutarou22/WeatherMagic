@@ -1,5 +1,9 @@
 #pragma once
 #include "Engine/GameObject.h"
+/// <summary>
+/// プレイヤーのHpのUI
+/// ※このクラスとプレイヤークラスのHP(変数)を共有させている
+/// </summary>
 class Hp :
 	public GameObject
 {

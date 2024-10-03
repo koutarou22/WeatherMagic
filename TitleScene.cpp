@@ -5,6 +5,7 @@
 
 // タイトル画面のテキスト
 const char* TITLE_TEXT = "Press P Key to start";
+using std::string;
 
 TitleScene::TitleScene(GameObject* parent)
     : GameObject(parent, "TitleScene")

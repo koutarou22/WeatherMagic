@@ -2,7 +2,8 @@
 #include "Engine/GameObject.h"
 
 /// <summary>
-/// 地面（プレイフィールド）
+/// 地面（ステージ）
+/// ※ステージ２を作る予定だったが、うまくいかなかったので修正
 /// </summary>
 class Field : public GameObject
 {

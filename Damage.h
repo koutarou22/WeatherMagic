@@ -1,5 +1,9 @@
 #pragma once
 #include "Engine/GameObject.h"
+/// <summary>
+/// スライムが攻撃をくらった時の表示
+/// ※ただその時だけ画像が出るだけなので処理は単純
+/// </summary>
 class Damage :public GameObject
 {
 private:

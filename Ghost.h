@@ -25,7 +25,7 @@ private:
 
 	int CoolDownAttack_ = 0;
 	int timer_ = 90;
-	enum State
+	enum State//Œ‹‹ÇŽg‚Á‚Ä‚È‚¢
 	{
 		S_WaIk = 0,
 		S_Cry,

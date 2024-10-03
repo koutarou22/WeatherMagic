@@ -1,5 +1,8 @@
 #pragma once
 #include"Engine/GameObject.h"
+/// <summary>
+/// ‰¡ƒXƒNƒ[ƒ‹‚Ìî•ñ
+/// </summary>
 class Camera : public GameObject
 {
 public:
