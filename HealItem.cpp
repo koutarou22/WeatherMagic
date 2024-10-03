@@ -6,7 +6,7 @@
 
 HealItem::HealItem(GameObject* parent) :GameObject(parent, "HpItem"), hImage_(-1)
 {
-	hImage_ = LoadGraph("Assets/Heel.png");
+	hImage_ = LoadGraph("Assets/Item/Heel.png");//‰ñ•œƒAƒCƒeƒ€‚ÌImage
 	assert(hImage_ >= 0);
 
 	flameCounter_ = 0;

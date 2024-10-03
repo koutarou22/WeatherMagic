@@ -6,13 +6,12 @@
 
 Magic::Magic(GameObject* scene) : GameObject(scene)
 {
-	hImage_ = LoadGraph("Assets/Magic_F.png");
+	hImage_ = LoadGraph("Assets/Chara/Bullet/Magic_F.png");
 	assert(hImage_ > 0);
 }
 
 Magic::~Magic()
 {
-
 	if (hImage_ > 0)
 	{
 		DeleteGraph(hImage_);

@@ -3,7 +3,7 @@
 
 Damage::Damage(GameObject* parent) :GameObject(parent, "Damage"), hImage_(-1), Timer_(90)
 {
-	hImage_ = LoadGraph("Assets/Confusion2.png");
+	hImage_ = LoadGraph("Assets/Chara/Confusion2.png");
 	assert(hImage_ >= 0);
 }
 

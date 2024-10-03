@@ -17,7 +17,7 @@ namespace
 
 Rock::Rock(GameObject* scene)
 {
-	hImage_ = LoadGraph("Assets/Rockmin.png");
+	hImage_ = LoadGraph("Assets/Chara/Rockmin.png");
 	assert(hImage_ > 0);
 	transform_.position_.x = 200.0f;
 	transform_.position_.y = 600.0f;

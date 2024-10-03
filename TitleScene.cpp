@@ -14,14 +14,16 @@ TitleScene::TitleScene(GameObject* parent)
 
 void TitleScene::Initialize()
 {
-    hImage_ = LoadGraph("Assets/OIG3.jpg");
+    hImage_ = LoadGraph("Assets/Scene/Title.jpg");//タイトルの背景
     assert(hImage_ >= 0);
-    charImage_ = LoadGraph("Assets/Weather.png");
-    assert(charImage_ >= 0);
-    spaceImage_ = LoadGraph("Assets/Space.png");
-    assert(spaceImage_ >= 0);
 
-    soundHandle = LoadSoundMem("Assets/select01.mp3");
+    charImage_ = LoadGraph("Assets/Font/Weather.png");//『WeatherMagic』のタイトルフォント
+    assert(charImage_ >= 0);
+
+   /* spaceImage_ = LoadGraph("Assets/Space.png");//『space』を押してくれ！的なフォント　結局未使用
+    assert(spaceImage_ >= 0);*/
+
+    soundHandle = LoadSoundMem("Assets/Music/SE/select01.mp3");//Pを押した時に効果音がなる(登録)
     assert(soundHandle != -1); // 音声ファイルの読み込みに失敗した場合のエラーチェック
 
 

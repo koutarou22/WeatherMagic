@@ -6,7 +6,7 @@
 
 ClearFlag::ClearFlag(GameObject* parent) :GameObject(parent, "ClearFlag"), hImage_(-1)
 {
-	hImage_ = LoadGraph("Assets/GoalFlag.png");
+	hImage_ = LoadGraph("Assets/Item/GoalFlag.png");
 	assert(hImage_ >= 0);
 
 	hImage_Right = LoadGraph("Assets/right.png");

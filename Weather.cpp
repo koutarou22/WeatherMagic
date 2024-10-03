@@ -4,43 +4,44 @@
 
 void Weather::Initialize()
 {
-    hImage_Sunny = LoadGraph("Assets/Sky.png");
+    //----------------”wŒi------------------------------------
+    hImage_Sunny = LoadGraph("Assets/BackImage/Sky.png");
     assert(hImage_Sunny > 0);
-    hImage_Rainy = LoadGraph("Assets/Rain.png");
+    hImage_Rainy = LoadGraph("Assets/BackImage/Rain.png");
     assert(hImage_Rainy > 0);
-    hImage_Wind = LoadGraph("Assets/Wind.png");
+    hImage_Wind = LoadGraph("Assets/BackImage/Wind.png");
     assert(hImage_Wind > 0);
 
     //---------------UI--------------------------------------
-    hImage_SIcon = LoadGraph("Assets/Sun.png");
+    hImage_SIcon = LoadGraph("Assets/UI/Sun.png");//°‚ê‚ÌƒAƒCƒRƒ“
     assert(hImage_SIcon > 0);
-    hImage_RIcon = LoadGraph("Assets/Rain1.png");
+    hImage_RIcon = LoadGraph("Assets/UI/Rain1.png");//‰J‚ÌƒAƒCƒRƒ“
     assert(hImage_RIcon > 0);
-    hImage_WIcon = LoadGraph("Assets/Gale.png");
+    hImage_WIcon = LoadGraph("Assets/UI/Gale.png");//•—‚ÌƒAƒCƒRƒ“
     assert(hImage_WIcon > 0);
 
-    BgImage_ = LoadGraph("Assets/BgWeather.png");
-    assert(BgImage_ > 0);
-    //------------------------------------------------------
+    //BgImage_ = LoadGraph("Assets/BgWeather.png");//c’·‚Ì•‚¢˜g
+    //assert(BgImage_ > 0);
 
-    //----------------MpØ‚ê—p------------------------------
-    hImage_RainyNoMp = LoadGraph("Assets/Rain4.png");//ŠDF‚Ì‰æ‘œ‚©~‚Ì‰æ‘œ—\’è
-    assert(hImage_RainyNoMp > 0);
+    //--------------‰ðà‚ª‘‚¢‚Ä‚ ‚éUI-------------------------
 
-    hImage_WindNoMp = LoadGraph("Assets/Gale3.png"); //ŠDF‚Ì‰æ‘œ‚©~‚Ì‰æ‘œ—\’è
-    assert(hImage_WindNoMp > 0);
-    //------------------------------------------------------
-
-    hImage_StateSun = LoadGraph("Assets/SState.png");
+    hImage_StateSun = LoadGraph("Assets/UI/SState.png");//°‚ê‚Ì‰ðàUI
     assert(hImage_StateSun > 0);
-    hImage_StateRain = LoadGraph("Assets/RState.png");
+    hImage_StateRain = LoadGraph("Assets/UI/RState.png");//‰J‚Ì‰ðàUI
     assert(hImage_StateRain > 0);
-    hImage_StateWind = LoadGraph("Assets/WState.png");
+    hImage_StateWind = LoadGraph("Assets/UI/WState.png");//•—‚Ì‰ðàUI
     assert(hImage_StateWind > 0);
     //hImage_Book = LoadGraph("Assets/Book.png");
     //assert(hImage_Book > 0);
-   
-    //bool
+
+
+    //----------------Mp‚ªØ‚ê‚½‚Æ‚«------------------------------
+    hImage_RainyNoMp = LoadGraph("Assets/UI/Rain4.png");//ŠDF‚Åƒoƒc‚ª‚Â‚¢‚½‰J‚ÌƒAƒCƒRƒ“
+    assert(hImage_RainyNoMp > 0);
+
+    hImage_WindNoMp = LoadGraph("Assets/UI/Gale3.png"); //ŠDF‚Åƒoƒc‚ª‚Â‚¢‚½•—‚ÌƒAƒCƒRƒ“
+    assert(hImage_WindNoMp > 0);
+  
     RainOnChecker = false;
 }
 

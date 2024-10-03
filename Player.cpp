@@ -29,7 +29,7 @@ namespace
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED), Hp_(3), NDTIME_(2.0f), Flash_Count(0), IsHitOneCount_(false),DebugLog_(false)
 {
-	hImage = LoadGraph("Assets/Wizard.png");
+	hImage = LoadGraph("Assets/Chara/Wizard.png");
 	assert(hImage > 0);
 	transform_.position_.x = 100.0f;
 	transform_.position_.y = GROUND;
@@ -46,19 +46,19 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	Hp_GetFlag = false;
 	StringUi_Up = transform_.position_.y;
 
-	soundHandle = LoadSoundMem("Assets/jump06.mp3");
+	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);
 	
-	RainHandle = LoadSoundMem("Assets/‰J‚ª~‚é2.mp3");
+	RainHandle = LoadSoundMem("Assets/Music/SE/‰J‚ª~‚é2.mp3");
 	assert(RainHandle != -1);
 
-	WindHandle = LoadSoundMem("Assets/•—‚ª‚­1.mp3");
+	WindHandle = LoadSoundMem("Assets/Music/SE/•—‚ª‚­1.mp3");
 	assert(WindHandle != -1);
 
-	GetItemSound = LoadSoundMem("Assets/poka01.mp3");
+	GetItemSound = LoadSoundMem("Assets/Music/SE/poka01.mp3");
 	assert(GetItemSound != -1);
 
-	MagicSound = LoadSoundMem("Assets/8bit_magic1.mp3");
+	MagicSound = LoadSoundMem("Assets/Music/SE/8bit_magic1.mp3");
 	assert(MagicSound != -1);
 
 }

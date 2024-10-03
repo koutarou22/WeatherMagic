@@ -12,7 +12,7 @@ namespace
 
 Ghost::Ghost(GameObject* scene)
 {
-	hImage_ = LoadGraph("Assets/Ghost.png");
+	hImage_ = LoadGraph("Assets/Chara/Ghost.png");
 	assert(hImage_ > 0);
 	transform_.position_.x = 900.0f;
 	transform_.position_.y = 780.0f;

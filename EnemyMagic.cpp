@@ -5,7 +5,7 @@
 
 EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene)
 {
-	hImage_ = LoadGraph("Assets/EnemyMagic_F.png");
+	hImage_ = LoadGraph("Assets/Chara/EnemyMagic_F.png");
 	assert(hImage_ > 0);
 	transform_.scale_.x = -2.0f;
 	transform_.scale_.y = -2.0f;

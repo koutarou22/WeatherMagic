@@ -14,10 +14,10 @@
 Field::Field(GameObject* scene) : GameObject(scene)
 {
 	Map = nullptr; // まずここでMapでnullいれとく
-	hImage_ = LoadGraph("Assets/bgchar.png");
+	hImage_ = LoadGraph("Assets/BackImage/bgchar.png");
 	assert(hImage_ > 0);
 
-	hBackGround_ = LoadGraph("Assets/bg5.png");
+	hBackGround_ = LoadGraph("Assets/BackImage/bg5.png");
 	assert(hBackGround_ > 0);
 
 	NowStage_ = 1; 
@@ -259,10 +259,10 @@ void Field::LoadStage(int StageNumber)
 	switch (StageNumber)
 	{
 	case 1:
-		ret = csv.Load("Assets/New_Stage1.csv");
+		ret = csv.Load("Assets/Stage_csv/Stage1.csv");
 		break;
 	case 2:
-		ret = csv.Load("Assets/New_Stage2.csv");
+		ret = csv.Load("Assets/Stage_csv/Stage2.csv");
 		break;
 	default:
 		//assert(false); // 未知のステージ番号

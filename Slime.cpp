@@ -25,7 +25,7 @@ namespace
 
 Slime::Slime(GameObject* scene)
 {
-	hImage = LoadGraph("Assets/slime_run2.png");
+	hImage = LoadGraph("Assets/Chara/slime_run2.png");
 	assert(hImage > 0);
 	/*transform_.position_.x = 1200.0f;
 	transform_.position_.y = 600.0f;*/

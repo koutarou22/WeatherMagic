@@ -6,7 +6,7 @@
 
 MpItem::MpItem(GameObject* parent) :GameObject(parent, "MpItem"), hImage_(-1)
 {
-	hImage_ = LoadGraph("Assets/Mp.png");
+	hImage_ = LoadGraph("Assets/Item/Mp.png");
 	assert(hImage_ > 0);
 
 	transform_.position_.x = 200;

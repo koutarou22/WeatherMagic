@@ -5,7 +5,7 @@
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
-    hImage_ = LoadGraph("Assets/GAME CLEAR.png");
+    hImage_ = LoadGraph("Assets/Scene/GAME CLEAR.png");
     assert(hImage_ > 0);
 }
 
