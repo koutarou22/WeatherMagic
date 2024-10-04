@@ -15,6 +15,7 @@ void RoadScene::Initialize()
 {
    /* hImage_ = LoadGraph("Assets/OIG3.jpg");
     assert(hImage_ >= 0);*/
+
 }
 
 void RoadScene::Update()
