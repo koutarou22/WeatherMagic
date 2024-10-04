@@ -7,7 +7,9 @@
 #include "../RoadScene.h"
 
 
+
 //pullリクエスト
+//testその２
 SceneManager::SceneManager(GameObject* parent)
 	: GameObject(parent, "SceneManager")
 {
