@@ -16,6 +16,7 @@
 #include "Rock.h"
 #include <iostream>
 
+//satou test
 namespace
 {
 	const float MOVE_SPEED = 4.5f;
