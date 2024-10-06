@@ -11,7 +11,6 @@ class Player : public GameObject
 {
 public:
 
-
 	Player(GameObject* scene);
 	~Player();
 	void Update() override;
@@ -22,10 +21,10 @@ public:
 
 	int GetMp() { return MagicPoint_; }
 	void SetMagicMP(int _Mp) { MagicPoint_ = _Mp; }//ほかのクラスでも共有するため用
-	void DamageHp();
+	/*void DamageHp();*/
 	void Jump();
 	int GetHp();
-	// MagicPoint_を増やすメソッド
+	// MagicPoint_を増やす
 	void MagicUp(int _PMp);
 	void MagicDown(int _MMp);
 	void HpUp(int _PHp);
@@ -67,7 +66,6 @@ private:
 	bool Mp_GetFlag;
 	bool IsHitOneCount_;
 	bool DebugLog_;
-	bool StatusFlag_;
 
 	//int MAGIC_COUNT = 0;
 	enum State

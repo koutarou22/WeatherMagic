@@ -6,15 +6,17 @@
 /// </summary>
 enum WeatherState
 {
-	Sunny,//晴れの日
-	Rainy,//雨の日
-	Gale,//強風(天候かこれ...?)
+	Sun,//晴れの日
+	Rain,//雨の日
+	Gale,//強風の日(天候かこれ...?)
+	Snow,//雪の日
 };
+
 class Weather:public GameObject
 {
 public:
 	
-	Weather(GameObject* parent) : GameObject(parent), weather_(Sunny) {}
+	Weather(GameObject* parent) : GameObject(parent), weather_(Sun) {}
 
 	void Initialize() override;
 	void Update() override;
@@ -34,15 +36,18 @@ private:
 	
 	//ここかっこ悪いなぁ
 	WeatherState NextWeather_;
-    int hImage_Sunny;//晴れのエフェクト
-	int hImage_Rainy;//雨のエフェクト
-	int hImage_Wind;//風のエフェクト
+    int hImage_Sun;//晴れのエフェクト(背景)
+	int hImage_Rain;//雨のエフェクト(背景)
+	int hImage_Wind;//風のエフェクト(背景)
+	int hImage_Snow;//雪のエフェクト(背景)
 
-	int hImage_SIcon;//晴れのアイコン
-	int hImage_RIcon;//雨のアイコン
-	int hImage_WIcon;//風のアイコン
 
-	int hImage_RainyNoMp;//Mpが使えない時の差し替え用(雨)
+	int Sun_Icon;//晴れのアイコン
+	int Rain_Icon;//雨のアイコン
+	int Gale_Icon;//風のアイコン
+	int Snow_Icon;//雪のアイコン
+
+	int hImage_RainNoMp;//Mpが使えない時の差し替え用(雨)
 	int hImage_WindNoMp;//Mpが使えない時の差し替え用(風)
 
 	int hImage_StateSun;
@@ -59,6 +64,8 @@ private:
 
 	int flameCounter_;
 	int animeFrame_;
+
+	bool DebugLog_;
 		
 };
 

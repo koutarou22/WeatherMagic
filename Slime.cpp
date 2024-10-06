@@ -27,8 +27,6 @@ Slime::Slime(GameObject* scene)
 {
 	hImage = LoadGraph("Assets/Chara/slime_run2.png");
 	assert(hImage > 0);
-	/*transform_.position_.x = 1200.0f;
-	transform_.position_.y = 600.0f;*/
 	StunTimer_ = 0;
 
 }
@@ -140,7 +138,7 @@ if (pField != nullptr)
 	}
 
 
-	if (cam != nullptr)
+	if (cam != nullptr)//画面外なら行動はとらないよ！
 	{
 		// カメラの位置を取得
 		int camX = cam->GetValue();
@@ -293,11 +291,7 @@ void Slime::Draw()
 		DrawModiGraph(x + SWidth * transform_.scale_.x, y, x, y, x, y + SHeight * transform_.scale_.y, x + SWidth * transform_.scale_.x, y + SHeight * transform_.scale_.y, hFrame, TRUE);
 	}
 
-	//Debug用
-	// 
-	//DrawFormatString(0, 90, GetColor(255, 255, 255), "スライムの風: %d", WindTimer_);
-	//DrawCircle(x + 32.0f * transform_.scale_.x, y + 32.0f * transform_.scale_.y, 32.0f * transform_.scale_.x, GetColor(255, 0, 0), FALSE);
-	//DrawBox(rectX, rectY, rectX + rectW, rectY + rectH, GetColor(255, 0, 0), FALSE);
+	DrawCircle(x + 32.0f * transform_.scale_.x, y + 32.0f * transform_.scale_.y, 32.0f * transform_.scale_.x, GetColor(255, 0, 0), FALSE);
 }
 
 void Slime::WeatherEffects(Weather* weather)
@@ -347,9 +341,9 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 
 	int MpVanish = pPlayer->GetMp();
 
-	if (state == Rainy && MpVanish > 0)
+	if (state == Rain && MpVanish > 0)
 	{
-		WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); // 雨の日は速度を減少させる
+		//WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); // 雨の日は速度を減少させる
 
 		
 		if (transform_.scale_.x < 1.5f)//大きさが1.5で止まるように
