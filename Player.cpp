@@ -51,10 +51,10 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);
 	
-	RainHandle = LoadSoundMem("Assets/Music/SE/雨が降る2.mp3");
+	RainHandle = LoadSoundMem("Assets/Music/SE/Rain.mp3");
 	assert(RainHandle != -1);
 
-	WindHandle = LoadSoundMem("Assets/Music/SE/風が吹く1.mp3");
+	WindHandle = LoadSoundMem("Assets/Music/SE/Wind.mp3");
 	assert(WindHandle != -1);
 
 	GetItemSound = LoadSoundMem("Assets/Music/SE/poka01.mp3");
