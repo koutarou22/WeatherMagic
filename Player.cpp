@@ -16,6 +16,7 @@
 #include "Rock.h"
 #include <iostream>
 
+//satou test
 namespace
 {
 	const float MOVE_SPEED = 4.5f;
@@ -40,7 +41,7 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 
 	Hp_ = 5;
 
-	MagicPoint_ = 100;//MP‚ÌÅ‘å’l100•ÏX
+	MagicPoint_ = 100;//MPã®æœ€å¤§å€¤100å¤‰æ›´
 
 	Hp_GetFlag = false;
 	Hp_GetFlag = false;
@@ -50,10 +51,10 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);
 	
-	RainHandle = LoadSoundMem("Assets/Music/SE/‰J‚ª~‚é2.mp3");
+	RainHandle = LoadSoundMem("Assets/Music/SE/é›¨ãŒé™ã‚‹2.mp3");
 	assert(RainHandle != -1);
 
-	WindHandle = LoadSoundMem("Assets/Music/SE/•—‚ª‚­1.mp3");
+	WindHandle = LoadSoundMem("Assets/Music/SE/é¢¨ãŒå¹ã1.mp3");
 	assert(WindHandle != -1);
 
 	GetItemSound = LoadSoundMem("Assets/Music/SE/poka01.mp3");
@@ -90,16 +91,16 @@ void Player::Update()
 
 	if (pWeather != nullptr)
 	{
-		WeatherEffects(pWeather); // “VŒóŠÖ”‚ğŒÄ‚Ño‚·
+		WeatherEffects(pWeather); // å¤©å€™é–¢æ•°ã‚’å‘¼ã³å‡ºã™
 	}
 
-	//‰æ–ÊŠO‚És‚©‚È‚¢‚æ‚¤‚É‚·‚éˆ—
+	//ç”»é¢å¤–ã«è¡Œã‹ãªã„ã‚ˆã†ã«ã™ã‚‹å‡¦ç†
 	if (transform_.position_.x < 0)
 	{
 		transform_.position_.x = 0;
 	}
 	if (Jump_P > 20.0f) {
-		Jump_P = 20.0f; // —‰º‘¬“x‚ªÅ‘å’l‚ğ’´‚¦‚È‚¢‚æ‚¤‚É§ŒÀ
+		Jump_P = 20.0f; // è½ä¸‹é€Ÿåº¦ãŒæœ€å¤§å€¤ã‚’è¶…ãˆãªã„ã‚ˆã†ã«åˆ¶é™
 	}
 
 
@@ -114,11 +115,11 @@ void Player::Update()
 		transform_.position_.x += WeatherSpeed_;
 		if (++flameCounter >= 24)
 		{
-			animeFrame = (animeFrame + 1) % 2;//if•¶‚ğg‚í‚È‚¢Å“K‰ğ
+			animeFrame = (animeFrame + 1) % 2;//ifæ–‡ã‚’ä½¿ã‚ãªã„æœ€é©è§£
 			flameCounter = 0;
 		}
 
-		//---------------Õ“Ë”»’è(‰E)--------------------------------
+		//---------------è¡çªåˆ¤å®š(å³)--------------------------------
 		hitX = transform_.position_.x + 50;
 		hitY = transform_.position_.y + 63;
 
@@ -137,13 +138,13 @@ void Player::Update()
 		transform_.position_.x -= WeatherSpeed_;
 		if (++flameCounter >= 24)
 		{
-			animeFrame = (animeFrame + 1) % 2;//if•¶‚ğg‚í‚È‚¢Å“K‰ğ
+			animeFrame = (animeFrame + 1) % 2;//ifæ–‡ã‚’ä½¿ã‚ãªã„æœ€é©è§£
 			flameCounter = 0;
 		}
 
-		//---------------Õ“Ë”»’è(¶)--------------------------------
+		//---------------è¡çªåˆ¤å®š(å·¦)--------------------------------
 		hitX = transform_.position_.x;
-		hitY = transform_.position_.y + 63; // ƒvƒŒƒCƒ„[‚Ì‘«Œ³‚ÌYÀ•W
+		hitY = transform_.position_.y + 63; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¶³å…ƒã®Yåº§æ¨™
 		if (pField != nullptr)
 		{
 			int push = pField->CollisionLeft(hitX, hitY);
@@ -179,12 +180,12 @@ void Player::Update()
 		prevSpaceKey = false;
 	}
 
-	//-------------------+++‰Á‘¬‚ÌƒvƒƒOƒ‰ƒ€‚ÍŠî‘b‚ÌŠî‘b+++-------------------
+	//-------------------+++åŠ é€Ÿã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯åŸºç¤ã®åŸºç¤+++-------------------
 
-	Jump_P += GRAVITY; //‘¬“x += ‰Á‘¬“x
-	transform_.position_.y += Jump_P; //À•W += ‘¬“x
+	Jump_P += GRAVITY; //é€Ÿåº¦ += åŠ é€Ÿåº¦
+	transform_.position_.y += Jump_P; //åº§æ¨™ += é€Ÿåº¦
 
-	//---------------Õ“Ë”»’è(ã)--------------------------------
+	//---------------è¡çªåˆ¤å®š(ä¸Š)--------------------------------
 	if (!onGround && pField != nullptr)
 	{
 		hitX = transform_.position_.x + 32;
@@ -200,12 +201,12 @@ void Player::Update()
 	//-----------------------------------------------------------
 
 
-	//---------------Õ“Ë”»’è(‰º)--------------------------------
+	//---------------è¡çªåˆ¤å®š(ä¸‹)--------------------------------
 	if (pField != nullptr)
 	{
 		int pushR = pField->CollisionDown(transform_.position_.x + 50, transform_.position_.y + 63);
 		int pushL = pField->CollisionDown(transform_.position_.x + 14, transform_.position_.y + 63);
-		int push = max(pushR, pushL);//‚Q‚Â‚Ì‘«Œ³‚Ì‚ß‚è‚±‚İ‚Ì‘å‚«‚¢‚Ù‚¤
+		int push = max(pushR, pushL);//ï¼’ã¤ã®è¶³å…ƒã®ã‚ã‚Šã“ã¿ã®å¤§ãã„ã»ã†
 		if (push >= 1)
 		{
 			transform_.position_.y -= push - 1;
@@ -223,26 +224,30 @@ void Player::Update()
 	{
 		if (!WeatherSwitch && pWeather != nullptr)
 		{
-			// Œ»İ‚Ì“VŒóó‘Ô‚ğæ“¾
+			// ç¾åœ¨ã®å¤©å€™çŠ¶æ…‹ã‚’å–å¾—
 			WeatherState WeatherState = pWeather->GetWeatherState();
-			// Ÿ‚ÉØ‚è‘Ö‚¦‚é“VŒó‚ğŒˆ’è
-			if (WeatherState == Sunny)//Œ»İ°‚ê‚È‚ç
+			// æ¬¡ã«åˆ‡ã‚Šæ›¿ãˆã‚‹å¤©å€™ã‚’æ±ºå®š
+			if (WeatherState == Sun)//ç¾åœ¨æ™´ã‚Œãªã‚‰
 			{
-				pWeather->SetWeather(Rainy);//Ÿ‚Í‰J‚É
+				pWeather->SetWeather(Rain);//æ¬¡ã¯é›¨ã«
 				StopSoundMem(WindHandle);
 			}
-			else if (WeatherState == Rainy)
+			else if (WeatherState == Rain)
 			{
-				pWeather->SetWeather(Gale);//Ÿ‚Í‹­•—‚É
+				pWeather->SetWeather(Gale);//æ¬¡ã¯å¼·é¢¨ã«
 				StopSoundMem(RainHandle);
 				StopSoundMem(WindHandle);
 			}
-			else
+			else if (WeatherState == Gale)
 			{
-				pWeather->SetWeather(Sunny);//Ÿ‚Í°‚ê‚É
+				pWeather->SetWeather(Snow);//æ¬¡ã¯é›ªã«
 				StopSoundMem(WindHandle);
 			}
-			WeatherTime_ = 60;
+			else if (WeatherState == Snow)
+			{
+				pWeather->SetWeather(Sun);
+			}
+			WeatherTime_= 60; 
 		}
 		WeatherSwitch = true;
 	}
@@ -253,7 +258,8 @@ void Player::Update()
 
 	if (pWeather != nullptr)
 	{
-		if (pWeather->GetWeatherState() == Gale)
+
+		if (pWeather->GetWeatherState() == Gale) //é¢¨ã®æ©Ÿèƒ½
 		{
 			if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ == 0)
 			{
@@ -273,8 +279,7 @@ void Player::Update()
 			GaleTime_--;
 		}
 
-
-		if (pWeather->GetWeatherState() == Rainy)
+		if (pWeather->GetWeatherState() == Rain) 
 		{
 			if (RainTime_ <= 0)
 			{
@@ -293,8 +298,8 @@ void Player::Update()
 	}
 
 
-	//Šg’£«‚Í‚È‚¢
-	//if (transform_.position_.y >= GROUND)//’n–Ê‚É‚Â‚¢‚½‚ç‘¬“x‚ğŒ³‚É–ß‚·A–ß‚³‚È‚¢‚ÆŠÑ’Ê‚·‚é‹°‚ê‚ ‚è
+	//æ‹¡å¼µæ€§ã¯ãªã„
+	//if (transform_.position_.y >= GROUND)//åœ°é¢ã«ã¤ã„ãŸã‚‰é€Ÿåº¦ã‚’å…ƒã«æˆ»ã™ã€æˆ»ã•ãªã„ã¨è²«é€šã™ã‚‹æã‚Œã‚ã‚Š
 	//{
 	//	transform_.position_.y = GROUND;
 	//	Jump_P = 0.0f;
@@ -302,7 +307,7 @@ void Player::Update()
 	//}
 	//------------------------------------------------------------------------------------------
 
-	//UŒ‚–‚–@‚Ìˆ—
+	//æ”»æ’ƒé­”æ³•ã®å‡¦ç†
 	if (CheckHitKey(KEY_INPUT_M))
 	{
 		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
@@ -326,38 +331,24 @@ void Player::Update()
 
 
 
-	// –³“GŠÔ‚ÌXV
+	// ç„¡æ•µæ™‚é–“ã®æ›´æ–°
 	if (NDTIME_ > 0.0f)
 	{
 		NDTIME_ -= 0.016f;
 	}
 
-	//if (isDead_)
-	//{
-	//	// €–SƒAƒjƒ[ƒVƒ‡ƒ“‚ÌXV
-	//	if (deathAnimationFrame_ < deathAnimationDuration_)
-	//	{
-	//		deathAnimationFrame_++;
-	//	}
-	//	else
-	//	{
-	//		KillMe(); // €–SƒAƒjƒ[ƒVƒ‡ƒ“‚ªŠ®—¹‚µ‚½‚çƒLƒƒƒ‰ƒNƒ^[‚ğíœ
-	//	}
-	//	return;
-	//}
-
-	////-----------------ƒXƒ‰ƒCƒ€‚Æ‚ÌÚG”»’è-----------------------------
+	////-----------------ã‚¹ãƒ©ã‚¤ãƒ ã¨ã®æ¥è§¦åˆ¤å®š-----------------------------
 	for (Slime* pSlime : pSlimes)
 	{
 		if (pSlime->ColliderRect(transform_.position_.x + pSlime->GetScale().x, transform_.position_.y + pSlime->GetScale().y, 64.0f, 64.0f))
 		{
-			if (transform_.position_.y + 64.0f <= pSlime->GetPosition().y + (64.0f * pSlime->GetScale().y) / 2 + 20) // ƒvƒŒƒCƒ„[‚ªƒXƒ‰ƒCƒ€‚Ìã•”‚É‚ ‚é
+			if (transform_.position_.y + 64.0f <= pSlime->GetPosition().y + (64.0f * pSlime->GetScale().y) / 2 + 20) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚¹ãƒ©ã‚¤ãƒ ã®ä¸Šéƒ¨ã«ã‚ã‚‹
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
-				float RainBound = 0.5; // ‰J‚Ì“ú‚É”­¶‚·‚éƒXƒ‰ƒCƒ€‚Ì’e«
-				if (WeatherState == Rainy && MagicPoint_ > 0)
+				float RainBound = 0.5; // é›¨ã®æ—¥ã«ç™ºç”Ÿã™ã‚‹ã‚¹ãƒ©ã‚¤ãƒ ã®å¼¾æ€§
+				if (WeatherState == Rain && MagicPoint_ > 0)
 				{
-					RainBound = 3.5f; // ‰J‚Ì‚Ì‚İƒWƒƒƒ“ƒv—Í‚ğ2.5”{
+					RainBound = 3.5f; // é›¨ã®æ™‚ã®ã¿ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’2.5å€
 				}
 				Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT * RainBound);
 				onGround = false;
@@ -378,7 +369,7 @@ void Player::Update()
 					}
 
 					NDTIME_ = 3.0f;
-					break; // ƒ_ƒ[ƒW‚ğ—^‚¦‚½Œã‚Éƒ‹[ƒv‚ğ”²‚¯‚é
+					break; // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆãŸå¾Œã«ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 				}
 			}
 		}
@@ -386,7 +377,7 @@ void Player::Update()
 
 
 	//Damage* pDamage = GetParent()->FindGameObject<Damage>();
-	//ƒJƒƒ‰‚Ìˆ—
+	//ã‚«ãƒ¡ãƒ©ã®å‡¦ç†
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	int xR = (int)transform_.position_.x - cam->GetValue();
 	int xL = (int)transform_.position_.x + cam->GetValue();
@@ -404,14 +395,14 @@ void Player::Update()
 
 	//----------------------------------------------------------------------------------
 
-	//2“_ŠÔ‚Ì‹——£‚Ì•Ö—˜‚³‚ğg‚Éõ‚İ‚ÄÀŠ´‚µ‚Ü‚µ‚½
+	//2ç‚¹é–“ã®è·é›¢ã®ä¾¿åˆ©ã•ã‚’èº«ã«æŸ“ã¿ã¦å®Ÿæ„Ÿã—ã¾ã—ãŸ
 	std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
 	for (EnemyMagic* pEnemyMagic : pEMagics)
 	{
-		//‰ğà@Œ©‚ê‚Î‚í‚©‚é‚Æv‚¤‚ª‚±‚ê‚ÍwEnemyMagicx‚ÆwSlimex‚Ì‹——£‚ğ‹‚ß‚Ä‚¢‚é
-		float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 32.0f);//Mg‚ÌÀ•WX - Sl‚ÌÀ•WX
-		float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 32.0f);//Mg‚ÌÀ•WY - Sl‚ÌÀ•WY
-		float distance = sqrt(dx * dx + dy * dy);//‚±‚±‚Å–¾Šm‚È‹——£‚ğŒvZ
+		//è§£èª¬ã€€è¦‹ã‚Œã°ã‚ã‹ã‚‹ã¨æ€ã†ãŒã“ã‚Œã¯ã€EnemyMagicã€ã¨ã€Slimeã€ã®è·é›¢ã‚’æ±‚ã‚ã¦ã„ã‚‹
+		float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 32.0f);//Mgã®åº§æ¨™X - Slã®åº§æ¨™X
+		float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 32.0f);//Mgã®åº§æ¨™Y - Slã®åº§æ¨™Y
+		float distance = sqrt(dx * dx + dy * dy);//ã“ã“ã§æ˜ç¢ºãªè·é›¢ã‚’è¨ˆç®—
 
 		if (distance <= 20.0f)
 		{
@@ -427,7 +418,7 @@ void Player::Update()
 					break;
 				}
 
-				NDTIME_ = 2.0f;//ŒÂX‚Ì”’l‚Å–³“GŠÔ‚ª‚«‚Ü‚é
+				NDTIME_ = 2.0f;//å€‹ã€…ã®æ•°å€¤ã§ç„¡æ•µæ™‚é–“ãŒãã¾ã‚‹
 			}
 			break;
 		}
@@ -495,10 +486,10 @@ void Player::Update()
 
 		if (distance <= 30.0f)
 		{
-			if (!IsHitOneCount_) // ƒAƒCƒeƒ€‚ğE‚Á‚½‚Æ‚«‚Éˆê“x‚¾‚¯MagicPoint_‚ğ‘‚â‚·
+			if (!IsHitOneCount_) // ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã£ãŸã¨ãã«ä¸€åº¦ã ã‘MagicPoint_ã‚’å¢—ã‚„ã™
 			{
 				MagicUp(5);
-				IsHitOneCount_ = true; // MagicPoint_‚ğ‘‚â‚µ‚½Œã‚ÍIsHitOneCount_‚ğtrue‚Éİ’è
+				IsHitOneCount_ = true; // MagicPoint_ã‚’å¢—ã‚„ã—ãŸå¾Œã¯IsHitOneCount_ã‚’trueã«è¨­å®š
 			}
 			pMp->KillMe();
 			Mp_GetFlag = true;
@@ -507,7 +498,7 @@ void Player::Update()
 		}
 		else
 		{
-			IsHitOneCount_ = false; // ƒAƒCƒeƒ€‚ª”ÍˆÍŠO‚É‚È‚Á‚½‚çIsHitOneCount_‚ğfalse‚ÉƒŠƒZƒbƒg
+			IsHitOneCount_ = false; // ã‚¢ã‚¤ãƒ†ãƒ ãŒç¯„å›²å¤–ã«ãªã£ãŸã‚‰IsHitOneCount_ã‚’falseã«ãƒªã‚»ãƒƒãƒˆ
 		}
 	}
 
@@ -521,33 +512,33 @@ void Player::Update()
 
 		if (distance <= 60.0f)
 		{
-			//<= 32.0f‚ÌˆÓ–¡‚Í‰¡‚Æ‚ÌÚG‚Ì•‚ğ§ŒÀ‚µ‚Ä‚¢‚é
-			if (dy < 0 && abs(dx) <= 32.0f) //Šâ‚Ìã‚Éæ‚é
+			//<= 32.0fã®æ„å‘³ã¯æ¨ªã¨ã®æ¥è§¦ã®å¹…ã‚’åˆ¶é™ã—ã¦ã„ã‚‹
+			if (dy < 0 && abs(dx) <= 32.0f) //å²©ã®ä¸Šã«ä¹—ã‚‹
 			{
-				transform_.position_.y = pRock->GetPosition().y - 64; // ƒvƒŒƒCƒ„[‚ğã‚ÉˆÚ“®
+				transform_.position_.y = pRock->GetPosition().y - 64; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸Šã«ç§»å‹•
 				WeatherSpeed_ = 0;
 				onGround = true;
 			}
-			else if (dy > 0 && abs(dx) <= 32.0f) //Šâ‚Ì‰º‚É‚Ô‚Â‚©‚é
+			else if (dy > 0 && abs(dx) <= 32.0f) //å²©ã®ä¸‹ã«ã¶ã¤ã‹ã‚‹
 			{
 				int push = 3;
-				transform_.position_.y = pRock->GetPosition().y + push; // ƒvƒŒƒCƒ„[‚ğ‰º‚ÉˆÚ“®
+				transform_.position_.y = pRock->GetPosition().y + push; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸‹ã«ç§»å‹•
 				WeatherSpeed_ = MOVE_SPEED;
 			}
-			else if (dx < 0) // Šâ‚Ì‰E‘¤‚ÌÕ“Ë”»’è
+			else if (dx < 0) // å²©ã®å³å´ã®è¡çªåˆ¤å®š
 			{
 				int push = 1;
-				transform_.position_.x += push; // ƒvƒŒƒCƒ„[‚ğ‰E‚ÉˆÚ“®
+				transform_.position_.x += push; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å³ã«ç§»å‹•
 			}
-			else if (dx > 0) // Šâ‚Ì¶‘¤‚ÌÕ“Ë”»’è
+			else if (dx > 0) // å²©ã®å·¦å´ã®è¡çªåˆ¤å®š
 			{
 				int push = 1;
-				transform_.position_.x -= push; // ƒvƒŒƒCƒ„[‚ğ¶‚ÉˆÚ“®
+				transform_.position_.x -= push; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å·¦ã«ç§»å‹•
 			}
 		}
 	}
 
-	//€–S‚µ‚½‚çƒQ[ƒ€ƒI[ƒo[‰æ–Ê‚Ö
+	//æ­»äº¡ã—ãŸã‚‰ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ç”»é¢ã¸
 	if (transform_.position_.y > GROUND || Hp_ == 0)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
@@ -577,18 +568,8 @@ void Player::Update()
 	{
 		DebugLog_ = false;
 	}
-
-
-	if (CheckHitKey(KEY_INPUT_K))
-	{
-		StatusFlag_ = true;
-	}
-	else
-	{
-		StatusFlag_ = false;
-	}
-
-	//mp20ˆÈ‰º‚Åmp©“®‰ñ•œ
+  
+	//mp20ä»¥ä¸‹ã§mpè‡ªå‹•å›å¾©
 	if (MagicPoint_ < 20)
 	{
 		if (--MpHealTimer_ < 0)
@@ -597,6 +578,7 @@ void Player::Update()
 			MpHealTimer_ = 30;
 		}
 	}
+  
 }
 
 void Player::Draw()
@@ -625,13 +607,12 @@ void Player::Draw()
 	
 	++Flash_Count;
 	
-
 	if (Mp_GetFlag == true)
 	{
 		if (UIGetTimer > 0)
 		{
 			DrawFormatString(x, StringUi_Up, GetColor(255,255,255), "MP+5");
-			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); // ‰¹º‚ğÄ¶
+			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); // éŸ³å£°ã‚’å†ç”Ÿ
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}
@@ -656,34 +637,24 @@ void Player::Draw()
 		}
 	}
 
-	
 	if (MagicPoint_ == 0)
 	{
-		DrawFormatString(0, 60, GetColor(255, 69, 0), "MP: %d /20", MagicPoint_);//0‚È‚çÔ‚É
+		DrawFormatString(0, 60, GetColor(255, 69, 0), "MP: %d /20", MagicPoint_);//0ãªã‚‰èµ¤ã«
 	}
 	else
 	{
-		DrawFormatString(0, 60, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//‚»‚êˆÈŠO‚È‚çÂ‚É
+		DrawFormatString(0, 60, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//ãã‚Œä»¥å¤–ãªã‚‰é’ã«
 	}
 
     if(DebugLog_ == true)
 	{
-		DrawFormatString(920, 0, GetColor(0, 0, 0), "ƒvƒŒƒCƒ„[(ƒJƒƒ‰)‚ÌˆÊ’u: (%d, %d)", x, y);
-		DrawFormatString(1050, 40, GetColor(255, 69, 0), "Œ»İHP: %d", Hp_);
-		DrawFormatString(1050, 60, GetColor(255, 215, 0), "–³“GŠÔ: %f", NDTIME_);	
-		DrawFormatString(1050, 80, GetColor(46, 139, 87), "’n–Ê”»’è:%d", onGround);
+		DrawFormatString(815, 0, GetColor(0, 0, 0), "ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼(ã‚«ãƒ¡ãƒ©)ã®ä½ç½®: (%d, %d)", x, y);
+		DrawFormatString(1000, 30, GetColor(0, 0, 0), "HP: %d", Hp_);
+		DrawFormatString(1000, 54, GetColor(0, 0, 0), "ç„¡æ•µæ™‚é–“: %f", NDTIME_);
+		DrawFormatString(1000, 76, GetColor(0, 0, 0), "åœ°é¢åˆ¤å®š:%d", onGround);
 	}
 
-	if (StatusFlag_ == true)
-	{
-		DrawFormatString(1100, 0, GetColor(255, 255, 255), "A = ¨");
-		DrawFormatString(1100, 30, GetColor(255, 255, 255), "D = ©");
-		DrawFormatString(1100, 60, GetColor(255, 255, 355), "SPACE = Jump");
-		DrawFormatString(1100, 90, GetColor(0, 255, 0), "N =“VŒó•Ï‰»");
-		DrawFormatString(1100, 120, GetColor(0, 0, 255), "M =–‚–@UŒ‚ -1 ");
-	}
-
-	//DrawFormatString(800, 0, GetColor(255, 255, 255), "•—‚ª‹N‚±‚¹‚éŠÔ:%d", GaleTime_);
+	//DrawFormatString(800, 0, GetColor(255, 255, 255), "é¢¨ãŒèµ·ã“ã›ã‚‹æ™‚é–“:%d", GaleTime_);
 }
 
 void Player::SetPosition(int x, int y)
@@ -698,33 +669,44 @@ void Player::WeatherEffects (Weather* weather)
 	float WeatherEffect = weather->GetWeatherChange();
 	//Buffs*pBuff = GetParent()->FindGameObject<Buffs>();
 
-	if (WeatherState == Sunny)
+	if (WeatherState == Sun)
 	{
 		WeatherSpeed_ = MOVE_SPEED;
 	}
-	else if (WeatherState == Rainy)
+	else if (WeatherState == Rain)
 	{
-		if (MagicPoint_ > 0)
+		WeatherSpeed_ = MOVE_SPEED;
+	}
+	else if (WeatherState == Gale)
+	{
+		if (MagicPoint_ > 0)//0ä»¥ä¸Šãªã‚‰ç§»å‹•é€Ÿåº¦ã‚’æ™®é€šã«æˆ»ã™
 		{
-			WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect);
+			WeatherSpeed_ = MOVE_SPEED * (0.2f + WeatherEffect);
 		}
 		else
 		{
 			WeatherSpeed_ = MOVE_SPEED;
 		}
 	}
-	else if (WeatherState == Gale)
+	else if (WeatherState == Snow)
 	{
-		WeatherSpeed_ = MOVE_SPEED;
+		if (MagicPoint_ > 0)
+		{
+			WeatherSpeed_ = MOVE_SPEED * (1.2f - WeatherEffect);
+		}
+		else
+		{
+			WeatherSpeed_ = MOVE_SPEED;
+		}
 	}
 	
 }
 
 void Player::Jump()
 {
-	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // ƒvƒŒƒCƒ„[‚ğƒWƒƒƒ“ƒv‚³‚¹‚é
+	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ã‚¸ãƒ£ãƒ³ãƒ—ã•ã›ã‚‹
 	onGround = false;
-	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // ‰¹º‚ğÄ¶
+	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // éŸ³å£°ã‚’å†ç”Ÿ
 }
 
 int Player::GetHp()
