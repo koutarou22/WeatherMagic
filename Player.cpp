@@ -226,21 +226,25 @@ void Player::Update()
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
 			// 次に切り替える天候を決定
-			if (WeatherState == Sunny)//現在晴れなら
+			if (WeatherState == Sun)//現在晴れなら
 			{
-				pWeather->SetWeather(Rainy);//次は雨に
+				pWeather->SetWeather(Rain);//次は雨に
 				StopSoundMem(WindHandle);
 			}
-			else if (WeatherState == Rainy)
+			else if (WeatherState == Rain)
 			{
 				pWeather->SetWeather(Gale);//次は強風に
 				StopSoundMem(RainHandle);
 				StopSoundMem(WindHandle);
 			}
-			else
+			else if (WeatherState == Gale)
 			{
-				pWeather->SetWeather(Sunny);//次は晴れに
+				pWeather->SetWeather(Snow);//次は雪に
 				StopSoundMem(WindHandle);
+			}
+			else if (WeatherState == Snow)
+			{
+				pWeather->SetWeather(Sun);
 			}
 			WeatherTime_= 60; 
 		}
@@ -253,7 +257,7 @@ void Player::Update()
 
 	if (pWeather != nullptr) 
 	{
-		if (pWeather->GetWeatherState() == Gale) 
+		if (pWeather->GetWeatherState() == Gale) //風の機能
 		{
 			if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ == 0) 
 			{
@@ -274,7 +278,7 @@ void Player::Update()
 		}
 		
 
-		if (pWeather->GetWeatherState() == Rainy) 
+		if (pWeather->GetWeatherState() == Rain) 
 		{
 			if (RainTime_ <= 0) 
 			{
@@ -331,20 +335,6 @@ void Player::Update()
 		NDTIME_ -= 0.016f;
 	}
 
-	//if (isDead_)
-	//{
-	//	// 死亡アニメーションの更新
-	//	if (deathAnimationFrame_ < deathAnimationDuration_)
-	//	{
-	//		deathAnimationFrame_++;
-	//	}
-	//	else
-	//	{
-	//		KillMe(); // 死亡アニメーションが完了したらキャラクターを削除
-	//	}
-	//	return;
-	//}
-
 	////-----------------スライムとの接触判定-----------------------------
 	for (Slime* pSlime : pSlimes)
 	{
@@ -354,7 +344,7 @@ void Player::Update()
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
 				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
-				if (WeatherState == Rainy && MagicPoint_ > 0)
+				if (WeatherState == Rain && MagicPoint_ > 0)
 				{
 					RainBound = 3.5f; // 雨の時のみジャンプ力を2.5倍
 				}
@@ -577,14 +567,6 @@ void Player::Update()
 		DebugLog_ = false;
 	}
 	
-	if (CheckHitKey(KEY_INPUT_K))
-	{
-		StatusFlag_ = true;
-	}
-	else
-	{
-		StatusFlag_ = false;
-	}
 }
 
 void Player::Draw()
@@ -613,7 +595,6 @@ void Player::Draw()
 	
 	++Flash_Count;
 	
-
 	if (Mp_GetFlag == true)
 	{
 		if (UIGetTimer > 0)
@@ -644,7 +625,6 @@ void Player::Draw()
 		}
 	}
 
-	
 	if (MagicPoint_ == 0)
 	{
 		DrawFormatString(0, 60, GetColor(255, 69, 0), "MP: %d /20", MagicPoint_);//0なら赤に
@@ -656,19 +636,10 @@ void Player::Draw()
 
     if(DebugLog_ == true)
 	{
-		DrawFormatString(920, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
-		DrawFormatString(1050, 40, GetColor(255, 69, 0), "現在HP: %d", Hp_);
-		DrawFormatString(1050, 60, GetColor(255, 215, 0), "無敵時間: %f", NDTIME_);	
-		DrawFormatString(1050, 80, GetColor(46, 139, 87), "地面判定:%d", onGround);
-	}
-
-	if (StatusFlag_ == true)
-	{
-		DrawFormatString(1100, 0, GetColor(255, 255, 255), "A = →");
-		DrawFormatString(1100, 30, GetColor(255, 255, 255), "D = ←");
-		DrawFormatString(1100, 60, GetColor(255, 255, 355), "SPACE = Jump");
-		DrawFormatString(1100, 90, GetColor(0, 255, 0), "N =天候変化");
-		DrawFormatString(1100, 120, GetColor(0, 0, 255), "M =魔法攻撃 -1 ");
+		DrawFormatString(815, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
+		DrawFormatString(1000, 30, GetColor(0, 0, 0), "HP: %d", Hp_);
+		DrawFormatString(1000, 54, GetColor(0, 0, 0), "無敵時間: %f", NDTIME_);
+		DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
 	}
 
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
@@ -686,24 +657,35 @@ void Player::WeatherEffects (Weather* weather)
 	float WeatherEffect = weather->GetWeatherChange();
 	//Buffs*pBuff = GetParent()->FindGameObject<Buffs>();
 
-	if (WeatherState == Sunny)
+	if (WeatherState == Sun)
 	{
 		WeatherSpeed_ = MOVE_SPEED;
 	}
-	else if (WeatherState == Rainy)
+	else if (WeatherState == Rain)
 	{
-		if (MagicPoint_ > 0)
+		WeatherSpeed_ = MOVE_SPEED;
+	}
+	else if (WeatherState == Gale)
+	{
+		if (MagicPoint_ > 0)//0以上なら移動速度を普通に戻す
 		{
-			WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect);
+			WeatherSpeed_ = MOVE_SPEED * (0.2f + WeatherEffect);
 		}
 		else
 		{
 			WeatherSpeed_ = MOVE_SPEED;
 		}
 	}
-	else if (WeatherState == Gale)
+	else if (WeatherState == Snow)
 	{
-		WeatherSpeed_ = MOVE_SPEED;
+		if (MagicPoint_ > 0)
+		{
+			WeatherSpeed_ = MOVE_SPEED * (1.2f - WeatherEffect);
+		}
+		else
+		{
+			WeatherSpeed_ = MOVE_SPEED;
+		}
 	}
 	
 }
