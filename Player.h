@@ -5,7 +5,7 @@
 #include "Weather.h"
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[ƒLƒƒƒ‰‚Ìî•ñ
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚­ãƒ£ãƒ©ã®æƒ…å ±
 /// </summary>
 class Player : public GameObject
 {
@@ -20,11 +20,11 @@ public:
 	void WeatherEffects(Weather* weather);
 
 	int GetMp() { return MagicPoint_; }
-	void SetMagicMP(int _Mp) { MagicPoint_ = _Mp; }//‚Ù‚©‚ÌƒNƒ‰ƒX‚Å‚à‹¤—L‚·‚é‚½‚ß—p
+	void SetMagicMP(int _Mp) { MagicPoint_ = _Mp; }//ã»ã‹ã®ã‚¯ãƒ©ã‚¹ã§ã‚‚å…±æœ‰ã™ã‚‹ãŸã‚ç”¨
 	/*void DamageHp();*/
 	void Jump();
 	int GetHp();
-	// MagicPoint_‚ğ‘‚â‚·
+	// MagicPoint_ã‚’å¢—ã‚„ã™
 	void MagicUp(int _PMp);
 	void MagicDown(int _MMp);
 	void HpUp(int _PHp);
@@ -33,7 +33,7 @@ public:
 	bool IsDead() const { return isDead_; }
 
 private:
-	int MagicPoint_;//‘Å‚Ä‚é–‚–@‚Ì‰ñ”
+	int MagicPoint_;//æ‰“ã¦ã‚‹é­”æ³•ã®å›æ•°
 	int hImage;
 	int hImage_cont;
 	int hImage_miss;
@@ -48,18 +48,18 @@ private:
 	float Jump_P = 0.0f;
 	int Flash_Count;
 
-	int animType;//ó‹µ
-	int animeFrame;//‹î
+	int animType;//çŠ¶æ³
+	int animeFrame;//é§’
 	int PictFlame;
 	int flameCounter;
 
-	float NDTIME_; //–³“GŠÔ
+	float NDTIME_; //ç„¡æ•µæ™‚é–“
 	int	 CoolDownMagic_ = 0;
 	int Hp_;
 	int hitCount;
 
-	float WeatherSpeed_;//MOVE_SPEED‚ÆWeather‚Ì’l‚ğ‡‚í‚¹Ši”[‚·‚é—p‚Ì•Ï”
-	bool  WeatherSwitch;//‚‘¬‚Å“VŒó‚ªØ‚è‘Ö‚í‚ç‚È‚¢‚æ‚¤‚É‚·‚é‘Îô
+	float WeatherSpeed_;//MOVE_SPEEDã¨Weatherã®å€¤ã‚’åˆã‚ã›æ ¼ç´ã™ã‚‹ç”¨ã®å¤‰æ•°
+	bool  WeatherSwitch;//é«˜é€Ÿã§å¤©å€™ãŒåˆ‡ã‚Šæ›¿ã‚ã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹å¯¾ç­–
 	
 	int UIGetTimer;
 	bool Hp_GetFlag;
@@ -67,6 +67,8 @@ private:
 	bool IsHitOneCount_;
 	bool DebugLog_;
 
+	int MpHealTimer_;//ä¸€å®šå‘¨æœŸã§MPã‚’å›å¾©ã™ã‚‹ã‚¿ã‚¤ãƒãƒ¼è¿½åŠ 
+  
 	//int MAGIC_COUNT = 0;
 	enum State
 	{
