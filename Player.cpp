@@ -22,7 +22,7 @@ namespace
 	const float GROUND = 600.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
     float GRAVITY = 9.8f / 60.0f;
-	const int MAX_MAGIC_POINT = 20;
+	const int MAX_MAGIC_POINT = 100;
 	const int MAX_DAMAGE_HP = 5;
 	
  
@@ -40,11 +40,12 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 
 	Hp_ = 5;
 
-	MagicPoint_ = 10;
+	MagicPoint_ = 100;//MPの最大値100変更
 
 	Hp_GetFlag = false;
 	Hp_GetFlag = false;
 	StringUi_Up = transform_.position_.y;
+	MpHealTimer_ = 30;
 
 	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);
@@ -81,8 +82,8 @@ void Player::Update()
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 
 	SetFontSize(24);
-	
-	if (hp == nullptr) 
+
+	if (hp == nullptr)
 	{
 		return;
 	}
@@ -126,7 +127,7 @@ void Player::Update()
 		{
 			int push = pField->CollisionRight(hitX, hitY);
 			transform_.position_.x -= push;
-			
+
 		}
 		//----------------------------------------------------------
 	}
@@ -147,7 +148,7 @@ void Player::Update()
 		{
 			int push = pField->CollisionLeft(hitX, hitY);
 			transform_.position_.x += push;
-			
+
 		}
 		//-----------------------------------------------------------
 	}
@@ -168,7 +169,7 @@ void Player::Update()
 			if (onGround)
 			{
 				Jump();
-				
+
 			}
 		}
 		prevSpaceKey = true;
@@ -193,12 +194,12 @@ void Player::Update()
 		if (push > 0) {
 			Jump_P = 0.0f;
 			transform_.position_.y += push;
-			
+
 		}
 	}
 	//-----------------------------------------------------------
 
-	
+
 	//---------------衝突判定(下)--------------------------------
 	if (pField != nullptr)
 	{
@@ -211,7 +212,7 @@ void Player::Update()
 			Jump_P = 0.0f;
 			onGround = true;
 		}
-		else 
+		else
 		{
 			onGround = false;
 		}
@@ -241,7 +242,7 @@ void Player::Update()
 				pWeather->SetWeather(Sunny);//次は晴れに
 				StopSoundMem(WindHandle);
 			}
-			WeatherTime_= 60; 
+			WeatherTime_ = 60;
 		}
 		WeatherSwitch = true;
 	}
@@ -250,11 +251,11 @@ void Player::Update()
 		WeatherSwitch = false;
 	}
 
-	if (pWeather != nullptr) 
+	if (pWeather != nullptr)
 	{
-		if (pWeather->GetWeatherState() == Gale) 
+		if (pWeather->GetWeatherState() == Gale)
 		{
-			if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ == 0) 
+			if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ == 0)
 			{
 				if (RainTime_ <= 0)
 				{
@@ -271,11 +272,11 @@ void Player::Update()
 		{
 			GaleTime_--;
 		}
-		
 
-		if (pWeather->GetWeatherState() == Rainy) 
+
+		if (pWeather->GetWeatherState() == Rainy)
 		{
-			if (RainTime_ <= 0) 
+			if (RainTime_ <= 0)
 			{
 				if (MagicPoint_ > 0)
 				{
@@ -301,6 +302,7 @@ void Player::Update()
 	//}
 	//------------------------------------------------------------------------------------------
 
+	//攻撃魔法の処理
 	if (CheckHitKey(KEY_INPUT_M))
 	{
 		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
@@ -322,7 +324,7 @@ void Player::Update()
 		CoolDownMagic_--;
 	}
 
-	
+
 
 	// 無敵時間の更新
 	if (NDTIME_ > 0.0f)
@@ -349,7 +351,7 @@ void Player::Update()
 	{
 		if (pSlime->ColliderRect(transform_.position_.x + pSlime->GetScale().x, transform_.position_.y + pSlime->GetScale().y, 64.0f, 64.0f))
 		{
-			if (transform_.position_.y + 64.0f <= pSlime->GetPosition().y + (64.0f * pSlime->GetScale().y) / 2+20) // プレイヤーがスライムの上部にある
+			if (transform_.position_.y + 64.0f <= pSlime->GetPosition().y + (64.0f * pSlime->GetScale().y) / 2 + 20) // プレイヤーがスライムの上部にある
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
 				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
@@ -383,189 +385,189 @@ void Player::Update()
 	}
 
 
-		//Damage* pDamage = GetParent()->FindGameObject<Damage>();
-		//カメラの処理
-		Camera* cam = GetParent()->FindGameObject<Camera>();
-		int xR = (int)transform_.position_.x - cam->GetValue();
-		int xL = (int)transform_.position_.x + cam->GetValue();
-		if (xR > 600)
+	//Damage* pDamage = GetParent()->FindGameObject<Damage>();
+	//カメラの処理
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	int xR = (int)transform_.position_.x - cam->GetValue();
+	int xL = (int)transform_.position_.x + cam->GetValue();
+	if (xR > 600)
+	{
+		xR = 600;
+		cam->SetValue((int)transform_.position_.x - xR);
+	}
+
+	if (xL > 600)
+	{
+		xL = 600;
+		cam->SetValue((int)transform_.position_.x - xL);
+	}
+
+	//----------------------------------------------------------------------------------
+
+	//2点間の距離の便利さを身に染みて実感しました
+	std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
+	for (EnemyMagic* pEnemyMagic : pEMagics)
+	{
+		//解説　見ればわかると思うがこれは『EnemyMagic』と『Slime』の距離を求めている
+		float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
+		float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
+		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
+
+		if (distance <= 20.0f)
 		{
-			xR = 600;
-			cam->SetValue((int)transform_.position_.x - xR);
-		}
-
-		if (xL > 600)
-		{
-			xL = 600;
-			cam->SetValue((int)transform_.position_.x - xL);
-		}
-
-		//----------------------------------------------------------------------------------
-
-		//2点間の距離の便利さを身に染みて実感しました
-		std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
-		for (EnemyMagic* pEnemyMagic : pEMagics)
-		{
-			//解説　見ればわかると思うがこれは『EnemyMagic』と『Slime』の距離を求めている
-			float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
-			float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
-			float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
-
-			if (distance <= 20.0f)
+			if (NDTIME_ <= 0.0f)
 			{
-				if (NDTIME_ <= 0.0f)
+
+				hp->DamageHp();
+				HpDown(1);
+
+				if (Hp_ <= 0)
 				{
-					
-					hp->DamageHp();
-					HpDown(1);
-
-					if (Hp_ <= 0)
-					{
-						KillMe();
-						break;
-					}
-
-					NDTIME_ = 2.0f;//個々の数値で無敵時間がきまる
+					KillMe();
+					break;
 				}
-				break;
+
+				NDTIME_ = 2.0f;//個々の数値で無敵時間がきまる
+			}
+			break;
+		}
+	}
+
+	std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
+	for (Ghost* pGhost : pGhosts)
+	{
+		float dx = pGhost->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
+		float dy = pGhost->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
+
+		float distance = sqrt(dx * dx + dy * dy);
+
+		if (distance <= 40.0f)
+		{
+			if (NDTIME_ <= 0.0f)
+			{
+				hp->DamageHp();
+				HpDown(1);
+				if (Hp_ <= 0)
+				{
+					KillMe();
+					break;
+				}
+
+				NDTIME_ = 3.0f;
+			}
+			break;
+		}
+	}
+
+	std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
+	for (HealItem* pHeal : pHeals)
+	{
+		float dx = pHeal->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
+		float dy = pHeal->GetPosition().y - (transform_.position_.y/* + 32.0f*/);
+
+		float distance = sqrt(dx * dx + dy * dy);
+
+		if (distance <= 20.0f)
+		{
+			Hp_GetFlag = true;
+			if (Hp_ < 5)
+			{
+				hp->HeelHp();
+				Hp_++;
+			}
+			pHeal->KillMe();
+			Hp_GetFlag = true;
+			UIGetTimer = 60;
+			StringUi_Up = transform_.position_.y;
+			break;
+		}
+
+	}
+
+
+	std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
+	for (MpItem* pMp : pMps)
+	{
+		float dx = pMp->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
+		float dy = pMp->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
+
+		float distance = sqrt(dx * dx + dy * dy);
+
+		if (distance <= 30.0f)
+		{
+			if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
+			{
+				MagicUp(5);
+				IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
+			}
+			pMp->KillMe();
+			Mp_GetFlag = true;
+			UIGetTimer = 60;
+			StringUi_Up = transform_.position_.y;
+		}
+		else
+		{
+			IsHitOneCount_ = false; // アイテムが範囲外になったらIsHitOneCount_をfalseにリセット
+		}
+	}
+
+	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+	for (Rock* pRock : pRocks)
+	{
+		float dx = pRock->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
+		float dy = pRock->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
+
+		float distance = sqrt(dx * dx + dy * dy);
+
+		if (distance <= 60.0f)
+		{
+			//<= 32.0fの意味は横との接触の幅を制限している
+			if (dy < 0 && abs(dx) <= 32.0f) //岩の上に乗る
+			{
+				transform_.position_.y = pRock->GetPosition().y - 64; // プレイヤーを上に移動
+				WeatherSpeed_ = 0;
+				onGround = true;
+			}
+			else if (dy > 0 && abs(dx) <= 32.0f) //岩の下にぶつかる
+			{
+				int push = 3;
+				transform_.position_.y = pRock->GetPosition().y + push; // プレイヤーを下に移動
+				WeatherSpeed_ = MOVE_SPEED;
+			}
+			else if (dx < 0) // 岩の右側の衝突判定
+			{
+				int push = 1;
+				transform_.position_.x += push; // プレイヤーを右に移動
+			}
+			else if (dx > 0) // 岩の左側の衝突判定
+			{
+				int push = 1;
+				transform_.position_.x -= push; // プレイヤーを左に移動
 			}
 		}
+	}
 
-		std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
-		for (Ghost* pGhost : pGhosts)
-		{
-			float dx = pGhost->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
-			float dy = pGhost->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
-
-			float distance = sqrt(dx * dx + dy * dy);
-
-			if (distance <= 40.0f)
-			{
-				if (NDTIME_ <= 0.0f)
-				{
-					hp->DamageHp();
-					HpDown(1);
-					if (Hp_ <= 0)
-					{
-						KillMe();
-						break;
-					}
-
-					NDTIME_ = 3.0f;
-				}
-				break;
-			}
-		}
-
-		std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
-		for (HealItem* pHeal : pHeals)
-		{
-			float dx = pHeal->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
-			float dy = pHeal->GetPosition().y - (transform_.position_.y/* + 32.0f*/);
-
-			float distance = sqrt(dx * dx + dy * dy);
-
-			if (distance <= 20.0f)
-			{
-				Hp_GetFlag = true;
-				if (Hp_ < 5) 
-				{
-					hp->HeelHp();
-					Hp_++;
-				}
-				pHeal->KillMe();
-				Hp_GetFlag = true;
-				UIGetTimer = 60;
-				StringUi_Up = transform_.position_.y;
-				break;
-			}
-			
-		}
+	//死亡したらゲームオーバー画面へ
+	if (transform_.position_.y > GROUND || Hp_ == 0)
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
+		StopSoundMem(WindHandle);
+	}
 
 
-		std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
-		for (MpItem* pMp : pMps)
-		{
-			float dx = pMp->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
-			float dy = pMp->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
+	if (pField != nullptr)
+	{
+		int playerX = (int)transform_.position_.x;
+		int playerY = (int)transform_.position_.y;
 
-			float distance = sqrt(dx * dx + dy * dy);
-
-			if (distance <= 30.0f)
-			{
-				if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
-				{
-					MagicUp(5);
-					IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
-				}
-				pMp->KillMe();
-				Mp_GetFlag = true;
-				UIGetTimer = 60;
-				StringUi_Up = transform_.position_.y;
-			}
-			else
-			{
-				IsHitOneCount_ = false; // アイテムが範囲外になったらIsHitOneCount_をfalseにリセット
-			}
-		}
-
-		std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
-		for (Rock* pRock : pRocks)
-		{
-			float dx = pRock->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
-			float dy = pRock->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
-
-			float distance = sqrt(dx * dx + dy * dy);
-
-			if (distance <= 60.0f)
-			{
-				//<= 32.0fの意味は横との接触の幅を制限している
-				if (dy < 0 && abs(dx) <= 32.0f) //岩の上に乗る
-				{
-					transform_.position_.y = pRock->GetPosition().y - 64; // プレイヤーを上に移動
-					WeatherSpeed_ = 0;
-					onGround = true;
-				}
-				else if (dy > 0 && abs(dx) <= 32.0f) //岩の下にぶつかる
-				{
-					int push = 3;
-					transform_.position_.y = pRock->GetPosition().y + push; // プレイヤーを下に移動
-					WeatherSpeed_ = MOVE_SPEED;
-				}
-				else if (dx < 0) // 岩の右側の衝突判定
-				{
-					int push = 1;
-					transform_.position_.x += push; // プレイヤーを右に移動
-				}
-				else if (dx > 0) // 岩の左側の衝突判定
-				{
-					int push = 1;
-					transform_.position_.x -= push; // プレイヤーを左に移動
-				}
-			}
-		}
-
-		//死亡したらゲームオーバー画面へ
-		if (transform_.position_.y > GROUND || Hp_ == 0 )
+		if (pField->IsHitClear(playerX, playerY))
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-			pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
+			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 			StopSoundMem(WindHandle);
 		}
-		
-
-		if (pField != nullptr)
-		{
-			int playerX = (int)transform_.position_.x;
-			int playerY = (int)transform_.position_.y;
-
-			if (pField->IsHitClear(playerX, playerY))
-			{
-				SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-				StopSoundMem(WindHandle);
-			}
-		}
+	}
 
 	if (CheckHitKey(KEY_INPUT_Q))
 	{
@@ -575,7 +577,8 @@ void Player::Update()
 	{
 		DebugLog_ = false;
 	}
-	
+
+
 	if (CheckHitKey(KEY_INPUT_K))
 	{
 		StatusFlag_ = true;
@@ -583,6 +586,16 @@ void Player::Update()
 	else
 	{
 		StatusFlag_ = false;
+	}
+
+	//mp20以下でmp自動回復
+	if (MagicPoint_ < 20)
+	{
+		if (--MpHealTimer_ < 0)
+		{
+			MagicPoint_++;
+			MpHealTimer_ = 30;
+		}
 	}
 }
 
@@ -650,7 +663,7 @@ void Player::Draw()
 	}
 	else
 	{
-		DrawFormatString(0, 60, GetColor(30, 144, 255), "MP: %d /20", MagicPoint_);//それ以外なら青に
+		DrawFormatString(0, 60, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//それ以外なら青に
 	}
 
     if(DebugLog_ == true)

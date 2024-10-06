@@ -68,6 +68,8 @@ private:
 	bool IsHitOneCount_;
 	bool DebugLog_;
 	bool StatusFlag_;
+	int MpHealTimer_;//一定周期でMPを回復するタイマー追加
+
 
 	//int MAGIC_COUNT = 0;
 	enum State
