@@ -4,6 +4,8 @@
 class GameOverScene : public GameObject
 {
 	int hImage_;
+	int padAnalogInput;//xboxの入力を受け取る
+	XINPUT_STATE input;//xboxの入力を受け取る
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

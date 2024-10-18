@@ -15,8 +15,9 @@ void GameOverScene::Initialize()
 
 void GameOverScene::Update()
 {
-    // スペースキーが押されたらTitleSceneに遷移
-    if (CheckHitKey(KEY_INPUT_SPACE)) {
+    padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+    // スペースキーが押されたらスタートボタンでTitleSceneに遷移
+    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4]) {
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_TITLE);
     }

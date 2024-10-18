@@ -40,6 +40,10 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	animeFrame = 0;
 
 	Hp_ = 5;
+	
+	ChangeWeatherCoolTime = 60;
+	CanChangeWeather = true;
+	
 
 	MagicPoint_ = 100;//MPの最大値100変更
 
@@ -82,6 +86,9 @@ void Player::Update()
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 
+	//xboxコントローラーの入力情報を取得
+	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+
 	SetFontSize(24);
 
 	if (hp == nullptr)
@@ -110,12 +117,13 @@ void Player::Update()
 		if (flameCounter);
 	}*/
 
-	if (CheckHitKey(KEY_INPUT_D) /*|| CheckHitKey(KEY_INPUT_RIGHT)*/)
+	//input.ThumbLXで左スティック入力をとる 倒した横軸値が-10000以下か10000以上で動く
+	if (CheckHitKey(KEY_INPUT_D) || input.ThumbLX >= 10000) 
 	{
 		transform_.position_.x += WeatherSpeed_;
 		if (++flameCounter >= 24)
 		{
-			animeFrame = (animeFrame + 1) % 2;//if文を使わない最適解
+			animeFrame = (animeFrame + 1) % 2;
 			flameCounter = 0;
 		}
 
@@ -132,13 +140,13 @@ void Player::Update()
 		}
 		//----------------------------------------------------------
 	}
-	else if (CheckHitKey(KEY_INPUT_A) /*|| CheckHitKey(KEY_INPUT_LEFT)*/)
+	else if (CheckHitKey(KEY_INPUT_A) || input.ThumbLX <= -10000)
 	{
 
 		transform_.position_.x -= WeatherSpeed_;
 		if (++flameCounter >= 24)
 		{
-			animeFrame = (animeFrame + 1) % 2;//if文を使わない最適解
+			animeFrame = (animeFrame + 1) % 2;
 			flameCounter = 0;
 		}
 
@@ -158,9 +166,10 @@ void Player::Update()
 		animeFrame = 0;
 		flameCounter = 0;
 	}
+	//padInput = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-
-	if (CheckHitKey(KEY_INPUT_SPACE))
+	//ジャンプ
+	if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[12])//Aボタン
 	{
 		PictFlame = 80;
 
@@ -256,6 +265,79 @@ void Player::Update()
 		WeatherSwitch = false;
 	}
 
+	//天気を変える（十字キー）
+	if (input.Buttons[0])//↑晴れにする
+	{
+		if (CanChangeWeather && pWeather != nullptr)
+		{
+			// 現在の天候状態を取得
+			WeatherState WeatherState = pWeather->GetWeatherState();
+
+			if (WeatherState != Sun)//晴れ以外なら
+			{
+				ChangeWeatherCoolTime = 60;
+				CanChangeWeather = false;
+				pWeather->SetWeather(Sun);
+				StopWeatherSE();
+			}
+		}
+	}
+	else if (input.Buttons[2])//←雨にする
+	{
+		if (CanChangeWeather && pWeather != nullptr)
+		{
+			// 現在の天候状態を取得
+			WeatherState WeatherState = pWeather->GetWeatherState();
+
+			if (WeatherState != Rain)//雨以外なら
+			{
+				ChangeWeatherCoolTime = 60;
+				CanChangeWeather = false;
+				pWeather->SetWeather(Rain);
+				StopWeatherSE();
+			}
+		}
+	}
+	else if (input.Buttons[3])//→風にする
+	{
+		if (CanChangeWeather && pWeather != nullptr)
+		{
+			// 現在の天候状態を取得
+			WeatherState WeatherState = pWeather->GetWeatherState();
+
+			if (WeatherState != Gale)//風以外なら
+			{
+				ChangeWeatherCoolTime = 60;
+				CanChangeWeather = false;
+				pWeather->SetWeather(Gale);
+				StopWeatherSE();
+			}
+		}
+	}
+	else if (input.Buttons[1])//↓雪にする
+	{
+		if (CanChangeWeather && pWeather != nullptr)
+		{
+			// 現在の天候状態を取得
+			WeatherState WeatherState = pWeather->GetWeatherState();
+
+			if (WeatherState != Snow)//雪以外なら
+			{
+				ChangeWeatherCoolTime = 60;
+				CanChangeWeather = false;
+				pWeather->SetWeather(Snow);
+				StopWeatherSE();
+			}
+		}
+	}
+	//タイマーが切れてCanChangeWeather = trueになるまで再度天気の変更不可
+	if (--ChangeWeatherCoolTime < 0) 
+	{
+		CanChangeWeather = true;
+	}
+	
+
+
 	if (pWeather != nullptr)
 	{
 
@@ -308,7 +390,7 @@ void Player::Update()
 	//------------------------------------------------------------------------------------------
 
 	//攻撃魔法の処理
-	if (CheckHitKey(KEY_INPUT_M))
+	if (CheckHitKey(KEY_INPUT_M) || input.Buttons[13])//bボタン
 	{
 		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
 		{
@@ -375,7 +457,6 @@ void Player::Update()
 		}
 	}
 
-
 	//Damage* pDamage = GetParent()->FindGameObject<Damage>();
 	//カメラの処理
 	Camera* cam = GetParent()->FindGameObject<Camera>();
@@ -395,11 +476,11 @@ void Player::Update()
 
 	//----------------------------------------------------------------------------------
 
-	//2点間の距離の便利さを身に染みて実感しました
+	
 	std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
 	for (EnemyMagic* pEnemyMagic : pEMagics)
 	{
-		//解説　見ればわかると思うがこれは『EnemyMagic』と『Slime』の距離を求めている
+		//『EnemyMagic』と『Slime』の距離を求めている
 		float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
 		float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
@@ -654,6 +735,7 @@ void Player::Draw()
 		DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
 	}
 
+	DrawFormatString(800, 0, GetColor(255, 0, 0), "thumbLX:%d", input.ThumbLX);
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
 }
 
@@ -747,5 +829,17 @@ void Player::HpUp(int _PHp)
 void Player::HpDown(int _MHp)
 {
 	Hp_ -= _MHp;
+}
+
+void Player::StopWeatherSE()
+{
+	if (CheckSoundMem(RainHandle) == 1)
+	{
+		StopSoundMem(RainHandle);
+	}
+	if (CheckSoundMem(WindHandle) == 1)
+	{
+		StopSoundMem(WindHandle);
+	}
 }
 
