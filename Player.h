@@ -32,11 +32,19 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
+	void StopWeatherSE();
+
 private:
 	int MagicPoint_;//打てる魔法の回数
 	int hImage;
 	int hImage_cont;
 	int hImage_miss;
+
+	
+	int padAnalogInput;//xboxの入力を受け取る
+	XINPUT_STATE input;//xboxの入力を受け取る
+	bool CanChangeWeather;//天気を変更できるか
+	int ChangeWeatherCoolTime;//天気を再変更するためのタイマー　0になったらできる
 	
 	GameObject* sceneTop;
 	bool isDead_ = false;
