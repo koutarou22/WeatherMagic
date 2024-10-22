@@ -4,6 +4,7 @@
 /// <summary>
 /// 天候を操作するクラス
 /// </summary>
+
 enum WeatherState
 {
 	Sunny,//晴れの日
@@ -18,18 +19,20 @@ public:
 
 	void Initialize() override;
 	void Update() override;
-	void Draw() override;
+    void Draw() override;
 
 	void SetPosition(int x, int y);
 	void SetWeather(WeatherState _state) { weather_ = _state ; }
 	void SetNextWeather(WeatherState _state) { NextWeather_ = _state; }
-    float GetWeather(){ return WeatherChange_; }
+    float GetWeather() { return WeatherChange_; }
 
 	WeatherState GetNextWeather() const { return NextWeather_; } 
 	WeatherState GetWeatherState() const { return weather_; }
 
 	float GetWeatherChange();
 	WeatherState weather_;
+
+    
 private:
 	
 	//ここかっこ悪いなぁ
@@ -44,15 +47,18 @@ private:
 
 	int hImage_RainyNoMp;//Mpが使えない時の差し替え用(雨)
 	int hImage_WindNoMp;//Mpが使えない時の差し替え用(風)
+    int hImage_SnowNoMp;//Mpが使えない時の差し替え用(雪)
 
 	int hImage_StateSun;
 	int hImage_StateWind;
 	int hImage_StateRain;
+    int hImage_StateSnow;
 
 	int BgImage_;
 
 	bool RainOnChecker;
 	bool WindOnChecker;
+    bool  SnowOnChecker; 
 
 	int hImage_Book;
     float WeatherChange_; // 天候に応じた移動速度用数値

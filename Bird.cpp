@@ -1,6 +1,7 @@
 #include "Bird.h"
 #include <assert.h>
 #include "Camera.h"
+#include "Weather.h"
 
 namespace
 {
@@ -37,10 +38,24 @@ void Bird::Update()
 		KillMe();
 		return;
 	}
-	transform_.position_.x -= 1.0f;
-	sinAngle += 3.0f;
-	float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
-	transform_.position_.y = 500.0f + sinValue * 50.0f;
+	
+
+	//天候取得、雪ならスピードを0に
+	Weather* pWeather = GetParent()->FindGameObject<Weather>();
+	if(pWeather->GetWeatherState()==WeatherState::Snow)
+	{
+		//敵のスピードを0にする
+		//処理なしでよいか...?
+	}
+	else
+	{
+		transform_.position_.x -= 1.0f;
+		sinAngle += 3.0f;
+		float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
+		transform_.position_.y = 500.0f + sinValue * 50.0f;
+	}
+
+	
 }
 
 void Bird::Draw()

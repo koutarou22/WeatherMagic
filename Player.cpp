@@ -24,7 +24,8 @@ namespace
     float GRAVITY = 9.8f / 60.0f;
 	const int MAX_MAGIC_POINT = 20;
 	const int MAX_DAMAGE_HP = 5;
-	
+	const float MAX_SNOW_FLAME = 120.0f * 5.0f;
+	const float CHIP_SIZE = 64.0f; //險育ｮ励〒菴ｿ縺・・縺ｧfloat
  
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED), Hp_(3), NDTIME_(2.0f), Flash_Count(0), IsHitOneCount_(false),DebugLog_(false)
@@ -45,6 +46,8 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	Hp_GetFlag = false;
 	Hp_GetFlag = false;
 	StringUi_Up = transform_.position_.y;
+
+	CountSnowFlame = MAX_SNOW_FLAME;
 
 	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);
@@ -584,6 +587,32 @@ void Player::Update()
 	{
 		StatusFlag_ = false;
 	}
+<<<<<<< Updated upstream
+=======
+
+	//髮ｪ縺ｮ譎・譎る俣邨碁℃(縺ｨ繧翫≠縺医★繝輔Ξ繝ｼ繝邨碁℃)縺ｧMP縺梧ｸ帙ｋ
+	if (pWeather->GetWeatherState() == WeatherState::Snow)
+	{
+		//繝輔Ξ繝ｼ繝蝓ｺ貅悶□縺九ｉ縺ｪ縺・..
+		CountSnowFlame--;
+	}
+
+	//谿九ｊ縺ｮ髮ｪ譎る俣縺・繧貞・縺｣縺溘ｉ
+	if (CountSnowFlame <= 0)
+	{
+		if (MagicPoint_ >= 10)//MP縺・0莉･荳翫・譎ゅ・10貂帙ｉ縺・
+		{
+			MagicPoint_ -= 10;
+			
+		}
+		else
+		{
+			MagicPoint_ = 0;//10繧医ｊ縺吶￥縺ｪ縺・→縺阪・0縺ｫ縺励■繧・≧
+		}
+		CountSnowFlame = MAX_SNOW_FLAME; //縺ｾ縺溘・繝・け繧ｹ縺ｫ謌ｻ縺・
+	}
+	
+>>>>>>> Stashed changes
 }
 
 void Player::Draw()
@@ -661,6 +690,7 @@ void Player::Draw()
 		DrawFormatString(1050, 80, GetColor(46, 139, 87), "地面判定:%d", onGround);
 	}
 
+<<<<<<< Updated upstream
 	if (StatusFlag_ == true)
 	{
 		DrawFormatString(1100, 0, GetColor(255, 255, 255), "A = →");
@@ -671,6 +701,10 @@ void Player::Draw()
 	}
 
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
+=======
+	//DrawFormatString(800, 0, GetColor(255, 255, 255), "鬚ｨ縺瑚ｵｷ縺薙○繧区凾髢・%d", GaleTime_);
+	WhereIs();
+>>>>>>> Stashed changes
 }
 
 void Player::SetPosition(int x, int y)
@@ -752,5 +786,33 @@ void Player::HpUp(int _PHp)
 void Player::HpDown(int _MHp)
 {
 	Hp_ -= _MHp;
+}
+
+void Player::WhereIs()
+{
+	/*
+	64*csv縺ｮ讓ｪ蟷・max
+	縺・∪縺・ｋ縺ｨ縺・now
+	繧医％縺帙ｓ縺ｰ繝ｼ縺ｲ縺・※縲∫ｷ壹・髟ｷ縺・now/max縺ｫ邵ｦ邱壼ｼ輔￥ 縺九ｓ縺假ｼ・
+	*/
+
+	//讓ｪ邱夐未騾｣
+	static int SenStart = 1000; //讓ｪ邱壹・蟋狗せx
+	static int SenLength = 200; //讓ｪ邱壹・髟ｷ縺富
+	static int SenY = 50; //讓ｪ邱壹・y
+	static int SenHeight = 5; //讓ｪ邱壹・蟷・
+	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true);
+
+	//邵ｦ邱夐未騾｣
+	Field* pField = GetParent()->FindGameObject<Field>();
+	static float max = CHIP_SIZE * pField->GetCsvWidth();
+	float now = transform_.position_.x;
+	float nowLine = SenStart + SenLength * (now / max); //邵ｦ邱壼ｼ輔￥縺ｨ縺薙ｍ縺ｮ
+	DrawLine(nowLine, SenY - 10, nowLine, SenY + 10, GetColor(128, 128, 128));
+
+
+	//騾ｲ陦悟ｺｦ菴懈・縺ｮ繝・ヰ繝・げ逕ｨ
+	DrawFormatString(0, 0, GetColor(255, 0, 0), "%f", transform_.position_.x);
+	DrawFormatString(0, 10, GetColor(255, 0, 0), "%f", nowLine);
 }
 

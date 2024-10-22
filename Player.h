@@ -7,6 +7,7 @@
 /// <summary>
 /// プレイヤーキャラの情報
 /// </summary>
+
 class Player : public GameObject
 {
 public:
@@ -32,6 +33,8 @@ public:
 	void HpDown(int _MHp);
 
 	bool IsDead() const { return isDead_; }
+
+	void WhereIs(); //達成度 いまどこ？
 
 private:
 	int MagicPoint_;//打てる魔法の回数
@@ -91,5 +94,6 @@ private:
 	int GetItemSound;
 	int MagicSound;
 
+	float CountSnowFlame; //雪のタイマー 減算
 	
 };
