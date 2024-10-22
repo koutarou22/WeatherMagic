@@ -6,6 +6,7 @@
 #include "Damage.h"
 #include "Rock.h"
 #include <iostream>
+#include "Weather.h"
 
 namespace
 {
@@ -116,8 +117,10 @@ if (pField != nullptr)
 		{
 			if (onGround)
 			{
-				Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
-				
+				if (pWeather->GetWeatherState() != WeatherState::Snow)
+				{
+					Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
+				}
 				onGround = false;
 				
 			}
@@ -147,7 +150,12 @@ if (pField != nullptr)
 		{
 			if (!onGround)
 			{
-				transform_.position_.x += WeatherSpeed_ * direction;
+
+				//天候取得、雪ならスピードを0に
+				if (pWeather->GetWeatherState() != WeatherState::Snow)
+				{
+					transform_.position_.x += WeatherSpeed_ * direction;
+				}
 			}
 		}
 	}
@@ -261,6 +269,8 @@ if (pField != nullptr)
 			
 		}
 	}
+
+	
 
 }
 

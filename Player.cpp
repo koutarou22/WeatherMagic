@@ -25,7 +25,8 @@ namespace
     float GRAVITY = 9.8f / 60.0f;
 	const int MAX_MAGIC_POINT = 100;
 	const int MAX_DAMAGE_HP = 5;
-	
+	const float MAX_SNOW_FLAME = 120.0f * 5.0f;
+	const float CHIP_SIZE = 64.0f; //計算で使ぁE�Eでfloat
  
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED), Hp_(3), NDTIME_(2.0f), Flash_Count(0), IsHitOneCount_(false),DebugLog_(false)
@@ -51,6 +52,8 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	Hp_GetFlag = false;
 	StringUi_Up = transform_.position_.y;
 	MpHealTimer_ = 30;
+
+	CountSnowFlame = MAX_SNOW_FLAME;
 
 	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);
@@ -660,6 +663,27 @@ void Player::Update()
 		}
 	}
   
+	//雪の晁E時間経過(とりあえずフレーム経過)でMPが減る
+	if (pWeather->GetWeatherState() == WeatherState::Snow)
+	{
+		//フレーム基準だからなぁE..
+		CountSnowFlame--;
+	}
+
+	//残りの雪時間ぁEを�Eったら
+	if (CountSnowFlame <= 0)
+	{
+		if (MagicPoint_ >= 10)//MPぁE0以上�E時�E10減らぁE
+		{
+			MagicPoint_ -= 10;
+			
+		}
+		else
+		{
+			MagicPoint_ = 0;//10よりすくなぁE��き�E0にしちめE��
+		}
+		CountSnowFlame = MAX_SNOW_FLAME; //また�EチE��スに戻ぁE
+	}
 }
 
 void Player::Draw()
@@ -735,6 +759,8 @@ void Player::Draw()
 		DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
 	}
 
+	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時閁E%d", GaleTime_);
+	WhereIs();
 	DrawFormatString(800, 0, GetColor(255, 0, 0), "thumbLX:%d", input.ThumbLX);
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
 }
@@ -831,6 +857,34 @@ void Player::HpDown(int _MHp)
 	Hp_ -= _MHp;
 }
 
+
+void Player::WhereIs()
+{
+	/*
+	64*csvの横幁Emax
+	ぁE��ぁE��とぁEnow
+	よこせんばーひぁE��、線�E長ぁEnow/maxに縦線引く かんじ！E
+	*/
+
+	//横線関連
+	static int SenStart = 1000; //横線�E始点x
+	static int SenLength = 200; //横線�E長さx
+	static int SenY = 50; //横線�Ey
+	static int SenHeight = 5; //横線�E幁E
+	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true);
+
+	//縦線関連
+	Field* pField = GetParent()->FindGameObject<Field>();
+	static float max = CHIP_SIZE * pField->GetCsvWidth();
+	float now = transform_.position_.x;
+	float nowLine = SenStart + SenLength * (now / max); //縦線引くところの
+	DrawLine(nowLine, SenY - 10, nowLine, SenY + 10, GetColor(128, 128, 128));
+
+
+	//進行度作�EのチE��チE��用
+	DrawFormatString(0, 0, GetColor(255, 0, 0), "%f", transform_.position_.x);
+	DrawFormatString(0, 10, GetColor(255, 0, 0), "%f", nowLine);
+  
 void Player::StopWeatherSE()
 {
 	if (CheckSoundMem(RainHandle) == 1)

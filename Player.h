@@ -7,6 +7,7 @@
 /// <summary>
 /// プレイヤーキャラの情報
 /// </summary>
+
 class Player : public GameObject
 {
 public:
@@ -32,6 +33,7 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
+	void WhereIs(); //�B���x ���܂ǂ��H
 	void StopWeatherSE();
 
 private:
@@ -99,5 +101,6 @@ private:
 	int GetItemSound;
 	int MagicSound;
 
+	float CountSnowFlame; //��̃^�C�}�[ ���Z
 	
 };
