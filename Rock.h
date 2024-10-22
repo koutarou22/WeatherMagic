@@ -40,5 +40,8 @@ private:
 	float Width_;  
 	float Height_; 
 
+	int padAnalogInput;//xbox‚Ì“ü—Í‚ðŽó‚¯Žæ‚é
+	XINPUT_STATE input;//xbox‚Ì“ü—Í‚ðŽó‚¯Žæ‚é
+
 };
 

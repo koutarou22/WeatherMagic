@@ -52,6 +52,11 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	StringUi_Up = transform_.position_.y;
 	MpHealTimer_ = 30;
 
+	stickTilt.IsLeftStickTilt_left = false;
+	stickTilt.IsLeftStickTilt_right = false;
+	stickTilt.IsRightStickTilt_left = false;
+	stickTilt.IsRightStickTilt_right = false;
+
 	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);
 	
@@ -88,6 +93,7 @@ void Player::Update()
 
 	//xboxコントローラーの入力情報を取得
 	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+	StickTiltCheck();
 
 	SetFontSize(24);
 
@@ -118,7 +124,7 @@ void Player::Update()
 	}*/
 
 	//input.ThumbLXで左スティック入力をとる 倒した横軸値が-10000以下か10000以上で動く
-	if (CheckHitKey(KEY_INPUT_D) || input.ThumbLX >= 10000) 
+	if (CheckHitKey(KEY_INPUT_D) || stickTilt.IsLeftStickTilt_right)
 	{
 		transform_.position_.x += WeatherSpeed_;
 		if (++flameCounter >= 24)
@@ -140,7 +146,7 @@ void Player::Update()
 		}
 		//----------------------------------------------------------
 	}
-	else if (CheckHitKey(KEY_INPUT_A) || input.ThumbLX <= -10000)
+	else if (CheckHitKey(KEY_INPUT_A) || stickTilt.IsLeftStickTilt_left)
 	{
 
 		transform_.position_.x -= WeatherSpeed_;
@@ -256,7 +262,7 @@ void Player::Update()
 			{
 				pWeather->SetWeather(Sun);
 			}
-			WeatherTime_= 60; 
+			WeatherTime_ = 60;
 		}
 		WeatherSwitch = true;
 	}
@@ -331,11 +337,11 @@ void Player::Update()
 		}
 	}
 	//タイマーが切れてCanChangeWeather = trueになるまで再度天気の変更不可
-	if (--ChangeWeatherCoolTime < 0) 
+	if (--ChangeWeatherCoolTime < 0)
 	{
 		CanChangeWeather = true;
 	}
-	
+
 
 
 	if (pWeather != nullptr)
@@ -343,39 +349,36 @@ void Player::Update()
 
 		if (pWeather->GetWeatherState() == Gale) //風の機能
 		{
-			if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ == 0)
+			if (MagicPoint_ > 0)
 			{
-				if (RainTime_ <= 0)
+				if (GaleTime_ < 0)//約5秒ごとに行う処理
 				{
-					if (MagicPoint_ >= 4)
-					{
-						MagicDown(4);
-						GaleTime_ = 300;
-						PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
-					}
+					GaleTime_ = 420;
+					MagicDown(2);//4だと消費量多すぎるかもしれない　要調整
+					PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
 				}
-			}
-		}
-		if (GaleTime_ > 0)
-		{
-			GaleTime_--;
+				else
+				{
+					GaleTime_--;
+				}
+			}	
 		}
 
-		if (pWeather->GetWeatherState() == Rain) 
+		if (pWeather->GetWeatherState() == Rain)
 		{
-			if (RainTime_ <= 0)
+			if (MagicPoint_ > 0)
 			{
-				if (MagicPoint_ > 0)
+				if (RainTime_ < 0)//約5秒ごとに行う処理
 				{
-					MagicDown(1);
 					RainTime_ = 420;
+					MagicDown(1);
 					PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK);
 				}
+				else
+				{
+					RainTime_--;
+				}
 			}
-		}
-		if (RainTime_ > 0)
-		{
-			RainTime_--;
 		}
 	}
 
@@ -673,7 +676,7 @@ void Player::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue(); 
 	}
-	
+
 	if (NDTIME_ <= 0.0f)
 	{
 		DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
@@ -687,7 +690,7 @@ void Player::Draw()
 	}
 	
 	++Flash_Count;
-	
+
 	if (Mp_GetFlag == true)
 	{
 		if (UIGetTimer > 0)
@@ -841,5 +844,42 @@ void Player::StopWeatherSE()
 	{
 		StopSoundMem(WindHandle);
 	}
+}
+
+/// <summary>
+/// sticktiltの構造体の変数を設定（各フレーム）
+/// </summary>
+void Player::StickTiltCheck()
+{
+	//左スティックを倒してる方向にtrue
+	if (input.ThumbLX <= -10000)
+	{
+		stickTilt.IsLeftStickTilt_left = true;
+	}
+	else if (input.ThumbLX >= 10000)
+	{
+		stickTilt.IsLeftStickTilt_right = true;
+	}
+	else
+	{
+		stickTilt.IsLeftStickTilt_left = false;
+		stickTilt.IsLeftStickTilt_right = false;
+	}
+	
+	//右スティックを倒してる方向にtrue
+	//player関連で右スティックを使うならコメント外す
+	/*if (input.ThumbRX <= -10000)
+	{
+		stickTilt.IsRightStickTilt_left = true;
+	}
+	else if(input.ThumbRX >= 10000)
+	{
+		stickTilt.IsRightStickTilt_right = true;
+	}
+	else
+	{
+		stickTilt.IsRightStickTilt_left = false;
+		stickTilt.IsRightStickTilt_right = false;
+	}*/
 }
 
