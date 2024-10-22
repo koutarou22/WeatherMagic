@@ -12,6 +12,7 @@
 #include "HealItem.h"
 #include "MpItem.h"
 #include "ClearFlag.h"
+#include"MP.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -26,6 +27,7 @@ void TestScene::Initialize()
     pField->Reset(); // Reset() メソッドを呼び出す
     Instantiate<Camera>(this);
     Instantiate<Hp>(this);
+    Instantiate<MP>(this);
     Instantiate<Player>(this);
    // Instantiate<MpItem>(this);
     Instantiate<Weather>(this);

@@ -3,55 +3,56 @@
 
 void Weather::Initialize()
 {
-    //----------------”wŒi------------------------------------
-    hImage_Sunny = LoadGraph("Assets/BackImage/Sky.png");
-    assert(hImage_Sunny > 0);
-    hImage_Rainy = LoadGraph("Assets/BackImage/Rain.png");
-    assert(hImage_Rainy > 0);
+    //----------------èƒŒæ™¯------------------------------------
+    hImage_Sun = LoadGraph("Assets/BackImage/Sky.png");
+    assert(hImage_Sun > 0);
+    hImage_Rain = LoadGraph("Assets/BackImage/Rain.png");
+    assert(hImage_Rain > 0);
     hImage_Wind = LoadGraph("Assets/BackImage/Wind.png");
     assert(hImage_Wind > 0);
+    hImage_Snow = LoadGraph("Assets/BackImage/Snow.png");
+    assert(hImage_Snow > 0);
 
     //---------------UI--------------------------------------
-    Sun_Icon = LoadGraph("Assets/UI/Sun.png");//°‚ê‚ÌƒAƒCƒRƒ“
+    Sun_Icon = LoadGraph("Assets/UI/Sun.png");//æ™´ã‚Œã®ã‚¢ã‚¤ã‚³ãƒ³
     assert(Sun_Icon > 0);
-    Rain_Icon = LoadGraph("Assets/UI/Rain1.png");//‰J‚ÌƒAƒCƒRƒ“
+    Rain_Icon = LoadGraph("Assets/UI/Rain1.png");//é›¨ã®ã‚¢ã‚¤ã‚³ãƒ³
     assert(Rain_Icon > 0);
-    Gale_Icon = LoadGraph("Assets/UI/Gale.png");//•—‚ÌƒAƒCƒRƒ“
+    Gale_Icon = LoadGraph("Assets/UI/Gale.png");//é¢¨ã®ã‚¢ã‚¤ã‚³ãƒ³
     assert(Gale_Icon > 0);
-    Snow_Icon = LoadGraph("Assets/UI/Snow.png");//á‚ÌƒAƒCƒRƒ“
+    Snow_Icon = LoadGraph("Assets/UI/Snow.png");//é›ªã®ã‚¢ã‚¤ã‚³ãƒ³
     assert(Snow_Icon > 0);
 
-    //BgImage_ = LoadGraph("Assets/BgWeather.png");//c’·‚Ì•‚¢˜g
-    //assert(BgImage_ > 0);
 
-    //--------------‰ğà‚ª‘‚¢‚Ä‚ ‚éUI-------------------------
-    hImage_StateSun = LoadGraph("Assets/UI/SState.png");//°‚ê‚Ì‰ğàUI
+    //--------------è§£èª¬ãŒæ›¸ã„ã¦ã‚ã‚‹UI-------------------------
+    hImage_StateSun = LoadGraph("Assets/UI/SState.png");//æ™´ã‚Œã®è§£èª¬UI
     assert(hImage_StateSun > 0);
-    hImage_StateRain = LoadGraph("Assets/UI/RState.png");//‰J‚Ì‰ğàUI
+    hImage_StateRain = LoadGraph("Assets/UI/RState.png");//é›¨ã®è§£èª¬UI
     assert(hImage_StateRain > 0);
-    hImage_StateWind = LoadGraph("Assets/UI/WState.png");//•—‚Ì‰ğàUI
+    hImage_StateWind = LoadGraph("Assets/UI/WState.png");//é¢¨ã®è§£èª¬UI
     assert(hImage_StateWind > 0);
-    //‘fŞo—ˆŸ‘æƒRƒƒ“ƒg‰ğœ1/2
-    //hImage_StateSnow = LoadGraph("Assets/UI/SState.png");//á‚Ì‰ğàUI
+    //ç´ æå‡ºæ¥æ¬¡ç¬¬ã‚³ãƒ¡ãƒ³ãƒˆè§£é™¤1/2
+    //hImage_StateSnow = LoadGraph("Assets/UI/SState.png");//é›ªã®è§£èª¬UI
     //assert(hImage_StateSnow > 0);
     
     //hImage_Book = LoadGraph("Assets/Book.png");
     //assert(hImage_Book > 0);
 
 
-    //----------------Mp‚ªØ‚ê‚½‚Æ‚«------------------------------
-    hImage_RainyNoMp = LoadGraph("Assets/UI/Rain4.png");//ŠDF‚Åƒoƒc‚ª‚Â‚¢‚½‰J‚ÌƒAƒCƒRƒ“
-    assert(hImage_RainyNoMp > 0);
+    //----------------MpãŒåˆ‡ã‚ŒãŸã¨ã------------------------------
+    hImage_RainNoMp = LoadGraph("Assets/UI/Rain4.png");//ç°è‰²ã§ãƒãƒ„ãŒã¤ã„ãŸé›¨ã®ã‚¢ã‚¤ã‚³ãƒ³
+    assert(hImage_RainNoMp > 0);
 
-    hImage_WindNoMp = LoadGraph("Assets/UI/Gale3.png"); //ŠDF‚Åƒoƒc‚ª‚Â‚¢‚½•—‚ÌƒAƒCƒRƒ“
+    hImage_WindNoMp = LoadGraph("Assets/UI/Gale3.png"); //ç°è‰²ã§ãƒãƒ„ãŒã¤ã„ãŸé¢¨ã®ã‚¢ã‚¤ã‚³ãƒ³
     assert(hImage_WindNoMp > 0);
 
-    //‘fŞo—ˆŸ‘æƒRƒƒ“ƒg‰ğœ2/2
-    //hImage_SnowNoMp = LoadGraph("Assets/UI/Gale3.png"); //ŠDF‚Åƒoƒc‚ª‚Â‚¢‚½•—‚ÌƒAƒCƒRƒ“
+    //ç´ æå‡ºæ¥æ¬¡ç¬¬ã‚³ãƒ¡ãƒ³ãƒˆè§£é™¤2/2
+    //hImage_SnowNoMp = LoadGraph("Assets/UI/Gale3.png"); //ç°è‰²ã§ãƒãƒ„ãŒã¤ã„ãŸé¢¨ã®ã‚¢ã‚¤ã‚³ãƒ³
     //assert(hImage_SnowNoMp > 0);
   
 
     RainOnChecker = false;
+    DebugLog_ = false;
 }
 
 void Weather::Update()
@@ -60,9 +61,18 @@ void Weather::Update()
     {
         if (animeFrame_ < 3) 
         {
-            animeFrame_ = (animeFrame_ + 1) % 4; //if•¶‚ğg‚í‚È‚¢Å“K‰ğ
+            animeFrame_ = (animeFrame_ + 1) % 4; //ifæ–‡ã‚’ä½¿ã‚ãªã„æœ€é©è§£
         }
         flameCounter_ = 0;
+    }
+
+    if (CheckHitKey(KEY_INPUT_Q))
+    {
+        DebugLog_ = true;
+    }
+    else
+    {
+        DebugLog_ = false;
     }
 }
 
@@ -76,55 +86,48 @@ void Weather::Draw()
         return;
     }
     int alpha = 24;
+    int alpha40 = 40;
     int SBookW = 128 / 3;
     int SBookH = 175 / 4;
     int AnimeS = animeFrame_ % 4 * SBookH;
 
-   // DrawGraph(0, 110, BgImage_, TRUE);
 
     if (pPlayer != nullptr)
     {
         switch (weather_)
         {
         case Sun:
-
             DrawGraph(0, 110, hImage_StateSun, TRUE);
-            DrawGraph(600, 0, hImage_SIcon, TRUE);  // °‚ê
+            DrawGraph(600, 0, Sun_Icon, TRUE);  // æ™´ã‚Œ
             SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-            DrawGraph(0, 0, hImage_Sunny, TRUE);  // °‚ê
+            DrawGraph(0, 0, hImage_Sun, TRUE);  // æ™´ã‚Œ
             break;
 
-        case Rainy:
-           /* DrawFormatString(580, 0, GetColor(100, 149, 237), "“VŒó: ‰J");
-            DrawFormatString(580, 18, GetColor(100, 149, 237), "Œø‰Ê:wˆÚ“®‘¬“x’á‰º +ˆê•”‚Ì“G‚É•Ï‰»x");*/
+        case Rain:
 
             DrawGraph(0, 110, hImage_StateRain, TRUE);
             if (pPlayer->GetMp() > 0)
             {
-                DrawGraph(600, 0, Rain_Icon, TRUE);  // ‰J
-                //  DrawFormatString(580, 38, GetColor(100, 149, 237), "íÁ”ïMp1");
+                DrawGraph(600, 0, Rain_Icon, TRUE);  // é›¨
+                //  DrawFormatString(580, 38, GetColor(100, 149, 237), "å¸¸æ™‚æ¶ˆè²»Mp1");
                 SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-                DrawGraph(0, 0, hImage_Rainy, TRUE);  // ‰J
+                DrawGraph(0, 0, hImage_Rain, TRUE);  // é›¨
                 RainOnChecker = false;
             }
             else
             {
                 RainOnChecker = true;
-                DrawGraph(600, 0, hImage_RainyNoMp, TRUE);  // ‰J
-                DrawFormatString(580, 48, GetColor(255, 0, 0), "Mp‚ª‘«‚è‚Ü‚¹‚ñI");  // Ô•¶š‚Å•\¦
+                DrawGraph(600, 0, hImage_RainNoMp, TRUE);  // é›¨
+                DrawFormatString(580, 48, GetColor(255, 0, 0), "MpãŒè¶³ã‚Šã¾ã›ã‚“ï¼");  // èµ¤æ–‡å­—ã§è¡¨ç¤º
             }
             break;
 
         case Gale:
-            /*DrawFormatString(580, 3, GetColor(0, 250, 154), "–Û: ‹­•—");
-            DrawFormatString(580, 24, GetColor(0, 250, 154), "Œø‰Ê:wˆê•”‚Ì“G‚ğ‹­§“I‚É“®‚©‚·x");
-            DrawFormatString(580, 34, GetColor(0, 250, 154), "”\—Í:w‰EƒL[‚©¶ƒL[‚ğ‰Ÿ‚·‚±‚Æ‚Å‚T•bŠÔ‹­•—‚ğ”­¶‚³‚¹‚éx");*/
 
             DrawGraph(0, 110, hImage_StateWind, TRUE);
             if (pPlayer->GetMp() > 3)
             {
-                DrawGraph(600, 0, hImage_WIcon, TRUE);
-               // DrawFormatString(575, 41, GetColor(0, 250, 154), "Á”ïMp 4");
+                DrawGraph(600, 0, Gale_Icon, TRUE);
                 SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
                 DrawGraph(0, 0, hImage_Wind, TRUE);
                 WindOnChecker = false;
@@ -133,69 +136,70 @@ void Weather::Draw()
             {
                 WindOnChecker = true;
                 DrawGraph(600, 0, hImage_WindNoMp, TRUE);
-                DrawFormatString(580, 48, GetColor(255, 0, 0), "Mp‚ª‘«‚è‚Ü‚¹‚ñI");  // Ô•¶š‚Å•\¦
+                DrawFormatString(580, 48, GetColor(255, 0, 0), "MpãŒè¶³ã‚Šã¾ã›ã‚“ï¼");  // èµ¤æ–‡å­—ã§è¡¨ç¤º
             }
             break;
 
         case Snow:
             DrawGraph(600, 0, Snow_Icon, TRUE);
-            if (pPlayer->GetMp()>0)//MP‚ğæ“¾‚µ‚Ä‚O‚æ‚è‘å‚«‚©‚Á‚½‚ç•’Ê‚Ìˆ—
+            if (pPlayer->GetMp()>0)//MPã‚’å–å¾—ã—ã¦ï¼ã‚ˆã‚Šå¤§ãã‹ã£ãŸã‚‰æ™®é€šã®å‡¦ç†
             {
                 SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha40);
-                DrawGraph(0, 0, hImage_Snow, TRUE);  // á
+                DrawGraph(0, 0, hImage_Snow, TRUE);  // é›ª
                 SnowOnChecker = false;
             }
-            else//0‚Ì‚Í‘«‚è‚Ü‚¹‚ñˆ—
+            else//0ã®æ™‚ã¯è¶³ã‚Šã¾ã›ã‚“å‡¦ç†
             {
                 SnowOnChecker = true;
-                // DrawGraph(600, 0, hImage_WindNoMp, TRUE); //‘fŞ‘Ò‚¿
-                DrawFormatString(580, 48, GetColor(255, 0, 0), "Mp‚ª‘«‚è‚Ü‚¹‚ñI");  // Ô•¶š‚Å•\¦
+                // DrawGraph(600, 0, hImage_WindNoMp, TRUE); //ç´ æå¾…ã¡
+                DrawFormatString(580, 48, GetColor(255, 0, 0), "MpãŒè¶³ã‚Šã¾ã›ã‚“ï¼");  // èµ¤æ–‡å­—ã§è¡¨ç¤º
             }
+            SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha40);
+            DrawGraph(0, 0, hImage_Snow, TRUE);  // é›ª
             break;
         }
     }
 
-    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);//“§–¾“x‚ğŒ³‚É–ß‚·
+    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);//é€æ˜åº¦ã‚’å…ƒã«æˆ»ã™
 
-    //“VŒóŠÖ˜A‚ÌƒƒO‚Ì•\¦(QƒL[‚Å•\¦‚Å‚«‚é)
-    //Á‚µ‚Ä‚à“®ì‚É‚Í–â‘è‚È‚¢
+    //å¤©å€™é–¢é€£ã®ãƒ­ã‚°ã®è¡¨ç¤º(Qã‚­ãƒ¼ã§è¡¨ç¤ºã§ãã‚‹)
+    //æ¶ˆã—ã¦ã‚‚å‹•ä½œã«ã¯å•é¡Œãªã„
     if (DebugLog_ == true)
     {
-        DrawFormatString(990, 230, GetColor(255, 255, 255), "Œ»İ‚Ì“VŒó‚Í % d", weather_, "‚Å‚·");
+        DrawFormatString(990, 230, GetColor(255, 255, 255), "ç¾åœ¨ã®å¤©å€™ã¯ % d", weather_, "ã§ã™");
         switch (weather_)
         {
         case Sun:
 
-            DrawFormatString(990, 120, GetColor(220, 20, 60), "“VŒó:‰õ° ");
-            DrawFormatString(990, 145, GetColor(220, 20, 60), "Œø‰Ê:w‚È‚µx");
+            DrawFormatString(990, 120, GetColor(220, 20, 60), "å¤©å€™:å¿«æ™´ ");
+            DrawFormatString(990, 145, GetColor(220, 20, 60), "åŠ¹æœ:ã€ãªã—ã€");
             break;
 
         case Rain:
 
-            DrawFormatString(990, 120, GetColor(65, 105, 225), "“VŒó: ‰J");
-            DrawFormatString(990, 145, GetColor(65, 105, 225), "Œø‰Ê1:wˆê•”‚Ì“G‚É•Ï‰»x");
-            DrawFormatString(990, 169, GetColor(255, 0, 0), "Œø‰Ê2:w–ˆ•bMp‚PŒ¸­x");
+            DrawFormatString(990, 120, GetColor(65, 105, 225), "å¤©å€™: é›¨");
+            DrawFormatString(990, 145, GetColor(65, 105, 225), "åŠ¹æœ1:ã€ä¸€éƒ¨ã®æ•µã«å¤‰åŒ–ã€");
+            DrawFormatString(990, 169, GetColor(255, 0, 0), "åŠ¹æœ2:ã€æ¯ç§’Mpï¼‘æ¸›å°‘ã€");
             break;
 
         case Gale:
 
-            DrawFormatString(990, 120, GetColor(0, 255, 127), "“VŒó: •—");
-            DrawFormatString(990, 145, GetColor(0, 187, 133), "Œø‰Ê1:wˆÚ“®‘¬“xã¸x");
-            DrawFormatString(990, 169, GetColor(0, 187, 133), "Œø‰Ê2:w‹­•—‚ğ”­¶x");
-            DrawFormatString(990, 192, GetColor(255, 0, 0), "ªÁ”ïMp 4");
+            DrawFormatString(990, 120, GetColor(0, 255, 127), "å¤©å€™: é¢¨");
+            DrawFormatString(990, 145, GetColor(0, 187, 133), "åŠ¹æœ1:ã€ç§»å‹•é€Ÿåº¦ä¸Šæ˜‡ã€");
+            DrawFormatString(990, 169, GetColor(0, 187, 133), "åŠ¹æœ2:ã€å¼·é¢¨ã‚’ç™ºç”Ÿã€");
+            DrawFormatString(990, 192, GetColor(255, 0, 0), "â†‘æ¶ˆè²»Mp 4");
             break;
 
-        case Snow: //•¶Í‚Í‰¼’u‚«
-            DrawFormatString(990, 120, GetColor(0, 255, 127), "“VŒó: á");
-            DrawFormatString(990, 145, GetColor(0, 187, 133), "Œø‰Ê1:wˆÚ“®‘¬“x’á‰ºx");
-            DrawFormatString(990, 145, GetColor(0, 187, 133), "Œø‰Ê:w“G‚Ì‘¬“x0x");
-            DrawFormatString(990, 145, GetColor(0, 187, 133), "Œø‰Ê:w’èŠúƒ_ƒ[ƒW(Mp10)x");
+        case Snow: //æ–‡ç« ã¯ä»®ç½®ã
+            DrawFormatString(990, 120, GetColor(0, 255, 127), "å¤©å€™: é›ª");
+            DrawFormatString(990, 145, GetColor(0, 187, 133), "åŠ¹æœ1:ã€ç§»å‹•é€Ÿåº¦ä½ä¸‹ã€");
+            DrawFormatString(990, 145, GetColor(0, 187, 133), "åŠ¹æœ:ã€æ•µã®é€Ÿåº¦0ã€");
+            DrawFormatString(990, 145, GetColor(0, 187, 133), "åŠ¹æœ:ã€å®šæœŸãƒ€ãƒ¡ãƒ¼ã‚¸(Mp10)ã€");
             break;
 
         }
     }
 }
-
 
 void Weather::SetPosition(int x, int y)
 {
@@ -207,14 +211,14 @@ float Weather::GetWeatherChange()
 {
     switch (weather_)
     {
-    case Sunny:
-        return 1.0f; // °‚ê‚Ì“ú‚Í’Êí‚Ì‘¬“x
-    case Rainy:
-        return 0.8f; // ‰J‚Ì“ú‚Í‘¬“x‚ğ20%Œ¸­
+    case Sun:
+        return 1.0f; // æ™´ã‚Œã®æ—¥ã¯é€šå¸¸ã®é€Ÿåº¦
+    case Rain:
+        return 1.0f; // å‰å›:é›¨ã®æ—¥ã¯é€Ÿåº¦ã‚’20%æ¸›å°‘
     case Gale: 
-        return 1.2f; //‹­•—@1.2”{‚Ì‘¬“x
+        return 1.2f; //å¼·é¢¨ã€€1.2å€ã®é€Ÿåº¦
     case Snow:
-        return 0.8f; //á = ˆÚ“®‘¬“x‚Ì’á‰º@ + “G‚Ì“®‚«‚ğ~‚ß‚é@ƒvƒŒƒCƒ„[‚ªƒ_ƒ[ƒW‚ğó‚¯‚é(‚T•b—\’è) Mp10
+        return 0.8f; //é›ª = ç§»å‹•é€Ÿåº¦ã®ä½ä¸‹ã€€ + æ•µã®å‹•ãã‚’æ­¢ã‚ã‚‹ã€€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹(ï¼•ç§’äºˆå®š) Mp10
     default:
         return 1.0f;
     }

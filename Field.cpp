@@ -17,7 +17,8 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	hImage_ = LoadGraph("Assets/BackImage/bgchar.png");
 	assert(hImage_ > 0);
 
-	hBackGround_ = LoadGraph("Assets/BackImage/bg5.png");
+	/*hBackGround_ = LoadGraph("Assets/BackImage/bg5.png");*/
+	hBackGround_ = LoadGraph("Assets/BackImage/background2.png");
 	assert(hBackGround_ > 0);
 
 	NowStage_ = 1; 
