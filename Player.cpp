@@ -28,7 +28,8 @@ namespace
 	
  
 };
-Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED), Hp_(3), NDTIME_(2.0f), Flash_Count(0), IsHitOneCount_(false),DebugLog_(false)
+Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
+        Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100),IsHitOneCount_(false),DebugLog_(false)
 {
 	hImage = LoadGraph("Assets/Chara/Wizard.png");
 	assert(hImage > 0);
@@ -395,11 +396,10 @@ void Player::Update()
 
 	//----------------------------------------------------------------------------------
 
-	//2点間の距離の便利さを身に染みて実感しました
 	std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
 	for (EnemyMagic* pEnemyMagic : pEMagics)
 	{
-		//解説　見ればわかると思うがこれは『EnemyMagic』と『Slime』の距離を求めている
+		//『EnemyMagic』と『Slime』の距離を求めている
 		float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
 		float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
@@ -549,14 +549,20 @@ void Player::Update()
 
 	if (pField != nullptr)
 	{
-		int playerX = (int)transform_.position_.x;
+		int playerX = (int)transform_.position_.x+10;
 		int playerY = (int)transform_.position_.y;
-
+	
 		if (pField->IsHitClear(playerX, playerY))
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+
+			if (pSceneManager != nullptr)
+			{	
+				int MpPass = MagicPoint_;//現在のMｐを変数に格納
+				pSceneManager->SetMagicPoint(MpPass);//Set関数に送り保存
+			}
+
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-			StopSoundMem(WindHandle);
 		}
 	}
 
@@ -707,6 +713,11 @@ void Player::Jump()
 	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // プレイヤーをジャンプさせる
 	onGround = false;
 	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
+}
+
+int Player::GetMp()
+{
+	return MagicPoint_;
 }
 
 int Player::GetHp()

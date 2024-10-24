@@ -76,7 +76,7 @@
     <ClCompile Include="Time.cpp">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp">
+    <ClCompile Include="PlayScene.cpp">
       <Filter>リソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameOverScene.cpp">
@@ -115,7 +115,12 @@
     <ClCompile Include="MpItem.cpp">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
-    <ClCompile Include="RoadScene.cpp" />
+    <ClCompile Include="LoadScene.cpp">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>リソース ファイル\Stage\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GameObject.h">
@@ -154,7 +159,7 @@
     <ClInclude Include="Time.h">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene.h">
+    <ClInclude Include="PlayScene.h">
       <Filter>リソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="GameOverScene.h">
@@ -193,9 +198,14 @@
     <ClInclude Include="MpItem.h">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClInclude>
-    <ClInclude Include="RoadScene.h" />
     <ClInclude Include="Player.h">
       <Filter>リソース ファイル\Chara\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadScene.h">
+      <Filter>リソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>リソース ファイル\Stage\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

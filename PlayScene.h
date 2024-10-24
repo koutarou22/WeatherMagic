@@ -1,17 +1,13 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-/// <summary>
-///クリアのシーン
-/// </summary>
-class ClearScene : public GameObject
+//テストシーンを管理するクラス
+class PlayScene : public GameObject
 {
-	int hImage_;
-
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
-	ClearScene(GameObject* parent);
+	PlayScene(GameObject* parent);
 
 	//初期化
 	void Initialize() override;
@@ -24,5 +20,6 @@ public:
 
 	//開放
 	void Release() override;
+private:
+	int MapNumber_;
 };
-

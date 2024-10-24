@@ -10,6 +10,7 @@
 #include "Rock.h"
 #include "MpItem.h"
 #include "ClearFlag.h"
+#include "Engine/SceneManager.h"
 
 Field::Field(GameObject* scene) : GameObject(scene)
 {
@@ -22,7 +23,7 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	assert(hBackGround_ > 0);
 
 	NowStage_ = 1; 
-	Reset(); // Reset() メソッドを有効にする
+	Reset(); // Reset() 
 }
 
 Field::~Field()
@@ -44,97 +45,6 @@ Field::~Field()
 void Field::Reset()
 {
 	LoadStage(NowStage_);
-	//if (Map != nullptr)
-	//{
-	//	delete[] Map;
-	//	Map = nullptr;
-	//}
-
-	//CsvReader csv;
-	//bool ret = csv.Load("Assets/New_Stage2.csv");
-	//assert(ret);
-
-	//width = csv.GetWidth();
-	//height = 22/*csv.GetHeight()*/;
-	//Map = new int[width * height];
-
-	////for (int h = 0; h < height; h++)
-	////{
-	////	if (csv.GetString(0, h) == "")
-	////	{
-	////		height = h;
-	////		break;
-	////	}
-	////	for (int w = 0; w < width; w++)
-	////	{
-	////		Map[h * width + w] = csv.GetInt(w,h);
-	////	}
-	////}
-
-	//for (int h = 0; h < height; h++)
-	//{
-	//	for (int w = 0; w < width; w++)
-	//	{
-	//		switch (csv.GetInt(w, h /*+ height + 1*/))
-	//		{
-	//		case 0:
-	//		{
-	//			Player* pPlayer = GetParent()->FindGameObject<Player>();
-	//			pPlayer->SetPosition(w * 32, h * 32);
-	//			break;
-	//		}
-	//		
-	//		case 1:
-	//		{
-	//			Ghost* pGhost = Instantiate<Ghost>(GetParent());
-	//			pGhost->SetPosition(w * 32, h * 32);
-	//			break;
-	//		}
-	//		
-	//		case 2:
-	//		{
-	//			Slime* pSlime = Instantiate<Slime>(GetParent());
-	//			pSlime->SetPosition(w * 32, h * 32);
-	//			break;
-
-	//		}
-	//		case 3:
-	//		{
-	//			Rock* pRock = Instantiate<Rock>(GetParent());
-	//			pRock->SetPosition(w * 32, h * 32);
-	//			break;
-	//		}
-
-	//		case 4:
-	//		{
-	//			HealItem* pHeal = Instantiate<HealItem>(GetParent());
-	//			pHeal->SetPosition(w * 32, h * 32);
-	//			break;
-	//		}
-
-	//		case 5:
-	//		{
-	//			MpItem* pMp = Instantiate<MpItem>(GetParent());
-	//			pMp->SetPosition(w * 32, h * 32);
-	//			break;
-	//		}
-
-	//		case 6:
-	//		{
-	//			ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
-	//			pClear->SetPosition(w * 32, h * 32);
-	//			break;
-	//		}
-	//		
-	//		default:
-	//			break;
-	//		}
-	//		Map[h * width + w] = csv.GetValue(w, h);
-	//	}
-	//}
-	////Update();
-
-
 }	
 
 void Field::Update()
@@ -238,16 +148,15 @@ bool Field::IsHitClear(int x, int y)
 	switch (Map[chipY * width + chipX])
 	{
 	case 6:
-	case 200:
 		return true;
-
 	};
-
 	return false;
 }
 
 void Field::LoadStage(int StageNumber)
 {
+	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+
 	if (Map != nullptr)
 	{
 		delete[] Map;
@@ -261,12 +170,12 @@ void Field::LoadStage(int StageNumber)
 	{
 	case 1:
 		ret = csv.Load("Assets/Stage_csv/Stage1.csv");
+		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
 		break;
 	case 2:
 		ret = csv.Load("Assets/Stage_csv/Stage2.csv");
 		break;
 	default:
-		//assert(false); // 未知のステージ番号
 		StageNumber = 1;
 		break;
 	}
@@ -279,64 +188,64 @@ void Field::LoadStage(int StageNumber)
 
 	for (int h = 0; h < height; h++)
 	{
-			for (int w = 0; w < width; w++)
+		for (int w = 0; w < width; w++)
+		{
+			switch (csv.GetInt(w, h /*+ height + 1*/))
 			{
-				switch (csv.GetInt(w, h /*+ height + 1*/))
-				{
-				case 0:
-				{
-					Player* pPlayer = GetParent()->FindGameObject<Player>();
-					pPlayer->SetPosition(w * 32, h * 32);
-					break;
-				}
-				
-				case 1:
-				{
-					Ghost* pGhost = Instantiate<Ghost>(GetParent());
-					pGhost->SetPosition(w * 32, h * 32);
-					break;
-				}
-				
-				case 2:
-				{
-					Slime* pSlime = Instantiate<Slime>(GetParent());
-					pSlime->SetPosition(w * 32, h * 32);
-					break;
+			case 0:
+			{
+				Player* pPlayer = GetParent()->FindGameObject<Player>();
+				pPlayer->SetPosition(w * 32, h * 32);
+				break;
+			}
 
-				}
-				case 3:
-				{
-					Rock* pRock = Instantiate<Rock>(GetParent());
-					pRock->SetPosition(w * 32, h * 32);
-					break;
-				}
+			case 1:
+			{
+				Ghost* pGhost = Instantiate<Ghost>(GetParent());
+				pGhost->SetPosition(w * 32, h * 32);
+				break;
+			}
 
-				case 4:
-				{
-					HealItem* pHeal = Instantiate<HealItem>(GetParent());
-					pHeal->SetPosition(w * 32, h * 32);
-					break;
-				}
+			case 2:
+			{
+				Slime* pSlime = Instantiate<Slime>(GetParent());
+				pSlime->SetPosition(w * 32, h * 32);
+				break;
 
-				case 5:
-				{
-					MpItem* pMp = Instantiate<MpItem>(GetParent());
-					pMp->SetPosition(w * 32, h * 32);
-					break;
-				}
+			}
+			case 3:
+			{
+				Rock* pRock = Instantiate<Rock>(GetParent());
+				pRock->SetPosition(w * 32, h * 32);
+				break;
+			}
 
-				case 6:
-				{
-					ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
-					pClear->SetPosition(w * 32, h * 32);
-			    	break;
-		     	}
-				
-				default:
+			case 4:
+			{
+				HealItem* pHeal = Instantiate<HealItem>(GetParent());
+				pHeal->SetPosition(w * 32, h * 32);
+				break;
+			}
+
+			case 5:
+			{
+				MpItem* pMp = Instantiate<MpItem>(GetParent());
+				pMp->SetPosition(w * 32, h * 32);
+				break;
+			}
+
+			case 6:
+			{
+				ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
+				pClear->SetPosition(w * 32, h * 32);
+				break;
+			}
+
+			default:
 				break;
 			}
 			Map[h * width + w] = csv.GetValue(w, h);
-	     }
+		}
 	}
 }
 

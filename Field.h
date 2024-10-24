@@ -62,5 +62,5 @@ private:
 	int width;
 	int height;
 
-	int NowStage_;//現在のステージ番号を保管する用
+	int NowStage_ = 0;//現在のステージ番号を保管する用
 };
