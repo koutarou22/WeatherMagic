@@ -63,4 +63,5 @@ private:
 	int height;
 
 	int NowStage_;//現在のステージ番号を保管する用
+	int hBackGroundDark_;
 };

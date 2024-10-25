@@ -21,6 +21,9 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	hBackGround_ = LoadGraph("Assets/BackImage/background2.png");
 	assert(hBackGround_ > 0);
 
+	hBackGroundDark_ = LoadGraph("Assets/BackImage/background_dark.png");
+	assert(hBackGroundDark_ > 0);
+
 	NowStage_ = 1; 
 	Reset(); // Reset() メソッドを有効にする
 }
@@ -147,6 +150,12 @@ void Field::Draw()
 	
 	int screenWidth, screenHeight, colorBitDepth;
 	GetScreenState(&screenWidth, &screenHeight, &colorBitDepth);
+
+	if (CheckHitKey(KEY_INPUT_Q))
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+		DrawExtendGraph(0, 0, screenWidth, screenHeight, hBackGroundDark_, TRUE);
+	}
 
 	// 画面全体に背景画像を描画
 	DrawExtendGraph(0, 0, screenWidth, screenHeight, hBackGround_, FALSE); 
