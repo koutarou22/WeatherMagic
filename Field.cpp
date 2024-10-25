@@ -52,7 +52,7 @@ void Field::Reset()
 
 void Field::Update()
 {
-
+	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
 }
 
 void Field::Draw()
@@ -61,7 +61,7 @@ void Field::Draw()
 	int screenWidth, screenHeight, colorBitDepth;
 	GetScreenState(&screenWidth, &screenHeight, &colorBitDepth);
 
-	if (CheckHitKey(KEY_INPUT_Q))
+	if (CheckHitKey(KEY_INPUT_Q) || input.Buttons[8] || input.Buttons[9])
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 		DrawExtendGraph(0, 0, screenWidth, screenHeight, hBackGroundDark_, TRUE);
