@@ -53,7 +53,7 @@ public:
 	void LoadStage(int StageNumber);
 
 	void NextLoadStage();
-
+	int GetCsvWidth() { return width; }
 private:
 	int hImage_;
 	int hBackGround_;

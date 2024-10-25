@@ -7,6 +7,7 @@
 /// <summary>
 /// プレイヤーキャラの情報
 /// </summary>
+
 class Player : public GameObject
 {
 public:
@@ -32,6 +33,7 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
+	void WhereIs(); //�B���x ���܂ǂ��H
 	void StopWeatherSE();
 	void StickTiltCheck();
 
@@ -110,6 +112,7 @@ private:
 	int GetItemSound;
 	int MagicSound;
 
+<<<<<<< HEAD
 	//スティックを倒したかどうか
 	struct Stick_Tilt {
 		bool IsLeftStickTilt_left;//左スティックを左に
@@ -118,5 +121,8 @@ private:
 		bool IsRightStickTilt_right;//右スティックを右に
 	};
 	Stick_Tilt stickTilt;
+=======
+	float CountSnowFlame; //��̃^�C�}�[ ���Z
+>>>>>>> master
 	
 };
