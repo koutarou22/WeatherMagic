@@ -31,8 +31,10 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-    // スペースキーが押されたらTestSceneに遷移
-    if (CheckHitKey(KEY_INPUT_P)) {
+    padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+
+    // スペースキーが押されるかスタートボタンでTestSceneに遷移
+    if (CheckHitKey(KEY_INPUT_P) || input.Buttons[4]) {
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_PLAY);

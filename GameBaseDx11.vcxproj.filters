@@ -115,10 +115,13 @@
     <ClCompile Include="MpItem.cpp">
       <Filter>リソース ファイル\Gimc</Filter>
     </ClCompile>
+
     <ClCompile Include="LoadScene.cpp">
       <Filter>リソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Score.cpp">
+      
+    <ClCompile Include="MP.cpp">
       <Filter>リソース ファイル\Stage\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -200,11 +203,12 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>リソース ファイル\Chara\Player</Filter>
-    </ClInclude>
+    </ClInclude
     <ClInclude Include="LoadScene.h">
       <Filter>リソース ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Score.h">
+    <ClInclude Include="Score.h
+    <ClInclude Include="MP.h">
       <Filter>リソース ファイル\Stage\UI</Filter>
     </ClInclude>
   </ItemGroup>

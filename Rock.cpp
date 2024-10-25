@@ -150,6 +150,10 @@ void Rock::WeatherEffects(Weather* weather)
 void Rock::GaleEffect(WeatherState state)
 {
 	Camera* cam = GetParent()->FindGameObject<Camera>();
+
+	//xboxコントローラーの入力情報を取得
+	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+
 	if (cam != nullptr)
 	{
 		// カメラの位置を取得
@@ -160,45 +164,25 @@ void Rock::GaleEffect(WeatherState state)
 			{
 				Player* pPlayer = GetParent()->FindGameObject<Player>();
 				int MpVanish = pPlayer->GetMp();
-				if (WindTimer_ <= 0 && MpVanish >= 4)
+				if ( MpVanish >= 4)
 				{
-					if (CheckHitKey(KEY_INPUT_RIGHT))
+					if (input.ThumbRX <= -10000)
 					{
-						WindTimer_ = 300;
-						PressKey_R = true;
-					}
-					else if (CheckHitKey(KEY_INPUT_LEFT))
-					{
-						WindTimer_ = 300;
-						PressKey_L = true;
-					}
-				}
-
-				if (WindTimer_ > 0)
-				{
-					if (PressKey_R)
-					{
-						transform_.position_.x += 0.6f;
-					}
-					else if (PressKey_L)
-					{
+						//WindTimer_ = 300;
+						//PressKey_R = true;
 						transform_.position_.x -= 0.6f;
 					}
-
-					WindTimer_--;
-					if (WindTimer_ == 0)
+					else if (input.ThumbRX >= 10000)
 					{
-						PressKey_R = false;
-						PressKey_L = false;
+						//WindTimer_ = 300;
+						//PressKey_L = true;
+						transform_.position_.x += 0.6f;
 					}
 				}
 			}
 		}
-
 	}
-	
 }
-
 
 //bool Rock::IsRockPosition(std::list<Rock*> rocks, int x, int y)
 //{

@@ -4,6 +4,7 @@
 #include "EnemyMagic.h"
 #include "Magic.h"
 #include "Damage.h"
+#include "Weather.h"
 
 namespace
 {
@@ -35,13 +36,16 @@ Ghost::~Ghost()
 void Ghost::Update()
 {
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-	
+
 
 	if (++flameCounter_ >= 24)
 	{
 		animeFrame_ = (animeFrame_ + 1) % 4;//if文を使わない最適解
 		flameCounter_ = 0;
 	}
+
+
+
 
 	if (cam != nullptr)
 	{
@@ -64,11 +68,15 @@ void Ghost::Update()
 
 				CoolDownAttack_ = 300;
 			}
-
-			transform_.position_.y -= 1.0f;
-			sinAngle += 3.0f;
-			float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
-			transform_.position_.y = 500.0f + sinValue * 50.0f;
+			//天候取得、雪なら止める
+			Weather* pWeather = GetParent()->FindGameObject<Weather>();
+			if (pWeather->GetWeatherState() != WeatherState::Snow)
+			{
+				transform_.position_.y -= 1.0f;
+				sinAngle += 3.0f;
+				float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
+				transform_.position_.y = 500.0f + sinValue * 50.0f;
+			}
 		}
 	}
 
@@ -79,7 +87,7 @@ void Ghost::Update()
 
 	int x = (int)transform_.position_.x;
 
-	
+
 	//if (cam != nullptr)
 	//{
 	//	x -= cam->GetValue();
@@ -91,23 +99,23 @@ void Ghost::Update()
 	//	KillMe();
 	//	return;
 	//}
-	
+
 
 
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
-	for(Magic* pMagic : pMagics)
+	for (Magic* pMagic : pMagics)
 	{
 		//解説　見ればわかると思うがこれは『Magic』と『Ghost』の距離を求めている
 		float dx = pMagic->GetPosition().x - (transform_.position_.x + 16.0f);//Mgの座標X - Ghの座標X
 		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);//Mgの座標Y - Ghの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
 
-		if(distance <= 20.0f)
+		if (distance <= 20.0f)
 		{
-		   KillMe();	
-		   break;
+			KillMe();
+			break;
 		}
-		
+
 	}
 }
 

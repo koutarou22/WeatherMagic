@@ -4,7 +4,7 @@
 #include"ClearScene.h"
 #include "Score.h"
 
-//‚±‚±‚É¯‚ğ‘‚­’Ç‰Á—\’è
+//ã“ã“ã«æ˜Ÿã‚’æ›¸ãè¿½åŠ äºˆå®š
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
@@ -14,14 +14,14 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 
 void ClearScene::Initialize()
 {
+    Instantiate<Score>(this);//è©•ä¾¡
 }
 
 void ClearScene::Update()
 {
-
-    Instantiate<Score>(this);//•]‰¿
-
-    if (CheckHitKey(KEY_INPUT_C))
+    padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+    // Cã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³ã§TitleSceneã«é·ç§»
+    if (CheckHitKey(KEY_INPUT_C) || input.Buttons[4]) 
     {
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_TITLE);
@@ -40,15 +40,15 @@ void ClearScene::Draw()
     ////Imaha Kantan na Syori
     //if (mp > 80)
     //{
-    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "•]‰¿™3");
+    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "è©•ä¾¡â˜†3");
     //}
     //else if (mp > 60)
     //{
-    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "•]‰¿™2");
+    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "è©•ä¾¡â˜†2");
     //}
     //else 
     //{
-    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "•]‰¿™1");
+    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "è©•ä¾¡â˜†1");
     //}
 
 }

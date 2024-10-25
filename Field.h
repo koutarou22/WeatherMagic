@@ -2,8 +2,8 @@
 #include "Engine/GameObject.h"
 
 /// <summary>
-/// ’n–ÊiƒXƒe[ƒWj
-/// ¦ƒXƒe[ƒW‚Q‚ğì‚é—\’è‚¾‚Á‚½‚ªA‚¤‚Ü‚­‚¢‚©‚È‚©‚Á‚½‚Ì‚ÅC³
+/// åœ°é¢ï¼ˆã‚¹ãƒ†ãƒ¼ã‚¸ï¼‰
+/// â€»ã‚¹ãƒ†ãƒ¼ã‚¸ï¼’ã‚’ä½œã‚‹äºˆå®šã ã£ãŸãŒã€ã†ã¾ãã„ã‹ãªã‹ã£ãŸã®ã§ä¿®æ­£
 /// </summary>
 class Field : public GameObject
 {
@@ -15,45 +15,45 @@ public:
 	void Draw() override;
 
 	/// <summary>
-	/// ‰E‘¤‚Ì“_‚ª“–‚½‚Á‚Ä‚¢‚é‚©’²‚×‚é
+	/// å³å´ã®ç‚¹ãŒå½“ãŸã£ã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
 	/// </summary>
-	/// <param name="x">XÀ•W</param>
-	/// <param name="y">YÀ•W</param>
-	/// <returns>‚ß‚è‚ñ‚¾—Ê(ƒhƒbƒg)</returns>
+	/// <param name="x">Xåº§æ¨™</param>
+	/// <param name="y">Yåº§æ¨™</param>
+	/// <returns>ã‚ã‚Šè¾¼ã‚“ã é‡(ãƒ‰ãƒƒãƒˆ)</returns>
 	int CollisionRight(int x, int y);
 	/// <summary>
-	/// ‰º‚Ì“_‚ª“–‚½‚Á‚Ä‚¢‚é‚©’²‚×‚é
+	/// ä¸‹ã®ç‚¹ãŒå½“ãŸã£ã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
 	/// </summary>
-	/// <param name="x">XÀ•W</param>
-	/// <param name="y">YÀ•W</param>
-	/// <returns>‚ß‚è‚ñ‚¾—Êiƒhƒbƒgj</returns>
+	/// <param name="x">Xåº§æ¨™</param>
+	/// <param name="y">Yåº§æ¨™</param>
+	/// <returns>ã‚ã‚Šè¾¼ã‚“ã é‡ï¼ˆãƒ‰ãƒƒãƒˆï¼‰</returns>
 	int CollisionDown(int x, int y);
 	/// <summary>
-	/// ¶‚Ì“_‚ª“–‚½‚Á‚Ä‚¢‚é‚©’²‚×‚é
+	/// å·¦ã®ç‚¹ãŒå½“ãŸã£ã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
 	/// </summary>
-	/// <param name="x">xÀ•W</param>
-	/// <param name="y">yÀ•W</param>
-	/// <returns>‚ß‚è‚ñ‚¾—Ê</returns>
+	/// <param name="x">xåº§æ¨™</param>
+	/// <param name="y">yåº§æ¨™</param>
+	/// <returns>ã‚ã‚Šè¾¼ã‚“ã é‡</returns>
 	int CollisionLeft(int x, int y);
 
 	/// <summary>
-	/// ã‚Ì“_‚ª‚ ‚½‚Á‚Ä‚¢‚é‚©’²‚×‚é
+	/// ä¸Šã®ç‚¹ãŒã‚ãŸã£ã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
 	/// </summary>
-	/// <param name="x">xÀ•W</param>
-	/// <param name="y">yÀ•W</param>
-	/// <returns>‚ß‚è‚ñ‚¾—Ê</returns>
+	/// <param name="x">xåº§æ¨™</param>
+	/// <param name="y">yåº§æ¨™</param>
+	/// <returns>ã‚ã‚Šè¾¼ã‚“ã é‡</returns>
 	int CollisionUp(int x, int y);
 	bool IsWallBlock(int x, int y);
 	bool IsHitClear(int x, int y);
 
 	/// <summary>
-	/// ƒXƒe[ƒWƒ[ƒh—p
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ­ãƒ¼ãƒ‰ç”¨
 	/// </summary>
 	/// <param name="StageNumber"></param>
 	void LoadStage(int StageNumber);
 
 	void NextLoadStage();
-
+	int GetCsvWidth() { return width; }
 private:
 	int hImage_;
 	int hBackGround_;
@@ -61,6 +61,8 @@ private:
 	int* Map;
 	int width;
 	int height;
-
-	int NowStage_ = 0;//Œ»İ‚ÌƒXƒe[ƒW”Ô†‚ğ•ÛŠÇ‚·‚é—p
+  
+  int NowStage_ = 0;//ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ç•ªå·ã‚’ä¿ç®¡ã™ã‚‹ç”¨
+	int NowStage_;//ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ç•ªå·ã‚’ä¿ç®¡ã™ã‚‹ç”¨
+	int hBackGroundDark_;
 };
