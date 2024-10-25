@@ -887,7 +887,8 @@ void Player::WhereIs()
 	//進行度作�EのチE��チE��用
 	DrawFormatString(0, 0, GetColor(255, 0, 0), "%f", transform_.position_.x);
 	DrawFormatString(0, 10, GetColor(255, 0, 0), "%f", nowLine);
-  
+}
+
 void Player::StopWeatherSE()
 {
 	if (CheckSoundMem(RainHandle) == 1)
