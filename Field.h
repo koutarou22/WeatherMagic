@@ -64,4 +64,7 @@ private:
 
 	int NowStage_;//現在のステージ番号を保管する用
 	int hBackGroundDark_;
+
+	int padAnalogInput;//xboxの入力を受け取る
+	XINPUT_STATE input;//xboxの入力を受け取る
 };

@@ -9,7 +9,7 @@ enum WeatherState
 {
 	Sun,//°‚ê‚Ì“ú
 	Rain,//‰J‚Ì“ú
-	Gale,//‹­•—‚Ì“ú(“VŒó‚©‚±‚ê...?)
+	Gale,//‹­•—‚Ì“ú
 	Snow,//á‚Ì“ú
 };
 
@@ -34,6 +34,8 @@ public:
 	float GetWeatherChange();
 	WeatherState weather_;
 
+	int padAnalogInput;//xbox‚Ì“ü—Í‚ğó‚¯æ‚é
+	XINPUT_STATE input;//xbox‚Ì“ü—Í‚ğó‚¯æ‚é
     
 private:
 	
@@ -72,6 +74,7 @@ private:
 	int animeFrame_;
 
 	bool DebugLog_;
+	bool IsExplanationDisplay_;
 		
 };
 

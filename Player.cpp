@@ -14,6 +14,7 @@
 #include "HealItem.h"
 #include "MpItem.h"
 #include "Rock.h"
+#include"MP.h"
 #include <iostream>
 
 //satou test
@@ -93,6 +94,7 @@ void Player::Update()
 	Rock* pRock = GetParent()->FindGameObject<Rock>();
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
+	MP* mp = GetParent()->FindGameObject<MP>();
 
 	//xboxコントローラーの入力情報を取得
 	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
@@ -357,7 +359,7 @@ void Player::Update()
 				if (GaleTime_ < 0)//約5秒ごとに行う処理
 				{
 					GaleTime_ = 420;
-					MagicDown(2);//4だと消費量多すぎるかもしれない　要調整
+					MagicDown(2);//消費量は要調整
 					PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
 				}
 				else
@@ -407,6 +409,7 @@ void Player::Update()
 			mg->SetDirection(dir);
 			mg->SetSpeed(5.5f);
 			CoolDownMagic_ = timer_;
+			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 			MagicPoint_--;
 
 			PlaySoundMem(MagicSound, DX_PLAYTYPE_BACK);
@@ -756,10 +759,10 @@ void Player::Draw()
 
     if(DebugLog_ == true)
 	{
-		DrawFormatString(815, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
-		DrawFormatString(1000, 30, GetColor(0, 0, 0), "HP: %d", Hp_);
-		DrawFormatString(1000, 54, GetColor(0, 0, 0), "無敵時間: %f", NDTIME_);
-		DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
+		//DrawFormatString(815, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y); 文字化けしてるので　使うなら再度書き直し
+		//DrawFormatString(1000, 30, GetColor(0, 0, 0), "HP: %d", Hp_);
+		//DrawFormatString(1000, 54, GetColor(0, 0, 0), "無敵時間: %f", NDTIME_);
+		//DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
 	}
 
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時閁E%d", GaleTime_);

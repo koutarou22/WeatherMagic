@@ -57,6 +57,8 @@ void Weather::Initialize()
 
 void Weather::Update()
 {
+    padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+
     if (++flameCounter_ >= 24)
     {
         if (animeFrame_ < 3) 
@@ -66,13 +68,15 @@ void Weather::Update()
         flameCounter_ = 0;
     }
 
-    if (CheckHitKey(KEY_INPUT_Q))
+    if (CheckHitKey(KEY_INPUT_Q) || input.Buttons[8] || input.Buttons[9])//画面暗くする
     {
         DebugLog_ = true;
+        IsExplanationDisplay_ = true;
     }
     else
     {
         DebugLog_ = false;
+        IsExplanationDisplay_ = false;
     }
 }
 
@@ -97,7 +101,7 @@ void Weather::Draw()
         switch (weather_)
         {
         case Sun:
-            DrawGraph(0, 110, hImage_StateSun, TRUE);
+            //DrawGraph(0, 110, hImage_StateSun, TRUE);//背景暗い時だけ使う
             DrawGraph(600, 0, Sun_Icon, TRUE);  // 晴れ
             SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
             DrawGraph(0, 0, hImage_Sun, TRUE);  // 晴れ
@@ -105,7 +109,7 @@ void Weather::Draw()
 
         case Rain:
 
-            DrawGraph(0, 110, hImage_StateRain, TRUE);
+            //DrawGraph(0, 110, hImage_StateRain, TRUE);//背景暗い時だけ使う
             if (pPlayer->GetMp() > 0)
             {
                 DrawGraph(600, 0, Rain_Icon, TRUE);  // 雨
@@ -124,7 +128,7 @@ void Weather::Draw()
 
         case Gale:
 
-            DrawGraph(0, 110, hImage_StateWind, TRUE);
+            //DrawGraph(0, 110, hImage_StateWind, TRUE);//背景暗い時だけ使う
             if (pPlayer->GetMp() > 3)
             {
                 DrawGraph(600, 0, Gale_Icon, TRUE);
@@ -141,6 +145,8 @@ void Weather::Draw()
             break;
 
         case Snow:
+            //背景暗い時だけ使う やつをいずれ用意
+
             DrawGraph(600, 0, Snow_Icon, TRUE);
             if (pPlayer->GetMp()>0)//MPを取得して０より大きかったら普通の処理
             {
@@ -199,6 +205,28 @@ void Weather::Draw()
 
         //}
     }
+
+    if (IsExplanationDisplay_)//画面暗くしているときに出す説明
+    {
+        switch (weather_)
+        {
+        case Sun:
+            DrawGraph(0, 110, hImage_StateSun, TRUE);//背景暗い時だけ使う
+            break;
+        case Rain:
+            DrawGraph(0, 110, hImage_StateRain, TRUE);//背景暗い時だけ使う
+            break;
+        case Gale:
+            DrawGraph(0, 110, hImage_StateWind, TRUE);//背景暗い時だけ使う
+            break;
+        case Snow:
+            //背景暗い時だけ使う やつをいずれ用意
+            break;
+        default:
+            break;
+        }
+    }
+
 }
 
 
