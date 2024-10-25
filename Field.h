@@ -2,8 +2,8 @@
 #include "Engine/GameObject.h"
 
 /// <summary>
-/// �n�ʁi�X�e�[�W�j
-/// ���X�e�[�W�Q�����\�肾�������A���܂������Ȃ������̂ŏC��
+/// 地面（ステージ）
+/// ※ステージ２を作る予定だったが、うまくいかなかったので修正
 /// </summary>
 class Field : public GameObject
 {
@@ -15,39 +15,39 @@ public:
 	void Draw() override;
 
 	/// <summary>
-	/// �E���̓_���������Ă��邩���ׂ�
+	/// 右側の点が当たっているか調べる
 	/// </summary>
-	/// <param name="x">X���W</param>
-	/// <param name="y">Y���W</param>
-	/// <returns>�߂荞�񂾗�(�h�b�g)</returns>
+	/// <param name="x">X座標</param>
+	/// <param name="y">Y座標</param>
+	/// <returns>めり込んだ量(ドット)</returns>
 	int CollisionRight(int x, int y);
 	/// <summary>
-	/// ���̓_���������Ă��邩���ׂ�
+	/// 下の点が当たっているか調べる
 	/// </summary>
-	/// <param name="x">X���W</param>
-	/// <param name="y">Y���W</param>
-	/// <returns>�߂荞�񂾗ʁi�h�b�g�j</returns>
+	/// <param name="x">X座標</param>
+	/// <param name="y">Y座標</param>
+	/// <returns>めり込んだ量（ドット）</returns>
 	int CollisionDown(int x, int y);
 	/// <summary>
-	/// ���̓_���������Ă��邩���ׂ�
+	/// 左の点が当たっているか調べる
 	/// </summary>
-	/// <param name="x">x���W</param>
-	/// <param name="y">y���W</param>
-	/// <returns>�߂荞�񂾗�</returns>
+	/// <param name="x">x座標</param>
+	/// <param name="y">y座標</param>
+	/// <returns>めり込んだ量</returns>
 	int CollisionLeft(int x, int y);
 
 	/// <summary>
-	/// ��̓_���������Ă��邩���ׂ�
+	/// 上の点があたっているか調べる
 	/// </summary>
-	/// <param name="x">x���W</param>
-	/// <param name="y">y���W</param>
-	/// <returns>�߂荞�񂾗�</returns>
+	/// <param name="x">x座標</param>
+	/// <param name="y">y座標</param>
+	/// <returns>めり込んだ量</returns>
 	int CollisionUp(int x, int y);
 	bool IsWallBlock(int x, int y);
 	bool IsHitClear(int x, int y);
 
 	/// <summary>
-	/// �X�e�[�W���[�h�p
+	/// ステージロード用
 	/// </summary>
 	/// <param name="StageNumber"></param>
 	void LoadStage(int StageNumber);
@@ -61,7 +61,8 @@ private:
 	int* Map;
 	int width;
 	int height;
-
-	int NowStage_;//���݂̃X�e�[�W�ԍ���ۊǂ���p
+  
+  int NowStage_ = 0;//現在のステージ番号を保管する用
+	int NowStage_;//現在のステージ番号を保管する用
 	int hBackGroundDark_;
 };

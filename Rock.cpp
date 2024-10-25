@@ -130,10 +130,6 @@ void Rock::Draw()
 	}
 
 	DrawExtendGraph(x, y, x + 64 * transform_.scale_.x, y + 64 * transform_.scale_.y, hImage_, TRUE);
-	DrawBox(hitX, hitY, hitX +54, hitY + 64, GetColor(255, 0, 0), FALSE);
-
-	
-	//DrawBox(rectX, rectY, rectX + rectW, rectY + rectH, GetColor(255, 0, 0), FALSE);
 }
 
 void Rock::SetPosition(int x, int y)

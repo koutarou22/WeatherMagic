@@ -2,6 +2,9 @@
 #include "Engine/GameObject.h"
 #include "Engine/SceneManager.h"
 #include"ClearScene.h"
+#include "Score.h"
+
+//ã“ã“ã«æ˜Ÿã‚’æ›¸ãè¿½åŠ äºˆå®š
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
@@ -11,13 +14,14 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 
 void ClearScene::Initialize()
 {
+    Instantiate<Score>(this);//è©•ä¾¡
 }
 
 void ClearScene::Update()
 {
     padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
-    // ƒXƒy[ƒXƒL[‚ª‰Ÿ‚³‚ê‚½‚çƒXƒ^[ƒgƒ{ƒ^ƒ“‚ÅTitleScene‚É‘JˆÚ
-    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4]) 
+    // Cã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³ã§TitleSceneã«é·ç§»
+    if (CheckHitKey(KEY_INPUT_C) || input.Buttons[4]) 
     {
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_TITLE);
@@ -29,9 +33,26 @@ void ClearScene::Draw()
     /*DrawString(0, 0, "Clear", GetColor(255, 255, 255));
     DrawString(0, 20, "Press SPACE to return to title", GetColor(255, 255, 255));*/
     DrawGraph(0, 0, hImage_, TRUE);
+
+    //SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+    //int mp = pSceneManager->GetMagicPoint();//GetMp
+    //
+    ////Imaha Kantan na Syori
+    //if (mp > 80)
+    //{
+    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "è©•ä¾¡â˜†3");
+    //}
+    //else if (mp > 60)
+    //{
+    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "è©•ä¾¡â˜†2");
+    //}
+    //else 
+    //{
+    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "è©•ä¾¡â˜†1");
+    //}
+
 }
 
 void ClearScene::Release()
 {
-
 }

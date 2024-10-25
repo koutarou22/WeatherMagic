@@ -19,11 +19,12 @@ public:
 	void SetPosition(int x, int y);
 
 	void WeatherEffects(Weather* weather);
-
-	int GetMp() { return MagicPoint_; }
+	
 	void SetMagicMP(int _Mp) { MagicPoint_ = _Mp; }//ほかのクラスでも共有するため用
 	/*void DamageHp();*/
+
 	void Jump();
+	int GetMp();
 	int GetHp();
 	// MagicPoint_を増やす
 	void MagicUp(int _PMp);

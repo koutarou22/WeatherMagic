@@ -1,25 +1,30 @@
 #pragma once
 #include "Engine/GameObject.h"
+
+/// <summary>
+///ã‚¯ãƒªã‚¢ã®ã‚·ãƒ¼ãƒ³
+/// </summary>
 class ClearScene : public GameObject
 {
 	int hImage_;
-	int padAnalogInput;//xbox‚Ì“ü—Í‚ğó‚¯æ‚é
-	XINPUT_STATE input;//xbox‚Ì“ü—Í‚ğó‚¯æ‚é
+  int padAnalogInput;//xboxã®å…¥åŠ›ã‚’å—ã‘å–ã‚‹
+	XINPUT_STATE input;//xboxã®å…¥åŠ›ã‚’å—ã‘å–ã‚‹
+
 public:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	//ˆø”Fparent  eƒIƒuƒWƒFƒNƒgiSceneManagerj
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	//å¼•æ•°ï¼šparent  è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆSceneManagerï¼‰
 	ClearScene(GameObject* parent);
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize() override;
 
-	//XV
+	//æ›´æ–°
 	void Update() override;
 
-	//•`‰æ
+	//æç”»
 	void Draw() override;
 
-	//ŠJ•ú
+	//é–‹æ”¾
 	void Release() override;
 };
 
