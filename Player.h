@@ -35,6 +35,7 @@ public:
 
 	void WhereIs(); //�B���x ���܂ǂ��H
 	void StopWeatherSE();
+	void StickTiltCheck();
 
 private:
 	int MagicPoint_;//打てる魔法の回数
@@ -80,12 +81,22 @@ private:
 	int MpHealTimer_;//一定周期でMPを回復するタイマー追加
   
 	//int MAGIC_COUNT = 0;
-	enum State
+	enum PlayerState
 	{
 		S_WaIk = 0,
-		S_Cry,
+		S_Damage,
+		S_Dead,
 	};
-	State state;
+	PlayerState player_state;
+
+	enum PlayerAnimationState 
+	{
+		S_Walk_A = 0,
+		S_Damage_A,
+		S_Dead_A,
+	};
+	PlayerAnimationState player_animation_state;
+
 	int timer_ = 90;
 	int WeatherTime_ = 90;
 	int GaleTime_ = 300;
@@ -102,5 +113,13 @@ private:
 	int MagicSound;
 
 	float CountSnowFlame; //��̃^�C�}�[ ���Z
+	//スティックを倒したかどうか
+	struct Stick_Tilt {
+		bool IsLeftStickTilt_left;//左スティックを左に
+		bool IsLeftStickTilt_right;//左スティックを右に
+		bool IsRightStickTilt_left;//右スティックを左に
+		bool IsRightStickTilt_right;//右スティックを右に
+	};
+	Stick_Tilt stickTilt;
 	
 };

@@ -59,7 +59,7 @@ private:
 	int hImage_StateRain;
     int hImage_StateSnow;
 
-	int BgImage_;
+	int Weather_ChangeMagic;//天候変えたときのアニメーション(まだ定義してない)
 
 	bool RainOnChecker;
 	bool WindOnChecker;

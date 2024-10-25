@@ -118,7 +118,7 @@ void Weather::Draw()
             {
                 RainOnChecker = true;
                 DrawGraph(600, 0, hImage_RainNoMp, TRUE);  // 雨
-                DrawFormatString(580, 48, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
+                //DrawFormatString(580, 48, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
             }
             break;
 
@@ -136,7 +136,7 @@ void Weather::Draw()
             {
                 WindOnChecker = true;
                 DrawGraph(600, 0, hImage_WindNoMp, TRUE);
-                DrawFormatString(580, 48, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
+                //DrawFormatString(580, 48, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
             }
             break;
 
@@ -152,7 +152,7 @@ void Weather::Draw()
             {
                 SnowOnChecker = true;
                 // DrawGraph(600, 0, hImage_WindNoMp, TRUE); //素材待ち
-                DrawFormatString(580, 48, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
+                //DrawFormatString(580, 48, GetColor(255, 0, 0), "Mpが足りません！");  // 赤文字で表示
             }
             SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha40);
             DrawGraph(0, 0, hImage_Snow, TRUE);  // 雪
@@ -166,40 +166,41 @@ void Weather::Draw()
     //消しても動作には問題ない
     if (DebugLog_ == true)
     {
-        DrawFormatString(990, 230, GetColor(255, 255, 255), "現在の天候は % d", weather_, "です");
-        switch (weather_)
-        {
-        case Sun:
+        //DrawFormatString(990, 230, GetColor(255, 255, 255), "現在の天候は % d", weather_, "です");
+        //switch (weather_)
+        //{
+        //case Sun:
 
-            DrawFormatString(990, 120, GetColor(220, 20, 60), "天候:快晴 ");
-            DrawFormatString(990, 145, GetColor(220, 20, 60), "効果:『なし』");
-            break;
+        //    DrawFormatString(990, 120, GetColor(220, 20, 60), "天候:快晴 ");
+        //    DrawFormatString(990, 145, GetColor(220, 20, 60), "効果:『なし』");
+        //    break;
 
-        case Rain:
+        //case Rain:
 
-            DrawFormatString(990, 120, GetColor(65, 105, 225), "天候: 雨");
-            DrawFormatString(990, 145, GetColor(65, 105, 225), "効果1:『一部の敵に変化』");
-            DrawFormatString(990, 169, GetColor(255, 0, 0), "効果2:『毎秒Mp１減少』");
-            break;
+        //    DrawFormatString(990, 120, GetColor(65, 105, 225), "天候: 雨");
+        //    DrawFormatString(990, 145, GetColor(65, 105, 225), "効果1:『一部の敵に変化』");
+        //    DrawFormatString(990, 169, GetColor(255, 0, 0), "効果2:『毎秒Mp１減少』");
+        //    break;
 
-        case Gale:
+        //case Gale:
 
-            DrawFormatString(990, 120, GetColor(0, 255, 127), "天候: 風");
-            DrawFormatString(990, 145, GetColor(0, 187, 133), "効果1:『移動速度上昇』");
-            DrawFormatString(990, 169, GetColor(0, 187, 133), "効果2:『強風を発生』");
-            DrawFormatString(990, 192, GetColor(255, 0, 0), "↑消費Mp 4");
-            break;
+        //    DrawFormatString(990, 120, GetColor(0, 255, 127), "天候: 風");
+        //    DrawFormatString(990, 145, GetColor(0, 187, 133), "効果1:『移動速度上昇』");
+        //    DrawFormatString(990, 169, GetColor(0, 187, 133), "効果2:『強風を発生』");
+        //    DrawFormatString(990, 192, GetColor(255, 0, 0), "↑消費Mp 4");
+        //    break;
 
-        case Snow: //文章は仮置き
-            DrawFormatString(990, 120, GetColor(0, 255, 127), "天候: 雪");
-            DrawFormatString(990, 145, GetColor(0, 187, 133), "効果1:『移動速度低下』");
-            DrawFormatString(990, 145, GetColor(0, 187, 133), "効果:『敵の速度0』");
-            DrawFormatString(990, 145, GetColor(0, 187, 133), "効果:『定期ダメージ(Mp10)』");
-            break;
+        //case Snow: //文章は仮置き
+        //    DrawFormatString(990, 120, GetColor(0, 255, 127), "天候: 雪");
+        //    DrawFormatString(990, 145, GetColor(0, 187, 133), "効果1:『移動速度低下』");
+        //    DrawFormatString(990, 145, GetColor(0, 187, 133), "効果:『敵の速度0』");
+        //    DrawFormatString(990, 145, GetColor(0, 187, 133), "効果:『定期ダメージ(Mp10)』");
+        //    break;
 
-        }
+        //}
     }
 }
+
 
 void Weather::SetPosition(int x, int y)
 {
