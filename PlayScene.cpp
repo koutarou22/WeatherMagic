@@ -12,6 +12,7 @@
 #include "HealItem.h"
 #include "MpItem.h"
 #include "ClearFlag.h"
+#include"MP.h"
 
 PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0) 
 {
@@ -33,6 +34,7 @@ void PlayScene::Initialize()
     Instantiate<Weather>(this);
     Instantiate<Camera>(this);
     Instantiate<Hp>(this);
+    Instantiate<MP>(this);
 }
 
 //çXêV
