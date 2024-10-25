@@ -53,14 +53,12 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	StringUi_Up = transform_.position_.y;
 	MpHealTimer_ = 30;
 
-<<<<<<< HEAD
+	CountSnowFlame = MAX_SNOW_FLAME;
+
 	stickTilt.IsLeftStickTilt_left = false;
 	stickTilt.IsLeftStickTilt_right = false;
 	stickTilt.IsRightStickTilt_left = false;
 	stickTilt.IsRightStickTilt_right = false;
-=======
-	CountSnowFlame = MAX_SNOW_FLAME;
->>>>>>> master
 
 	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);

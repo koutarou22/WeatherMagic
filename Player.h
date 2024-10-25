@@ -112,7 +112,7 @@ private:
 	int GetItemSound;
 	int MagicSound;
 
-<<<<<<< HEAD
+	float CountSnowFlame; //��̃^�C�}�[ ���Z
 	//スティックを倒したかどうか
 	struct Stick_Tilt {
 		bool IsLeftStickTilt_left;//左スティックを左に
@@ -121,8 +121,5 @@ private:
 		bool IsRightStickTilt_right;//右スティックを右に
 	};
 	Stick_Tilt stickTilt;
-=======
-	float CountSnowFlame; //��̃^�C�}�[ ���Z
->>>>>>> master
 	
 };
