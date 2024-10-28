@@ -34,7 +34,7 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
-	void WhereIs(); //�B���x ���܂ǂ��H
+	void WhereIs(); //tassei do
 	void StopWeatherSE();
 	void StickTiltCheck();
 
@@ -113,7 +113,7 @@ private:
 	int GetItemSound;
 	int MagicSound;
 
-	float CountSnowFlame; //��̃^�C�}�[ ���Z
+	float CountSnowFlame; //snowflame
 	//スティックを倒したかどうか
 	struct Stick_Tilt {
 		bool IsLeftStickTilt_left;//左スティックを左に
