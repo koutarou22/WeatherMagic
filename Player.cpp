@@ -26,7 +26,7 @@ namespace
     float GRAVITY = 9.8f / 60.0f;
 	const int MAX_MAGIC_POINT = 100;
 	const int MAX_DAMAGE_HP = 5;
-	const float MAX_SNOW_FLAME = 120.0f * 5.0f;
+	const float MAX_SNOW_FLAME = 120.0f * 10.0f;
 	const float CHIP_SIZE = 64.0f; //計算で使ぁE�Eでfloat
  
 };
@@ -675,15 +675,18 @@ void Player::Update()
 		{
 			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 			MagicPoint_++;
-			MpHealTimer_ = 30;
+			MpHealTimer_ = 60;
 		}
 	}
   
 	//雪の晁E時間経過(とりあえずフレーム経過)でMPが減る
-	if (pWeather->GetWeatherState() == WeatherState::Snow)
+	if (pWeather != nullptr)
 	{
-		//フレーム基準だからなぁE..
-		CountSnowFlame--;
+		if (pWeather->GetWeatherState() == WeatherState::Snow)
+		{
+			//フレーム基準だからなぁE..
+			CountSnowFlame--;
+		}
 	}
 
 	//残りの雪時間ぁEを�Eったら
@@ -692,7 +695,7 @@ void Player::Update()
 		if (MagicPoint_ >= 10)//MPぁE0以上�E時�E10減らぁE
 		{
 			MagicPoint_ -= 10;
-			
+			HpDown(1);
 		}
 		else
 		{
