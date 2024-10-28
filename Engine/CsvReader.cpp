@@ -260,6 +260,7 @@ size_t CsvReader::GetHeight()
 int CsvReader::GetInt(int column, int line)
 {
 	std::string str = GetString(column, line);
+
 	if (str == "")
 		return 0;
 	return std::stoi(str);

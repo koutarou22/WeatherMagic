@@ -27,7 +27,7 @@ namespace
 	const int MAX_MAGIC_POINT = 100;
 	const int MAX_DAMAGE_HP = 5;
 	const float MAX_SNOW_FLAME = 120.0f * 5.0f;
-	const float CHIP_SIZE = 64.0f; //計算で使ぁE�Eでfloat
+	const float CHIP_SIZE = 64.0f; //計算でつかうのでfloat
  
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
@@ -675,26 +675,26 @@ void Player::Update()
 		}
 	}
   
-	//雪の晁E時間経過(とりあえずフレーム経過)でMPが減る
+	//雪の時間経過(とりあえずフレーム経過)でMPが減る
 	if (pWeather->GetWeatherState() == WeatherState::Snow)
 	{
 		//フレーム基準だからなぁE..
 		CountSnowFlame--;
 	}
 
-	//残りの雪時間ぁEを�Eったら
+	//残りの雪時間が0以下だったら
 	if (CountSnowFlame <= 0)
 	{
-		if (MagicPoint_ >= 10)//MPぁE0以上�E時�E10減らぁE
+		if (MagicPoint_ >= 10)//MPが10以上なら減らす
 		{
 			MagicPoint_ -= 10;
 			
 		}
 		else
 		{
-			MagicPoint_ = 0;//10よりすくなぁE��き�E0にしちめE��
+			MagicPoint_ = 0;//10より少なかったら0に
 		}
-		CountSnowFlame = MAX_SNOW_FLAME; //また�EチE��スに戻ぁE
+		CountSnowFlame = MAX_SNOW_FLAME; //元に戻す
 	}
 }
 
@@ -877,28 +877,22 @@ void Player::HpDown(int _MHp)
 
 void Player::WhereIs()
 {
-	/*
-	64*csvの横幁Emax
-	ぁE��ぁE��とぁEnow
-	よこせんばーひぁE��、線�E長ぁEnow/maxに縦線引く かんじ！E
-	*/
-
 	//横線関連
-	static int SenStart = 1000; //横線�E始点x
-	static int SenLength = 200; //横線�E長さx
-	static int SenY = 50; //横線�Ey
-	static int SenHeight = 5; //横線�E幁E
-	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true);
+	static int SenStart = 1000; //横線の始点x
+	static int SenLength = 200; //横線の長さx
+	static int SenY = 50; //横線の始点y
+	static int SenHeight = 5; //横線の幅
+	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true); //横線かく
 
 	//縦線関連
 	Field* pField = GetParent()->FindGameObject<Field>();
-	static float max = CHIP_SIZE * pField->GetCsvWidth();
+	 
+	static float max = CHIP_SIZE * pField->GetGoalWidth();
 	float now = transform_.position_.x;
-	float nowLine = SenStart + SenLength * (now / max); //縦線引くところの
-	DrawLine(nowLine, SenY - 10, nowLine, SenY + 10, GetColor(128, 128, 128));
+	float nowLine = SenStart + SenLength * (now / max); //縦線引くところのX
+	DrawLine(nowLine, SenY - 10, nowLine, SenY + 10, GetColor(128, 128, 128)); //縦線かく
 
-
-	//進行度作�EのチE��チE��用
+	//進行度関連のデバッグ用
 	DrawFormatString(0, 0, GetColor(255, 0, 0), "%f", transform_.position_.x);
 	DrawFormatString(0, 10, GetColor(255, 0, 0), "%f", nowLine);
 }
