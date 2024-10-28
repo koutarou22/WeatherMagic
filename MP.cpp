@@ -22,10 +22,10 @@ void MP::Update()
 	
 	trs.scale_.x =(float)MPgaugeCrrVal_/(float)MPgaugeMaxVal_ ;
 	//MPå∏ÇÈÇÃÇ™ÇÌÇ©ÇËÇ‚Ç∑Ç≠å©Ç¶ÇÈå„Ç≈è¡Ç∑
-	if (CheckHitKey(KEY_INPUT_P))
+	/*if (CheckHitKey(KEY_INPUT_P))
 	{
 		MPgaugeCrrVal_--;
-	}
+	}*/
 }
 
 void MP::Draw()
@@ -36,7 +36,7 @@ void MP::Draw()
 	{
 		
 		DrawExtendGraph(trs.position_.x, trs.position_.y,
-			trs.position_.x+512*trs.scale_.x,trs.position_.y+60*trs.scale_.y, hMPBar_, TRUE);
+		240*trs.scale_.x,trs.position_.y+60*trs.scale_.y, hMPBar_, TRUE);
 	}
 	DrawGraph(-265, 60, hMPFrame_, TRUE);
 }

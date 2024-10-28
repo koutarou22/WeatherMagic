@@ -26,9 +26,10 @@ namespace
     float GRAVITY = 9.8f / 60.0f;
 	const int MAX_MAGIC_POINT = 100;
 	const int MAX_DAMAGE_HP = 5;
-	const float MAX_SNOW_FLAME = 120.0f * 5.0f;
-	const float CHIP_SIZE = 64.0f; //計算でつかうのでfloat
- 
+
+	const float MAX_SNOW_FLAME = 120.0f * 10.0f;
+	const float CHIP_SIZE = 64.0f;  //計算でつかうのでfloat
+
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
         Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100),IsHitOneCount_(false),DebugLog_(false)
@@ -376,8 +377,9 @@ void Player::Update()
 			{
 				if (RainTime_ < 0)//約5秒ごとに行う処理
 				{
-					RainTime_ = 420;
 					MagicDown(1);
+					RainTime_ = 10;
+					//RainTime_ = 420;
 					PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK);
 				}
 				else
@@ -410,7 +412,9 @@ void Player::Update()
 			mg->SetDirection(dir);
 			mg->SetSpeed(5.5f);
 			CoolDownMagic_ = timer_;
-			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+  
+      
+			mp->SetGaugeVal(MagicPoint_,MAX_MAGIC_POINT);
 			MagicPoint_--;
 
 			PlaySoundMem(MagicSound, DX_PLAYTYPE_BACK);
@@ -670,16 +674,20 @@ void Player::Update()
 	{
 		if (--MpHealTimer_ < 0)
 		{
+			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 			MagicPoint_++;
-			MpHealTimer_ = 30;
+			MpHealTimer_ = 60;
 		}
 	}
   
 	//雪の時間経過(とりあえずフレーム経過)でMPが減る
-	if (pWeather->GetWeatherState() == WeatherState::Snow)
+	if (pWeather != nullptr)
 	{
-		//フレーム基準だからなぁE..
-		CountSnowFlame--;
+		if (pWeather->GetWeatherState() == WeatherState::Snow)
+		{
+			//フレーム基準だからなぁE..
+			CountSnowFlame--;
+		}
 	}
 
 	//残りの雪時間が0以下だったら
@@ -688,7 +696,7 @@ void Player::Update()
 		if (MagicPoint_ >= 10)//MPが10以上なら減らす
 		{
 			MagicPoint_ -= 10;
-			
+			HpDown(1);
 		}
 		else
 		{
@@ -841,6 +849,8 @@ int Player::GetHp()
 
 void Player::MagicUp(int _PMp)
 {
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 	MagicPoint_ += _PMp;
 	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
 	if (MagicPoint_ > MAX_MAGIC_POINT)
@@ -851,8 +861,10 @@ void Player::MagicUp(int _PMp)
 
 void Player::MagicDown(int _MMp)
 {
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 	MagicPoint_ -= _MMp;
-
+	
 	if (MagicPoint_ < 0)
 	{
 		MagicPoint_ = 0;
