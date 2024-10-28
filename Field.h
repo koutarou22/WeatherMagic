@@ -4,7 +4,10 @@
 /// <summary>
 /// 
 /// 
-/// /// </summary>
+/// /// </summary> 
+
+class CsvReader;
+
 class Field : public GameObject
 {
 public:
@@ -53,7 +56,8 @@ public:
 	void LoadStage(int StageNumber);
 
 	void NextLoadStage();
-	int GetCsvWidth() { return width; }
+	void WhereIsGoal(int w,int h,CsvReader c); //ゴールのwidthをとってくる
+	int GetGoalWidth() { return goalWid_; } 
 private:
 	int hImage_;
 	int hBackGround_;
@@ -61,10 +65,13 @@ private:
 	int* Map;
 	int width;
 	int height;
+	int goalWid_; //ゴールのwidth
   
 	int NowStage_;//今のステージの番号
 	int hBackGroundDark_;
 
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る
+
+	
 };
