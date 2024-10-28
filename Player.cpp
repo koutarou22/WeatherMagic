@@ -14,6 +14,7 @@
 #include "HealItem.h"
 #include "MpItem.h"
 #include "Rock.h"
+#include"MP.h"
 #include <iostream>
 
 //satou test
@@ -81,6 +82,7 @@ void Player::Update()
 	Rock* pRock = GetParent()->FindGameObject<Rock>();
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
+	MP* mp = GetParent()->FindGameObject<MP>();
 
 	SetFontSize(24);
 
@@ -286,7 +288,8 @@ void Player::Update()
 				if (MagicPoint_ > 0)
 				{
 					MagicDown(1);
-					RainTime_ = 420;
+					RainTime_ = 10;
+					//RainTime_ = 420;
 					PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK);
 				}
 			}
@@ -319,6 +322,7 @@ void Player::Update()
 			mg->SetDirection(dir);
 			mg->SetSpeed(5.5f);
 			CoolDownMagic_ = timer_;
+			mp->SetGaugeVal(MagicPoint_,MAX_MAGIC_POINT);
 			MagicPoint_--;
 
 			PlaySoundMem(MagicSound, DX_PLAYTYPE_BACK);
@@ -574,6 +578,7 @@ void Player::Update()
 	{
 		if (--MpHealTimer_ < 0)
 		{
+			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 			MagicPoint_++;
 			MpHealTimer_ = 30;
 		}
@@ -716,6 +721,8 @@ int Player::GetHp()
 
 void Player::MagicUp(int _PMp)
 {
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 	MagicPoint_ += _PMp;
 	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
 	if (MagicPoint_ > MAX_MAGIC_POINT)
@@ -726,8 +733,10 @@ void Player::MagicUp(int _PMp)
 
 void Player::MagicDown(int _MMp)
 {
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 	MagicPoint_ -= _MMp;
-
+	
 	if (MagicPoint_ < 0)
 	{
 		MagicPoint_ = 0;
