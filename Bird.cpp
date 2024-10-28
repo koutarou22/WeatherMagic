@@ -3,7 +3,6 @@
 #include "Camera.h"
 #include "Weather.h"
 
-
 namespace
 {
 	static const int SCREEN_WIDTH = 1280;
