@@ -26,10 +26,12 @@ namespace
     float GRAVITY = 9.8f / 60.0f;
 	const int MAX_MAGIC_POINT = 100;
 	const int MAX_DAMAGE_HP = 5;
-	
+	const float MAX_SNOW_FLAME = 120.0f * 5.0f;
+	const float CHIP_SIZE = 64.0f; //計算で使ぁE�Eでfloat
  
 };
-Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED), Hp_(3), NDTIME_(2.0f), Flash_Count(0), IsHitOneCount_(false),DebugLog_(false)
+Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
+        Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100),IsHitOneCount_(false),DebugLog_(false)
 {
 	hImage = LoadGraph("Assets/Chara/Wizard.png");
 	assert(hImage > 0);
@@ -41,6 +43,10 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	animeFrame = 0;
 
 	Hp_ = 5;
+	
+	ChangeWeatherCoolTime = 60;
+	CanChangeWeather = true;
+	
 
 	MagicPoint_ = 100;//MPの最大値100変更
 
@@ -48,6 +54,13 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	Hp_GetFlag = false;
 	StringUi_Up = transform_.position_.y;
 	MpHealTimer_ = 30;
+
+	CountSnowFlame = MAX_SNOW_FLAME;
+
+	stickTilt.IsLeftStickTilt_left = false;
+	stickTilt.IsLeftStickTilt_right = false;
+	stickTilt.IsRightStickTilt_left = false;
+	stickTilt.IsRightStickTilt_right = false;
 
 	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);
@@ -84,6 +97,10 @@ void Player::Update()
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 	MP* mp = GetParent()->FindGameObject<MP>();
 
+	//xboxコントローラーの入力情報を取得
+	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+	StickTiltCheck();
+
 	SetFontSize(24);
 
 	if (hp == nullptr)
@@ -112,12 +129,13 @@ void Player::Update()
 		if (flameCounter);
 	}*/
 
-	if (CheckHitKey(KEY_INPUT_D) /*|| CheckHitKey(KEY_INPUT_RIGHT)*/)
+	//input.ThumbLXで左スティック入力をとる 倒した横軸値が-10000以下か10000以上で動く
+	if (CheckHitKey(KEY_INPUT_D) || stickTilt.IsLeftStickTilt_right)
 	{
 		transform_.position_.x += WeatherSpeed_;
 		if (++flameCounter >= 24)
 		{
-			animeFrame = (animeFrame + 1) % 2;//if文を使わない最適解
+			animeFrame = (animeFrame + 1) % 2;
 			flameCounter = 0;
 		}
 
@@ -134,13 +152,13 @@ void Player::Update()
 		}
 		//----------------------------------------------------------
 	}
-	else if (CheckHitKey(KEY_INPUT_A) /*|| CheckHitKey(KEY_INPUT_LEFT)*/)
+	else if (CheckHitKey(KEY_INPUT_A) || stickTilt.IsLeftStickTilt_left)
 	{
 
 		transform_.position_.x -= WeatherSpeed_;
 		if (++flameCounter >= 24)
 		{
-			animeFrame = (animeFrame + 1) % 2;//if文を使わない最適解
+			animeFrame = (animeFrame + 1) % 2;
 			flameCounter = 0;
 		}
 
@@ -160,9 +178,10 @@ void Player::Update()
 		animeFrame = 0;
 		flameCounter = 0;
 	}
+	//padInput = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-
-	if (CheckHitKey(KEY_INPUT_SPACE))
+	//ジャンプ
+	if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[12])//Aボタン
 	{
 		PictFlame = 80;
 
@@ -249,7 +268,7 @@ void Player::Update()
 			{
 				pWeather->SetWeather(Sun);
 			}
-			WeatherTime_= 60; 
+			WeatherTime_ = 60;
 		}
 		WeatherSwitch = true;
 	}
@@ -258,45 +277,115 @@ void Player::Update()
 		WeatherSwitch = false;
 	}
 
+	//天気を変える（十字キー）
+	if (input.Buttons[0])//↑晴れにする
+	{
+		if (CanChangeWeather && pWeather != nullptr)
+		{
+			// 現在の天候状態を取得
+			WeatherState WeatherState = pWeather->GetWeatherState();
+
+			if (WeatherState != Sun)//晴れ以外なら
+			{
+				ChangeWeatherCoolTime = 60;
+				CanChangeWeather = false;
+				pWeather->SetWeather(Sun);
+				StopWeatherSE();
+			}
+		}
+	}
+	else if (input.Buttons[2])//←雨にする
+	{
+		if (CanChangeWeather && pWeather != nullptr)
+		{
+			// 現在の天候状態を取得
+			WeatherState WeatherState = pWeather->GetWeatherState();
+
+			if (WeatherState != Rain)//雨以外なら
+			{
+				ChangeWeatherCoolTime = 60;
+				CanChangeWeather = false;
+				pWeather->SetWeather(Rain);
+				StopWeatherSE();
+			}
+		}
+	}
+	else if (input.Buttons[3])//→風にする
+	{
+		if (CanChangeWeather && pWeather != nullptr)
+		{
+			// 現在の天候状態を取得
+			WeatherState WeatherState = pWeather->GetWeatherState();
+
+			if (WeatherState != Gale)//風以外なら
+			{
+				ChangeWeatherCoolTime = 60;
+				CanChangeWeather = false;
+				pWeather->SetWeather(Gale);
+				StopWeatherSE();
+			}
+		}
+	}
+	else if (input.Buttons[1])//↓雪にする
+	{
+		if (CanChangeWeather && pWeather != nullptr)
+		{
+			// 現在の天候状態を取得
+			WeatherState WeatherState = pWeather->GetWeatherState();
+
+			if (WeatherState != Snow)//雪以外なら
+			{
+				ChangeWeatherCoolTime = 60;
+				CanChangeWeather = false;
+				pWeather->SetWeather(Snow);
+				StopWeatherSE();
+			}
+		}
+	}
+	//タイマーが切れてCanChangeWeather = trueになるまで再度天気の変更不可
+	if (--ChangeWeatherCoolTime < 0)
+	{
+		CanChangeWeather = true;
+	}
+
+
+
 	if (pWeather != nullptr)
 	{
 
 		if (pWeather->GetWeatherState() == Gale) //風の機能
 		{
-			if ((CheckHitKey(KEY_INPUT_RIGHT) || CheckHitKey(KEY_INPUT_LEFT)) && GaleTime_ == 0)
+			if (MagicPoint_ > 0)
 			{
-				if (RainTime_ <= 0)
+				if (GaleTime_ < 0)//約5秒ごとに行う処理
 				{
-					if (MagicPoint_ >= 4)
-					{
-						MagicDown(4);
-						GaleTime_ = 300;
-						PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
-					}
+					GaleTime_ = 420;
+					MagicDown(2);//消費量は要調整
+					PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
 				}
-			}
-		}
-		if (GaleTime_ > 0)
-		{
-			GaleTime_--;
+				else
+				{
+					GaleTime_--;
+				}
+			}	
 		}
 
-		if (pWeather->GetWeatherState() == Rain) 
+		if (pWeather->GetWeatherState() == Rain)
 		{
-			if (RainTime_ <= 0)
+			if (MagicPoint_ > 0)
 			{
-				if (MagicPoint_ > 0)
+				if (RainTime_ < 0)//約5秒ごとに行う処理
 				{
 					MagicDown(1);
 					RainTime_ = 10;
 					//RainTime_ = 420;
 					PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK);
 				}
+				else
+				{
+					RainTime_--;
+				}
 			}
-		}
-		if (RainTime_ > 0)
-		{
-			RainTime_--;
 		}
 	}
 
@@ -311,7 +400,7 @@ void Player::Update()
 	//------------------------------------------------------------------------------------------
 
 	//攻撃魔法の処理
-	if (CheckHitKey(KEY_INPUT_M))
+	if (CheckHitKey(KEY_INPUT_M) || input.Buttons[13])//bボタン
 	{
 		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
 		{
@@ -322,6 +411,8 @@ void Player::Update()
 			mg->SetDirection(dir);
 			mg->SetSpeed(5.5f);
 			CoolDownMagic_ = timer_;
+  
+      
 			mp->SetGaugeVal(MagicPoint_,MAX_MAGIC_POINT);
 			MagicPoint_--;
 
@@ -379,7 +470,6 @@ void Player::Update()
 		}
 	}
 
-
 	//Damage* pDamage = GetParent()->FindGameObject<Damage>();
 	//カメラの処理
 	Camera* cam = GetParent()->FindGameObject<Camera>();
@@ -399,11 +489,10 @@ void Player::Update()
 
 	//----------------------------------------------------------------------------------
 
-	//2点間の距離の便利さを身に染みて実感しました
 	std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
 	for (EnemyMagic* pEnemyMagic : pEMagics)
 	{
-		//解説　見ればわかると思うがこれは『EnemyMagic』と『Slime』の距離を求めている
+		//『EnemyMagic』と『Slime』の距離を求めている
 		float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
 		float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
@@ -553,14 +642,20 @@ void Player::Update()
 
 	if (pField != nullptr)
 	{
-		int playerX = (int)transform_.position_.x;
+		int playerX = (int)transform_.position_.x+10;
 		int playerY = (int)transform_.position_.y;
-
+	
 		if (pField->IsHitClear(playerX, playerY))
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+
+			if (pSceneManager != nullptr)
+			{	
+				int MpPass = MagicPoint_;//現在のMｐを変数に格納
+				pSceneManager->SetMagicPoint(MpPass);//Set関数に送り保存
+			}
+
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-			StopSoundMem(WindHandle);
 		}
 	}
 
@@ -584,6 +679,27 @@ void Player::Update()
 		}
 	}
   
+	//雪の晁E時間経過(とりあえずフレーム経過)でMPが減る
+	if (pWeather->GetWeatherState() == WeatherState::Snow)
+	{
+		//フレーム基準だからなぁE..
+		CountSnowFlame--;
+	}
+
+	//残りの雪時間ぁEを�Eったら
+	if (CountSnowFlame <= 0)
+	{
+		if (MagicPoint_ >= 10)//MPぁE0以上�E時�E10減らぁE
+		{
+			MagicPoint_ -= 10;
+			
+		}
+		else
+		{
+			MagicPoint_ = 0;//10よりすくなぁE��き�E0にしちめE��
+		}
+		CountSnowFlame = MAX_SNOW_FLAME; //また�EチE��スに戻ぁE
+	}
 }
 
 void Player::Draw()
@@ -597,7 +713,7 @@ void Player::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue(); 
 	}
-	
+
 	if (NDTIME_ <= 0.0f)
 	{
 		DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
@@ -611,7 +727,7 @@ void Player::Draw()
 	}
 	
 	++Flash_Count;
-	
+
 	if (Mp_GetFlag == true)
 	{
 		if (UIGetTimer > 0)
@@ -653,12 +769,15 @@ void Player::Draw()
 
     if(DebugLog_ == true)
 	{
-		DrawFormatString(815, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y);
-		DrawFormatString(1000, 30, GetColor(0, 0, 0), "HP: %d", Hp_);
-		DrawFormatString(1000, 54, GetColor(0, 0, 0), "無敵時間: %f", NDTIME_);
-		DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
+		//DrawFormatString(815, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y); 文字化けしてるので　使うなら再度書き直し
+		//DrawFormatString(1000, 30, GetColor(0, 0, 0), "HP: %d", Hp_);
+		//DrawFormatString(1000, 54, GetColor(0, 0, 0), "無敵時間: %f", NDTIME_);
+		//DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
 	}
 
+	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時閁E%d", GaleTime_);
+	WhereIs();
+	DrawFormatString(800, 0, GetColor(255, 0, 0), "thumbLX:%d", input.ThumbLX);
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
 }
 
@@ -714,6 +833,11 @@ void Player::Jump()
 	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
 }
 
+int Player::GetMp()
+{
+	return MagicPoint_;
+}
+
 int Player::GetHp()
 {
  	return Hp_;
@@ -756,5 +880,83 @@ void Player::HpUp(int _PHp)
 void Player::HpDown(int _MHp)
 {
 	Hp_ -= _MHp;
+}
+
+
+void Player::WhereIs()
+{
+	/*
+	64*csvの横幁Emax
+	ぁE��ぁE��とぁEnow
+	よこせんばーひぁE��、線�E長ぁEnow/maxに縦線引く かんじ！E
+	*/
+
+	//横線関連
+	static int SenStart = 1000; //横線�E始点x
+	static int SenLength = 200; //横線�E長さx
+	static int SenY = 50; //横線�Ey
+	static int SenHeight = 5; //横線�E幁E
+	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true);
+
+	//縦線関連
+	Field* pField = GetParent()->FindGameObject<Field>();
+	static float max = CHIP_SIZE * pField->GetCsvWidth();
+	float now = transform_.position_.x;
+	float nowLine = SenStart + SenLength * (now / max); //縦線引くところの
+	DrawLine(nowLine, SenY - 10, nowLine, SenY + 10, GetColor(128, 128, 128));
+
+
+	//進行度作�EのチE��チE��用
+	DrawFormatString(0, 0, GetColor(255, 0, 0), "%f", transform_.position_.x);
+	DrawFormatString(0, 10, GetColor(255, 0, 0), "%f", nowLine);
+}
+
+void Player::StopWeatherSE()
+{
+	if (CheckSoundMem(RainHandle) == 1)
+	{
+		StopSoundMem(RainHandle);
+	}
+	if (CheckSoundMem(WindHandle) == 1)
+	{
+		StopSoundMem(WindHandle);
+	}
+}
+
+/// <summary>
+/// sticktiltの構造体の変数を設定（各フレーム）
+/// </summary>
+void Player::StickTiltCheck()
+{
+	//左スティックを倒してる方向にtrue
+	if (input.ThumbLX <= -10000)
+	{
+		stickTilt.IsLeftStickTilt_left = true;
+	}
+	else if (input.ThumbLX >= 10000)
+	{
+		stickTilt.IsLeftStickTilt_right = true;
+	}
+	else
+	{
+		stickTilt.IsLeftStickTilt_left = false;
+		stickTilt.IsLeftStickTilt_right = false;
+	}
+	
+	//右スティックを倒してる方向にtrue
+	//player関連で右スティックを使うならコメント外す
+	/*if (input.ThumbRX <= -10000)
+	{
+		stickTilt.IsRightStickTilt_left = true;
+	}
+	else if(input.ThumbRX >= 10000)
+	{
+		stickTilt.IsRightStickTilt_right = true;
+	}
+	else
+	{
+		stickTilt.IsRightStickTilt_left = false;
+		stickTilt.IsRightStickTilt_right = false;
+	}*/
 }
 

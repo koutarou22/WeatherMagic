@@ -1,15 +1,13 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-class GameOverScene : public GameObject
+//テストシーンを管理するクラス
+class PlayScene : public GameObject
 {
-	int hImage_;
-	int padAnalogInput;//xboxの入力を受け取る
-	XINPUT_STATE input;//xboxの入力を受け取る
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
-	GameOverScene(GameObject* parent);
+	PlayScene(GameObject* parent);
 
 	//初期化
 	void Initialize() override;
@@ -22,4 +20,6 @@ public:
 
 	//開放
 	void Release() override;
+private:
+	int MapNumber_;
 };
