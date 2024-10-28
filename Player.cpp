@@ -28,6 +28,7 @@ namespace
 	const int MAX_DAMAGE_HP = 5;
 	const float MAX_SNOW_FLAME = 120.0f * 10.0f;
 	const float CHIP_SIZE = 64.0f; //計算で使ぁE�Eでfloat
+	const float DEAD_LINE = 900.0f;
  
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
@@ -632,7 +633,7 @@ void Player::Update()
 	}
 
 	//死亡したらゲームオーバー画面へ
-	if (transform_.position_.y > GROUND || Hp_ == 0)
+	if (transform_.position_.y > DEAD_LINE || Hp_ == 0)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
@@ -763,11 +764,11 @@ void Player::Draw()
 
 	if (MagicPoint_ == 0)
 	{
-		DrawFormatString(0, 60, GetColor(255, 69, 0), "MP: %d /20", MagicPoint_);//0なら赤に
+		DrawFormatString(0, 120, GetColor(255, 69, 0), "MP: %d /100", MagicPoint_);//0なら赤に
 	}
 	else
 	{
-		DrawFormatString(0, 60, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//それ以外なら青に
+		DrawFormatString(0, 120, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//それ以外なら青に
 	}
 
     if(DebugLog_ == true)
@@ -780,7 +781,7 @@ void Player::Draw()
 
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時閁E%d", GaleTime_);
 	WhereIs();
-	DrawFormatString(800, 0, GetColor(255, 0, 0), "thumbLX:%d", input.ThumbLX);
+	//DrawFormatString(800, 0, GetColor(255, 0, 0), "thumbLX:%d", input.ThumbLX);
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
 }
 
