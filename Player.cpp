@@ -902,7 +902,11 @@ void Player::WhereIs()
 	 
 	static float max = CHIP_SIZE * pField->GetGoalWidth();
 	float now = transform_.position_.x;
-	float nowLine = SenStart + SenLength * (now / max); //縦線引くところのX
+	float nowLine = SenStart + SenLength * (now / max) * 2; //縦線引くところのX
+	if (nowLine >= SenStart + SenLength)
+	{
+		nowLine = SenStart + SenLength; //マップは続くがゴールしたら縦線は動かない
+	}
 	DrawLine(nowLine, SenY - 10, nowLine, SenY + 10, GetColor(128, 128, 128)); //縦線かく
 
 	//進行度関連のデバッグ用

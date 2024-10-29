@@ -46,7 +46,7 @@ void Weather::Initialize()
     hImage_WindNoMp = LoadGraph("Assets/UI/Gale3.png"); //灰色でバツがついた風のアイコン
     assert(hImage_WindNoMp > 0);
 
-    //素材出来次第コメント解除2/2
+    //素材出来次第コメント解除
     //hImage_SnowNoMp = LoadGraph("Assets/UI/Gale3.png"); //灰色でバツがついた風のアイコン
     //assert(hImage_SnowNoMp > 0);
   
