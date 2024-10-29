@@ -43,7 +43,7 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	animType = 0;
 	animeFrame = 0;
 
-	Hp_ = 5;
+	Hp_ = 1;
 	
 	ChangeWeatherCoolTime = 60;
 	CanChangeWeather = true;
@@ -122,13 +122,7 @@ void Player::Update()
 	if (Jump_P > 20.0f) {
 		Jump_P = 20.0f; // 落下速度が最大値を超えないように制限
 	}
-
-
-	/*if (state == S_Cry)
-	{
-		flameCounter++;
-		if (flameCounter);
-	}*/
+	
 
 	//input.ThumbLXで左スティック入力をとる 倒した横軸値が-10000以下か10000以上で動く
 	if (CheckHitKey(KEY_INPUT_D) || stickTilt.IsLeftStickTilt_right)
@@ -192,7 +186,6 @@ void Player::Update()
 			if (onGround)
 			{
 				Jump();
-
 			}
 		}
 		prevSpaceKey = true;
@@ -455,14 +448,6 @@ void Player::Update()
 				{
 					hp->DamageHp();
 					HpDown(1);
-					if (Hp_ <= 0)
-					{
-						KillMe();
-					}
-					if (Hp_ > 3)
-					{
-						HpDown(1);
-					}
 
 					NDTIME_ = 3.0f;
 					break; // ダメージを与えた後にループを抜ける
@@ -506,12 +491,6 @@ void Player::Update()
 				hp->DamageHp();
 				HpDown(1);
 
-				if (Hp_ <= 0)
-				{
-					KillMe();
-					break;
-				}
-
 				NDTIME_ = 2.0f;//個々の数値で無敵時間がきまる
 			}
 			break;
@@ -532,11 +511,6 @@ void Player::Update()
 			{
 				hp->DamageHp();
 				HpDown(1);
-				if (Hp_ <= 0)
-				{
-					KillMe();
-					break;
-				}
 
 				NDTIME_ = 3.0f;
 			}
@@ -633,13 +607,29 @@ void Player::Update()
 	}
 
 	//死亡したらゲームオーバー画面へ
-	if (transform_.position_.y > DEAD_LINE || Hp_ == 0)
+	if (transform_.position_.y > DEAD_LINE )
 	{
+		player_animation_state = S_Dead_A;
+		isDead_ = true;
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
 		StopSoundMem(WindHandle);
 	}
+	if (Hp_ == 0)
+	{
+		player_animation_state = S_Dead_A;
+		isDead_ = true;
+	}
 
+	if (isDead_)//死亡のアニメーション
+	{
+		animeFrame = 5;
+		if (++flameCounter >= 60)
+		{
+			animeFrame = (animeFrame + 5) % 2;
+			flameCounter = 0;
+		}
+	}
 
 	if (pField != nullptr)
 	{
@@ -718,19 +708,36 @@ void Player::Draw()
 		x -= cam->GetValue(); 
 	}
 
-	if (NDTIME_ <= 0.0f)
+	switch (player_animation_state)
 	{
-		DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
-	}
-	else
-	{
-		if (Flash_Count % 24 == 0)
+	case Player::S_Walk_A:
+		if (NDTIME_ <= 0.0f)
 		{
 			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 		}
+		else
+		{
+			if (Flash_Count % 24 == 0)
+			{
+				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+			}
+		}
+		++Flash_Count;
+		//DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+
+		break;
+	/*case Player::S_Damage_A:
+		DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+		break;*/
+	case Player::S_Dead_A:	
+		DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+		break;
+	case Player::S_Erase_A:
+		break;
+	default:
+		break;
 	}
-	
-	++Flash_Count;
+
 
 	if (Mp_GetFlag == true)
 	{
@@ -883,7 +890,10 @@ void Player::HpUp(int _PHp)
 
 void Player::HpDown(int _MHp)
 {
+	animeFrame = 2;
 	Hp_ -= _MHp;
+	transform_.position_.x -= 2.0f;
+	//player_animation_state = S_Dead_A;
 }
 
 

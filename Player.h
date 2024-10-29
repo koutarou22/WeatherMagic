@@ -38,6 +38,8 @@ public:
 	void StopWeatherSE();
 	void StickTiltCheck();
 
+	
+
 private:
 	int MagicPoint_;//打てる魔法の回数
 	int hImage;
@@ -68,7 +70,9 @@ private:
 	float NDTIME_; //無敵時間
 	int	 CoolDownMagic_ = 0;
 	int Hp_;
-	int hitCount;
+	int hitCount;//使ってない？
+
+	bool IsDamage_;//ダメージ中
 
 	float WeatherSpeed_;//MOVE_SPEEDとWeatherの値を合わせ格納する用の変数
 	bool  WeatherSwitch;//高速で天候が切り替わらないようにする対策
@@ -81,7 +85,6 @@ private:
 
 	int MpHealTimer_;//一定周期でMPを回復するタイマー追加
   
-	//int MAGIC_COUNT = 0;
 	enum PlayerState
 	{
 		S_WaIk = 0,
@@ -95,6 +98,7 @@ private:
 		S_Walk_A = 0,
 		S_Damage_A,
 		S_Dead_A,
+		S_Erase_A
 	};
 	PlayerAnimationState player_animation_state;
 
