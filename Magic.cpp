@@ -45,7 +45,7 @@ void Magic::Draw()
 	}
 
 	DrawGraph(x, y, hImage_, TRUE);
-  // DrawCircle(x +15 , y + 11 , 20.0f, GetColor(255, 0, 0), 0);
+	DrawCircle(x + 16, y + 16, 16, GetColor(255, 0, 0), FALSE);
 }
 
 void Magic::SetPosition(int x, int y)
@@ -67,7 +67,7 @@ bool Magic::ColliderCircle(float x, float y, float r)
 		//é©ï™ÇÃâ~ÇÃèÓïÒ
 	float myCenterX = transform_.position_.x + 16.0f;
 	float myCenterY = transform_.position_.y + 16.0f;
-	float myR = 12.0f;
+	float myR = 16.0f;
 	float dx = myCenterX - x;
 	float dy = myCenterY - y;
 	if (sqrt(dx * dx + dy * dy) < (r + myR) * (r + myR))

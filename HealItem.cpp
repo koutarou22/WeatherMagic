@@ -71,8 +71,8 @@ bool HealItem::ColliderCircle(float x, float y, float r)
 {
 	//x,y,r‚ª‘Šè‚Ì‰~‚Ìî•ñ
 	//©•ª‚Ì‰~‚Ìî•ñ
-	float myCenterX = transform_.position_.x + 32.0f;
-	float myCenterY = transform_.position_.y + 32.0f;
+	float myCenterX = transform_.position_.x + 64.0f;
+	float myCenterY = transform_.position_.y + 64.0f;
 	float myR = 20.0f;
 	float dx = myCenterX - x;
 	float dy = myCenterY - y;

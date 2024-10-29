@@ -139,7 +139,7 @@ void Ghost::Draw()
 	// スプライトを描画
 	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
 
-	//DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 32.0f, GetColor(255, 0, 0), 0);
+	DrawCircle(x + 39, y + 34, 32, GetColor(255, 0, 0), FALSE);
 }
 
 void Ghost::SetPosition(int x, int y)
@@ -161,23 +161,3 @@ bool Ghost::ColliderCircle(float x, float y, float r)
 		return true;
 	return false;
 }
-
-//bool Ghost::ColliderRect(float x, float y, float w, float h)
-//{
-//	// x,y,w,hが相手の矩形の情報
-//	// 自分の矩形の情報
-//	float myX = transform_.position_.x;
-//	float myY = transform_.position_.y;
-//	float myW = 64.0f * transform_.scale_.x;
-//	float myH = 64.0f * transform_.scale_.y;
-//
-//	// 矩形の衝突判定
-//	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
-//	{
-//		return true;
-//	}
-//	else
-//	{
-//		return false;
-//	}
-//}

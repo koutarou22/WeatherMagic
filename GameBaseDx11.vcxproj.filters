@@ -1,215 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="01Engine">
-      <UniqueIdentifier>{e5fccdcb-f299-4448-bdb6-01fa28039576}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01Engine\GameObject">
-      <UniqueIdentifier>{b450e438-c939-4b05-b319-0e3c0b4a335c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01Engine\ResourceManager">
-      <UniqueIdentifier>{bedee914-5063-4c08-95bb-79c861b4969c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="リソース ファイル\Chara">
-      <UniqueIdentifier>{80b1a4ab-64ad-438b-9086-cda56f153863}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="リソース ファイル\Stage">
-      <UniqueIdentifier>{0389b8f6-4874-4cc9-9160-8cb6a22caf84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="リソース ファイル\Gimc">
-      <UniqueIdentifier>{c7b3dc85-2ff9-4b09-ba10-7513d9e6eed1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="リソース ファイル\Scene">
-      <UniqueIdentifier>{ad92ea05-5851-4cbe-be24-019a79fe2d91}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="リソース ファイル\Chara\Enemy">
-      <UniqueIdentifier>{0d700ca0-6adc-4820-802e-117b66c75cd9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="リソース ファイル\Stage\UI">
-      <UniqueIdentifier>{69fc9686-f35e-4aa0-b830-576313ca0d0f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="リソース ファイル\Chara\Player">
-      <UniqueIdentifier>{9607281f-646b-4060-8421-dab8d5a6f477}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="Bird.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ClearFlag.cpp" />
+    <ClCompile Include="ClearScene.cpp" />
+    <ClCompile Include="Damage.cpp" />
+    <ClCompile Include="EnemyMagic.cpp" />
+    <ClCompile Include="Engine\CsvReader.cpp" />
+    <ClCompile Include="Engine\GameObject.cpp" />
+    <ClCompile Include="Engine\Main.cpp" />
+    <ClCompile Include="Engine\RootObject.cpp" />
+    <ClCompile Include="Engine\SceneManager.cpp" />
+    <ClCompile Include="Engine\Transform.cpp" />
+    <ClCompile Include="Field.cpp" />
+    <ClCompile Include="GameOverScene.cpp" />
+    <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="HealItem.cpp" />
+    <ClCompile Include="Hp.cpp" />
+    <ClCompile Include="MP.cpp" />
+    <ClCompile Include="MpItem.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="LoadScene.cpp" />
+    <ClCompile Include="Score.cpp" />
+    <ClCompile Include="Rock.cpp" />
+    <ClCompile Include="Slime.cpp" />
+    <ClCompile Include="Magic.cpp" />
+    <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="Weather.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\GameObject.cpp">
-      <Filter>01Engine\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\RootObject.cpp">
-      <Filter>01Engine\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\CsvReader.cpp">
-      <Filter>01Engine\ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Main.cpp">
-      <Filter>01Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\SceneManager.cpp">
-      <Filter>01Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Transform.cpp">
-      <Filter>01Engine\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>リソース ファイル\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Field.cpp">
-      <Filter>リソース ファイル\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Weather.cpp">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClCompile>
-    <ClCompile Include="Magic.cpp">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClCompile>
-    <ClCompile Include="Hp.cpp">
-      <Filter>リソース ファイル\Stage\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOverScene.cpp">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Rock.cpp">
-      <Filter>リソース ファイル\Chara\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Bird.cpp">
-      <Filter>リソース ファイル\Chara\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Slime.cpp">
-      <Filter>リソース ファイル\Chara\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Ghost.cpp">
-      <Filter>リソース ファイル\Chara\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyMagic.cpp">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClCompile>
-    <ClCompile Include="ClearScene.cpp">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Damage.cpp">
-      <Filter>リソース ファイル\Stage\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="HealItem.cpp">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>リソース ファイル\Chara\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="ClearFlag.cpp">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClCompile>
-    <ClCompile Include="MpItem.cpp">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClCompile>
-
-    <ClCompile Include="LoadScene.cpp">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Score.cpp">
-      
-    <ClCompile Include="MP.cpp">
-      <Filter>リソース ファイル\Stage\UI</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Engine\GameObject.h">
-      <Filter>01Engine\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\RootObject.h">
-      <Filter>01Engine\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\CsvReader.h">
-      <Filter>01Engine\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Global.h">
-      <Filter>01Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\SceneManager.h">
-      <Filter>01Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Transform.h">
-      <Filter>01Engine\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>リソース ファイル\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Field.h">
-      <Filter>リソース ファイル\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Weather.h">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClInclude>
-    <ClInclude Include="Magic.h">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClInclude>
-    <ClInclude Include="Hp.h">
-      <Filter>リソース ファイル\Stage\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOverScene.h">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Rock.h">
-      <Filter>リソース ファイル\Chara\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Bird.h">
-      <Filter>リソース ファイル\Chara\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Slime.h">
-      <Filter>リソース ファイル\Chara\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleScene.h">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Ghost.h">
-      <Filter>リソース ファイル\Chara\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyMagic.h">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClInclude>
-    <ClInclude Include="ClearScene.h">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Damage.h">
-      <Filter>リソース ファイル\Stage\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="HealItem.h">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClInclude>
-    <ClInclude Include="ClearFlag.h">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClInclude>
-    <ClInclude Include="MpItem.h">
-      <Filter>リソース ファイル\Gimc</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>リソース ファイル\Chara\Player</Filter>
-    </ClInclude
-    <ClInclude Include="LoadScene.h">
-      <Filter>リソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Score.h
-    <ClInclude Include="MP.h">
-      <Filter>リソース ファイル\Stage\UI</Filter>
-    </ClInclude>
+    <ClInclude Include="Bird.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ClearFlag.h" />
+    <ClInclude Include="ClearScene.h" />
+    <ClInclude Include="Damage.h" />
+    <ClInclude Include="EnemyMagic.h" />
+    <ClInclude Include="Engine\CsvReader.h" />
+    <ClInclude Include="Engine\GameObject.h" />
+    <ClInclude Include="Engine\Global.h" />
+    <ClInclude Include="Engine\RootObject.h" />
+    <ClInclude Include="Engine\SceneManager.h" />
+    <ClInclude Include="Engine\Transform.h" />
+    <ClInclude Include="Field.h" />
+    <ClInclude Include="GameOverScene.h" />
+    <ClInclude Include="Ghost.h" />
+    <ClInclude Include="HealItem.h" />
+    <ClInclude Include="Hp.h" />
+    <ClInclude Include="MP.h" />
+    <ClInclude Include="MpItem.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="LoadScene.h" />
+    <ClInclude Include="Score.h" />
+    <ClInclude Include="Rock.h" />
+    <ClInclude Include="Slime.h" />
+    <ClInclude Include="Magic.h" />
+    <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="Time.h" />
+    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Weather.h" />
   </ItemGroup>
 </Project>

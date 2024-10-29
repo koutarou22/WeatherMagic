@@ -437,9 +437,12 @@ void Player::Update()
 	////-----------------スライムとの接触判定-----------------------------
 	for (Slime* pSlime : pSlimes)
 	{
-		if (pSlime->ColliderRect(transform_.position_.x + pSlime->GetScale().x, transform_.position_.y + pSlime->GetScale().y, 64.0f, 64.0f))
+		float x = transform_.position_.x;
+		float y = transform_.position_.y;
+
+		if (pSlime->ColliderRect(x + pSlime->GetScale().x, y + pSlime->GetScale().y, 43.0f, 43.0f))
 		{
-			if (transform_.position_.y + 64.0f <= pSlime->GetPosition().y + (64.0f * pSlime->GetScale().y) / 2 + 20) // プレイヤーがスライムの上部にある
+			if (y + 43.0f <= pSlime->GetPosition().y+42-(43.0f * pSlime->GetScale().y) / 2+ 20) // プレイヤーがスライムの上部にある
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
 				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
@@ -495,11 +498,11 @@ void Player::Update()
 	for (EnemyMagic* pEnemyMagic : pEMagics)
 	{
 		//『EnemyMagic』と『Slime』の距離を求めている
-		float dx = pEnemyMagic->GetPosition().x - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
-		float dy = pEnemyMagic->GetPosition().y - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
+		float dx = pEnemyMagic->GetPosition().x+16 - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
+		float dy = pEnemyMagic->GetPosition().y+16 - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
 
-		if (distance <= 20.0f)
+		if (distance <= 30.0f)
 		{
 			if (NDTIME_ <= 0.0f)
 			{
@@ -522,8 +525,8 @@ void Player::Update()
 	std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
 	for (Ghost* pGhost : pGhosts)
 	{
-		float dx = pGhost->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
-		float dy = pGhost->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
+		float dx = pGhost->GetPosition().x+42 - (transform_.position_.x + 32.0f);
+		float dy = pGhost->GetPosition().y+42 - (transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
@@ -548,8 +551,8 @@ void Player::Update()
 	std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
 	for (HealItem* pHeal : pHeals)
 	{
-		float dx = pHeal->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
-		float dy = pHeal->GetPosition().y - (transform_.position_.y/* + 32.0f*/);
+		float dx = pHeal->GetPosition().x+35 - (transform_.position_.x + 32.0f);
+		float dy = pHeal->GetPosition().y+32 - (transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
@@ -574,12 +577,12 @@ void Player::Update()
 	std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
 	for (MpItem* pMp : pMps)
 	{
-		float dx = pMp->GetPosition().x - (transform_.position_.x /*+ 32.0f*/);
-		float dy = pMp->GetPosition().y - (transform_.position_.y /*+ 32.0f*/);
+		float dx = pMp->GetPosition().x+35 - (transform_.position_.x + 32.0f);
+		float dy = pMp->GetPosition().y+32 - (transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
-		if (distance <= 30.0f)
+		if (distance <= 20.0f)
 		{
 			if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
 			{
@@ -644,7 +647,7 @@ void Player::Update()
 
 	if (pField != nullptr)
 	{
-		int playerX = (int)transform_.position_.x+10;
+		int playerX = (int)transform_.position_.x;
 		int playerY = (int)transform_.position_.y;
 	
 		if (pField->IsHitClear(playerX, playerY))
@@ -779,11 +782,11 @@ void Player::Draw()
 		//DrawFormatString(1000, 54, GetColor(0, 0, 0), "無敵時間: %f", NDTIME_);
 		//DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
 	}
-
-	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時閁E%d", GaleTime_);
 	WhereIs();
 	//DrawFormatString(800, 0, GetColor(255, 0, 0), "thumbLX:%d", input.ThumbLX);
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
+
+	DrawCircle(x+32, y+32, 32, GetColor(255, 0, 0), FALSE);
 }
 
 void Player::SetPosition(int x, int y)
