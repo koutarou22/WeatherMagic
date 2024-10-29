@@ -20,8 +20,6 @@ namespace
 
 	int SWidth = 512 / 6;
 	int SHeight = 86;
-
-
 };
 
 Slime::Slime(GameObject* scene)
@@ -94,21 +92,21 @@ void Slime::Update()
 	}
 	//-----------------------------------------------------------
 
-//---------------衝突判定(右)--------------------------------
-hitX = transform_.position_.x + 50;
-hitY = transform_.position_.y + 54;
+    //---------------衝突判定(右)--------------------------------
+    hitX = transform_.position_.x + 50;
+    hitY = transform_.position_.y + 54;
 
-if (pField != nullptr)
-{
-	int push = pField->CollisionRight(hitX, hitY);
-	transform_.position_.x -= push;
+   if (pField != nullptr)
+   {
+	  int push = pField->CollisionRight(hitX, hitY);
+	  transform_.position_.x -= push;
 
-	if (pField->CollisionRight(hitX, hitY) && direction == 1)
-	{
-		direction = -1;
-	}
-}
-//----------------------------------------------------------
+	  if (pField->CollisionRight(hitX, hitY) && direction == 1)
+	  {
+		 direction = -1;
+	  }
+   }
+   //----------------------------------------------------------
 
 	if(CoolGround_Now <= 0 && StunTimer_ <= 0)
 	{
@@ -217,11 +215,11 @@ if (pField != nullptr)
 	for (Magic* pMagic : pMagics)
 	{
 		//解説『Magic』と『Slime』の距離を求めている
-		float dx = pMagic->GetPosition().x - (transform_.position_.x + 10.0f);//Mgの座標X - Slの座標X
-		float dy = pMagic->GetPosition().y - (transform_.position_.y + 10.0f);//Mgの座標Y - Slの座標Y
+		float dx = pMagic->GetPosition().x+32 - (transform_.position_.x + 42.0f);//Mgの座標X - Slの座標X
+		float dy = pMagic->GetPosition().y+32 - (transform_.position_.y + 42.0f);//Mgの座標Y - Slの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
 
-		if (distance <= 20.0f)
+		if (distance <= 30.0f)
 		{
 			Damage* dam = Instantiate<Damage>(GetParent());
 			dam->SetPosition(transform_.position_);
@@ -269,9 +267,6 @@ if (pField != nullptr)
 			
 		}
 	}
-
-	
-
 }
 
 void Slime::Draw()
@@ -291,6 +286,7 @@ void Slime::Draw()
 	int frameX = animeFrame_ % 6; 
 	int hFrame = DerivationGraph(frameX, 0, SWidth, SHeight, hImage);
 
+
 	if (direction == 1)
 	{
 		DrawRectExtendGraph(x, y, x + SWidth * transform_.scale_.x, y + SHeight * transform_.scale_.y, frameX, 0, SWidth, SHeight, hImage, TRUE);
@@ -300,8 +296,6 @@ void Slime::Draw()
 		// DrawModiGraphを使用して画像を反転
 		DrawModiGraph(x + SWidth * transform_.scale_.x, y, x, y, x, y + SHeight * transform_.scale_.y, x + SWidth * transform_.scale_.x, y + SHeight * transform_.scale_.y, hFrame, TRUE);
 	}
-
-	//DrawCircle(x + 32.0f * transform_.scale_.x, y + 32.0f * transform_.scale_.y, 32.0f * transform_.scale_.x, GetColor(255, 0, 0), FALSE);
 }
 
 void Slime::WeatherEffects(Weather* weather)
@@ -322,8 +316,8 @@ bool Slime::ColliderRect(float x, float y, float w, float h)
 	// 自分の矩形の情報
 	float myX = transform_.position_.x;
 	float myY = transform_.position_.y;
-	float myW = 64.0f ; 
-	float myH = 64.0f ; 
+	float myW = 85.0f; 
+	float myH = 85.0f; 
 
 	// 矩形の衝突判定
 	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
@@ -387,7 +381,6 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 	
 }
 
-
 bool wasKeyPressed_R = false;
 bool wasKeyPressed_L = false;
 
@@ -434,16 +427,3 @@ void Slime::GaleEffect(WeatherState state)
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
