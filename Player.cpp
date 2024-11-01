@@ -901,8 +901,7 @@ void Player::WhereIs()
 	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true); //横線かく
 
 	//縦線関連
-	Field* pField = GetParent()->FindGameObject<Field>();
-	 
+	Field* pField = GetParent()->FindGameObject<Field>(); 
 	static float max = CHIP_SIZE * pField->GetGoalWidth();
 	float now = transform_.position_.x;
 	float nowLine = SenStart + SenLength * (now / max) * 2; //縦線引くところのX
@@ -910,11 +909,19 @@ void Player::WhereIs()
 	{
 		nowLine = SenStart + SenLength; //マップは続くがゴールしたら縦線は動かない
 	}
-	DrawLine(nowLine, SenY - 10, nowLine, SenY + 10, GetColor(128, 128, 128)); //縦線かく
+	DrawBox(nowLine, SenY - 10, nowLine + SenHeight, SenY + 10, GetColor(128, 128, 128),true);  //縦線かく
 
-	//進行度関連のデバッグ用
-	DrawFormatString(0, 0, GetColor(255, 0, 0), "%f", transform_.position_.x);
-	DrawFormatString(0, 10, GetColor(255, 0, 0), "%f", nowLine);
+	//スタート
+	SetFontSize(20);
+	DrawCircle(SenStart-5, SenY, 10,GetColor(128, 128, 128), true);
+	DrawFormatString(SenStart-9,SenY-8, GetColor(255, 255, 255),"S");
+
+	//ゴール
+	SetFontSize(20);
+	DrawCircle(SenStart+SenLength+ 5, SenY, 10, GetColor(128, 128, 128), true);
+	DrawFormatString(SenStart + SenLength +2, SenY-8, GetColor(255, 255, 255), "G");
+
+	SetFontSize(32); //一応デフォルトなサイズに戻す
 }
 
 void Player::StopWeatherSE()
