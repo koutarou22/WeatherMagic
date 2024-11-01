@@ -39,6 +39,7 @@ class CsvReader
 	//戻値：なし
 	void GetToComma(std::string* result, std::string data, DWORD* index);
 
+
 public:
 	//コンストラクタ
 	CsvReader();

@@ -27,6 +27,8 @@ Field::Field(GameObject* scene) : GameObject(scene)
 
 	NowStage_ = 1; 
 	Reset(); // Reset() 
+
+	goalWid_ = -1;
 }
 
 Field::~Field()
@@ -195,6 +197,8 @@ void Field::LoadStage(int StageNumber)
 	height = 22;
 	Map = new int[width * height];
 
+	WhereIsGoal(width, height, csv); //ゴールのwidthをとってくる
+
 	for (int h = 0; h < height; h++)
 	{
 		for (int w = 0; w < width; w++)
@@ -262,4 +266,18 @@ void Field::NextLoadStage()
 {
 	NowStage_++; // ステージ番号を増やす
 	LoadStage(NowStage_); // 次のステージをロード
+}
+
+void Field::WhereIsGoal(int w,int h,CsvReader c)
+{
+	for (int i = 0; i < w; i++)
+	{
+		for (int j = 0; j <h; j++)
+		{
+			if (c.GetInt(i, j) == 6)
+			{
+				goalWid_ = i;
+			}
+		}
+	}
 }
