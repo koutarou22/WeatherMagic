@@ -928,8 +928,6 @@ void Player::UpdateWalk()
 	}
 
 
-	
-
 	if (pField != nullptr)
 	{
 		int playerX = (int)transform_.position_.x;
@@ -1009,8 +1007,6 @@ void Player::UpdateDamage()
 void Player::UpdateDead()
 {
 	//死亡のアニメーション
-	
-		
 		if (++flameCounter >= 30)
 		{
 			animeFrame++;
@@ -1023,6 +1019,98 @@ void Player::UpdateDead()
 			player_state = S_Erase;
 			animeFrame = 7;
 		}
+	}
+	
+}
+
+void Player::Jump()
+{
+	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // プレイヤーをジャンプさせる
+	onGround = false;
+	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
+}
+
+int Player::GetMp()
+{
+	return MagicPoint_;
+}
+
+int Player::GetHp()
+{
+ 	return Hp_;
+}
+
+void Player::MagicUp(int _PMp)
+{
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+	MagicPoint_ += _PMp;
+	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
+	if (MagicPoint_ > MAX_MAGIC_POINT)
+	{
+		MagicPoint_ = MAX_MAGIC_POINT;
+	}
+}
+
+void Player::MagicDown(int _MMp)
+{
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+	MagicPoint_ -= _MMp;
+	
+	if (MagicPoint_ < 0)
+	{
+		MagicPoint_ = 0;
+	}
+}
+
+void Player::HpUp(int _PHp)
+{
+	Hp_ += _PHp;
+	
+	if (Hp_ < MAX_DAMAGE_HP)
+	{
+		Hp_ > MAX_DAMAGE_HP;
+	}
+}
+
+void Player::HpDown(int _MHp)
+{
+	Hp_ -= _MHp;
+}
+
+
+void Player::WhereIs()
+{
+	//横線関連
+	static int SenStart = 1000; //横線の始点x
+	static int SenLength = 200; //横線の長さx
+	static int SenY = 50; //横線の始点y
+	static int SenHeight = 5; //横線の幅
+	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true); //横線かく
+
+	//縦線関連
+	Field* pField = GetParent()->FindGameObject<Field>(); 
+	static float max = CHIP_SIZE * pField->GetGoalWidth();
+	float now = transform_.position_.x;
+	float nowLine = SenStart + SenLength * (now / max) * 2; //縦線引くところのX
+	if (nowLine >= SenStart + SenLength)
+	{
+		nowLine = SenStart + SenLength; //マップは続くがゴールしたら縦線は動かない
+	}
+	DrawBox(nowLine, SenY - 10, nowLine + SenHeight, SenY + 10, GetColor(128, 128, 128),true);  //縦線かく
+
+	//スタート
+	SetFontSize(20);
+	DrawCircle(SenStart-5, SenY, 10,GetColor(128, 128, 128), true);
+	DrawFormatString(SenStart-9,SenY-8, GetColor(255, 255, 255),"S");
+
+	//ゴール
+	SetFontSize(20);
+	DrawCircle(SenStart+SenLength+ 5, SenY, 10, GetColor(128, 128, 128), true);
+	DrawFormatString(SenStart + SenLength +2, SenY-8, GetColor(255, 255, 255), "G");
+
+	SetFontSize(32); //一応デフォルトなサイズに戻す
 }
 
 void Player::UpdateErase()
@@ -1034,7 +1122,5 @@ void Player::UpdateErase()
 		StopSoundMem(WindHandle);
 		flameCounter = 0;
 	}
-
-	
 }
 
