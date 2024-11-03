@@ -91,6 +91,307 @@ Player::~Player()
 
 void Player::Update()
 {
+	switch (player_state)
+	{
+	case Player::S_WaIk:
+		UpdateWalk();
+		break;
+	case Player::S_Damage:
+		UpdateDamage();
+		break;
+	case Player::S_Dead:
+		UpdateDead();
+		break;
+	case Player::S_Erase:
+		UpdateErase();
+	default:
+		break;
+	}
+}
+
+void Player::Draw()
+{
+	int x = (int)transform_.position_.x;
+	int y = (int)transform_.position_.y;
+
+	int displayY = y - 30;
+
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr) {
+		x -= cam->GetValue(); 
+	}
+
+	switch (player_animation_state)
+	{
+	case Player::S_Walk_A:
+	{
+		if (NDTIME_ <= 0.0f)
+		{
+			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+		}
+		else
+		{
+			if (Flash_Count % 24 == 0)
+			{
+				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+			}
+		}
+		++Flash_Count;
+		break;
+	}
+	case Player::S_Damage_A:
+		DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hImage, TRUE);
+		break;
+	case Player::S_Dead_A:
+		DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+		break;
+	case Player::S_Erase_A:
+		break;
+	default:
+		break;
+
+	}
+	if (Mp_GetFlag == true)
+	{
+		if (UIGetTimer > 0)
+		{
+			DrawFormatString(x, StringUi_Up, GetColor(255,255,255), "MP+5");
+			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); // 音声を再生
+			StringUi_Up -= 1;
+			UIGetTimer--;
+		}
+		else
+		{
+			Mp_GetFlag = false;
+		}
+	}
+
+	if (Hp_GetFlag == true)
+	{
+		if (UIGetTimer > 0)
+		{
+			DrawFormatString(x, StringUi_Up, GetColor(255,255,255), "Hp+2");
+			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
+			StringUi_Up -= 1;
+			UIGetTimer--;
+		}
+		else
+		{
+			Hp_GetFlag = false;
+		}
+	}
+
+	if (MagicPoint_ == 0)
+	{
+		DrawFormatString(0, 120, GetColor(255, 69, 0), "MP: %d /100", MagicPoint_);//0なら赤に
+	}
+	else
+	{
+		DrawFormatString(0, 120, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//それ以外なら青に
+	}
+
+    if(DebugLog_ == true)
+	{
+		//DrawFormatString(815, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y); 文字化けしてるので　使うなら再度書き直し
+		//DrawFormatString(1000, 30, GetColor(0, 0, 0), "HP: %d", Hp_);
+		//DrawFormatString(1000, 54, GetColor(0, 0, 0), "無敵時間: %f", NDTIME_);
+		//DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
+	}
+	WhereIs();
+	//DrawFormatString(800, 0, GetColor(255, 0, 0), "thumbLX:%d", input.ThumbLX);
+	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
+
+	DrawCircle(x+32, y+32, 32, GetColor(255, 0, 0), FALSE);
+}
+
+void Player::SetPosition(int x, int y)
+{
+	transform_.position_.x = x;
+	transform_.position_.y = y;
+}
+
+void Player::WeatherEffects (Weather* weather)
+{
+	WeatherState WeatherState = weather->GetWeatherState();
+	float WeatherEffect = weather->GetWeatherChange();
+	//Buffs*pBuff = GetParent()->FindGameObject<Buffs>();
+
+	if (WeatherState == Sun)
+	{
+		WeatherSpeed_ = MOVE_SPEED;
+	}
+	else if (WeatherState == Rain)
+	{
+		WeatherSpeed_ = MOVE_SPEED;
+	}
+	else if (WeatherState == Gale)
+	{
+		if (MagicPoint_ > 0)//0以上なら移動速度を普通に戻す
+		{
+			WeatherSpeed_ = MOVE_SPEED * (0.2f + WeatherEffect);
+		}
+		else
+		{
+			WeatherSpeed_ = MOVE_SPEED;
+		}
+	}
+	else if (WeatherState == Snow)
+	{
+		if (MagicPoint_ > 0)
+		{
+			WeatherSpeed_ = MOVE_SPEED * (1.2f - WeatherEffect);
+		}
+		else
+		{
+			WeatherSpeed_ = MOVE_SPEED;
+		}
+	}
+	
+}
+
+void Player::Jump()
+{
+	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // プレイヤーをジャンプさせる
+	onGround = false;
+	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
+}
+
+int Player::GetMp()
+{
+	return MagicPoint_;
+}
+
+int Player::GetHp()
+{
+ 	return Hp_;
+}
+
+void Player::MagicUp(int _PMp)
+{
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+	MagicPoint_ += _PMp;
+	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
+	if (MagicPoint_ > MAX_MAGIC_POINT)
+	{
+		MagicPoint_ = MAX_MAGIC_POINT;
+	}
+}
+
+void Player::MagicDown(int _MMp)
+{
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+	MagicPoint_ -= _MMp;
+	
+	if (MagicPoint_ < 0)
+	{
+		MagicPoint_ = 0;
+	}
+}
+
+void Player::HpUp(int _PHp)
+{
+	Hp_ += _PHp;
+	
+	if (Hp_ < MAX_DAMAGE_HP)
+	{
+		Hp_ > MAX_DAMAGE_HP;
+	}
+}
+
+void Player::HpDown(int _MHp)
+{
+	Hp_ -= _MHp;
+	player_animation_state = S_Damage_A;
+	player_state = S_Damage;
+}
+
+
+void Player::WhereIs()
+{
+	//横線関連
+	static int SenStart = 1000; //横線の始点x
+	static int SenLength = 200; //横線の長さx
+	static int SenY = 50; //横線の始点y
+	static int SenHeight = 5; //横線の幅
+	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true); //横線かく
+
+	//縦線関連
+	Field* pField = GetParent()->FindGameObject<Field>();
+	 
+	static float max = CHIP_SIZE * pField->GetGoalWidth();
+	float now = transform_.position_.x;
+	float nowLine = SenStart + SenLength * (now / max) * 2; //縦線引くところのX
+	if (nowLine >= SenStart + SenLength)
+	{
+		nowLine = SenStart + SenLength; //マップは続くがゴールしたら縦線は動かない
+	}
+	DrawLine(nowLine, SenY - 10, nowLine, SenY + 10, GetColor(128, 128, 128)); //縦線かく
+
+	//進行度関連のデバッグ用
+	DrawFormatString(0, 0, GetColor(255, 0, 0), "%f", transform_.position_.x);
+	DrawFormatString(0, 10, GetColor(255, 0, 0), "%f", nowLine);
+}
+
+void Player::StopWeatherSE()
+{
+	if (CheckSoundMem(RainHandle) == 1)
+	{
+		StopSoundMem(RainHandle);
+	}
+	if (CheckSoundMem(WindHandle) == 1)
+	{
+		StopSoundMem(WindHandle);
+	}
+}
+
+/// <summary>
+/// sticktiltの構造体の変数を設定（各フレーム）
+/// </summary>
+void Player::StickTiltCheck()
+{
+	//左スティックを倒してる方向にtrue
+	if (input.ThumbLX <= -10000)
+	{
+		stickTilt.IsLeftStickTilt_left = true;
+	}
+	else if (input.ThumbLX >= 10000)
+	{
+		stickTilt.IsLeftStickTilt_right = true;
+	}
+	else
+	{
+		stickTilt.IsLeftStickTilt_left = false;
+		stickTilt.IsLeftStickTilt_right = false;
+	}
+	
+	//右スティックを倒してる方向にtrue
+	//player関連で右スティックを使うならコメント外す
+	/*if (input.ThumbRX <= -10000)
+	{
+		stickTilt.IsRightStickTilt_left = true;
+	}
+	else if(input.ThumbRX >= 10000)
+	{
+		stickTilt.IsRightStickTilt_right = true;
+	}
+	else
+	{
+		stickTilt.IsRightStickTilt_left = false;
+		stickTilt.IsRightStickTilt_right = false;
+	}*/
+}
+/*
+void Player::Update()
+{
+	
+}
+*/
+
+
+void Player::UpdateWalk()
+{
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	std::list<Slime*> pSlimes = GetParent()->FindGameObjects<Slime>();
@@ -123,13 +424,6 @@ void Player::Update()
 	if (Jump_P > 20.0f) {
 		Jump_P = 20.0f; // 落下速度が最大値を超えないように制限
 	}
-
-
-	/*if (state == S_Cry)
-	{
-		flameCounter++;
-		if (flameCounter);
-	}*/
 
 	//input.ThumbLXで左スティック入力をとる 倒した横軸値が-10000以下か10000以上で動く
 	if (CheckHitKey(KEY_INPUT_D) || stickTilt.IsLeftStickTilt_right)
@@ -369,7 +663,7 @@ void Player::Update()
 				{
 					GaleTime_--;
 				}
-			}	
+			}
 		}
 
 		if (pWeather->GetWeatherState() == Rain)
@@ -413,9 +707,9 @@ void Player::Update()
 			mg->SetDirection(dir);
 			mg->SetSpeed(5.5f);
 			CoolDownMagic_ = timer_;
-  
-      
-			mp->SetGaugeVal(MagicPoint_,MAX_MAGIC_POINT);
+
+
+			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 			MagicPoint_--;
 
 			PlaySoundMem(MagicSound, DX_PLAYTYPE_BACK);
@@ -442,7 +736,7 @@ void Player::Update()
 
 		if (pSlime->ColliderRect(x + pSlime->GetScale().x, y + pSlime->GetScale().y, 43.0f, 43.0f))
 		{
-			if (y + 43.0f <= pSlime->GetPosition().y+42-(43.0f * pSlime->GetScale().y) / 2+ 20) // プレイヤーがスライムの上部にある
+			if (y + 43.0f <= pSlime->GetPosition().y + 42 - (43.0f * pSlime->GetScale().y) / 2 + 20) // プレイヤーがスライムの上部にある
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
 				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
@@ -459,14 +753,6 @@ void Player::Update()
 				{
 					hp->DamageHp();
 					HpDown(1);
-					if (Hp_ <= 0)
-					{
-						KillMe();
-					}
-					if (Hp_ > 3)
-					{
-						HpDown(1);
-					}
 
 					NDTIME_ = 3.0f;
 					break; // ダメージを与えた後にループを抜ける
@@ -498,23 +784,16 @@ void Player::Update()
 	for (EnemyMagic* pEnemyMagic : pEMagics)
 	{
 		//『EnemyMagic』と『Slime』の距離を求めている
-		float dx = pEnemyMagic->GetPosition().x+16 - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
-		float dy = pEnemyMagic->GetPosition().y+16 - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
+		float dx = pEnemyMagic->GetPosition().x + 16 - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
+		float dy = pEnemyMagic->GetPosition().y + 16 - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
 
 		if (distance <= 30.0f)
 		{
 			if (NDTIME_ <= 0.0f)
 			{
-
 				hp->DamageHp();
 				HpDown(1);
-
-				if (Hp_ <= 0)
-				{
-					KillMe();
-					break;
-				}
 
 				NDTIME_ = 2.0f;//個々の数値で無敵時間がきまる
 			}
@@ -525,8 +804,8 @@ void Player::Update()
 	std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
 	for (Ghost* pGhost : pGhosts)
 	{
-		float dx = pGhost->GetPosition().x+42 - (transform_.position_.x + 32.0f);
-		float dy = pGhost->GetPosition().y+42 - (transform_.position_.y + 32.0f);
+		float dx = pGhost->GetPosition().x + 42 - (transform_.position_.x + 32.0f);
+		float dy = pGhost->GetPosition().y + 42 - (transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
@@ -536,11 +815,6 @@ void Player::Update()
 			{
 				hp->DamageHp();
 				HpDown(1);
-				if (Hp_ <= 0)
-				{
-					KillMe();
-					break;
-				}
 
 				NDTIME_ = 3.0f;
 			}
@@ -551,8 +825,8 @@ void Player::Update()
 	std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
 	for (HealItem* pHeal : pHeals)
 	{
-		float dx = pHeal->GetPosition().x+35 - (transform_.position_.x + 32.0f);
-		float dy = pHeal->GetPosition().y+32 - (transform_.position_.y + 32.0f);
+		float dx = pHeal->GetPosition().x + 35 - (transform_.position_.x + 32.0f);
+		float dy = pHeal->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
@@ -577,8 +851,8 @@ void Player::Update()
 	std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
 	for (MpItem* pMp : pMps)
 	{
-		float dx = pMp->GetPosition().x+35 - (transform_.position_.x + 32.0f);
-		float dy = pMp->GetPosition().y+32 - (transform_.position_.y + 32.0f);
+		float dx = pMp->GetPosition().x + 35 - (transform_.position_.x + 32.0f);
+		float dy = pMp->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
@@ -639,9 +913,18 @@ void Player::Update()
 	//死亡したらゲームオーバー画面へ
 	if (transform_.position_.y > DEAD_LINE || Hp_ == 0)
 	{
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		/*SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
-		StopSoundMem(WindHandle);
+		StopSoundMem(WindHandle);*/
+	}
+
+	if (Hp_ == 0)
+	{
+		animeFrame = 5;
+		flameCounter = 0;
+		player_animation_state = S_Dead_A;
+		player_state = S_Dead;
+		//isDead_ = true;
 	}
 
 
@@ -649,13 +932,13 @@ void Player::Update()
 	{
 		int playerX = (int)transform_.position_.x;
 		int playerY = (int)transform_.position_.y;
-	
+
 		if (pField->IsHitClear(playerX, playerY))
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 
 			if (pSceneManager != nullptr)
-			{	
+			{
 				int MpPass = MagicPoint_;//現在のMｐを変数に格納
 				pSceneManager->SetMagicPoint(MpPass);//Set関数に送り保存
 			}
@@ -672,7 +955,7 @@ void Player::Update()
 	{
 		DebugLog_ = false;
 	}
-  
+
 	//mp20以下でmp自動回復
 	if (MagicPoint_ < 20)
 	{
@@ -683,7 +966,7 @@ void Player::Update()
 			MpHealTimer_ = 60;
 		}
 	}
-  
+
 	//雪の時間経過(とりあえずフレーム経過)でMPが減る
 	if (pWeather != nullptr)
 	{
@@ -710,125 +993,31 @@ void Player::Update()
 	}
 }
 
-void Player::Draw()
+void Player::UpdateDamage()
 {
-	int x = (int)transform_.position_.x;
-	int y = (int)transform_.position_.y;
-
-	int displayY = y - 30;
-
-	Camera* cam = GetParent()->FindGameObject<Camera>();
-	if (cam != nullptr) {
-		x -= cam->GetValue(); 
-	}
-
-	if (NDTIME_ <= 0.0f)
+	animeFrame = 2;
+	if (++flameCounter >= 24)
 	{
-		DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+		player_state = S_WaIk;
+		player_animation_state = S_Walk_A;
+		animeFrame = 0;
 	}
-	else
-	{
-		if (Flash_Count % 24 == 0)
-		{
-			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
-		}
-	}
-	
-	++Flash_Count;
-
-	if (Mp_GetFlag == true)
-	{
-		if (UIGetTimer > 0)
-		{
-			DrawFormatString(x, StringUi_Up, GetColor(255,255,255), "MP+5");
-			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); // 音声を再生
-			StringUi_Up -= 1;
-			UIGetTimer--;
-		}
-		else
-		{
-			Mp_GetFlag = false;
-		}
-	}
-
-	if (Hp_GetFlag == true)
-	{
-		if (UIGetTimer > 0)
-		{
-			DrawFormatString(x, StringUi_Up, GetColor(255,255,255), "Hp+2");
-			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
-			StringUi_Up -= 1;
-			UIGetTimer--;
-		}
-		else
-		{
-			Hp_GetFlag = false;
-		}
-	}
-
-	if (MagicPoint_ == 0)
-	{
-		DrawFormatString(0, 120, GetColor(255, 69, 0), "MP: %d /100", MagicPoint_);//0なら赤に
-	}
-	else
-	{
-		DrawFormatString(0, 120, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//それ以外なら青に
-	}
-
-    if(DebugLog_ == true)
-	{
-		//DrawFormatString(815, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y); 文字化けしてるので　使うなら再度書き直し
-		//DrawFormatString(1000, 30, GetColor(0, 0, 0), "HP: %d", Hp_);
-		//DrawFormatString(1000, 54, GetColor(0, 0, 0), "無敵時間: %f", NDTIME_);
-		//DrawFormatString(1000, 76, GetColor(0, 0, 0), "地面判定:%d", onGround);
-	}
-	WhereIs();
-	//DrawFormatString(800, 0, GetColor(255, 0, 0), "thumbLX:%d", input.ThumbLX);
-	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
-
-	DrawCircle(x+32, y+32, 32, GetColor(255, 0, 0), FALSE);
 }
 
-void Player::SetPosition(int x, int y)
+void Player::UpdateDead()
 {
-	transform_.position_.x = x;
-	transform_.position_.y = y;
-}
-
-void Player::WeatherEffects (Weather* weather)
-{
-	WeatherState WeatherState = weather->GetWeatherState();
-	float WeatherEffect = weather->GetWeatherChange();
-	//Buffs*pBuff = GetParent()->FindGameObject<Buffs>();
-
-	if (WeatherState == Sun)
-	{
-		WeatherSpeed_ = MOVE_SPEED;
-	}
-	else if (WeatherState == Rain)
-	{
-		WeatherSpeed_ = MOVE_SPEED;
-	}
-	else if (WeatherState == Gale)
-	{
-		if (MagicPoint_ > 0)//0以上なら移動速度を普通に戻す
+	//死亡のアニメーション
+		if (++flameCounter >= 30)
 		{
-			WeatherSpeed_ = MOVE_SPEED * (0.2f + WeatherEffect);
+			animeFrame++;
+			flameCounter = 0;
 		}
-		else
-		{
-			WeatherSpeed_ = MOVE_SPEED;
-		}
-	}
-	else if (WeatherState == Snow)
-	{
-		if (MagicPoint_ > 0)
-		{
-			WeatherSpeed_ = MOVE_SPEED * (1.2f - WeatherEffect);
-		}
-		else
-		{
-			WeatherSpeed_ = MOVE_SPEED;
+		
+		
+		if (animeFrame >= 7) {
+			player_animation_state = S_Erase_A;
+			player_state = S_Erase;
+			animeFrame = 7;
 		}
 	}
 	
@@ -924,52 +1113,14 @@ void Player::WhereIs()
 	SetFontSize(32); //一応デフォルトなサイズに戻す
 }
 
-void Player::StopWeatherSE()
+void Player::UpdateErase()
 {
-	if (CheckSoundMem(RainHandle) == 1)
+	if (++flameCounter >= 60)
 	{
-		StopSoundMem(RainHandle);
-	}
-	if (CheckSoundMem(WindHandle) == 1)
-	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
 		StopSoundMem(WindHandle);
+		flameCounter = 0;
 	}
-}
-
-/// <summary>
-/// sticktiltの構造体の変数を設定（各フレーム）
-/// </summary>
-void Player::StickTiltCheck()
-{
-	//左スティックを倒してる方向にtrue
-	if (input.ThumbLX <= -10000)
-	{
-		stickTilt.IsLeftStickTilt_left = true;
-	}
-	else if (input.ThumbLX >= 10000)
-	{
-		stickTilt.IsLeftStickTilt_right = true;
-	}
-	else
-	{
-		stickTilt.IsLeftStickTilt_left = false;
-		stickTilt.IsLeftStickTilt_right = false;
-	}
-	
-	//右スティックを倒してる方向にtrue
-	//player関連で右スティックを使うならコメント外す
-	/*if (input.ThumbRX <= -10000)
-	{
-		stickTilt.IsRightStickTilt_left = true;
-	}
-	else if(input.ThumbRX >= 10000)
-	{
-		stickTilt.IsRightStickTilt_right = true;
-	}
-	else
-	{
-		stickTilt.IsRightStickTilt_left = false;
-		stickTilt.IsRightStickTilt_right = false;
-	}*/
 }
 
