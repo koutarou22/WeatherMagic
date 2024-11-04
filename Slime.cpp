@@ -306,7 +306,7 @@ void Slime::WeatherEffects(Weather* weather)
 	HitWeather = true;
 	RainScale(WeatherState, transform_, WeatherSpeed_, MOVE_SPEED, WeatherEffect, ScaleEffect_);
 	
-	GaleEffect(WeatherState);
+	//GaleEffect(WeatherState);
 }
 
 
