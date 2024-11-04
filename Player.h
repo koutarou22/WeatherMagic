@@ -40,6 +40,11 @@ public:
 
 	void GaleEffect(WeatherState state);//Ride on the Rocks && Using the Wind
 
+  void UpdateWalk();
+  void UpdateDamage();
+  void UpdateDead();
+  void UpdateErase();
+
 private:
 	int MagicPoint_;//打てる魔法の回数
 	int hImage;
@@ -69,7 +74,7 @@ private:
 	float NDTIME_; //無敵時間
 	int	 CoolDownMagic_ = 0;
 	int Hp_;
-	int hitCount;
+	bool DamageFlag;
 
 	float WeatherSpeed_;//MOVE_SPEEDとWeatherの値を合わせ格納する用の変数
 	bool  WeatherSwitch;//高速で天候が切り替わらないようにする対策
@@ -88,6 +93,7 @@ private:
 		S_WaIk = 0,
 		S_Damage,
 		S_Dead,
+		S_Erase,
 	};
 	PlayerState player_state;
 
@@ -96,6 +102,7 @@ private:
 		S_Walk_A = 0,
 		S_Damage_A,
 		S_Dead_A,
+		S_Erase_A,
 	};
 	PlayerAnimationState player_animation_state;
 
@@ -113,6 +120,7 @@ private:
 	int WindHandle;
 	int GetItemSound;
 	int MagicSound;
+
 
 	float CountSnowFlame; //snowflame
 	//スティックを倒したかどうか
