@@ -25,15 +25,15 @@ void Weather::Initialize()
 
 
     //--------------解説が書いてあるUI-------------------------
-    hImage_StateSun = LoadGraph("Assets/UI/SState.png");//晴れの解説UI
+    hImage_StateSun = LoadGraph("Assets/UI/SunText.png");//晴れの解説UI
     assert(hImage_StateSun > 0);
-    hImage_StateRain = LoadGraph("Assets/UI/RState.png");//雨の解説UI
+    hImage_StateRain = LoadGraph("Assets/UI/RainText.png");//雨の解説UI
     assert(hImage_StateRain > 0);
-    hImage_StateWind = LoadGraph("Assets/UI/WState.png");//風の解説UI
+    hImage_StateWind = LoadGraph("Assets/UI/GaleText.png");//風の解説UI
     assert(hImage_StateWind > 0);
     //素材出来次第コメント解除1/2
-    //hImage_StateSnow = LoadGraph("Assets/UI/SState.png");//雪の解説UI
-    //assert(hImage_StateSnow > 0);
+    hImage_StateSnow = LoadGraph("Assets/UI/SnowText.png");//雪の解説UI
+    assert(hImage_StateSnow > 0);
     
     //hImage_Book = LoadGraph("Assets/Book.png");
     //assert(hImage_Book > 0);
@@ -51,6 +51,9 @@ void Weather::Initialize()
     //assert(hImage_SnowNoMp > 0);
   
 
+    //Controller State
+    hImage_ControllerState = LoadGraph("Assets/UI/ControllerState.png");
+    assert(hImage_ControllerState > 0);
     RainOnChecker = false;
     DebugLog_ = false;
 }
@@ -208,19 +211,25 @@ void Weather::Draw()
 
     if (IsExplanationDisplay_)//画面暗くしているときに出す説明
     {
+        int x = 20;
+        int y = 460;
         switch (weather_)
         {
         case Sun:
-            DrawGraph(0, 110, hImage_StateSun, TRUE);//背景暗い時だけ使う
+            DrawGraph(0, 140, hImage_StateSun, TRUE);//背景暗い時だけ使う
+            DrawGraph(x, y, hImage_ControllerState, TRUE);
             break;
         case Rain:
-            DrawGraph(0, 110, hImage_StateRain, TRUE);//背景暗い時だけ使う
+            DrawGraph(-2, 140, hImage_StateRain, TRUE);//背景暗い時だけ使う
+            DrawGraph(x, y, hImage_ControllerState, TRUE);
             break;
         case Gale:
-            DrawGraph(0, 110, hImage_StateWind, TRUE);//背景暗い時だけ使う
+            DrawGraph(0, 140, hImage_StateWind, TRUE);//背景暗い時だけ使う
+            DrawGraph(x, y, hImage_ControllerState, TRUE);
             break;
         case Snow:
-            //背景暗い時だけ使う やつをいずれ用意
+            DrawGraph(0, 140, hImage_StateSnow, TRUE);//背景暗い時だけ使う
+            DrawGraph(x, y, hImage_ControllerState, TRUE);
             break;
         default:
             break;

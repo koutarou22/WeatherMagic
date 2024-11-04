@@ -61,6 +61,8 @@ private:
 	int hImage_StateRain;
     int hImage_StateSnow;
 
+	int hImage_ControllerState;//Controller　Change　StateUI
+
 	int Weather_ChangeMagic;//天候変えたときのアニメーション(まだ定義してない)
 
 	bool RainOnChecker;
