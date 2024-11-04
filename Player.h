@@ -38,10 +38,12 @@ public:
 	void StopWeatherSE();
 	void StickTiltCheck();
 
-	void UpdateWalk();
-	void UpdateDamage();
-	void UpdateDead();
-	void UpdateErase();
+	void GaleEffect(WeatherState state);//Ride on the Rocks && Using the Wind
+
+  void UpdateWalk();
+  void UpdateDamage();
+  void UpdateDead();
+  void UpdateErase();
 
 private:
 	int MagicPoint_;//打てる魔法の回数
@@ -58,9 +60,8 @@ private:
 	GameObject* sceneTop;
 	bool isDead_ = false;
 	bool prevSpaceKey;
-	bool onGround;
-	bool onRock;
-	bool onFiled;
+	bool onGround;//Player on the Ground?
+	bool onRock;//Player on the Rock?
 	bool damaged = false;
 	float Jump_P = 0.0f;
 	int Flash_Count;

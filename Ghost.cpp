@@ -65,6 +65,16 @@ void Ghost::Update()
 				emg->SetDirection(dir);
 				emg->SetSpeed(3.5f);
 
+				// “VŒó‚É‚æ‚Á‚Ä‘¬“x‚ð’²®
+				Weather* pWeather = GetParent()->FindGameObject<Weather>();
+				if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
+				{
+					emg->SetSpeed(1.0f);
+				}
+				else
+				{
+					emg->SetSpeed(3.5f); 
+				}
 
 				CoolDownAttack_ = 300;
 			}
@@ -75,7 +85,9 @@ void Ghost::Update()
 				transform_.position_.y -= 1.0f;
 				sinAngle += 3.0f;
 				float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
-				transform_.position_.y = 500.0f + sinValue * 50.0f;
+				transform_.position_.y = sinValue * 50.0f;
+
+				CoolDownAttack_ = 360;
 			}
 		}
 	}

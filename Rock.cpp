@@ -113,8 +113,6 @@ void Rock::Update()
 			onGround = false;
 		}
 	}
-	//-----------------------------------------------------------
-	 
 }
 
 void Rock::Draw()
@@ -156,7 +154,6 @@ void Rock::GaleEffect(WeatherState state)
 
 	if (cam != nullptr)
 	{
-		// ƒJƒƒ‰‚ÌˆÊ’u‚ðŽæ“¾
 		int camX = cam->GetValue();
 		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
@@ -183,48 +180,6 @@ void Rock::GaleEffect(WeatherState state)
 		}
 	}
 }
-
-//bool Rock::IsRockPosition(std::list<Rock*> rocks, int x, int y)
-//{
-//	for (Rock* rock : rocks)
-//	{
-//		if (rock->GetPosition().x == x  && rock->GetPosition().y == y)
-//		{
-//			return true;
-//		}
-//	}
-//
-//	return false;
-//}
-
-//int Rock::CollisionRight(std::list<Rock*> rocks, int x, int y)
-//{
-//	if (IsRockPosition(rocks, x + 1, y))
-//	{
-//		return (x + 1) % 32 + 1;
-//	}
-//	return 0;
-//}
-//
-//int Rock::CollisionLeft(std::list<Rock*> rocks, int x, int y)
-//{
-//	if (IsRockPosition(rocks, x - 1, y))
-//	{
-//		return 32 - (x % 32);
-//	}
-//	return 0;
-//}
-//
-//int Rock::CollisionDown(std::list<Rock*> rocks, int x, int y)
-//{
-//	if (IsRockPosition(rocks, x, y + 1))
-//	{
-//		return (y + 1) % 32 + 1;
-//	}
-//	return 0;
-//}
-
-
 
 bool Rock::ColliderRect(float x, float y, float w, float h)
 {

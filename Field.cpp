@@ -180,7 +180,7 @@ void Field::LoadStage(int StageNumber)
 	switch (StageNumber)
 	{
 	case 1:
-		ret = csv.Load("Assets/Stage_csv/Stage1.csv");
+		ret = csv.Load("Assets/Stage_csv/Stage.csv");
 		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
 		break;
 	case 2:

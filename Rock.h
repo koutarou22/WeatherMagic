@@ -24,6 +24,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool ColliderRect(float x, float y, float w, float h);
+	void HitCollisionWithRock();
 
 	float x;
 	float y;
