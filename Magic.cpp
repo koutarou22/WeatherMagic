@@ -50,13 +50,14 @@ void Magic::Draw()
 
 void Magic::SetPosition(int x, int y)
 {
-	transform_.position_.x = x;
-	transform_.position_.y = y;
+	transform_.position_.x = x + 20;
+	transform_.position_.y = y + 10;
 	timer_ = 90;
 }
 
 void Magic::SetPosition(XMFLOAT3 pos)
 {
+	pos.y += 10; 
 	transform_.position_ = pos;
 	timer_ = 90;
 }

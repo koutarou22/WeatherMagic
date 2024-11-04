@@ -23,7 +23,9 @@ namespace
 	const float MOVE_SPEED = 4.5f;
 	const float GROUND = 600.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
-    float GRAVITY = 9.8f / 60.0f;
+
+    const float GRAVITY = 9.8f / 60.0f;
+	const float MAX_GRAVITY = 6.0f;//Limit Gravity
 	const int MAX_MAGIC_POINT = 100;
 	const int MAX_DAMAGE_HP = 5;
 
@@ -40,6 +42,7 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	transform_.position_.x = 100.0f;
 	transform_.position_.y = GROUND;
 	onGround = true;
+	onRock = false;
 	flameCounter = 0;
 	animType = 0;
 	animeFrame = 0;
@@ -120,10 +123,6 @@ void Player::Update()
 	{
 		transform_.position_.x = 0;
 	}
-	if (Jump_P > 20.0f) {
-		Jump_P = 20.0f; // 落下速度が最大値を超えないように制限
-	}
-
 
 	/*if (state == S_Cry)
 	{
@@ -206,6 +205,10 @@ void Player::Update()
 	//-------------------+++加速のプログラムは基礎の基礎+++-------------------
 
 	Jump_P += GRAVITY; //速度 += 加速度
+	if (Jump_P > MAX_GRAVITY) 
+	{
+		Jump_P = MAX_GRAVITY;
+	}
 	transform_.position_.y += Jump_P; //座標 += 速度
 
 	//---------------衝突判定(上)--------------------------------
@@ -350,11 +353,8 @@ void Player::Update()
 		CanChangeWeather = true;
 	}
 
-
-
 	if (pWeather != nullptr)
 	{
-
 		if (pWeather->GetWeatherState() == Gale) //風の機能
 		{
 			if (MagicPoint_ > 0)
@@ -391,7 +391,6 @@ void Player::Update()
 		}
 	}
 
-
 	//拡張性はない
 	//if (transform_.position_.y >= GROUND)//地面についたら速度を元に戻す、戻さないと貫通する恐れあり
 	//{
@@ -407,8 +406,7 @@ void Player::Update()
 		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
 		{
 			Magic* mg = Instantiate<Magic>(GetParent());
-			//mg->SetPosition(transform_.position_.x,transform_.position_.y);
-			mg->SetPosition(transform_.position_);
+			mg->SetPosition(transform_.position_.x,transform_.position_.y);
 			VECTOR dir = { 1.0f, 0.0f };
 			mg->SetDirection(dir);
 			mg->SetSpeed(5.5f);
@@ -425,8 +423,6 @@ void Player::Update()
 	{
 		CoolDownMagic_--;
 	}
-
-
 
 	// 無敵時間の更新
 	if (NDTIME_ > 0.0f)
@@ -601,40 +597,41 @@ void Player::Update()
 	}
 
 	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+	onRock = false;
 	for (Rock* pRock : pRocks)
 	{
-		float dx = pRock->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
-		float dy = pRock->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
+
+		WeatherState WeatherState = pWeather->GetWeatherState();
+
+		float dx = pRock->GetPosition().x - transform_.position_.x;
+		float dy = pRock->GetPosition().y - transform_.position_.y;
 
 		float distance = sqrt(dx * dx + dy * dy);
+		float push = 3.5;
 
-		if (distance <= 60.0f)
+		if (distance <= 64.0f) 
 		{
-			//<= 32.0fの意味は横との接触の幅を制限している
-			if (dy < 0 && abs(dx) <= 32.0f) //岩の上に乗る
+			if (dy <= -0.1 && abs(dx) <= 32.0f)
 			{
-				transform_.position_.y = pRock->GetPosition().y - 64; // プレイヤーを上に移動
-				WeatherSpeed_ = 0;
+				transform_.position_.y = pRock->GetPosition().y - 64 + push; 
 				onGround = true;
+				onRock = true;
 			}
-			else if (dy > 0 && abs(dx) <= 32.0f) //岩の下にぶつかる
+			else if (dy > -0.1 && abs(dx) <= 32.0f) 
 			{
-				int push = 3;
-				transform_.position_.y = pRock->GetPosition().y + push; // プレイヤーを下に移動
-				WeatherSpeed_ = MOVE_SPEED;
+				transform_.position_.y = pRock->GetPosition().y + push; 
 			}
-			else if (dx < 0) // 岩の右側の衝突判定
+			else if (dx < -0.1 && abs(dy) <= 32.0f)
 			{
-				int push = 1;
-				transform_.position_.x += push; // プレイヤーを右に移動
+				transform_.position_.x += push; 
 			}
-			else if (dx > 0) // 岩の左側の衝突判定
+			else if (dx > -0.1 && abs(dy) <= 32.0f)
 			{
-				int push = 1;
-				transform_.position_.x -= push; // プレイヤーを左に移動
+				transform_.position_.x -= push; 
 			}
 		}
 	}
+
 
 	//死亡したらゲームオーバー画面へ
 	if (transform_.position_.y > DEAD_LINE || Hp_ == 0)
@@ -643,7 +640,6 @@ void Player::Update()
 		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
 		StopSoundMem(WindHandle);
 	}
-
 
 	if (pField != nullptr)
 	{
@@ -819,6 +815,8 @@ void Player::WeatherEffects (Weather* weather)
 		{
 			WeatherSpeed_ = MOVE_SPEED;
 		}
+	
+	    GaleEffect(Gale);
 	}
 	else if (WeatherState == Snow)
 	{
@@ -838,6 +836,7 @@ void Player::Jump()
 {
 	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // プレイヤーをジャンプさせる
 	onGround = false;
+	onRock = false;
 	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
 }
 
@@ -889,7 +888,6 @@ void Player::HpDown(int _MHp)
 {
 	Hp_ -= _MHp;
 }
-
 
 void Player::WhereIs()
 {
@@ -961,4 +959,40 @@ void Player::StickTiltCheck()
 		stickTilt.IsRightStickTilt_right = false;
 	}*/
 }
+
+void Player::GaleEffect(WeatherState state)
+{
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+
+	// xboxコントローラーの入力情報を取得
+	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+
+	if (cam != nullptr)
+	{
+		// カメラの位置を取得
+		int camX = cam->GetValue();
+		//if (transform_.position_.x >= camX && transform_.position_.x <= camX)
+		//{
+
+		if (onRock == true)
+		{
+			if (state == Gale)
+			{
+				int MpVanish = GetMp();
+				if (MpVanish >= 4)
+				{
+					if (input.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_LEFT))
+					{
+						transform_.position_.x -= 0.6f;
+					}
+					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_RIGHT))
+					{
+						transform_.position_.x += 0.6f;
+					}
+				}
+			}
+		}
+	}
+}
+
 
