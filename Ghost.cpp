@@ -151,7 +151,7 @@ void Ghost::Draw()
 	// スプライトを描画
 	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
 
-	DrawCircle(x + 39, y + 34, 32, GetColor(255, 0, 0), FALSE);
+	//DrawCircle(x + 39, y + 34, 32, GetColor(255, 0, 0), FALSE);
 }
 
 void Ghost::SetPosition(int x, int y)

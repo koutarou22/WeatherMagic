@@ -186,11 +186,11 @@ void Player::Draw()
 
 	if (MagicPoint_ == 0)
 	{
-		DrawFormatString(0, 120, GetColor(255, 69, 0), "MP: %d /100", MagicPoint_);//0なら赤に
+		DrawFormatString(0, 130, GetColor(255, 69, 0), "MP: %d /100", MagicPoint_);//0なら赤に
 	}
 	else
 	{
-		DrawFormatString(0, 120, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//それ以外なら青に
+		DrawFormatString(0, 130, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//それ以外なら青に
 	}
 
     if(DebugLog_ == true)
@@ -204,7 +204,7 @@ void Player::Draw()
 	//DrawFormatString(800, 0, GetColor(255, 0, 0), "thumbLX:%d", input.ThumbLX);
 	//DrawFormatString(800, 0, GetColor(255, 255, 255), "風が起こせる時間:%d", GaleTime_);
 
-	DrawCircle(x+32, y+32, 32, GetColor(255, 0, 0), FALSE);
+	//DrawCircle(x+32, y+32, 32, GetColor(255, 0, 0), FALSE);
 }
 
 void Player::SetPosition(int x, int y)
@@ -572,6 +572,7 @@ void Player::UpdateWalk()
 	{
 		if (pWeather->GetWeatherState() == Gale) //風の機能
 		{
+			GaleEffect(Gale);
 			if (MagicPoint_ > 0)
 			{
 				if (GaleTime_ < 0)//約5秒ごとに行う処理
@@ -594,8 +595,8 @@ void Player::UpdateWalk()
 				if (RainTime_ < 0)//約5秒ごとに行う処理
 				{
 					MagicDown(1);
-					RainTime_ = 10;
-					//RainTime_ = 420;
+					/*RainTime_ = 10;*/
+					RainTime_ = 420;
 					PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK);
 				}
 				else
@@ -829,14 +830,7 @@ void Player::UpdateWalk()
 
 
 	//死亡したらゲームオーバー画面へ
-	if (transform_.position_.y > DEAD_LINE || Hp_ == 0)
-	{
-		/*SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
-		StopSoundMem(WindHandle);*/
-	}
-
-	if (Hp_ == 0)
+	if (Hp_ <= 0 || transform_.position_.y > DEAD_LINE)
 	{
 		animeFrame = 5;
 		flameCounter = 0;
@@ -932,7 +926,8 @@ void Player::UpdateDead()
 		}
 		
 		
-		if (animeFrame >= 7) {
+		if (animeFrame >= 7) 
+		{
 			player_animation_state = S_Erase_A;
 			player_state = S_Erase;
 			animeFrame = 7;

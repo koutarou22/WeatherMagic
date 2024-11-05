@@ -8,7 +8,7 @@
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
-    hImage_ = LoadGraph("Assets/Scene/GAME CLEAR.png");
+    hImage_ = LoadGraph("Assets/Scene/GAME CLEAR2.png");
     assert(hImage_ > 0);
 }
 
@@ -21,7 +21,7 @@ void ClearScene::Update()
 {
     padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
     // Cキーが押されたらスタートボタンでTitleSceneに遷移
-    if (CheckHitKey(KEY_INPUT_C) || input.Buttons[4]) 
+    if (CheckHitKey(KEY_INPUT_X) || input.Buttons[14]) 
     {
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_TITLE);
