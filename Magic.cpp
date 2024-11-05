@@ -45,7 +45,7 @@ void Magic::Draw()
 	}
 
 	DrawGraph(x, y, hImage_, TRUE);
-	DrawCircle(x + 16, y + 16, 16, GetColor(255, 0, 0), FALSE);
+	//DrawCircle(x + 16, y + 16, 16, GetColor(255, 0, 0), FALSE);
 }
 
 void Magic::SetPosition(int x, int y)
