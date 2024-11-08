@@ -167,13 +167,13 @@ void Rock::GaleEffect(WeatherState state)
 					{
 						//WindTimer_ = 300;
 						//PressKey_R = true;
-						transform_.position_.x -= 0.6f;
+						transform_.position_.x -= 1.2f;
 					}
 					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_RIGHT))
 					{
 						//WindTimer_ = 300;
 						//PressKey_L = true;
-						transform_.position_.x += 0.6f;
+						transform_.position_.x += 1.2f;
 					}
 				}
 			}
