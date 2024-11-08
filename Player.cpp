@@ -61,6 +61,7 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	MpHealTimer_ = 30;
 
 	CountSnowFlame = MAX_SNOW_FLAME;
+	IsTurnLeft = false;
 
 	stickTilt.IsLeftStickTilt_left = false;
 	stickTilt.IsLeftStickTilt_right = false;
@@ -130,23 +131,52 @@ void Player::Draw()
 	{
 		if (NDTIME_ <= 0.0f)
 		{
-			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+			if (IsTurnLeft)
+			{
+				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);//1...左右反転on 0...上下反転off
+			}
+			else
+			{
+				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+			}
+	
 		}
 		else
 		{
 			if (Flash_Count % 24 == 0)
 			{
-				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+				if (IsTurnLeft)
+				{
+					DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
+				}
+				else
+				{
+					DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+				}
 			}
 		}
 		++Flash_Count;
 		break;
 	}
 	case Player::S_Damage_A:
-		DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hImage, TRUE);
+		if (IsTurnLeft)
+		{
+			DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
+		}
+		else
+		{
+			DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hImage, TRUE);
+		}
 		break;
 	case Player::S_Dead_A:
-		DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+		if (IsTurnLeft)
+		{
+			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
+		}
+		else
+		{
+			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+		}
 		break;
 	case Player::S_Erase_A:
 		break;
@@ -348,6 +378,7 @@ void Player::UpdateWalk()
 	//input.ThumbLXで左スティック入力をとる 倒した横軸値が-10000以下か10000以上で動く
 	if (CheckHitKey(KEY_INPUT_D) || stickTilt.IsLeftStickTilt_right)
 	{
+		IsTurnLeft = false;
 		transform_.position_.x += WeatherSpeed_;
 		if (++flameCounter >= 24)
 		{
@@ -370,7 +401,7 @@ void Player::UpdateWalk()
 	}
 	else if (CheckHitKey(KEY_INPUT_A) || stickTilt.IsLeftStickTilt_left)
 	{
-
+		IsTurnLeft = true;
 		transform_.position_.x -= WeatherSpeed_;
 		if (++flameCounter >= 24)
 		{
@@ -925,7 +956,7 @@ void Player::UpdateDead()
 			flameCounter = 0;
 		}
 		
-		
+		///アニメーション終了後消える
 		if (animeFrame >= 7) 
 		{
 			player_animation_state = S_Erase_A;
@@ -1038,6 +1069,7 @@ void Player::UpdateErase()
 	}
 }
 
+//風の影響
 void Player::GaleEffect(WeatherState state)
 {
 	Camera* cam = GetParent()->FindGameObject<Camera>();
@@ -1052,6 +1084,7 @@ void Player::GaleEffect(WeatherState state)
 		//if (transform_.position_.x >= camX && transform_.position_.x <= camX)
 		//{
 
+		//岩の上に乗る処理
 		if (onRock == true)
 		{
 			if (state == Gale)
@@ -1061,11 +1094,11 @@ void Player::GaleEffect(WeatherState state)
 				{
 					if (input.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_LEFT))
 					{
-						transform_.position_.x -= 0.6f;
+						transform_.position_.x -= 1.2f;
 					}
 					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_RIGHT))
 					{
-						transform_.position_.x += 0.6f;
+						transform_.position_.x += 1.2f;
 					}
 				}
 			}

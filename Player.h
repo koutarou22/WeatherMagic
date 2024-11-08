@@ -123,6 +123,7 @@ private:
 
 
 	float CountSnowFlame; //snowflame
+	bool IsTurnLeft;//左向きかどうか 左右反転処理用
 	//スティックを倒したかどうか
 	struct Stick_Tilt {
 		bool IsLeftStickTilt_left;//左スティックを左に
