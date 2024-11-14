@@ -53,7 +53,7 @@ private:
 	int hImage;
 	int hImage_cont;
 	int hImage_miss;
-
+	int hGoal;
 	
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る

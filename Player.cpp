@@ -24,18 +24,18 @@ namespace
 	const float GROUND = 600.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
 
-    const float GRAVITY = 9.8f / 60.0f;
+	const float GRAVITY = 9.8f / 60.0f;
 	const float MAX_GRAVITY = 6.0f;//Limit Gravity
 	const int MAX_MAGIC_POINT = 100;
 	const int MAX_DAMAGE_HP = 5;
 
 	const float MAX_SNOW_FLAME = 120.0f * 10.0f;
-  const float CHIP_SIZE = 64.0f;  //計算でつかうのでfloat
+	const float CHIP_SIZE = 64.0f;  //計算でつかうのでfloat
 	const float DEAD_LINE = 900.0f;
-	
+
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
-        Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100),IsHitOneCount_(false),DebugLog_(false)
+Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), DebugLog_(false)
 {
 	hImage = LoadGraph("Assets/Chara/Clear_Wizard.png");
 	assert(hImage > 0);
@@ -48,10 +48,10 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	animeFrame = 0;
 
 	Hp_ = 5;
-	
+
 	ChangeWeatherCoolTime = 60;
 	CanChangeWeather = true;
-	
+
 
 	MagicPoint_ = 100;//MPの最大値100変更
 
@@ -70,7 +70,7 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 
 	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
 	assert(soundHandle != -1);
-	
+
 	RainHandle = LoadSoundMem("Assets/Music/SE/Rain.mp3");
 	assert(RainHandle != -1);
 
@@ -83,6 +83,7 @@ Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SP
 	MagicSound = LoadSoundMem("Assets/Music/SE/8bit_magic1.mp3");
 	assert(MagicSound != -1);
 
+	hGoal = LoadGraph("Assets/Item/GoalFlag.png");
 }
 
 Player::~Player()
@@ -122,7 +123,7 @@ void Player::Draw()
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr) {
-		x -= cam->GetValue(); 
+		x -= cam->GetValue();
 	}
 
 	switch (player_animation_state)
@@ -139,7 +140,7 @@ void Player::Draw()
 			{
 				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 			}
-	
+
 		}
 		else
 		{
@@ -188,7 +189,7 @@ void Player::Draw()
 	{
 		if (UIGetTimer > 0)
 		{
-			DrawFormatString(x, StringUi_Up, GetColor(255,255,255), "MP+5");
+			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "MP+5");
 			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); // 音声を再生
 			StringUi_Up -= 1;
 			UIGetTimer--;
@@ -203,8 +204,8 @@ void Player::Draw()
 	{
 		if (UIGetTimer > 0)
 		{
-			DrawFormatString(x, StringUi_Up, GetColor(255,255,255), "Hp+2");
-			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
+			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "Hp+2");
+			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK);
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}
@@ -223,7 +224,7 @@ void Player::Draw()
 		DrawFormatString(0, 130, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//それ以外なら青に
 	}
 
-    if(DebugLog_ == true)
+	if (DebugLog_ == true)
 	{
 		//DrawFormatString(815, 0, GetColor(0, 0, 0), "プレイヤー(カメラ)の位置: (%d, %d)", x, y); 文字化けしてるので　使うなら再度書き直し
 		//DrawFormatString(1000, 30, GetColor(0, 0, 0), "HP: %d", Hp_);
@@ -243,7 +244,7 @@ void Player::SetPosition(int x, int y)
 	transform_.position_.y = y;
 }
 
-void Player::WeatherEffects (Weather* weather)
+void Player::WeatherEffects(Weather* weather)
 {
 	WeatherState WeatherState = weather->GetWeatherState();
 	float WeatherEffect = weather->GetWeatherChange();
@@ -279,7 +280,7 @@ void Player::WeatherEffects (Weather* weather)
 			WeatherSpeed_ = MOVE_SPEED;
 		}
 	}
-	
+
 }
 
 void Player::StopWeatherSE()
@@ -313,7 +314,7 @@ void Player::StickTiltCheck()
 		stickTilt.IsLeftStickTilt_left = false;
 		stickTilt.IsLeftStickTilt_right = false;
 	}
-	
+
 	//右スティックを倒してる方向にtrue
 	//player関連で右スティックを使うならコメント外す
 	/*if (input.ThumbRX <= -10000)
@@ -333,7 +334,7 @@ void Player::StickTiltCheck()
 /*
 void Player::Update()
 {
-	
+
 }
 */
 
@@ -451,7 +452,7 @@ void Player::UpdateWalk()
 	//-------------------+++加速のプログラムは基礎の基礎+++-------------------
 
 	Jump_P += GRAVITY; //速度 += 加速度
-	if (Jump_P > MAX_GRAVITY) 
+	if (Jump_P > MAX_GRAVITY)
 	{
 		Jump_P = MAX_GRAVITY;
 	}
@@ -653,7 +654,7 @@ void Player::UpdateWalk()
 		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
 		{
 			Magic* mg = Instantiate<Magic>(GetParent());
-			mg->SetPosition(transform_.position_.x,transform_.position_.y);
+			mg->SetPosition(transform_.position_.x, transform_.position_.y);
 			VECTOR dir = { 0.0f, 0.0f };
 			if (IsTurnLeft) {
 				dir.x = -1.0f;
@@ -843,25 +844,25 @@ void Player::UpdateWalk()
 		float distance = sqrt(dx * dx + dy * dy);
 		float push = 3.5;
 
-		if (distance <= 64.0f) 
+		if (distance <= 64.0f)
 		{
 			if (dy <= -0.1 && abs(dx) <= 32.0f)
 			{
-				transform_.position_.y = pRock->GetPosition().y - 64 + push; 
+				transform_.position_.y = pRock->GetPosition().y - 64 + push;
 				onGround = true;
 				onRock = true;
 			}
-			else if (dy > -0.1 && abs(dx) <= 32.0f) 
+			else if (dy > -0.1 && abs(dx) <= 32.0f)
 			{
-				transform_.position_.y = pRock->GetPosition().y + push; 
+				transform_.position_.y = pRock->GetPosition().y + push;
 			}
 			else if (dx < -0.1 && abs(dy) <= 32.0f)
 			{
-				transform_.position_.x += push; 
+				transform_.position_.x += push;
 			}
 			else if (dx > -0.1 && abs(dy) <= 32.0f)
 			{
-				transform_.position_.x -= push; 
+				transform_.position_.x -= push;
 			}
 		}
 	}
@@ -962,24 +963,24 @@ void Player::UpdateDead()
 {
 
 	//死亡のアニメーション
-		if (++flameCounter >= 30)
-		{
-			animeFrame++;
-			flameCounter = 0;
-		}
-		
-		///アニメーション終了後消える
-		if (animeFrame >= 7) 
-		{
-			player_animation_state = S_Erase_A;
-			player_state = S_Erase;
-			animeFrame = 7;
-		}
+	if (++flameCounter >= 30)
+	{
+		animeFrame++;
+		flameCounter = 0;
+	}
+
+	///アニメーション終了後消える
+	if (animeFrame >= 7)
+	{
+		player_animation_state = S_Erase_A;
+		player_state = S_Erase;
+		animeFrame = 7;
+	}
 }
 
 void Player::Jump()
 {
-	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_ ); // プレイヤーをジャンプさせる
+	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_); // プレイヤーをジャンプさせる
 	onGround = false;
 	onRock = false;
 	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
@@ -992,7 +993,7 @@ int Player::GetMp()
 
 int Player::GetHp()
 {
- 	return Hp_;
+	return Hp_;
 }
 
 void Player::MagicUp(int _PMp)
@@ -1000,7 +1001,7 @@ void Player::MagicUp(int _PMp)
 	MP* mp = GetParent()->FindGameObject<MP>();
 	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 	MagicPoint_ += _PMp;
-	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); 
+	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK);
 	if (MagicPoint_ > MAX_MAGIC_POINT)
 	{
 		MagicPoint_ = MAX_MAGIC_POINT;
@@ -1012,7 +1013,7 @@ void Player::MagicDown(int _MMp)
 	MP* mp = GetParent()->FindGameObject<MP>();
 	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 	MagicPoint_ -= _MMp;
-	
+
 	if (MagicPoint_ < 0)
 	{
 		MagicPoint_ = 0;
@@ -1022,7 +1023,7 @@ void Player::MagicDown(int _MMp)
 void Player::HpUp(int _PHp)
 {
 	Hp_ += _PHp;
-	
+
 	if (Hp_ < MAX_DAMAGE_HP)
 	{
 		Hp_ > MAX_DAMAGE_HP;
@@ -1036,7 +1037,6 @@ void Player::HpDown(int _MHp)
 	player_state = S_Damage;
 }
 
-
 void Player::WhereIs()
 {
 	//横線関連
@@ -1047,7 +1047,7 @@ void Player::WhereIs()
 	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true); //横線かく
 
 	//縦線関連
-	Field* pField = GetParent()->FindGameObject<Field>(); 
+	Field* pField = GetParent()->FindGameObject<Field>();
 	static float max = CHIP_SIZE * pField->GetGoalWidth();
 	float now = transform_.position_.x;
 	float nowLine = SenStart + SenLength * (now / max) * 2; //縦線引くところのX
@@ -1055,19 +1055,11 @@ void Player::WhereIs()
 	{
 		nowLine = SenStart + SenLength; //マップは続くがゴールしたら縦線は動かない
 	}
-	DrawBox(nowLine, SenY - 10, nowLine + SenHeight, SenY + 10, GetColor(128, 128, 128),true);  //縦線かく
-
-	//スタート
-	SetFontSize(20);
-	DrawCircle(SenStart-5, SenY, 10,GetColor(128, 128, 128), true);
-	DrawFormatString(SenStart-9,SenY-8, GetColor(255, 255, 255),"S");
-
+	DrawTriangle(nowLine - 4, SenY - 14, (nowLine - 4 + nowLine + SenHeight + 4) / 2, (SenY - 10 + SenY + 14) / 2, nowLine + SenHeight + 4, SenY - 14, GetColor(128, 128, 128), true); //三角形かく
+	//色変え
+	DrawBox(SenStart, SenY, nowLine + 2, SenY + SenHeight, GetColor(65, 105, 225), true); //横線かく
 	//ゴール
-	SetFontSize(20);
-	DrawCircle(SenStart+SenLength+ 5, SenY, 10, GetColor(128, 128, 128), true);
-	DrawFormatString(SenStart + SenLength +2, SenY-8, GetColor(255, 255, 255), "G");
-
-	SetFontSize(32); //一応デフォルトなサイズに戻す
+	DrawRotaGraph(SenStart + SenLength + 2, SenY - 9, 0.75, 0, hGoal, true);
 }
 
 void Player::UpdateErase()
@@ -1084,7 +1076,7 @@ void Player::UpdateErase()
 void Player::CheckWall(Field* pf)
 {
 	bool wallNow = pf->IsWallBlock(transform_.position_.x, transform_.position_.y);
-	
+
 	if (wallNow)
 	{
 		transform_.position_.x -= 32;
