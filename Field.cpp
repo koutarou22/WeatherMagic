@@ -30,14 +30,6 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	Reset(); // Reset() 
 
 	goalWid_ = -1;
-
-	for (int h = 0; h <252; h++)
-	{
-		for (int w = 0; w < 22; w++)
-		{
-			isSnow[h][w] = false;
-		}
-	}
 }
 
 Field::~Field()
@@ -68,7 +60,6 @@ void Field::Update()
 
 void Field::Draw()
 {
-
 	int screenWidth, screenHeight, colorBitDepth;
 	GetScreenState(&screenWidth, &screenHeight, &colorBitDepth);
 
@@ -95,16 +86,12 @@ void Field::Draw()
 		{
 			int chip = Map[y * width + x];
 
-			if (isSnow[y][x]) //雪フラグ立ってて
+			if (isSnow[y * width + x]) //雪フラグ立ってて
 			{
 				if (pWeather->GetWeatherState() == Snow)//今雪なら
 				{
 					//足場チップに
 					chip = 18;
-				}
-				else //雪降ってないなら
-				{
-					chip = -1;
 				}
 			}
 			DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
@@ -161,7 +148,6 @@ bool Field::IsWallBlock(int x, int y)
 
 	//今が雪で、かつ雪チップのときに当たり判定をしたい
 	Weather* pWea = GetParent()->FindGameObject<Weather>();
-	
 
 	switch (Map[chipY * width + chipX])
 	{
@@ -185,7 +171,7 @@ bool Field::IsWallBlock(int x, int y)
 			}
 		}
 	}
-		break;
+	break;
 	};
 
 	return false;
@@ -235,15 +221,15 @@ void Field::LoadStage(int StageNumber)
 	width = csv.GetWidth();
 	height = 22;
 	Map = new int[width * height];
+	isSnow = new bool[width * height];
 
 	WhereIsGoal(width, height, csv); //ゴールのwidthをとってくる
-
-	
 
 	for (int h = 0; h < height; h++)
 	{
 		for (int w = 0; w < width; w++)
 		{
+			isSnow[h * width + w] = false;
 			switch (csv.GetInt(w, h /*+ height + 1*/))
 			{
 			case 0:
@@ -296,7 +282,7 @@ void Field::LoadStage(int StageNumber)
 			}
 			case 7: //雪の時
 			{
-				isSnow[h][w] = true;
+				isSnow[h * width + w] = true;
 				break;
 			}
 
