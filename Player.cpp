@@ -37,7 +37,7 @@ namespace
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
         Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100),IsHitOneCount_(false),DebugLog_(false)
 {
-	hImage = LoadGraph("Assets/Chara/Wizard.png");
+	hImage = LoadGraph("Assets/Chara/Clear_Wizard.png");
 	assert(hImage > 0);
 	transform_.position_.x = 100.0f;
 	transform_.position_.y = GROUND;
@@ -654,7 +654,14 @@ void Player::UpdateWalk()
 		{
 			Magic* mg = Instantiate<Magic>(GetParent());
 			mg->SetPosition(transform_.position_.x,transform_.position_.y);
-			VECTOR dir = { 1.0f, 0.0f };
+			VECTOR dir = { 0.0f, 0.0f };
+			if (IsTurnLeft) {
+				dir.x = -1.0f;
+			}
+			else {
+				dir.x = 1.0f;
+			}
+
 			mg->SetDirection(dir);
 			mg->SetSpeed(5.5f);
 			CoolDownMagic_ = timer_;
