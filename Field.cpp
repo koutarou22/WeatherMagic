@@ -11,6 +11,7 @@
 #include "MpItem.h"
 #include "ClearFlag.h"
 #include "Engine/SceneManager.h"
+#include "Weather.h"
 
 Field::Field(GameObject* scene) : GameObject(scene)
 {
@@ -25,10 +26,18 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	hBackGroundDark_ = LoadGraph("Assets/BackImage/background_dark.png");
 	assert(hBackGroundDark_ > 0);
 
-	NowStage_ = 1; 
+	NowStage_ = 1;
 	Reset(); // Reset() 
 
 	goalWid_ = -1;
+
+	for (int h = 0; h <252; h++)
+	{
+		for (int w = 0; w < 22; w++)
+		{
+			isSnow[h][w] = false;
+		}
+	}
 }
 
 Field::~Field()
@@ -50,7 +59,7 @@ Field::~Field()
 void Field::Reset()
 {
 	LoadStage(NowStage_);
-}	
+}
 
 void Field::Update()
 {
@@ -59,7 +68,7 @@ void Field::Update()
 
 void Field::Draw()
 {
-	
+
 	int screenWidth, screenHeight, colorBitDepth;
 	GetScreenState(&screenWidth, &screenHeight, &colorBitDepth);
 
@@ -70,7 +79,7 @@ void Field::Draw()
 	}
 
 	// 画面全体に背景画像を描画
-	DrawExtendGraph(0, 0, screenWidth, screenHeight, hBackGround_, FALSE); 
+	DrawExtendGraph(0, 0, screenWidth, screenHeight, hBackGround_, FALSE);
 	int scroll = 0;
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr)
@@ -78,37 +87,53 @@ void Field::Draw()
 		scroll = cam->GetValue();
 	}
 
+	Weather* pWeather = GetParent()->FindGameObject<Weather>();
+
 	for (int y = 0; y < height; y++)
 	{
 		for (int x = 0; x < width; x++)
 		{
 			int chip = Map[y * width + x];
+
+			if (isSnow[y][x]) //雪フラグ立ってて
+			{
+				if (pWeather->GetWeatherState() == Snow)//今雪なら
+				{
+					//足場チップに
+					chip = 18;
+				}
+				else //雪降ってないなら
+				{
+					chip = -1;
+				}
+			}
 			DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
-			/*if (IsWallBlock(x * 32, y * 32)) 
+
+			/*if (IsWallBlock(x * 32, y * 32))
 			{
 				DrawBox(x * 32 - scroll, y * 32, (x + 1) * 32 - scroll, (y + 1) * 32, GetColor(255, 0, 0), FALSE);
 			}*/
 		}
 	}
-	
+
 }
 
 int Field::CollisionRight(int x, int y)
 {
-    if (IsWallBlock(x + 1, y)) 
-    {
-        return (x + 1) % 32 + 1;
-    }
-    return 0;
+	if (IsWallBlock(x + 1, y))
+	{
+		return (x + 1) % 32 + 1;
+	}
+	return 0;
 }
 
 int Field::CollisionDown(int x, int y)
 {
-    if (IsWallBlock(x, y + 1)) 
-    {
-        return (y + 1) % 32 + 1;
-    }
-    return 0;
+	if (IsWallBlock(x, y + 1))
+	{
+		return (y + 1) % 32 + 1;
+	}
+	return 0;
 }
 
 int Field::CollisionLeft(int x, int y)
@@ -122,7 +147,7 @@ int Field::CollisionLeft(int x, int y)
 
 int Field::CollisionUp(int x, int y)
 {
-	if (IsWallBlock(x, y-1))
+	if (IsWallBlock(x, y - 1))
 	{
 		return 32 - (y % 32);
 	}
@@ -134,9 +159,13 @@ bool Field::IsWallBlock(int x, int y)
 	int chipX = x / 32;
 	int chipY = y / 32;
 
+	//今が雪で、かつ雪チップのときに当たり判定をしたい
+	Weather* pWea = GetParent()->FindGameObject<Weather>();
+	
+
 	switch (Map[chipY * width + chipX])
 	{
-	//case 3://new
+		//case 3://ne
 	case 16://地面
 	case 17:
 	case 18:
@@ -146,6 +175,16 @@ bool Field::IsWallBlock(int x, int y)
 	case 34:
 	case 35:
 		return true;
+	case 7:
+	{
+		if (pWea != nullptr)
+		{
+			if (pWea->GetWeatherState() == Snow)//今が雪
+			{
+				return true;
+			}
+		}
+	}
 		break;
 	};
 
@@ -180,8 +219,8 @@ void Field::LoadStage(int StageNumber)
 	switch (StageNumber)
 	{
 	case 1:
-		ret = csv.Load("Assets/Stage_csv/Stage.csv");
-		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
+		//ret = csv.Load("Assets/Stage_csv/Stage.csv");
+		ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
 		break;
 	case 2:
 		ret = csv.Load("Assets/Stage_csv/Stage2.csv");
@@ -198,6 +237,8 @@ void Field::LoadStage(int StageNumber)
 	Map = new int[width * height];
 
 	WhereIsGoal(width, height, csv); //ゴールのwidthをとってくる
+
+	
 
 	for (int h = 0; h < height; h++)
 	{
@@ -253,6 +294,11 @@ void Field::LoadStage(int StageNumber)
 				pClear->SetPosition(w * 32, h * 32);
 				break;
 			}
+			case 7: //雪の時
+			{
+				isSnow[h][w] = true;
+				break;
+			}
 
 			default:
 				break;
@@ -268,11 +314,11 @@ void Field::NextLoadStage()
 	LoadStage(NowStage_); // 次のステージをロード
 }
 
-void Field::WhereIsGoal(int w,int h,CsvReader c)
+void Field::WhereIsGoal(int w, int h, CsvReader c)
 {
 	for (int i = 0; i < w; i++)
 	{
-		for (int j = 0; j <h; j++)
+		for (int j = 0; j < h; j++)
 		{
 			if (c.GetInt(i, j) == 6)
 			{

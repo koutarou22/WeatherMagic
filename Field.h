@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include <vector>
 
 /// <summary>
 /// 
@@ -7,6 +8,8 @@
 /// /// </summary> 
 
 class CsvReader;
+
+using std::vector;
 
 class Field : public GameObject
 {
@@ -72,6 +75,6 @@ private:
 
 	int padAnalogInput;//xbox‚Ì“ü—Í‚ðŽó‚¯Žæ‚é
 	XINPUT_STATE input;//xbox‚Ì“ü—Í‚ðŽó‚¯Žæ‚é
-
 	
+	bool isSnow[252][22];//‚«‚ß‚¤‚¿‚Å‚²‚ß‚ñ
 };
