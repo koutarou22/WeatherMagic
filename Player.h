@@ -4,9 +4,12 @@
 #include "Engine/GameObject.h"
 #include "Weather.h"
 
+
 /// <summary>
 /// プレイヤーキャラの情報
 /// </summary>
+
+class Field;
 
 class Player : public GameObject
 {
@@ -132,5 +135,7 @@ private:
 		bool IsRightStickTilt_right;//右スティックを右に
 	};
 	Stick_Tilt stickTilt;
+
+	void CheckWall(Field* pf); //今いるところが壁の中か調べる
 	
 };
