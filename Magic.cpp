@@ -43,8 +43,14 @@ void Magic::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
-
-	DrawGraph(x, y, hImage_, TRUE);
+	if (direction_.x == -1.0f)
+	{
+		DrawTurnGraph(x, y, hImage_, TRUE);
+	}
+	else
+	{
+		DrawGraph(x, y, hImage_, TRUE);
+	}
 	//DrawCircle(x + 16, y + 16, 16, GetColor(255, 0, 0), FALSE);
 }
 
