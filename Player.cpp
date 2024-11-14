@@ -940,6 +940,11 @@ void Player::UpdateWalk()
 		}
 		CountSnowFlame = MAX_SNOW_FLAME; //元に戻す
 	}
+
+	if (CheckHitKey(KEY_INPUT_P))
+	{
+		CheckWall(pField);
+	}
 }
 
 void Player::UpdateDamage()
@@ -1073,6 +1078,16 @@ void Player::UpdateErase()
 		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
 		StopSoundMem(WindHandle);
 		flameCounter = 0;
+	}
+}
+
+void Player::CheckWall(Field* pf)
+{
+	bool wallNow = pf->IsWallBlock(transform_.position_.x, transform_.position_.y);
+	
+	if (wallNow)
+	{
+		transform_.position_.x -= 32;
 	}
 }
 
