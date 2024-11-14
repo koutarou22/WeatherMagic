@@ -163,13 +163,13 @@ void Rock::GaleEffect(WeatherState state)
 				int MpVanish = pPlayer->GetMp();
 				if (MpVanish >= 4)
 				{
-					if (input.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_LEFT))
+					if (input.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_K))
 					{
 						//WindTimer_ = 300;
 						//PressKey_R = true;
 						transform_.position_.x -= 1.2f;
 					}
-					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_RIGHT))
+					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_L))
 					{
 						//WindTimer_ = 300;
 						//PressKey_L = true;

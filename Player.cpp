@@ -439,7 +439,6 @@ void Player::UpdateWalk()
 			if (onGround)
 			{
 				Jump();
-
 			}
 		}
 		prevSpaceKey = true;
@@ -493,44 +492,8 @@ void Player::UpdateWalk()
 	}
 	//-----------------------------------------------------------
 
-	if (CheckHitKey(KEY_INPUT_N))
-	{
-		if (!WeatherSwitch && pWeather != nullptr)
-		{
-			// 現在の天候状態を取得
-			WeatherState WeatherState = pWeather->GetWeatherState();
-			// 次に切り替える天候を決定
-			if (WeatherState == Sun)//現在晴れなら
-			{
-				pWeather->SetWeather(Rain);//次は雨に
-				StopSoundMem(WindHandle);
-			}
-			else if (WeatherState == Rain)
-			{
-				pWeather->SetWeather(Gale);//次は強風に
-				StopSoundMem(RainHandle);
-				StopSoundMem(WindHandle);
-			}
-			else if (WeatherState == Gale)
-			{
-				pWeather->SetWeather(Snow);//次は雪に
-				StopSoundMem(WindHandle);
-			}
-			else if (WeatherState == Snow)
-			{
-				pWeather->SetWeather(Sun);
-			}
-			WeatherTime_ = 60;
-		}
-		WeatherSwitch = true;
-	}
-	else
-	{
-		WeatherSwitch = false;
-	}
-
-	//天気を変える（十字キー）
-	if (input.Buttons[0])//↑晴れにする
+	//天気を変える　Controller & keyboard
+	if (input.Buttons[0] || CheckHitKey(KEY_INPUT_UP))//↑晴れにする
 	{
 		if (CanChangeWeather && pWeather != nullptr)
 		{
@@ -546,7 +509,7 @@ void Player::UpdateWalk()
 			}
 		}
 	}
-	else if (input.Buttons[2])//←雨にする
+	else if (input.Buttons[2] || CheckHitKey(KEY_INPUT_LEFT))//←雨にする
 	{
 		if (CanChangeWeather && pWeather != nullptr)
 		{
@@ -562,7 +525,7 @@ void Player::UpdateWalk()
 			}
 		}
 	}
-	else if (input.Buttons[3])//→風にする
+	else if (input.Buttons[3] || CheckHitKey(KEY_INPUT_DOWN))//→風にする
 	{
 		if (CanChangeWeather && pWeather != nullptr)
 		{
@@ -578,7 +541,7 @@ void Player::UpdateWalk()
 			}
 		}
 	}
-	else if (input.Buttons[1])//↓雪にする
+	else if (input.Buttons[1] || CheckHitKey(KEY_INPUT_RIGHT))//↓雪にする
 	{
 		if (CanChangeWeather && pWeather != nullptr)
 		{
@@ -602,6 +565,7 @@ void Player::UpdateWalk()
 
 	if (pWeather != nullptr)
 	{
+		//Gale MP Management
 		if (pWeather->GetWeatherState() == Gale) //風の機能
 		{
 			GaleEffect(Gale);
@@ -611,7 +575,7 @@ void Player::UpdateWalk()
 				{
 					GaleTime_ = 420;
 					MagicDown(2);//消費量は要調整
-					PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
+					StopWeatherSE();
 				}
 				else
 				{
@@ -619,7 +583,7 @@ void Player::UpdateWalk()
 				}
 			}
 		}
-
+		//Rain MP Management
 		if (pWeather->GetWeatherState() == Rain)
 		{
 			if (MagicPoint_ > 0)
@@ -629,7 +593,7 @@ void Player::UpdateWalk()
 					MagicDown(1);
 					/*RainTime_ = 10;*/
 					RainTime_ = 420;
-					PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK);
+					StopWeatherSE();
 				}
 				else
 				{
@@ -656,10 +620,12 @@ void Player::UpdateWalk()
 			Magic* mg = Instantiate<Magic>(GetParent());
 			mg->SetPosition(transform_.position_.x, transform_.position_.y);
 			VECTOR dir = { 0.0f, 0.0f };
-			if (IsTurnLeft) {
+			if (IsTurnLeft) 
+			{
 				dir.x = -1.0f;
 			}
-			else {
+			else 
+			{
 				dir.x = 1.0f;
 			}
 
@@ -835,7 +801,6 @@ void Player::UpdateWalk()
 	onRock = false;
 	for (Rock* pRock : pRocks)
 	{
-
 		WeatherState WeatherState = pWeather->GetWeatherState();
 
 		float dx = pRock->GetPosition().x - transform_.position_.x;
@@ -1106,11 +1071,11 @@ void Player::GaleEffect(WeatherState state)
 				int MpVanish = GetMp();
 				if (MpVanish >= 4)
 				{
-					if (input.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_LEFT))
+					if (input.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_K))
 					{
 						transform_.position_.x -= 1.2f;
 					}
-					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_RIGHT))
+					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_L))
 					{
 						transform_.position_.x += 1.2f;
 					}

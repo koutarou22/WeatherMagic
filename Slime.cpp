@@ -231,40 +231,33 @@ void Slime::Update()
 	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
 	for (Rock* pRock : pRocks)
 	{
-		float dx = pRock->GetPosition().x + 32 - (transform_.position_.x + SWidth / 2.0f);
-		float dy = pRock->GetPosition().y + 32 - (transform_.position_.y + SHeight / 2.0f);
+		float dx = pRock->GetPosition().x - transform_.position_.x;
+		float dy = pRock->GetPosition().y - transform_.position_.y;
 
-		
 		float distance = sqrt(dx * dx + dy * dy);
-		int push;
+		float push = 3.5;
 
-		if (distance <= 60.0f)
+		if (distance <= 85.0f)
 		{
-			if (dy < 0 && abs(dx) <= 32) //岩の上に乗る
+			if (dy < 0 && abs(dx) <= 42) //岩の上に乗る
 			{
-				transform_.position_.y = pRock->GetPosition().y - SHeight; // スライムを上に移動
-				WeatherSpeed_ = 0;
+				transform_.position_.y = pRock->GetPosition().y - 85 + push; // スライムを上に移動
 				onGround = true; // スライムは岩の上にいるので、地面にいるとみなす
 			}
-			else if (dy > 0 && abs(dx) <= 32) //岩の下にぶつかる
+			else if (dy > -0.1 && abs(dx) <= 42.0f)
 			{
-				push = 3;
-				transform_.position_.y = pRock->GetPosition().y + push; // スライムを下に移動
-				WeatherSpeed_ = MOVE_SPEED;
+				transform_.position_.y = pRock->GetPosition().y + push;
 			}
 			else if (dx < 0 && direction == -1) // 岩の右側の衝突判定
 			{
-				push = 1;
-				transform_.position_.x += push; 
-				Reverse_ = true; 
+				transform_.position_.x += push;
+				Reverse_ = true;
 			}
 			else if (dx > 0 && direction == 1) // 岩の左側の衝突判定
 			{
-				push = 1;
 				transform_.position_.x -= push;
-				Reverse_ = true; 
+				Reverse_ = true;
 			}
-			
 		}
 	}
 }
@@ -354,12 +347,12 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 		{
 			ScaleEffect_ = transform_.scale_.x;
 			transform_.scale_.x += 0.01f;
-			transform_.position_.y -= (transform_.scale_.x - ScaleEffect_) * 32;
+			transform_.position_.y -= (transform_.scale_.x - ScaleEffect_) * 42;
 		}
 		if (transform_.scale_.y < 1.5f) {
 			ScaleEffect_ = transform_.scale_.y;
 			transform_.scale_.y += 0.01f; 
-			transform_.position_.y -= (transform_.scale_.y - ScaleEffect_) * 32;
+			transform_.position_.y -= (transform_.scale_.y - ScaleEffect_) * 42;
 		}
 	}
 	else 
@@ -370,12 +363,12 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 		if (transform_.scale_.x > 1.0f) {
 			ScaleEffect_ = transform_.scale_.x;
 			transform_.scale_.x -= 0.01f; 
-			transform_.position_.y += (ScaleEffect_ - transform_.scale_.x) * 32; 
+			transform_.position_.y += (ScaleEffect_ - transform_.scale_.x) * 42; 
 		}
 		if (transform_.scale_.y > 1.0f) {
 			ScaleEffect_ = transform_.scale_.y;
 			transform_.scale_.y -= 0.01f; 
-			transform_.position_.y += (ScaleEffect_ - transform_.scale_.y) * 32; 
+			transform_.position_.y += (ScaleEffect_ - transform_.scale_.y) * 42; 
 		}
 	}
 	
@@ -395,12 +388,12 @@ void Slime::GaleEffect(WeatherState state)
 		int MpVanish = pPlayer->GetMp(); 
 		if (WindTimer_ <= 0 && MpVanish >= 4)
 		{
-			if (CheckHitKey(KEY_INPUT_RIGHT))
+			if (CheckHitKey(KEY_INPUT_K))
 			{
 				WindTimer_ = 300;
 				PressKey_R = true;
 			}
-			else if (CheckHitKey(KEY_INPUT_LEFT))
+			else if (CheckHitKey(KEY_INPUT_L))
 			{
 				WindTimer_ = 300;
 				PressKey_L = true;
