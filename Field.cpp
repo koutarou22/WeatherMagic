@@ -91,11 +91,16 @@ void Field::Draw()
 				if (pWeather->GetWeatherState() == Snow)//ç°ê·Ç»ÇÁ
 				{
 					//ë´èÍÉ`ÉbÉvÇ…
-					chip = 18;
+					//îñÇ¢ÇŸÇ§
+					//DrawRectGraph(x * 32 - scroll, y * 32, 32 * 9, 32 * 2, 32, 32, hImage_, TRUE);
+					//îZÇ¢ÇŸÇ§
+					DrawRectGraph(x * 32 - scroll, y * 32, 32 * 10, 32 * 2, 32, 32, hImage_, TRUE);
 				}
 			}
-			DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
-
+			else
+			{
+				DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
+			}
 			/*if (IsWallBlock(x * 32, y * 32))
 			{
 				DrawBox(x * 32 - scroll, y * 32, (x + 1) * 32 - scroll, (y + 1) * 32, GetColor(255, 0, 0), FALSE);
