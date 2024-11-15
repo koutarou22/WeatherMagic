@@ -10,6 +10,7 @@ using std::string;
 namespace
 {
     const int TIMER = 255;
+    const int MOJI_TIMER = 100;
 }
 
 TitleScene::TitleScene(GameObject* parent)
@@ -22,6 +23,9 @@ TitleScene::TitleScene(GameObject* parent)
 
     keyTimer_ = TIMER;
     keyPushed_ = false;
+
+    mojiTimer_ = MOJI_TIMER;
+    mojiend_ = false;
 }
 
 void TitleScene::Initialize()
@@ -51,7 +55,14 @@ void TitleScene::Update()
 
     if (keyPushed_)
     {
-        keyTimer_--;
+        if (mojiend_)
+        {
+            keyTimer_--;
+        }
+        else
+        {
+            mojiTimer_--;
+        }
     }
 
     //タイマーが終わったら(暗転が終わったら)
@@ -60,6 +71,12 @@ void TitleScene::Update()
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_PLAY);
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
+    }
+
+    //文字タイマーが終わったら(ぴかぴか終わったら)
+    if (mojiTimer_ < 0)
+    {
+        mojiend_ = true;
     }
 }
 
@@ -71,6 +88,8 @@ void TitleScene::Draw()
     int screenWidth, screenHeight, colorBitDepth;
     GetScreenState(&screenWidth, &screenHeight, &colorBitDepth);
   
+//押したらすぐ暗転していく
+#if 0
     if (keyPushed_)
     {
         static int al = TIMER;
@@ -86,6 +105,34 @@ void TitleScene::Draw()
         DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
         DrawGraph(600, 40, charImage_, TRUE);
     }
+#endif
+
+//押したらPush P~がちょっと光って暗転
+#if 1
+    if (keyPushed_&&mojiend_) //文字ぴかぴか終わった
+    {
+        static int al = TIMER;
+        SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        al = keyTimer_;
+    }
+    else if(keyPushed_&&!mojiend_) //文字ぴかぴかさせている
+    {
+        // 画面全体に背景画像を描画
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        // タイトル画面のテキストを描画
+        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 0));
+        DrawGraph(600, 40, charImage_, TRUE);
+    }
+    else //そもそもキーが押されてない
+    {
+        // 画面全体に背景画像を描画
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        // タイトル画面のテキストを描画
+        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
+        DrawGraph(600, 40, charImage_, TRUE);
+    }
+#endif
 }
 
 void TitleScene::Release()

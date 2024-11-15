@@ -11,7 +11,9 @@ private:
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る
 	int keyTimer_; //キーが押されてから遷移までのタイマー
-	bool keyPushed_; //キーが押されたかのフラグ
+	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
+	int mojiTimer_; //文字をぴかぴかするタイマー
+	bool mojiend_; //ぴかぴか終わりかなフラグ
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
