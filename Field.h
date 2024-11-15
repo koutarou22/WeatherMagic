@@ -76,5 +76,5 @@ private:
 	int padAnalogInput;//xbox‚Ì“ü—Í‚ğó‚¯æ‚é
 	XINPUT_STATE input;//xbox‚Ì“ü—Í‚ğó‚¯æ‚é
 	
-	bool* isSnow;//‚«‚ß‚¤‚¿‚Å‚²‚ß‚ñ
+	bool* isSnow;//áƒtƒ‰ƒO
 };
