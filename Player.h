@@ -124,6 +124,7 @@ private:
 	int GetItemSound;
 	int MagicSound;
 
+	int CameraPosX;
 
 	float CountSnowFlame; //snowflame
 	bool IsTurnLeft;//左向きかどうか 左右反転処理用

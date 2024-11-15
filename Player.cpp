@@ -15,6 +15,7 @@
 #include "MpItem.h"
 #include "Rock.h"
 #include"MP.h"
+#include"WeatherChangeEffect.h"
 #include <iostream>
 
 //satou test
@@ -125,6 +126,7 @@ void Player::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
+	CameraPosX = x;
 
 	switch (player_animation_state)
 	{
@@ -500,12 +502,17 @@ void Player::UpdateWalk()
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
 
+			
+
 			if (WeatherState != Sun)//晴れ以外なら
 			{
 				ChangeWeatherCoolTime = 60;
 				CanChangeWeather = false;
 				pWeather->SetWeather(Sun);
 				StopWeatherSE();
+
+				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+				pWCE->SetPosition(CameraPosX ,transform_.position_.y,transform_.position_.z);
 			}
 		}
 	}
@@ -516,44 +523,58 @@ void Player::UpdateWalk()
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
 
+		
+
 			if (WeatherState != Rain)//雨以外なら
 			{
 				ChangeWeatherCoolTime = 60;
 				CanChangeWeather = false;
 				pWeather->SetWeather(Rain);
 				StopWeatherSE();
+
+				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+				pWCE->SetPosition(CameraPosX, transform_.position_.y, transform_.position_.z);
 			}
 		}
 	}
-	else if (input.Buttons[3] || CheckHitKey(KEY_INPUT_DOWN))//→風にする
+	else if (input.Buttons[3] || CheckHitKey(KEY_INPUT_DOWN))//→雪にする
 	{
 		if (CanChangeWeather && pWeather != nullptr)
 		{
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
 
-			if (WeatherState != Gale)//風以外なら
-			{
-				ChangeWeatherCoolTime = 60;
-				CanChangeWeather = false;
-				pWeather->SetWeather(Gale);
-				StopWeatherSE();
-			}
-		}
-	}
-	else if (input.Buttons[1] || CheckHitKey(KEY_INPUT_RIGHT))//↓雪にする
-	{
-		if (CanChangeWeather && pWeather != nullptr)
-		{
-			// 現在の天候状態を取得
-			WeatherState WeatherState = pWeather->GetWeatherState();
-
-			if (WeatherState != Snow)//雪以外なら
+			
+			if (WeatherState != Snow)//風以外なら
 			{
 				ChangeWeatherCoolTime = 60;
 				CanChangeWeather = false;
 				pWeather->SetWeather(Snow);
 				StopWeatherSE();
+
+				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+				pWCE->SetPosition(CameraPosX, transform_.position_.y, transform_.position_.z);
+			}
+		}
+	}
+	else if (input.Buttons[1] || CheckHitKey(KEY_INPUT_RIGHT))//↓風にする
+	{
+		if (CanChangeWeather && pWeather != nullptr)
+		{
+			// 現在の天候状態を取得
+			WeatherState WeatherState = pWeather->GetWeatherState();
+
+			
+
+			if (WeatherState != Gale)//雪以外なら
+			{
+				ChangeWeatherCoolTime = 60;
+				CanChangeWeather = false;
+				pWeather->SetWeather(Gale);
+				StopWeatherSE();
+
+				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+				pWCE->SetPosition(CameraPosX, transform_.position_.y, transform_.position_.z);
 			}
 		}
 	}
