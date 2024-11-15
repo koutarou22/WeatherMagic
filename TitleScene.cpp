@@ -26,6 +26,9 @@ TitleScene::TitleScene(GameObject* parent)
 
     mojiTimer_ = MOJI_TIMER;
     mojiend_ = false;
+
+    SetFontSize(16);
+    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void TitleScene::Initialize()
@@ -68,6 +71,7 @@ void TitleScene::Update()
     //タイマーが終わったら(暗転が終わったら)
     if (keyTimer_ < 0)
     {
+        SetFontSize(32); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_PLAY);
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
@@ -111,6 +115,7 @@ void TitleScene::Draw()
 #if 1
     if (keyPushed_&&mojiend_) //文字ぴかぴか終わった
     {
+        SetFontSize(16);
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
@@ -118,6 +123,7 @@ void TitleScene::Draw()
     }
     else if(keyPushed_&&!mojiend_) //文字ぴかぴかさせている
     {
+        //SetFontSize(18); //一瞬文字が大きく協調されます
         // 画面全体に背景画像を描画
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
         // タイトル画面のテキストを描画
