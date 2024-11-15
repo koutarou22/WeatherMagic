@@ -15,11 +15,12 @@ namespace
 	const float JUMP_HEIGHT = 64.0f * 1.0f;
 	const float GRAVITY = 9.8f / 60.0f;
 	static const int SCREEN_WIDTH = 1280;
+
+	const int SIZE_X = 85;
+	const int SIZE_Y = 85;
 	int hitX = 0;
 	int hitY = 0;
 
-	int SWidth = 512 / 6;
-	int SHeight = 86;
 };
 
 Slime::Slime(GameObject* scene)
@@ -27,7 +28,6 @@ Slime::Slime(GameObject* scene)
 	hImage = LoadGraph("Assets/Chara/slime_run2.png");
 	assert(hImage > 0);
 	StunTimer_ = 0;
-
 }
 
 Slime::~Slime()
@@ -73,13 +73,13 @@ void Slime::Update()
 
 	if (++flameCounter_ >= 24)
 	{
-		animeFrame_ = (animeFrame_ + 1) % 4;//if文を使わない最適解
+		animeFrame_ = (animeFrame_ + 1) % 4;
 		flameCounter_ = 0;
 	}
 
 	//---------------衝突判定(左)--------------------------------
 	hitX = transform_.position_.x + 9;
-	hitY = transform_.position_.y /*+ 19*/; 
+	hitY = transform_.position_.y; 
 	if (pField != nullptr)
 	{
 		int push = pField->CollisionLeft(hitX, hitY);
@@ -93,7 +93,7 @@ void Slime::Update()
 	//-----------------------------------------------------------
 
     //---------------衝突判定(右)--------------------------------
-    hitX = transform_.position_.x + 50;
+    hitX = transform_.position_.x + 85;
     hitY = transform_.position_.y + 54;
 
    if (pField != nullptr)
@@ -268,6 +268,8 @@ void Slime::Draw()
 	Player* pPlayer = GetParent()->FindGameObject<Player>();
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
+	float scale_x = (float)transform_.scale_.x;
+	float scale_y = (float)transform_.scale_.y;
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr)
@@ -277,17 +279,17 @@ void Slime::Draw()
 
 	
 	int frameX = animeFrame_ % 6; 
-	int hFrame = DerivationGraph(frameX, 0, SWidth, SHeight, hImage);
+	int hFrame = DerivationGraph(frameX, 0, 85, 85, hImage);
 
 
 	if (direction == 1)
 	{
-		DrawRectExtendGraph(x, y, x + SWidth * transform_.scale_.x, y + SHeight * transform_.scale_.y, frameX, 0, SWidth, SHeight, hImage, TRUE);
+		DrawRectExtendGraph(x, y, x + SIZE_X* scale_x, y + SIZE_Y * scale_y, frameX, 0, SIZE_X, SIZE_Y, hImage, TRUE);
 	}
 	else if (direction == -1)
 	{
 		// DrawModiGraphを使用して画像を反転
-		DrawModiGraph(x + SWidth * transform_.scale_.x, y, x, y, x, y + SHeight * transform_.scale_.y, x + SWidth * transform_.scale_.x, y + SHeight * transform_.scale_.y, hFrame, TRUE);
+		DrawModiGraph(x + SIZE_X * transform_.scale_.x, y, x, y, x, y + SIZE_Y * transform_.scale_.y, x + SIZE_X * transform_.scale_.x, y + SIZE_Y * transform_.scale_.y, hFrame, TRUE);
 	}
 }
 
@@ -299,7 +301,7 @@ void Slime::WeatherEffects(Weather* weather)
 	HitWeather = true;
 	RainScale(WeatherState, transform_, WeatherSpeed_, MOVE_SPEED, WeatherEffect, ScaleEffect_);
 	
-	//GaleEffect(WeatherState);
+	//GaleEffect(WeatherState);//風の影響を受ける
 }
 
 
@@ -309,8 +311,8 @@ bool Slime::ColliderRect(float x, float y, float w, float h)
 	// 自分の矩形の情報
 	float myX = transform_.position_.x;
 	float myY = transform_.position_.y;
-	float myW = 85.0f; 
-	float myH = 85.0f; 
+	float myW = 42.0f; 
+	float myH = 42.0f; 
 
 	// 矩形の衝突判定
 	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
@@ -339,17 +341,15 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 	int MpVanish = pPlayer->GetMp();
 
 	if (state == Rain && MpVanish > 0)
-	{
-		//WeatherSpeed_ = MOVE_SPEED * (1.0f - WeatherEffect); // 雨の日は速度を減少させる
-
-		
+	{		
 		if (transform_.scale_.x < 1.5f)//大きさが1.5で止まるように
 		{
 			ScaleEffect_ = transform_.scale_.x;
 			transform_.scale_.x += 0.01f;
 			transform_.position_.y -= (transform_.scale_.x - ScaleEffect_) * 42;
 		}
-		if (transform_.scale_.y < 1.5f) {
+		if (transform_.scale_.y < 1.5f) 
+		{
 			ScaleEffect_ = transform_.scale_.y;
 			transform_.scale_.y += 0.01f; 
 			transform_.position_.y -= (transform_.scale_.y - ScaleEffect_) * 42;
@@ -357,15 +357,16 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 	}
 	else 
 	{
+		WeatherSpeed_ = MOVE_SPEED;//普通の速度に戻る 
 
-		WeatherSpeed_ = MOVE_SPEED; 
-		
-		if (transform_.scale_.x > 1.0f) {
+		if (transform_.scale_.x > 1.0f) 
+		{
 			ScaleEffect_ = transform_.scale_.x;
 			transform_.scale_.x -= 0.01f; 
 			transform_.position_.y += (ScaleEffect_ - transform_.scale_.x) * 42; 
 		}
-		if (transform_.scale_.y > 1.0f) {
+		if (transform_.scale_.y > 1.0f)
+		{
 			ScaleEffect_ = transform_.scale_.y;
 			transform_.scale_.y -= 0.01f; 
 			transform_.position_.y += (ScaleEffect_ - transform_.scale_.y) * 42; 
