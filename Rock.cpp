@@ -5,10 +5,11 @@
 
 namespace
 {
-	const float MOVE_SPEED = 2.5f;
+	const float MOVE_SPEED = 1.2f;
 	const float GROUND = 595.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.0f;
 	const float GRAVITY = 9.8f / 60.0f;
+
 
 	int hitX = 0;
 	int hitY = 0;
@@ -26,6 +27,10 @@ Rock::Rock(GameObject* scene)
 
 	hitX = transform_.position_.x + 32;
 	hitY = transform_.position_.y + 32;
+
+
+	CanMoveRight = true;
+	CanMoveLeft = true;
 
 }
 
@@ -48,32 +53,44 @@ void Rock::Update()
 		WeatherEffects(pWeather); // 天候関数を呼び出す
 	}
 
-
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr)
 	{
 		x -= cam->GetValue();
 	}
 
-
 	//---------------衝突判定(左)--------------------------------
-	hitX = transform_.position_.x + 18;
-	hitY = transform_.position_.y + 54;
+	hitX = transform_.position_.x;
+	hitY = transform_.position_.y + 5;
 	if (pField != nullptr)
 	{
 		int push = pField->CollisionLeft(hitX, hitY);
-		transform_.position_.x += push;
+		if (push > 0)
+		{
+			CanMoveLeft = false;
+		}
+		else
+		{
+			CanMoveLeft = true;
+		}
 	}
 	//-----------------------------------------------------------
 
 //---------------衝突判定(右)--------------------------------
-	hitX = transform_.position_.x + 32;
-	hitY = transform_.position_.y + 32;
+	hitX = transform_.position_.x + 60;
+	hitY = transform_.position_.y + 60;
 
 	if (pField != nullptr)
 	{
 		int push = pField->CollisionRight(hitX, hitY);
-		transform_.position_.x -= push;
+		if (push > 0)
+		{
+			CanMoveRight = false;
+		}
+		else
+		{
+			CanMoveRight = true;
+		}
 	}
 
 	Jump_P += GRAVITY; //速度 += 加速度
@@ -91,7 +108,8 @@ void Rock::Update()
 		hitY = transform_.position_.y;
 
 		int push = pField->CollisionUp(hitX, hitY);
-		if (push > 0) {
+		if (push > 0) 
+		{
 			Jump_P = 0.0f;
 			transform_.position_.y += push;
 		}
@@ -104,12 +122,14 @@ void Rock::Update()
 		int pushR = pField->CollisionDown(transform_.position_.x + 50 * transform_.scale_.x, transform_.position_.y + 60 * transform_.scale_.y);
 		int pushL = pField->CollisionDown(transform_.position_.x + 14 * transform_.scale_.x, transform_.position_.y + 60 * transform_.scale_.y);
 		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
-		if (push >= 1) {
+		if (push >= 1) 
+		{
 			transform_.position_.y -= push - 1;
 			Jump_P = 0.0f;
 			onGround = true;
 		}
-		else {
+		else 
+		{
 			onGround = false;
 		}
 	}
@@ -167,13 +187,19 @@ void Rock::GaleEffect(WeatherState state)
 					{
 						//WindTimer_ = 300;
 						//PressKey_R = true;
-						transform_.position_.x -= 1.2f;
+						if (CanMoveLeft)
+						{
+							transform_.position_.x -= MOVE_SPEED;
+						}
 					}
 					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_L))
 					{
 						//WindTimer_ = 300;
 						//PressKey_L = true;
-						transform_.position_.x += 1.2f;
+						if (CanMoveRight)
+						{
+							transform_.position_.x += MOVE_SPEED;
+						}
 					}
 				}
 			}

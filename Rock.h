@@ -26,12 +26,28 @@ public:
 	bool ColliderRect(float x, float y, float w, float h);
 	void HitCollisionWithRock();
 
+	/// <summary>
+	/// プレイヤーが岩に乗ってるときプレイヤーだけ動かないようにするよう
+	/// </summary>
+	/// <returns></returns>
+	bool GetNotMoveRight() { return CanMoveRight == false; }
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	bool GetNotMoveLeft() { return CanMoveLeft == false; }
+
 	float x;
 	float y;
 	
 private:
 	bool PressKey_R = false;
 	bool PressKey_L = false;
+
+	//挙動がおかしくならないようにする処理
+	bool CanMoveRight;
+	bool CanMoveLeft;
+
 	int WindTimer_ = 300;
 
 	int hImage_;

@@ -771,6 +771,7 @@ void Player::UpdateWalk()
 	}
 
 
+
 	std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
 	for (MpItem* pMp : pMps)
 	{
@@ -796,6 +797,7 @@ void Player::UpdateWalk()
 			IsHitOneCount_ = false; // アイテムが範囲外になったらIsHitOneCount_をfalseにリセット
 		}
 	}
+
 
 	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
 	onRock = false;
@@ -828,6 +830,19 @@ void Player::UpdateWalk()
 			else if (dx > -0.1 && abs(dy) <= 32.0f)
 			{
 				transform_.position_.x -= push;
+			}
+		}
+
+		Field* pField = GetParent()->FindGameObject<Field>();
+		if (pField != nullptr)
+		{
+			int hitX = pRock->GetPosition().x + 32;
+			int hitY = pRock->GetPosition().y + 32;
+
+			if (pField->CollisionLeft(hitX, hitY) > 0 || pField->CollisionRight(hitX, hitY) > 0 ||
+				pField->CollisionUp(hitX, hitY) > 0 || pField->CollisionDown(hitX, hitY) > 0)
+			{
+				onRock = false;
 			}
 		}
 	}
@@ -1052,6 +1067,7 @@ void Player::CheckWall(Field* pf)
 void Player::GaleEffect(WeatherState state)
 {
 	Camera* cam = GetParent()->FindGameObject<Camera>();
+	Rock* pRock = GetParent()->FindGameObject<Rock>();
 
 	// xboxコントローラーの入力情報を取得
 	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
@@ -1060,9 +1076,7 @@ void Player::GaleEffect(WeatherState state)
 	{
 		// カメラの位置を取得
 		int camX = cam->GetValue();
-		//if (transform_.position_.x >= camX && transform_.position_.x <= camX)
-		//{
-
+	
 		//岩の上に乗る処理
 		if (onRock == true)
 		{
