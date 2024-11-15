@@ -15,6 +15,11 @@ namespace
 TitleScene::TitleScene(GameObject* parent)
     : GameObject(parent, "TitleScene")
 {
+    hImage_ = -1;
+    charImage_ = -1;
+    spaceImage_ = -1;
+    soundHandle = -1;
+
     keyTimer_ = TIMER;
     keyPushed_ = false;
 }
