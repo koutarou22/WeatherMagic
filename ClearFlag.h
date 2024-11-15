@@ -14,6 +14,7 @@ private:
 	int animeFrame_;//‹î
 	int PictFlame_;
 	int flameCounter_;
+	bool IsClear_;
 public:
 
 	ClearFlag(GameObject* parent);
@@ -31,5 +32,6 @@ public:
 	void SetPosition(int x, int y);
 	void SetPosition(XMFLOAT3 pos);
 	bool ColliderCircle(float x, float y, float r);
+	void SetIsClear() { IsClear_ = true; }
 };
 

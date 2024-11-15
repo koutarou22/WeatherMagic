@@ -47,7 +47,7 @@ public:
   void UpdateDamage();
   void UpdateDead();
   void UpdateErase();
-
+  void UpdateClear();
 private:
 	int MagicPoint_;//打てる魔法の回数
 	int hImage;
@@ -97,6 +97,7 @@ private:
 		S_Damage,
 		S_Dead,
 		S_Erase,
+		S_Clear
 	};
 	PlayerState player_state;
 

@@ -26,7 +26,7 @@ void GameOverScene::Update()
 {
 	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
 	// スペースキーが押されたらスタートボタンでTitleSceneに遷移
-	if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[14]) {
+	if (CheckHitKey(KEY_INPUT_SPACE) ||  input.Buttons[4]) {
 		keyPushed_ = true;
 	}
 
