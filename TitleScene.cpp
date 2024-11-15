@@ -7,9 +7,25 @@
 const char* TITLE_TEXT = "Press P Key to start";
 using std::string;
 
+namespace
+{
+    const int TIMER = 255;
+    const int MOJI_TIMER = 100;
+}
+
 TitleScene::TitleScene(GameObject* parent)
     : GameObject(parent, "TitleScene")
 {
+    hImage_ = -1;
+    charImage_ = -1;
+    spaceImage_ = -1;
+    soundHandle = -1;
+
+    keyTimer_ = TIMER;
+    keyPushed_ = false;
+
+    mojiTimer_ = MOJI_TIMER;
+    mojiend_ = false;
 }
 
 void TitleScene::Initialize()
@@ -25,8 +41,6 @@ void TitleScene::Initialize()
 
     soundHandle = LoadSoundMem("Assets/Music/SE/select01.mp3");//Pを押した時に効果音がなる(登録)
     assert(soundHandle != -1); // 音声ファイルの読み込みに失敗した場合のエラーチェック
-
-
 }
 
 void TitleScene::Update()
@@ -36,9 +50,33 @@ void TitleScene::Update()
     // スペースキーが押されるかスタートボタンでTestSceneに遷移
     if (CheckHitKey(KEY_INPUT_P) || input.Buttons[4]) {
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
+        keyPushed_ = true;
+    }
+
+    if (keyPushed_)
+    {
+        if (mojiend_)
+        {
+            keyTimer_--;
+        }
+        else
+        {
+            mojiTimer_--;
+        }
+    }
+
+    //タイマーが終わったら(暗転が終わったら)
+    if (keyTimer_ < 0)
+    {
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_PLAY);
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
+    }
+
+    //文字タイマーが終わったら(ぴかぴか終わったら)
+    if (mojiTimer_ < 0)
+    {
+        mojiend_ = true;
     }
 }
 
@@ -49,14 +87,52 @@ void TitleScene::Draw()
 
     int screenWidth, screenHeight, colorBitDepth;
     GetScreenState(&screenWidth, &screenHeight, &colorBitDepth);
+  
+//押したらすぐ暗転していく
+#if 0
+    if (keyPushed_)
+    {
+        static int al = TIMER;
+        SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        al = keyTimer_;
+    }
+    else
+    {
+        // 画面全体に背景画像を描画
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        // タイトル画面のテキストを描画
+        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
+        DrawGraph(600, 40, charImage_, TRUE);
+    }
+#endif
 
-   
-    // 画面全体に背景画像を描画
-    DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
-    // タイトル画面のテキストを描画
-    DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
-    DrawGraph(600, 40, charImage_, TRUE);
-    
+//押したらPush P~がちょっと光って暗転
+#if 1
+    if (keyPushed_&&mojiend_) //文字ぴかぴか終わった
+    {
+        static int al = TIMER;
+        SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        al = keyTimer_;
+    }
+    else if(keyPushed_&&!mojiend_) //文字ぴかぴかさせている
+    {
+        // 画面全体に背景画像を描画
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        // タイトル画面のテキストを描画
+        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 0));
+        DrawGraph(600, 40, charImage_, TRUE);
+    }
+    else //そもそもキーが押されてない
+    {
+        // 画面全体に背景画像を描画
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        // タイトル画面のテキストを描画
+        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
+        DrawGraph(600, 40, charImage_, TRUE);
+    }
+#endif
 }
 
 void TitleScene::Release()
