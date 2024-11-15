@@ -4,7 +4,7 @@
 
 GameOverScene::GameOverScene(GameObject* parent) : GameObject(parent, "GameOverScene")
 {
-    hImage_ = LoadGraph("Assets/Scene/GAME OVER.png");
+    hImage_ = LoadGraph("Assets/Scene/GAME OVER1.png");
     assert(hImage_ > 0);
 }
 

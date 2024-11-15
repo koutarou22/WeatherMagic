@@ -166,6 +166,7 @@
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Weather.cpp" />
+    <ClCompile Include="WeatherBackGround.cpp" />
     <ClCompile Include="WeatherChangeEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +199,7 @@
     <ClInclude Include="Time.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Weather.h" />
+    <ClInclude Include="WeatherBackGround.h" />
     <ClInclude Include="WeatherChangeEffect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
