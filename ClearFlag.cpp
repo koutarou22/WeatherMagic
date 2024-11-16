@@ -4,7 +4,7 @@
 #include "Field.h"
 
 
-ClearFlag::ClearFlag(GameObject* parent) :GameObject(parent, "ClearFlag"), hImage_(-1)
+ClearFlag::ClearFlag(GameObject* parent) :GameObject(parent, "ClearFlag"), hImage_(-1),IsClear_(false)
 {
 	hImage_ = LoadGraph("Assets/Item/GoalFlag.png");
 	assert(hImage_ >= 0);
@@ -32,7 +32,7 @@ void ClearFlag::Update()
 {
 	if (++flameCounter_ >= 24)
 	{
-		animeFrame_ = (animeFrame_ + 1) % 4;
+		animeFrame_ = (animeFrame_ + 1) % 3;
 		flameCounter_ = 0;
 	}
 }
@@ -46,11 +46,14 @@ void ClearFlag::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
-	int SWidth = 192 / 3;
-	int SHeight = 63;
-	int frameX = animeFrame_ % 4;
-	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hImage_Right, TRUE);
-	DrawGraph(x, y, hImage_, TRUE);
+	int SWidth = 61;
+	int SHeight = 61;
+	//int frameX = animeFrame_ % 4;
+	if (!IsClear_)
+	{
+		DrawRectGraph(x, y, animeFrame_ * SWidth, 0, SWidth, SHeight, hImage_Right, TRUE);
+		DrawGraph(x, y, hImage_, TRUE);
+	}
 	//DrawCircle(x + 63.0f, y + 63.0f, 24.0f, GetColor(255, 0, 0), 0);
 }
 

@@ -4,7 +4,7 @@
 #include "Engine/SceneManager.h"
 
 // タイトル画面のテキスト
-const char* TITLE_TEXT = "Press P Key to start";
+const char* TITLE_TEXT = "Press Space Key to start";
 using std::string;
 
 namespace
@@ -50,8 +50,8 @@ void TitleScene::Update()
 {
     padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
 
-    // スペースキーが押されるかスタートボタンでTestSceneに遷移
-    if (CheckHitKey(KEY_INPUT_P) || input.Buttons[4]) {
+    // スペースキーが押されるかスタートボタンでPlaySceneに遷移
+    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4]) {
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
         keyPushed_ = true;
     }
