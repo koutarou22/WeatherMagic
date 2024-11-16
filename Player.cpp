@@ -16,7 +16,8 @@
 #include "Rock.h"
 #include"MP.h"
 #include"WeatherChangeEffect.h"
-#include <iostream>
+#include"ClearFlag.h"
+#include"Logo.h"
 
 //satou test
 namespace
@@ -110,6 +111,8 @@ void Player::Update()
 		break;
 	case Player::S_Erase:
 		UpdateErase();
+	case Player::S_Clear:
+		UpdateClear();
 	default:
 		break;
 	}
@@ -887,6 +890,12 @@ void Player::UpdateWalk()
 		if (pField->IsHitClear(playerX, playerY))
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+			ClearFlag* pClearFlag = (ClearFlag*)FindObject("ClearFlag");
+
+			if (pClearFlag != nullptr)
+			{
+				pClearFlag->KillMe();
+			}
 
 			if (pSceneManager != nullptr)
 			{
@@ -894,7 +903,8 @@ void Player::UpdateWalk()
 				pSceneManager->SetMagicPoint(MpPass);//Set関数に送り保存
 			}
 
-			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+			
+			player_state = S_Clear;
 		}
 	}
 
@@ -976,6 +986,7 @@ void Player::UpdateDead()
 		player_animation_state = S_Erase_A;
 		player_state = S_Erase;
 		animeFrame = 7;
+		flameCounter = 0;
 	}
 }
 
@@ -1074,13 +1085,24 @@ void Player::UpdateErase()
 	}
 }
 
+void Player::UpdateClear()
+{
+	Instantiate<Logo>(this);
+	if (++flameCounter >= 180)
+	{
+		flameCounter = 0;
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+	}
+}
+
 void Player::CheckWall(Field* pf)
 {
 	bool wallNow = pf->IsWallBlock(transform_.position_.x, transform_.position_.y);
 
 	if (wallNow)
 	{
-		transform_.position_.x -= 32;
+		transform_.position_.x -= 64;
 	}
 }
 

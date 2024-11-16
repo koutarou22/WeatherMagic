@@ -2,35 +2,72 @@
 #include "Engine/SceneManager.h"
 #include"GameOverScene.h"
 
+namespace
+{
+	const int TIMER = 100;
+}
+
 GameOverScene::GameOverScene(GameObject* parent) : GameObject(parent, "GameOverScene")
 {
-    hImage_ = LoadGraph("Assets/Scene/GAME OVER1.png");
-    assert(hImage_ > 0);
+
+  hImage_ = LoadGraph("Assets/Scene/GAME OVER1.png");
+  assert(hImage_ > 0);
+
+	keyTimer_ = TIMER;
+	keyPushed_ = false;
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 }
 
 void GameOverScene::Initialize()
 {
-    // ƒQ[ƒ€ƒI[ƒo[ƒV[ƒ“‚Ì‰Šú‰»ˆ—...
+	// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã‚·ãƒ¼ãƒ³ã®åˆæœŸåŒ–å‡¦ç†...
 }
 
 void GameOverScene::Update()
 {
-    padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
-    // ƒXƒy[ƒXƒL[‚ª‰Ÿ‚³‚ê‚½‚çƒXƒ^[ƒgƒ{ƒ^ƒ“‚ÅTitleScene‚É‘JˆÚ
-    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[14]) {
-        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_TITLE);
-    }
+	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+	// ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³ã§TitleSceneã«é·ç§»
+	if (CheckHitKey(KEY_INPUT_SPACE) ||  input.Buttons[4]) {
+		keyPushed_ = true;
+	}
+
+	if (keyPushed_)
+	{
+
+		keyTimer_--;
+	}
+
+	//ã‚¿ã‚¤ãƒãƒ¼ãŒçµ‚ã‚ã£ãŸã‚‰(æš—è»¢ãŒçµ‚ã‚ã£ãŸã‚‰)
+	if (keyTimer_ < 0)
+	{
+		SetFontSize(32); //ã‚‚ã¨ã«ã‚‚ã©ã™
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_TITLE);
+	}
 }
 
 void GameOverScene::Draw()
 {
-    DrawGraph(0, 0, hImage_, TRUE);
-  /*  DrawString(0, 0, "GAME OVER", GetColor(255, 255, 255));
-    DrawString(0, 20, "Press SPACE to return to title", GetColor(255, 255, 255));*/
+	if (keyPushed_)
+	{
+		static int al = TIMER;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
+		DrawGraph(0, 0, hImage_, TRUE);
+		al = keyTimer_;
+	}
+	else
+	{
+		// ç”»é¢å…¨ä½“ã«èƒŒæ™¯ç”»åƒã‚’æç”»
+		DrawGraph(0, 0, hImage_, TRUE);
+	}
+
+
+	/*  DrawString(0, 0, "GAME OVER", GetColor(255, 255, 255));
+	  DrawString(0, 20, "Press SPACE to return to title", GetColor(255, 255, 255));*/
 }
 
 void GameOverScene::Release()
 {
-    
+
 }
