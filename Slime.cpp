@@ -180,7 +180,8 @@ void Slime::Update()
 		hitY = transform_.position_.y;
 
 		int push = pField->CollisionUp(hitX, hitY);
-		if (push > 0) {
+		if (push > 0) 
+		{
 			Jump_P = 0.0f;
 			transform_.position_.y += push;
 		}
@@ -193,12 +194,14 @@ void Slime::Update()
 		int pushR = pField->CollisionDown(transform_.position_.x + 25 * transform_.scale_.x, transform_.position_.y + 64 * transform_.scale_.y);
 		int pushL = pField->CollisionDown(transform_.position_.x + 10 * transform_.scale_.x, transform_.position_.y + 54 * transform_.scale_.y);
 		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
-		if (push >= 1) {
+		if (push >= 1)
+		{
 			transform_.position_.y -= push - 1;
 			Jump_P = 0.0f;
 			onGround = true;
 		}
-		else {
+		else 
+		{
 			onGround = false;
 		}
 
@@ -215,8 +218,8 @@ void Slime::Update()
 	for (Magic* pMagic : pMagics)
 	{
 		//解説『Magic』と『Slime』の距離を求めている
-		float dx = pMagic->GetPosition().x+32 - (transform_.position_.x + 42.0f);//Mgの座標X - Slの座標X
-		float dy = pMagic->GetPosition().y+32 - (transform_.position_.y + 42.0f);//Mgの座標Y - Slの座標Y
+		float dx = pMagic->GetPosition().x + 16 - (transform_.position_.x + 42.0f);//Mgの座標X - Slの座標X
+		float dy = pMagic->GetPosition().y + 16 - (transform_.position_.y + 42.0f);//Mgの座標Y - Slの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
 
 		if (distance <= 30.0f)
@@ -244,7 +247,7 @@ void Slime::Update()
 				transform_.position_.y = pRock->GetPosition().y - 85 + push; // スライムを上に移動
 				onGround = true; // スライムは岩の上にいるので、地面にいるとみなす
 			}
-			else if (dy > -0.1 && abs(dx) <= 42.0f)
+			else if (dy > -0.1 && abs(dx) <= 42.)
 			{
 				transform_.position_.y = pRock->GetPosition().y + push;
 			}
@@ -277,10 +280,8 @@ void Slime::Draw()
 		x -= cam->GetValue();
 	}
 
-	
 	int frameX = animeFrame_ % 6; 
 	int hFrame = DerivationGraph(frameX, 0, 85, 85, hImage);
-
 
 	if (direction == 1)
 	{
@@ -334,7 +335,8 @@ void Slime::SetPosition(int x, int y)
 void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_)
 {
 	Player* pPlayer = GetParent()->FindGameObject<Player>();
-	if (pPlayer == nullptr) {
+	if (pPlayer == nullptr) 
+	{
 		return;
 	}
 

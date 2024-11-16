@@ -1,8 +1,10 @@
 #include "Weather.h"
 #include "Player.h"
+#include "WeatherBackGround.h"
 
 void Weather::Initialize()
 {
+    Instantiate<WeatherBackGround>(this);
     //----------------背景------------------------------------
     hImage_Sun = LoadGraph("Assets/BackImage/Sky.png");
     assert(hImage_Sun > 0);
