@@ -3,7 +3,7 @@
 WeatherChangeEffect::WeatherChangeEffect(GameObject* parent)
 	:GameObject(parent, "WeatherChangeEffect"), hImage_(-1),animeFrame(0),FrameCounter(0),eraseCounter(0)
 {
-	hImage_ = LoadGraph("Assets/Chara/WeatherChangeMagic.png");
+	hImage_ = LoadGraph("Assets/Effect/WeatherChangeMagic.png");
 	assert(hImage_ > 0);
 }
 
@@ -41,6 +41,7 @@ void WeatherChangeEffect::Draw()
 	}
 
 	DrawRectGraph(x, y, animeFrame * 64,  0, 64, 64, hImage_, TRUE);
+	//DrawFormatString(100,500, GetColor(0, 0, 0), "x: %d y:%d", x,y);
 }
 
 void WeatherChangeEffect::Release()

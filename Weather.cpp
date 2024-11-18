@@ -1,13 +1,15 @@
 #include "Weather.h"
 #include "Player.h"
+#include "WeatherBackGround.h"
 
 void Weather::Initialize()
 {
+   
     //----------------背景------------------------------------
     hImage_Sun = LoadGraph("Assets/BackImage/Sky.png");
     assert(hImage_Sun > 0);
-    hImage_Rain = LoadGraph("Assets/BackImage/Rain.png");
-    assert(hImage_Rain > 0);
+    //hImage_Rain = LoadGraph("Assets/BackImage/Rain.png");
+    //assert(hImage_Rain > 0);
     hImage_Wind = LoadGraph("Assets/BackImage/Wind.png");
     assert(hImage_Wind > 0);
     hImage_Snow = LoadGraph("Assets/BackImage/Snow.png");
@@ -118,7 +120,7 @@ void Weather::Draw()
                 DrawGraph(600, 0, Rain_Icon, TRUE);  // 雨
                 //  DrawFormatString(580, 38, GetColor(100, 149, 237), "常時消費Mp1");
                 SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-                DrawGraph(0, 0, hImage_Rain, TRUE);  // 雨
+                //DrawGraph(0, 0, hImage_Rain, TRUE);  // 雨
                 RainOnChecker = false;
             }
             else

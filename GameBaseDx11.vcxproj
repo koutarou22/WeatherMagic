@@ -142,6 +142,7 @@
     <ClCompile Include="ClearFlag.cpp" />
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Damage.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="EnemyMagic.cpp" />
     <ClCompile Include="Engine\CsvReader.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
@@ -150,10 +151,12 @@
     <ClCompile Include="Engine\SceneManager.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="FreezeEffect.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="HealItem.cpp" />
     <ClCompile Include="Hp.cpp" />
+    <ClCompile Include="LandingEffect.cpp" />
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="MP.cpp" />
     <ClCompile Include="MpItem.cpp" />
@@ -167,6 +170,7 @@
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Weather.cpp" />
+    <ClCompile Include="WeatherBackGround.cpp" />
     <ClCompile Include="WeatherChangeEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +179,7 @@
     <ClInclude Include="ClearFlag.h" />
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Damage.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="EnemyMagic.h" />
     <ClInclude Include="Engine\CsvReader.h" />
     <ClInclude Include="Engine\GameObject.h" />
@@ -183,10 +188,12 @@
     <ClInclude Include="Engine\SceneManager.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="FreezeEffect.h" />
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="HealItem.h" />
     <ClInclude Include="Hp.h" />
+    <ClInclude Include="LandingEffect.h" />
     <ClInclude Include="Logo.h" />
     <ClInclude Include="MP.h" />
     <ClInclude Include="MpItem.h" />
@@ -200,6 +207,7 @@
     <ClInclude Include="Time.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Weather.h" />
+    <ClInclude Include="WeatherBackGround.h" />
     <ClInclude Include="WeatherChangeEffect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

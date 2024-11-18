@@ -5,6 +5,7 @@
 #include "Magic.h"
 #include "Damage.h"
 #include "Weather.h"
+#include "FreezeEffect.h"
 
 namespace
 {
@@ -23,6 +24,7 @@ Ghost::Ghost(GameObject* scene)
 	flameCounter_ = 0;
 	animeType_ = 0;
 	animeFrame_ = 0;
+	FreezeOne = false;
 }
 
 Ghost::~Ghost()
@@ -44,43 +46,43 @@ void Ghost::Update()
 		flameCounter_ = 0;
 	}
 
-
-
-
 	if (cam != nullptr)
 	{
 		// カメラの位置を取得
 		int camX = cam->GetValue();
 		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
-			if (CoolDownAttack_ <= 0)
+			Weather* pWeather = GetParent()->FindGameObject<Weather>();
+			if (pWeather!=nullptr&&pWeather->GetWeatherState() != WeatherState::Snow)
 			{
-				EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
-				if (emg == nullptr)
+				if (CoolDownAttack_ <= 0)
 				{
-					return;
-				}
-				emg->SetPosition(transform_.position_);
-				VECTOR dir = { -1.0f,0.0f };
-				emg->SetDirection(dir);
-				emg->SetSpeed(3.5f);
+					EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
+					if (emg == nullptr)
+					{
+						return;
+					}
+					emg->SetPosition(transform_.position_);
+					VECTOR dir = { -1.0f,0.0f };
+					emg->SetDirection(dir);
+					emg->SetSpeed(3.5f);
 
-				// 天候によって速度を調整
-				Weather* pWeather = GetParent()->FindGameObject<Weather>();
-				if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
-				{
-					emg->SetSpeed(1.0f);
-				}
-				else
-				{
-					emg->SetSpeed(3.5f); 
-				}
+					// 天候によって速度を調整
 
-				CoolDownAttack_ = 300;
+					if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
+					{
+						emg->SetSpeed(1.0f);
+					}
+					else
+					{
+						emg->SetSpeed(3.5f);
+					}
+
+					CoolDownAttack_ = 300;
+				}
 			}
 			//天候取得、雪なら止める
-			Weather* pWeather = GetParent()->FindGameObject<Weather>();
-			if (pWeather->GetWeatherState() != WeatherState::Snow)
+			if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
 			{
 				transform_.position_.y -= 1.0f;
 				sinAngle += 3.0f;
@@ -88,6 +90,14 @@ void Ghost::Update()
 				transform_.position_.y = sinValue * 50.0f;
 
 				CoolDownAttack_ = 360;
+			}
+			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow && !FreezeOne)//雪の時氷のAnimationを発生させる
+			{
+				FreezeEffect* pFreeze = Instantiate<FreezeEffect>(GetParent());
+				pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
+				FreezeOne = true; //ここで一回しか呼べないようにする
+				//問題が発生中　本当に一回しか出せない　
+				//制御しないと　重くなっちゃうんです
 			}
 		}
 	}

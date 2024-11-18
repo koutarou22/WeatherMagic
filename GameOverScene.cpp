@@ -9,23 +9,25 @@ namespace
 
 GameOverScene::GameOverScene(GameObject* parent) : GameObject(parent, "GameOverScene")
 {
-	hImage_ = LoadGraph("Assets/Scene/GAME OVER.png");
-	assert(hImage_ > 0);
+
+  hImage_ = LoadGraph("Assets/Scene/GAME OVER1.png");
+  assert(hImage_ > 0);
 
 	keyTimer_ = TIMER;
 	keyPushed_ = false;
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 }
 
 void GameOverScene::Initialize()
 {
-	// ƒQ[ƒ€ƒI[ƒo[ƒV[ƒ“‚Ì‰Šú‰»ˆ—...
+	// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã‚·ãƒ¼ãƒ³ã®åˆæœŸåŒ–å‡¦ç†...
 }
 
 void GameOverScene::Update()
 {
 	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
-	// ƒXƒy[ƒXƒL[‚ª‰Ÿ‚³‚ê‚½‚çƒXƒ^[ƒgƒ{ƒ^ƒ“‚ÅTitleScene‚É‘JˆÚ
+	// ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³ã§TitleSceneã«é·ç§»
 	if (CheckHitKey(KEY_INPUT_SPACE) ||  input.Buttons[4]) {
 		keyPushed_ = true;
 	}
@@ -36,10 +38,10 @@ void GameOverScene::Update()
 		keyTimer_--;
 	}
 
-	//ƒ^ƒCƒ}[‚ªI‚í‚Á‚½‚ç(ˆÃ“]‚ªI‚í‚Á‚½‚ç)
+	//ã‚¿ã‚¤ãƒãƒ¼ãŒçµ‚ã‚ã£ãŸã‚‰(æš—è»¢ãŒçµ‚ã‚ã£ãŸã‚‰)
 	if (keyTimer_ < 0)
 	{
-		SetFontSize(32); //‚à‚Æ‚É‚à‚Ç‚·
+		SetFontSize(32); //ã‚‚ã¨ã«ã‚‚ã©ã™
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);
 	}
@@ -56,7 +58,7 @@ void GameOverScene::Draw()
 	}
 	else
 	{
-		// ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ğ•`‰æ
+		// ç”»é¢å…¨ä½“ã«èƒŒæ™¯ç”»åƒã‚’æç”»
 		DrawGraph(0, 0, hImage_, TRUE);
 	}
 

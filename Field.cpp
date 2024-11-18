@@ -224,7 +224,7 @@ void Field::LoadStage(int StageNumber)
 	switch (StageNumber)
 	{
 	case 1:
-		ret = csv.Load("Assets/Stage_csv/Stage.csv");
+		ret = csv.Load("Assets/Stage_csv/Stage0.csv");
 		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
 		break;
 	case 2:
@@ -238,7 +238,7 @@ void Field::LoadStage(int StageNumber)
 	assert(ret);
 
 	width = csv.GetWidth();
-	height = 22;
+	height = 23;
 	Map = new int[width * height];
 	isSnow = new bool[width * height];
 
