@@ -39,6 +39,7 @@ public:
 
 	void WhereIs(); //tassei do
 	void StopWeatherSE();
+	void StopMoveSE();
 	void StickTiltCheck();
 
 	void GaleEffect(WeatherState state);//Ride on the Rocks && Using the Wind
@@ -66,6 +67,7 @@ private:
 	bool onGround;//Player on the Ground?
 	bool onRock;//Player on the Rock?
 	bool damaged = false;
+	bool HitLanding;//着地したかどうかを確認する
 	float Jump_P = 0.0f;
 	int Flash_Count;
 
@@ -119,11 +121,24 @@ private:
 
 	int StringUi_Up;
 
-	int soundHandle;
-	int RainHandle;
-	int WindHandle;
-	int GetItemSound;
-	int MagicSound;
+    //SE
+	//天候関連
+	int RainHandle;//晴
+	int WindHandle;//風
+	int SnowHandle;//雪
+
+	//動作SE
+	int GetItemHandle;//回復アイテム取得
+	int MagicHandle;//魔法打つ
+	int JumpHandle;//ジャンプ音
+	int LandingHandle;//着地音
+
+	int DamageHandle;//接触時
+	int CrisisHandle;//Hpが1の時;
+	int DieHandle;//死亡時
+
+	int SpeedUpHandle;//スピードアップ時
+
 
 	int CameraPosX;
 

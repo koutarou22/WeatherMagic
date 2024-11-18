@@ -13,6 +13,7 @@
 #include "MpItem.h"
 #include "ClearFlag.h"
 #include"MP.h"
+#include "WeatherBackGround.h"
 
 PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0) 
 {
@@ -22,19 +23,23 @@ void PlayScene::Initialize()
 {
     SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 
+ 
     Field* pField = Instantiate<Field>(this);
     pField->Reset(); // Reset()
-
+    Instantiate<Weather>(this);
+    Instantiate<WeatherBackGround>(this);
     Player* pPlayer = nullptr;
     pPlayer = Instantiate<Player>(this);
 
     int MpPass = pPlayer->GetMp();//Mp‚Ì’l‚ğ‚Á‚Ä‚­‚é
     pSceneManager->SetMagicPoint(MpPass);//PlayScene‚ÅPlayer‚ÌMp‚ğSet
 
-    Instantiate<Weather>(this);
+  
+
     Instantiate<Camera>(this);
     Instantiate<Hp>(this);
     Instantiate<MP>(this);
+    
 }
 
 //XV

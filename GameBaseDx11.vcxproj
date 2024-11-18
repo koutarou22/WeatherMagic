@@ -150,10 +150,12 @@
     <ClCompile Include="Engine\SceneManager.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="FreezeEffect.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="HealItem.cpp" />
     <ClCompile Include="Hp.cpp" />
+    <ClCompile Include="LandingEffect.cpp" />
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="MP.cpp" />
     <ClCompile Include="MpItem.cpp" />
@@ -184,10 +186,12 @@
     <ClInclude Include="Engine\SceneManager.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="FreezeEffect.h" />
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="HealItem.h" />
     <ClInclude Include="Hp.h" />
+    <ClInclude Include="LandingEffect.h" />
     <ClInclude Include="Logo.h" />
     <ClInclude Include="MP.h" />
     <ClInclude Include="MpItem.h" />

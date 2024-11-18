@@ -7,6 +7,7 @@
 #include "Rock.h"
 #include <iostream>
 #include "Weather.h"
+#include "FreezeEffect.h"
 
 namespace
 {
@@ -28,6 +29,8 @@ Slime::Slime(GameObject* scene)
 	hImage = LoadGraph("Assets/Chara/slime_run2.png");
 	assert(hImage > 0);
 	StunTimer_ = 0;
+
+	HitLanding = false;
 }
 
 Slime::~Slime()
@@ -199,10 +202,24 @@ void Slime::Update()
 			transform_.position_.y -= push - 1;
 			Jump_P = 0.0f;
 			onGround = true;
+			///
+			//※地面でのみ氷Effectを出現させたい　たまに表示されない(自信がない)
+			///
+			if (onGround)//地面にいるとき　これを書かないと地面にいるとき表示されない
+			{
+				if (pWeather->GetWeatherState() == WeatherState::Snow && !HitLanding)//もし天候が雪になってて着地もしていなければ
+				{
+					FreezeEffect* pFreeze = Instantiate<FreezeEffect>(GetParent());
+					pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
+
+					HitLanding = true;//最後に着地したことにする
+				}
+			}
 		}
 		else 
 		{
 			onGround = false;
+			HitLanding = false;
 		}
 
 	}

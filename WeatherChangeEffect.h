@@ -5,9 +5,11 @@ class WeatherChangeEffect :
 {
 private:
     int hImage_;
-	int animeFrame;//スプライトのどのコマを描画するか
-	int FrameCounter;//スプライトが次のコマに行くまでのカウンター
-	int eraseCounter;///スプライトが次のコマに行ったら増やし、アニメーション終了後消す判定
+	int animeFrame;
+	int FrameCounter;
+	int eraseCounter;
+
+
 public:
 	WeatherChangeEffect(GameObject* parent);
 
@@ -20,5 +22,6 @@ public:
 	void Draw() override;
 	//開放
 	void Release() override;
+
 };
 

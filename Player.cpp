@@ -18,12 +18,13 @@
 #include"WeatherChangeEffect.h"
 #include"ClearFlag.h"
 #include"Logo.h"
+#include "LandingEffect.h"
 
 //satou test
 namespace
 {
 	const float MOVE_SPEED = 4.5f;
-	const float GROUND = 600.0f;
+	const float GROUND = 605.0f;
 	const float JUMP_HEIGHT = 64.0f * 1.45f;
 
 	const float GRAVITY = 9.8f / 60.0f;
@@ -54,6 +55,7 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 	ChangeWeatherCoolTime = 60;
 	CanChangeWeather = true;
 
+	HitLanding = true;
 
 	MagicPoint_ = 100;//MPの最大値100変更
 
@@ -69,21 +71,49 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 	stickTilt.IsLeftStickTilt_right = false;
 	stickTilt.IsRightStickTilt_left = false;
 	stickTilt.IsRightStickTilt_right = false;
-
-	soundHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
-	assert(soundHandle != -1);
-
+	////------------------------------------------------天候音の登録
+	//雨音
 	RainHandle = LoadSoundMem("Assets/Music/SE/Rain.mp3");
 	assert(RainHandle != -1);
-
+	//風音
 	WindHandle = LoadSoundMem("Assets/Music/SE/Wind.mp3");
 	assert(WindHandle != -1);
+	//雪音
+	SnowHandle = LoadSoundMem("Assets/Music/SE/Snow.mp3");
+	assert(SnowHandle != -1);
+	//-----------------------------------------------------------
+	
+	//アイテム取得音
+	GetItemHandle = LoadSoundMem("Assets/Music/SE/poka01.mp3");
+	assert(GetItemHandle != -1);
 
-	GetItemSound = LoadSoundMem("Assets/Music/SE/poka01.mp3");
-	assert(GetItemSound != -1);
+	//魔法音
+	MagicHandle = LoadSoundMem("Assets/Music/SE/8bit_magic1.mp3");
+	assert(MagicHandle != -1);
 
-	MagicSound = LoadSoundMem("Assets/Music/SE/8bit_magic1.mp3");
-	assert(MagicSound != -1);
+	//ジャンプ音
+	JumpHandle = LoadSoundMem("Assets/Music/SE/jump06.mp3");
+	assert(JumpHandle != -1);
+
+	//着地音
+	LandingHandle = LoadSoundMem("Assets/Music/SE/Landing.mp3");
+	assert(LandingHandle != -1);
+
+	//ダメージ音
+	DamageHandle = LoadSoundMem("Assets/Music/SE/Damaged.mp3");
+	assert(DamageHandle != -1);
+
+	//ピンチ音
+	CrisisHandle = LoadSoundMem("Assets/Music/SE/Crisis.mp3");
+	assert(CrisisHandle != -1);
+
+	//死亡時の音
+	DieHandle = LoadSoundMem("Assets/Music/SE/Die.mp3");
+	assert(DieHandle != -1);
+
+	//スピードアップ音
+	SpeedUpHandle = LoadSoundMem("Assets/Music/SE/SpeedUp.mp3");
+	assert(SpeedUpHandle != -1);
 
 	hGoal = LoadGraph("Assets/Item/GoalFlag.png");
 }
@@ -165,22 +195,29 @@ void Player::Draw()
 		break;
 	}
 	case Player::S_Damage_A:
+		
 		if (IsTurnLeft)
 		{
+			PlaySoundMem(DamageHandle, DX_PLAYTYPE_BACK); // 音声を再生
 			DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
 		}
 		else
 		{
+			PlaySoundMem(DamageHandle, DX_PLAYTYPE_BACK); // 音声を再生
 			DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hImage, TRUE);
 		}
+
 		break;
 	case Player::S_Dead_A:
+		
 		if (IsTurnLeft)
 		{
+			PlaySoundMem(DieHandle, DX_PLAYTYPE_BACK); // 音声を再生
 			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
 		}
 		else
 		{
+			PlaySoundMem(DieHandle, DX_PLAYTYPE_BACK); // 音声を再生
 			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 		}
 		break;
@@ -195,7 +232,7 @@ void Player::Draw()
 		if (UIGetTimer > 0)
 		{
 			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "MP+5");
-			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK); // 音声を再生
+			PlaySoundMem(GetItemHandle , DX_PLAYTYPE_BACK); // 音声を再生
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}
@@ -210,7 +247,6 @@ void Player::Draw()
 		if (UIGetTimer > 0)
 		{
 			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "Hp+2");
-			PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK);
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}
@@ -298,6 +334,10 @@ void Player::StopWeatherSE()
 	{
 		StopSoundMem(WindHandle);
 	}
+}
+
+void Player::StopMoveSE()
+{
 }
 
 /// <summary>
@@ -488,11 +528,20 @@ void Player::UpdateWalk()
 		{
 			transform_.position_.y -= push - 1;
 			Jump_P = 0.0f;
-			onGround = true;
+
+			if (!onGround)
+			{
+				onGround = true;
+				LandingEffect* pLanding = Instantiate<LandingEffect>(GetParent());
+				pLanding->SetPosition(transform_.position_.x, transform_.position_.y);
+				HitLanding = true;
+				PlaySoundMem(LandingHandle, DX_PLAYTYPE_BACK); // 音声を再生
+			}
 		}
 		else
 		{
 			onGround = false;
+			HitLanding = false;
 		}
 	}
 	//-----------------------------------------------------------
@@ -504,8 +553,6 @@ void Player::UpdateWalk()
 		{
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
-
-			
 
 			if (WeatherState != Sun)//晴れ以外なら
 			{
@@ -526,8 +573,6 @@ void Player::UpdateWalk()
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
 
-		
-
 			if (WeatherState != Rain)//雨以外なら
 			{
 				ChangeWeatherCoolTime = 60;
@@ -537,6 +582,8 @@ void Player::UpdateWalk()
 
 				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
 				pWCE->SetPosition(CameraPosX, transform_.position_.y, transform_.position_.z);
+
+				
 			}
 		}
 	}
@@ -566,8 +613,6 @@ void Player::UpdateWalk()
 		{
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
-
-			
 
 			if (WeatherState != Gale)//雪以外なら
 			{
@@ -599,13 +644,17 @@ void Player::UpdateWalk()
 				{
 					GaleTime_ = 420;
 					MagicDown(2);//消費量は要調整
-					StopWeatherSE();
+					PlaySoundMem(WindHandle, DX_PLAYTYPE_BACK);
 				}
 				else
 				{
 					GaleTime_--;
 				}
 			}
+		}
+		else
+		{
+			StopWeatherSE();
 		}
 		//Rain MP Management
 		if (pWeather->GetWeatherState() == Rain)
@@ -617,13 +666,18 @@ void Player::UpdateWalk()
 					MagicDown(1);
 					/*RainTime_ = 10;*/
 					RainTime_ = 420;
-					StopWeatherSE();
+					PlaySoundMem(RainHandle, DX_PLAYTYPE_BACK);
+					
 				}
 				else
 				{
 					RainTime_--;
 				}
 			}
+		}
+		else
+		{
+			StopWeatherSE();
 		}
 	}
 
@@ -661,7 +715,7 @@ void Player::UpdateWalk()
 			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 			MagicPoint_--;
 
-			PlaySoundMem(MagicSound, DX_PLAYTYPE_BACK);
+			PlaySoundMem(MagicHandle, DX_PLAYTYPE_BACK);
 		}
 	}
 	if (CoolDownMagic_ > 0)
@@ -683,7 +737,7 @@ void Player::UpdateWalk()
 
 		if (pSlime->ColliderRect(x + pSlime->GetScale().x, y + pSlime->GetScale().y, 43.0f, 43.0f))
 		{
-			if (y + 43.0f <= pSlime->GetPosition().y + 42 - (43.0f * pSlime->GetScale().y) / 2 + 20) // プレイヤーがスライムの上部にある
+			if (y + 43.0f <= pSlime->GetPosition().y + 43 - (43.0f * pSlime->GetScale().y) / 2 + 20) // プレイヤーがスライムの上部にある
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
 				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
@@ -782,6 +836,7 @@ void Player::UpdateWalk()
 			Hp_GetFlag = true;
 			if (Hp_ < 5)
 			{
+				
 				hp->HeelHp();
 				Hp_++;
 			}
@@ -995,7 +1050,8 @@ void Player::Jump()
 	Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_); // プレイヤーをジャンプさせる
 	onGround = false;
 	onRock = false;
-	PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
+	HitLanding = false;
+	PlaySoundMem(JumpHandle, DX_PLAYTYPE_BACK); // 音声を再生
 }
 
 int Player::GetMp()
@@ -1013,7 +1069,7 @@ void Player::MagicUp(int _PMp)
 	MP* mp = GetParent()->FindGameObject<MP>();
 	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 	MagicPoint_ += _PMp;
-	PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK);
+	//PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK);
 	if (MagicPoint_ > MAX_MAGIC_POINT)
 	{
 		MagicPoint_ = MAX_MAGIC_POINT;
