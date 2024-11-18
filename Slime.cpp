@@ -221,6 +221,8 @@ void Slime::Update()
 
 		if (distance <= 30.0f)
 		{
+			pMagic->SetMagicStateHit();
+
 			Damage* dam = Instantiate<Damage>(GetParent());
 			dam->SetPosition(transform_.position_);
 			StunTimer_ = 300;

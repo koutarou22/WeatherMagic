@@ -41,7 +41,6 @@ void WeatherChangeEffect::Draw()
 	}
 
 	DrawRectGraph(x, y, animeFrame * 64,  0, 64, 64, hImage_, TRUE);
-	DrawFormatString(100,500, GetColor(0, 0, 0), "x: %d y:%d", x,y);
 }
 
 void WeatherChangeEffect::Release()
