@@ -3,8 +3,10 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Ghost.h"
+#include"Field.h"
 
-Magic::Magic(GameObject* scene) : GameObject(scene)
+Magic::Magic(GameObject* scene) : GameObject(scene),Magic_s(S_Move),animeNum(0),
+direction_({0,0}),frameCounter(0),speed_(0.0f),timer_(0)
 {
 	hImage_ = LoadGraph("Assets/Bullet/Magic_F.png");
 	assert(hImage_ > 0);
@@ -76,7 +78,7 @@ void Magic::Draw()
 	{
 	case Magic::S_Move:
 	{
-		if (direction_.x == -1.0f)
+		if (direction_.x == -1.0f)//¶Œü‚«‚È‚ç”½“]•`‰æ
 		{
 			DrawTurnGraph(x, y, animeArray_[animeNum], TRUE);
 		}
@@ -95,20 +97,12 @@ void Magic::Draw()
 		break;
 	}
 
-
-	/*if (direction_.x == -1.0f)
-	{
-		DrawTurnGraph(x, y, hImage_, TRUE);
-	}
-	else
-	{
-		DrawGraph(x, y, hImage_, TRUE);
-	}*/
 	//DrawCircle(x + 16, y + 16, 16, GetColor(255, 0, 0), FALSE);
 }
 
 void Magic::UpdateMove()
 {
+	Field* pField = GetParent()->FindGameObject<Field>();
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr)
 	{
@@ -125,6 +119,27 @@ void Magic::UpdateMove()
 		{
 			timer_ = 0;
 			KillMe();
+		}
+	}
+
+	//---------------Õ“Ë”»’è--------------------------------
+	if (pField != nullptr)
+	{
+		if (direction_.x == 1.0)
+		{
+			if (pField->IsWallBlock(transform_.position_.x + 32 , transform_.position_.y) || 
+				pField->IsHitRock(transform_.position_.x + 32, transform_.position_.y))
+			{
+				Magic_s = S_Hit;
+			}
+		}
+		else
+		{
+			if (pField->IsWallBlock(transform_.position_.x , transform_.position_.y) || 
+				pField->IsHitRock(transform_.position_.x - 32 , transform_.position_.y))
+			{
+				Magic_s = S_Hit;
+			}
 		}
 	}
 }

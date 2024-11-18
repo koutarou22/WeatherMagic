@@ -48,11 +48,10 @@ private:
 		S_Hit,
 	};
 	MagicState Magic_s;
-	std::array<int, 4> animeArray_;
-	std::array<int, 7> animeHitArray_;
+	std::array<int, 4> animeArray_;//アニメーションの固定長配列
+	std::array<int, 7> animeHitArray_;//アニメーションの固定長配列
 	int animeNum;//アニメーションのうち何番目か
 	int frameCounter;//アニメーションの切り替えカウント
-
 
 	//bool IsPrevHit_;//当たっているか（）
 
