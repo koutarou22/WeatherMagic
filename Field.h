@@ -51,6 +51,7 @@ public:
 	int CollisionUp(int x, int y);
 	bool IsWallBlock(int x, int y);
 	bool IsHitClear(int x, int y);
+	bool IsHitRock(int x, int y);
 
 	/// <summary>
 	///

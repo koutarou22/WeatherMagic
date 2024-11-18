@@ -194,6 +194,20 @@ bool Field::IsHitClear(int x, int y)
 	return false;
 }
 
+bool Field::IsHitRock(int x, int y)
+{
+	int chipX = x / 32;
+	int chipY = y / 32;
+
+	switch (Map[chipY * width + chipX])
+	{
+	case 3:
+		return true;
+	}
+
+	return false;
+}
+
 void Field::LoadStage(int StageNumber)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");

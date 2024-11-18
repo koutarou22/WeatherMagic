@@ -134,6 +134,7 @@ void Ghost::Update()
 
 		if (distance <= 20.0f)
 		{
+			pMagic->SetMagicStateHit();
 			KillMe();
 			break;
 		}
