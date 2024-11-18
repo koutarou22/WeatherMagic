@@ -142,6 +142,7 @@
     <ClCompile Include="ClearFlag.cpp" />
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Damage.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="EnemyMagic.cpp" />
     <ClCompile Include="Engine\CsvReader.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="ClearFlag.h" />
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Damage.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="EnemyMagic.h" />
     <ClInclude Include="Engine\CsvReader.h" />
     <ClInclude Include="Engine\GameObject.h" />
