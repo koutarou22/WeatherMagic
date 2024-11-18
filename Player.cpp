@@ -141,8 +141,10 @@ void Player::Update()
 		break;
 	case Player::S_Erase:
 		UpdateErase();
+		break;
 	case Player::S_Clear:
 		UpdateClear();
+		break;
 	default:
 		break;
 	}
@@ -960,6 +962,7 @@ void Player::UpdateWalk()
 
 			
 			player_state = S_Clear;
+			Instantiate<Logo>(this);
 		}
 	}
 
@@ -1143,8 +1146,7 @@ void Player::UpdateErase()
 
 void Player::UpdateClear()
 {
-	Instantiate<Logo>(this);
-	if (++flameCounter >= 180)
+	if (++flameCounter >= 240)
 	{
 		flameCounter = 0;
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
