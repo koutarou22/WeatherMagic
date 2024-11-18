@@ -5,6 +5,7 @@
 #include "Magic.h"
 #include "Damage.h"
 #include "Weather.h"
+#include "FreezeEffect.h"
 
 namespace
 {
@@ -23,6 +24,7 @@ Ghost::Ghost(GameObject* scene)
 	flameCounter_ = 0;
 	animeType_ = 0;
 	animeFrame_ = 0;
+	FreezeOne = false;
 }
 
 Ghost::~Ghost()
@@ -43,9 +45,6 @@ void Ghost::Update()
 		animeFrame_ = (animeFrame_ + 1) % 4;//if文を使わない最適解
 		flameCounter_ = 0;
 	}
-
-
-
 
 	if (cam != nullptr)
 	{
@@ -88,6 +87,14 @@ void Ghost::Update()
 				transform_.position_.y = sinValue * 50.0f;
 
 				CoolDownAttack_ = 360;
+			}
+			if (pWeather->GetWeatherState() == WeatherState::Snow && !FreezeOne)//雪の時氷のAnimationを発生させる
+			{
+				FreezeEffect* pFreeze = Instantiate<FreezeEffect>(GetParent());
+				pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
+				FreezeOne = true; //ここで一回しか呼べないようにする
+				//問題が発生中　本当に一回しか出せない　
+				//制御しないと　重くなっちゃうんです
 			}
 		}
 	}

@@ -32,4 +32,5 @@ private:
 	};
 	State state;
 
+	bool FreezeOne;//•XŒ‹‚ğˆê‰ñ‚µ‚©o‚¹‚È‚¢‚æ‚¤‚É‚·‚é@¦d‚­‚È‚Á‚½‚Ì‚Å
 };

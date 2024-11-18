@@ -36,6 +36,7 @@ private:
 	bool PressRight;
 	bool PressLeft;
 
+	bool HitLanding;//’…’n‚µ‚½‚©‚Ç‚¤‚©‚ðŠm”F‚·‚é
 
 	int flameCounter_;
 	int animeFrame_;
