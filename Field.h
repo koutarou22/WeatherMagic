@@ -3,9 +3,8 @@
 #include <vector>
 
 /// <summary>
-/// 
-/// 
-/// /// </summary> 
+/// stage、敵の出現など重要なクラス
+/// </summary>
 
 class CsvReader;
 
@@ -56,9 +55,11 @@ public:
 	///
 	/// </summary>
 	/// <param name="StageNumber"></param>
-	void LoadStage(int StageNumber);
+	//void LoadStage(int StageNumber);
+	//void Reset(int StageNumber);
 
-	void NextLoadStage();
+	void Reset(int num);
+
 	void WhereIsGoal(int w,int h,CsvReader c); //ゴールのwidthをとってくる
 	int GetGoalWidth() { return goalWid_; } 
 private:

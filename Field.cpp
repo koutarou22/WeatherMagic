@@ -15,8 +15,10 @@
 
 Field::Field(GameObject* scene) : GameObject(scene)
 {
+	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	
 	Map = nullptr; // まずここでMapでnullいれとく
-	hImage_ = LoadGraph("Assets/BackImage/bgchar.png");
+	hImage_ = LoadGraph("Assets/BackImage/bgchar_remake.png");
 	assert(hImage_ > 0);
 
 	/*hBackGround_ = LoadGraph("Assets/BackImage/bg5.png");*/
@@ -26,8 +28,8 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	hBackGroundDark_ = LoadGraph("Assets/BackImage/background_dark.png");
 	assert(hBackGroundDark_ > 0);
 
-	NowStage_ = 1;
-	Reset(); // Reset() 
+	NowStage_ = pSceneManager->GetClearCount();
+	Reset(NowStage_); // Reset() 
 
 	goalWid_ = -1;
 }
@@ -50,7 +52,7 @@ Field::~Field()
 
 void Field::Reset()
 {
-	LoadStage(NowStage_);
+	//LoadStage(NowStage_);
 }
 
 void Field::Update()
@@ -90,6 +92,7 @@ void Field::Draw()
 			{
 				if (pWeather->GetWeatherState() == Snow)//今雪なら
 				{
+					//hImage_ = LoadGraph("Assets/BackImage/bgchar_Snow.png");
 					//足場チップに
 					//薄いほう
 					//DrawRectGraph(x * 32 - scroll, y * 32, 32 * 9, 32 * 2, 32, 32, hImage_, TRUE);
@@ -194,7 +197,112 @@ bool Field::IsHitClear(int x, int y)
 	return false;
 }
 
-void Field::LoadStage(int StageNumber)
+//void Field::LoadStage(int StageNumber)
+//{
+//	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+//
+//	if (Map != nullptr)
+//	{
+//		delete[] Map;
+//		Map = nullptr;
+//	}
+//
+//	CsvReader csv;
+//	bool ret = false;
+//
+//	switch (StageNumber)
+//	{
+//	case 0:
+//		ret = csv.Load("Assets/Stage_csv/debug.csv");
+//		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
+//		break;
+//	case 100:
+//		ret = csv.Load("Assets/Stage_csv/stage0.csv");
+//		break;
+//	default:
+//		StageNumber = 1;
+//		break;
+//	}
+//
+//	assert(ret);
+//
+//	width = csv.GetWidth();
+//	height = 23;
+//	Map = new int[width * height];
+//	isSnow = new bool[width * height];
+//
+//	WhereIsGoal(width, height, csv); //ゴールのwidthをとってくる
+//
+//	for (int h = 0; h < height; h++)
+//	{
+//		for (int w = 0; w < width; w++)
+//		{
+//			isSnow[h * width + w] = false;
+//			switch (csv.GetInt(w, h /*+ height + 1*/))
+//			{
+//			case 0:
+//			{
+//				Player* pPlayer = GetParent()->FindGameObject<Player>();
+//				pPlayer->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 1:
+//			{
+//				Ghost* pGhost = Instantiate<Ghost>(GetParent());
+//				pGhost->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 2:
+//			{
+//				Slime* pSlime = Instantiate<Slime>(GetParent());
+//				pSlime->SetPosition(w * 32, h * 32);
+//				break;
+//
+//			}
+//			case 3:
+//			{
+//				Rock* pRock = Instantiate<Rock>(GetParent());
+//				pRock->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 4:
+//			{
+//				HealItem* pHeal = Instantiate<HealItem>(GetParent());
+//				pHeal->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 5:
+//			{
+//				MpItem* pMp = Instantiate<MpItem>(GetParent());
+//				pMp->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 6:
+//			{
+//				ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
+//				pClear->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//			case 7: //雪の時
+//			{
+//				isSnow[h * width + w] = true;
+//				break;
+//			}
+//
+//			default:
+//				break;
+//			}
+//			Map[h * width + w] = csv.GetValue(w, h);
+//		}
+//	}
+//}
+
+void Field::Reset(int num)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 
@@ -207,17 +315,18 @@ void Field::LoadStage(int StageNumber)
 	CsvReader csv;
 	bool ret = false;
 
-	switch (StageNumber)
+	switch (num)
 	{
-	case 1:
-		ret = csv.Load("Assets/Stage_csv/Stage0.csv");
+	case 0:
+		ret = csv.Load("Assets/Stage_csv/stage0.csv");
 		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
 		break;
-	case 2:
-		ret = csv.Load("Assets/Stage_csv/Stage2.csv");
+	case 100:
+		ret = csv.Load("Assets/Stage_csv/debug.csv");
 		break;
 	default:
-		StageNumber = 1;
+		pSceneManager->ChangeScene(SCENE_ID_TITLE);
+		ret = csv.Load("Assets/Stage_csv/debug.csv");
 		break;
 	}
 
@@ -299,11 +408,122 @@ void Field::LoadStage(int StageNumber)
 	}
 }
 
-void Field::NextLoadStage()
-{
-	NowStage_++; // ステージ番号を増やす
-	LoadStage(NowStage_); // 次のステージをロード
-}
+//void Field::Reset(int StageNumber)
+//{
+//	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+//
+//	if (Map != nullptr)
+//	{
+//		delete[] Map;
+//		Map = nullptr;
+//	}
+//
+//	CsvReader csv;
+//	bool ret = false;
+//
+//	switch (StageNumber)
+//	{
+//	case 1:
+//		ret = csv.Load("Assets/Stage_csv/debug.csv");
+//		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
+//		break;
+//	case 2:
+//		ret = csv.Load("Assets/Stage_csv/stage0.csv");
+//		break;
+//	default:
+//		StageNumber = 1;
+//		break;
+//	}
+//
+//	assert(ret);
+//
+//	width = csv.GetWidth();
+//	height = 23;
+//	Map = new int[width * height];
+//	isSnow = new bool[width * height];
+//
+//	WhereIsGoal(width, height, csv); //ゴールのwidthをとってくる
+//
+//	for (int h = 0; h < height; h++)
+//	{
+//		for (int w = 0; w < width; w++)
+//		{
+//			isSnow[h * width + w] = false;
+//			switch (csv.GetInt(w, h /*+ height + 1*/))
+//			{
+//			case 0:
+//			{
+//				Player* pPlayer = GetParent()->FindGameObject<Player>();
+//				pPlayer->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 1:
+//			{
+//				Ghost* pGhost = Instantiate<Ghost>(GetParent());
+//				pGhost->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 2:
+//			{
+//				Slime* pSlime = Instantiate<Slime>(GetParent());
+//				pSlime->SetPosition(w * 32, h * 32);
+//				break;
+//
+//			}
+//			case 3:
+//			{
+//				Rock* pRock = Instantiate<Rock>(GetParent());
+//				pRock->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 4:
+//			{
+//				HealItem* pHeal = Instantiate<HealItem>(GetParent());
+//				pHeal->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 5:
+//			{
+//				MpItem* pMp = Instantiate<MpItem>(GetParent());
+//				pMp->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//
+//			case 6:
+//			{
+//				ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
+//				pClear->SetPosition(w * 32, h * 32);
+//				break;
+//			}
+//			case 7: //雪の時
+//			{
+//				isSnow[h * width + w] = true;
+//				break;
+//			}
+//
+//			default:
+//				break;
+//			}
+//			Map[h * width + w] = csv.GetValue(w, h);
+//		}
+//	}
+//}
+//
+//void Field::NextLoadStage()
+//{
+//	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+//	//if (pSceneManager != nullptr)
+//	//{
+//	//	NowStage_ = pSceneManager->GetNextStage();  // SceneManagerから次のステージ番号を取得
+//	//}
+//	NowStage_++;
+//	LoadStage(NowStage_); // 次のステージをロード
+//}
+
 
 void Field::WhereIsGoal(int w, int h, CsvReader c)
 {
