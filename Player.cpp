@@ -894,21 +894,21 @@ void Player::UpdateWalk()
 
 		if (distance <= 64.0f)
 		{
-			if (dy <= -0.1 && abs(dx) <= 32.0f)
+			if (dy <= 0 && abs(dx) <= 32.0f)
 			{
 				transform_.position_.y = pRock->GetPosition().y - 64 + push;
 				onGround = true;
 				onRock = true;
 			}
-			else if (dy > -0.1 && abs(dx) <= 32.0f)
+			else if (dy > 0 && abs(dx) <= 32.0f)
 			{
 				transform_.position_.y = pRock->GetPosition().y + push;
 			}
-			else if (dx < -0.1 && abs(dy) <= 32.0f)
+			else if (dx < 0 && abs(dy) <= 32.0f)
 			{
 				transform_.position_.x += push;
 			}
-			else if (dx > -0.1 && abs(dy) <= 32.0f)
+			else if (dx > 0 && abs(dy) <= 32.0f)
 			{
 				transform_.position_.x -= push;
 			}
@@ -956,9 +956,11 @@ void Player::UpdateWalk()
 
 			if (pSceneManager != nullptr)
 			{
-				int MpPass = MagicPoint_;//現在のMｐを変数に格納
-				pSceneManager->SetMagicPoint(MpPass);//Set関数に送り保存
+				// MPの保存
+				int MpPass = MagicPoint_; // 現在のMPを変数に格納
+				pSceneManager->SetMagicPoint(MpPass); // Set関数に保存
 			}
+
 
 			
 			player_state = S_Clear;
@@ -1150,7 +1152,19 @@ void Player::UpdateClear()
 	{
 		flameCounter = 0;
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+		Field* pField = GetParent()->FindGameObject<Field>();
+		if (pSceneManager != nullptr)
+		{
+			if (pSceneManager->GetClear())
+			{
+				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+			}
+			else
+			{
+				pSceneManager->ClearCountPlus();
+				pSceneManager->ChangeScene(SCENE_ID_LOAD);;
+			}
+		}
 	}
 }
 
