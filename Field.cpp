@@ -17,7 +17,7 @@ Field::Field(GameObject* scene) : GameObject(scene)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	
-	Map = nullptr; // ‚Ü‚¸‚±‚±‚ÅMap‚Ånull‚¢‚ê‚Æ‚­
+	Map = nullptr; // ã¾ãšã“ã“ã§Mapã§nullã„ã‚Œã¨ã
 	hImage_ = LoadGraph("Assets/BackImage/bgchar_remake.png");
 	assert(hImage_ > 0);
 
@@ -46,7 +46,7 @@ Field::~Field()
 	}
 	if (Map != nullptr)
 	{
-		delete[] Map;//Map‚Í“®“I”z—ñ‚È‚Ì‚Å[]‚ğ‚Â‚¯‚é
+		delete[] Map;//Mapã¯å‹•çš„é…åˆ—ãªã®ã§[]ã‚’ã¤ã‘ã‚‹
 	}
 }
 
@@ -71,7 +71,7 @@ void Field::Draw()
 		DrawExtendGraph(0, 0, screenWidth, screenHeight, hBackGroundDark_, TRUE);
 	}
 
-	// ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ğ•`‰æ
+	// ç”»é¢å…¨ä½“ã«èƒŒæ™¯ç”»åƒã‚’æç”»
 	DrawExtendGraph(0, 0, screenWidth, screenHeight, hBackGround_, FALSE);
 	int scroll = 0;
 	Camera* cam = GetParent()->FindGameObject<Camera>();
@@ -88,15 +88,15 @@ void Field::Draw()
 		{
 			int chip = Map[y * width + x];
 
-			if (isSnow[y * width + x]) //áƒtƒ‰ƒO—§‚Á‚Ä‚Ä
+			if (isSnow[y * width + x]) //é›ªãƒ•ãƒ©ã‚°ç«‹ã£ã¦ã¦
 			{
-				if (pWeather->GetWeatherState() == Snow)//¡á‚È‚ç
+				if (pWeather->GetWeatherState() == Snow)//ä»Šé›ªãªã‚‰
 				{
 					//hImage_ = LoadGraph("Assets/BackImage/bgchar_Snow.png");
-					//‘«êƒ`ƒbƒv‚É
-					//”–‚¢‚Ù‚¤
+					//è¶³å ´ãƒãƒƒãƒ—ã«
+					//è–„ã„ã»ã†
 					//DrawRectGraph(x * 32 - scroll, y * 32, 32 * 9, 32 * 2, 32, 32, hImage_, TRUE);
-					//”Z‚¢‚Ù‚¤
+					//æ¿ƒã„ã»ã†
 					DrawRectGraph(x * 32 - scroll, y * 32, 32 * 10, 32 * 2, 32, 32, hImage_, TRUE);
 				}
 			}
@@ -154,13 +154,13 @@ bool Field::IsWallBlock(int x, int y)
 	int chipX = x / 32;
 	int chipY = y / 32;
 
-	//¡‚ªá‚ÅA‚©‚Âáƒ`ƒbƒv‚Ì‚Æ‚«‚É“–‚½‚è”»’è‚ğ‚µ‚½‚¢
+	//ä»ŠãŒé›ªã§ã€ã‹ã¤é›ªãƒãƒƒãƒ—ã®ã¨ãã«å½“ãŸã‚Šåˆ¤å®šã‚’ã—ãŸã„
 	Weather* pWea = GetParent()->FindGameObject<Weather>();
 
 	switch (Map[chipY * width + chipX])
 	{
 		//case 3://ne
-	case 16://’n–Ê
+	case 16://åœ°é¢
 	case 17:
 	case 18:
 	case 19:
@@ -173,7 +173,7 @@ bool Field::IsWallBlock(int x, int y)
 	{
 		if (pWea != nullptr)
 		{
-			if (pWea->GetWeatherState() == Snow)//¡‚ªá
+			if (pWea->GetWeatherState() == Snow)//ä»ŠãŒé›ª
 			{
 				return true;
 			}
@@ -197,112 +197,26 @@ bool Field::IsHitClear(int x, int y)
 	return false;
 }
 
-//void Field::LoadStage(int StageNumber)
-//{
-//	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-//
-//	if (Map != nullptr)
-//	{
-//		delete[] Map;
-//		Map = nullptr;
-//	}
-//
-//	CsvReader csv;
-//	bool ret = false;
-//
-//	switch (StageNumber)
-//	{
-//	case 0:
-//		ret = csv.Load("Assets/Stage_csv/debug.csv");
-//		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
-//		break;
-//	case 100:
-//		ret = csv.Load("Assets/Stage_csv/stage0.csv");
-//		break;
-//	default:
-//		StageNumber = 1;
-//		break;
-//	}
-//
-//	assert(ret);
-//
-//	width = csv.GetWidth();
-//	height = 23;
-//	Map = new int[width * height];
-//	isSnow = new bool[width * height];
-//
-//	WhereIsGoal(width, height, csv); //ƒS[ƒ‹‚Ìwidth‚ğ‚Æ‚Á‚Ä‚­‚é
-//
-//	for (int h = 0; h < height; h++)
-//	{
-//		for (int w = 0; w < width; w++)
-//		{
-//			isSnow[h * width + w] = false;
-//			switch (csv.GetInt(w, h /*+ height + 1*/))
-//			{
-//			case 0:
-//			{
-//				Player* pPlayer = GetParent()->FindGameObject<Player>();
-//				pPlayer->SetPosition(w * 32, h * 32);
-//				break;
-//			}
-//
-//			case 1:
-//			{
-//				Ghost* pGhost = Instantiate<Ghost>(GetParent());
-//				pGhost->SetPosition(w * 32, h * 32);
-//				break;
-//			}
-//
-//			case 2:
-//			{
-//				Slime* pSlime = Instantiate<Slime>(GetParent());
-//				pSlime->SetPosition(w * 32, h * 32);
-//				break;
-//
-//			}
-//			case 3:
-//			{
-//				Rock* pRock = Instantiate<Rock>(GetParent());
-//				pRock->SetPosition(w * 32, h * 32);
-//				break;
-//			}
-//
-//			case 4:
-//			{
-//				HealItem* pHeal = Instantiate<HealItem>(GetParent());
-//				pHeal->SetPosition(w * 32, h * 32);
-//				break;
-//			}
-//
-//			case 5:
-//			{
-//				MpItem* pMp = Instantiate<MpItem>(GetParent());
-//				pMp->SetPosition(w * 32, h * 32);
-//				break;
-//			}
-//
-//			case 6:
-//			{
-//				ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
-//				pClear->SetPosition(w * 32, h * 32);
-//				break;
-//			}
-//			case 7: //á‚Ì
-//			{
-//				isSnow[h * width + w] = true;
-//				break;
-//			}
-//
-//			default:
-//				break;
-//			}
-//			Map[h * width + w] = csv.GetValue(w, h);
-//		}
-//	}
-//}
+
 
 void Field::Reset(int num)
+
+bool Field::IsHitRock(int x, int y)
+{
+	int chipX = x / 32;
+	int chipY = y / 32;
+
+	switch (Map[chipY * width + chipX])
+	{
+	case 3:
+		return true;
+	}
+
+	return false;
+}
+
+void Field::LoadStage(int StageNumber)
+
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 
@@ -337,7 +251,7 @@ void Field::Reset(int num)
 	Map = new int[width * height];
 	isSnow = new bool[width * height];
 
-	WhereIsGoal(width, height, csv); //ƒS[ƒ‹‚Ìwidth‚ğ‚Æ‚Á‚Ä‚­‚é
+	WhereIsGoal(width, height, csv); //ã‚´ãƒ¼ãƒ«ã®widthã‚’ã¨ã£ã¦ãã‚‹
 
 	for (int h = 0; h < height; h++)
 	{
@@ -394,7 +308,7 @@ void Field::Reset(int num)
 				pClear->SetPosition(w * 32, h * 32);
 				break;
 			}
-			case 7: //á‚Ì
+			case 7: //é›ªã®æ™‚
 			{
 				isSnow[h * width + w] = true;
 				break;
@@ -442,7 +356,7 @@ void Field::Reset(int num)
 //	Map = new int[width * height];
 //	isSnow = new bool[width * height];
 //
-//	WhereIsGoal(width, height, csv); //ƒS[ƒ‹‚Ìwidth‚ğ‚Æ‚Á‚Ä‚­‚é
+//	WhereIsGoal(width, height, csv); //ã‚´ãƒ¼ãƒ«ã®widthã‚’ã¨ã£ã¦ãã‚‹
 //
 //	for (int h = 0; h < height; h++)
 //	{
@@ -499,7 +413,7 @@ void Field::Reset(int num)
 //				pClear->SetPosition(w * 32, h * 32);
 //				break;
 //			}
-//			case 7: //á‚Ì
+//			case 7: //é›ªã®æ™‚
 //			{
 //				isSnow[h * width + w] = true;
 //				break;
@@ -518,10 +432,10 @@ void Field::Reset(int num)
 //	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 //	//if (pSceneManager != nullptr)
 //	//{
-//	//	NowStage_ = pSceneManager->GetNextStage();  // SceneManager‚©‚çŸ‚ÌƒXƒe[ƒW”Ô†‚ğæ“¾
+//	//	NowStage_ = pSceneManager->GetNextStage();  // SceneManagerã‹ã‚‰æ¬¡ã®ã‚¹ãƒ†ãƒ¼ã‚¸ç•ªå·ã‚’å–å¾—
 //	//}
 //	NowStage_++;
-//	LoadStage(NowStage_); // Ÿ‚ÌƒXƒe[ƒW‚ğƒ[ƒh
+//	LoadStage(NowStage_); // æ¬¡ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’ãƒ­ãƒ¼ãƒ‰
 //}
 
 
