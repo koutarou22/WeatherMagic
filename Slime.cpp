@@ -263,7 +263,7 @@ void Slime::Update()
 		{
 			if (dy < 0 && abs(dx) <= 42) //岩の上に乗る
 			{
-				transform_.position_.y = pRock->GetPosition().y - 85 + push; // スライムを上に移動
+				transform_.position_.y = pRock->GetPosition().y - 86  * transform_.scale_.y + push * transform_.scale_.y;  // スライムを上に移動
 				onGround = true; // スライムは岩の上にいるので、地面にいるとみなす
 			}
 			else if (dy > -0.1 && abs(dx) <= 42.)
@@ -272,12 +272,12 @@ void Slime::Update()
 			}
 			else if (dx < 0 && direction == -1) // 岩の右側の衝突判定
 			{
-				transform_.position_.x += push;
+				transform_.position_.x += push * transform_.scale_.x;
 				Reverse_ = true;
 			}
 			else if (dx > 0 && direction == 1) // 岩の左側の衝突判定
 			{
-				transform_.position_.x -= push;
+				transform_.position_.x -= push * transform_.scale_.x;
 				Reverse_ = true;
 			}
 		}
@@ -399,7 +399,7 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 bool wasKeyPressed_R = false;
 bool wasKeyPressed_L = false;
 
-void Slime::GaleEffect(WeatherState state)
+void Slime::GaleEffect(WeatherState state)//現在使用不可
 {
 	if (state == Gale)
 	{

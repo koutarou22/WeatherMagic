@@ -22,10 +22,10 @@ PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapN
 void PlayScene::Initialize() 
 {
     SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-
- 
+    MapNumber_ = pSceneManager->GetClearCount();
     Field* pField = Instantiate<Field>(this);
-    pField->Reset(); // Reset()
+    pField->Reset(MapNumber_);//‰Šú‰»ˆ—
+
     Instantiate<Weather>(this);
     Instantiate<WeatherBackGround>(this);
     Player* pPlayer = nullptr;
@@ -34,11 +34,10 @@ void PlayScene::Initialize()
     int MpPass = pPlayer->GetMp();//Mp‚Ì’l‚ğ‚Á‚Ä‚­‚é
     pSceneManager->SetMagicPoint(MpPass);//PlayScene‚ÅPlayer‚ÌMp‚ğSet
 
-  
-
     Instantiate<Camera>(this);
     Instantiate<Hp>(this);
     Instantiate<MP>(this);
+
     
 }
 
