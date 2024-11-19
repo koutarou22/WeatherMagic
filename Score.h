@@ -9,6 +9,13 @@ private:
 	int hImage_;
 
 	int NumStars = 0;
+
+	float StarMoveX;//イージング関数用の値
+	float MessageMoveX;//イージング関数用の値
+	float frame_Star;//フレーム数える(星用)
+	float frame_Message;//フレーム数える(メッセージ用)
+	bool IsStarMoveEnd = false;
+
 	//int animeType_;//状況
 	//int animeFrame_;//駒
 	//int PictFlame_;
@@ -29,5 +36,11 @@ public:
 	void Release() override;
 	void SetPosition(int x, int y);
 	void SetPosition(XMFLOAT3 pos);
+
+	//急加速して急減速する
+	float easeOutQuart(float time);
+
+	//少しはみ出る動き
+	float easeBackOut(float time);
 };
 
