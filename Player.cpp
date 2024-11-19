@@ -1160,7 +1160,7 @@ void Player::CheckWall(Field* pf)
 
 	if (wallNow)
 	{
-		transform_.position_.x -= 64;
+		transform_.position_.x -= 32;
 	}
 }
 
