@@ -32,22 +32,22 @@ public:
 	////引数：next	次のシーンのID
 	void ChangeScene(SCENE_ID next);
 
-	///// <summary>
-	///// クリアした回数を増やす（player.cppでしか使わない）
-	///// </summary>
-	//void ClearCountPlus() { ClearCount_ += 100; }
+	/// <summary>
+	/// クリアした回数を増やす（player.cppでしか使わない）
+	/// </summary>
+	void ClearCountPlus() { ClearCount_ += 100; }
 
-	///// <summary>
-	///// クリアした回数をゲット
-	///// </summary>
-	///// <returns></returns>
-	//int GetClearCount() { return ClearCount_; }
+	/// <summary>
+	/// クリアした回数をゲット
+	/// </summary>
+	/// <returns></returns>
+	int GetClearCount() { return ClearCount_; }
 
-	///// <summary>
-	///// クリアしたかどうかゲット clearcountが200以上ならクリアはんてい
-	///// </summary>
-	///// <returns></returns>
-	//bool GetClear() { return isGameClear_; }
+	/// <summary>
+	/// クリアしたかどうかゲット clearcountが200以上ならクリアはんてい
+	/// </summary>
+	/// <returns></returns>
+	bool GetClear() { return isGameClear_; }
      
 	/// <summary>
 	/// MPの変数をセット

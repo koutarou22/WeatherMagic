@@ -37,17 +37,24 @@ void ClearScene::Update()
 
     if (keyPushed_)
     {
-
         keyTimer_--;
     }
 
+ 
     //タイマーが終わったら(暗転が終わったら)
     if (keyTimer_ < 0)
     {
         SetFontSize(32); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_TITLE);
+        pSceneManager->ChangeScene(SCENE_ID_LOAD);
     }
+
+    //テスト用
+  /*if (CheckHitKey(KEY_INPUT_SPACE))
+    {
+        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->ChangeScene(SCENE_ID_LOAD);
+    }*/
 }
 
 void ClearScene::Draw()
