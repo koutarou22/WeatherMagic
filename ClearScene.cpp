@@ -23,7 +23,9 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 
 void ClearScene::Initialize()
 {
-    Instantiate<Score>(this);//評価
+   Score* sc= Instantiate<Score>(this);//評価
+   bool b = false;
+   sc->SetPlaying(false);
 }
 
 void ClearScene::Update()
