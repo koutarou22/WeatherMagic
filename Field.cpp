@@ -199,7 +199,7 @@ bool Field::IsHitClear(int x, int y)
 
 
 
-void Field::Reset(int num)
+
 
 bool Field::IsHitRock(int x, int y)
 {
@@ -215,8 +215,7 @@ bool Field::IsHitRock(int x, int y)
 	return false;
 }
 
-void Field::LoadStage(int StageNumber)
-
+void Field::Reset(int num)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 
