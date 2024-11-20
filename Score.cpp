@@ -38,8 +38,6 @@ void Score::Update()
     if (frame_Star >= 1.0f) {
         IsStarMoveEnd = true;
     }
-
-   
 }
 
 void Score::Draw() 

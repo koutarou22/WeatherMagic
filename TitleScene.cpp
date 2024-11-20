@@ -9,7 +9,7 @@ using std::string;
 
 namespace
 {
-    const int TIMER = 2;
+    const int TIMER = 255;
     const int MOJI_TIMER = 100;
 }
 
