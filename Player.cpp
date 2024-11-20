@@ -1121,7 +1121,7 @@ void Player::WhereIs()
 
 	//縦線関連
 	Field* pField = GetParent()->FindGameObject<Field>();
-	static float max = CHIP_SIZE * pField->GetGoalWidth();
+	float max = CHIP_SIZE * pField->GetGoalWidth();
 	float now = transform_.position_.x;
 	float nowLine = SenStart + SenLength * (now / max) * 2; //縦線引くところのX
 	if (nowLine >= SenStart + SenLength)

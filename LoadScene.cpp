@@ -1,7 +1,6 @@
 #include "LoadScene.h"
 #include "Engine/GameObject.h"
 #include "Engine/SceneManager.h"
-#include"LoadScene.h"
 #include "Score.h"
 #include "Field.h"
 
