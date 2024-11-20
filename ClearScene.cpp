@@ -46,7 +46,7 @@ void ClearScene::Update()
     {
         SetFontSize(32); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_LOAD);
+        pSceneManager->ChangeScene(SCENE_ID_TITLE);
     }
 
     //テスト用

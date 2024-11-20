@@ -29,15 +29,17 @@ void Score::Update()
     StarMoveX = easeOutQuart(frame_Star);
     frame_Star += 1.0f / 60.0f;
 
-    if (frame_Star >= 1.0f) {
-        IsStarMoveEnd = true;
-    }
-
     if (IsStarMoveEnd)
     {
         MessageMoveX = easeBackOut(frame_Message);
         frame_Message += 1.0f / 60.0f;
     }
+
+    if (frame_Star >= 1.0f) {
+        IsStarMoveEnd = true;
+    }
+
+   
 }
 
 void Score::Draw() 
@@ -76,7 +78,9 @@ void Score::Draw()
     }
     
     if (IsStarMoveEnd) {
-        DrawFormatString(0 * MessageMoveX, 120, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
+       // DrawFormatString(0 * MessageMoveX, 120, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
+        DrawFormatString(0 , 120, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
+
     }
  
 

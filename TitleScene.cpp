@@ -9,7 +9,7 @@ using std::string;
 
 namespace
 {
-    const int TIMER = 255;
+    const int TIMER = 2;
     const int MOJI_TIMER = 100;
 }
 
@@ -73,7 +73,7 @@ void TitleScene::Update()
     {
         SetFontSize(32); //‚à‚Æ‚É‚à‚Ç‚·
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_LOAD);
+        pSceneManager->ChangeScene(SCENE_ID_TITLE);//‚±‚±‚©‚¦‚é
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
     }
 
