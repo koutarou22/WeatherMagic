@@ -68,15 +68,28 @@ void Score::Draw()
         StarCount = 1;
     }
 
-    for (int i = 0; i < StarCount; i++) 
+    if (!isPlaying) //ƒvƒŒƒCƒV[ƒ“‚¶‚á‚È‚¢
     {
-        float x = i * Width;
-        float y = transform_.position_.y;//Œ©‚¸‚ç‚¢‚©‚çŠi”[‚µ‚½‚¾‚¯
-        DrawExtendGraph(x * StarMoveX, y, x + 64, y + 64 , hImage_, TRUE);
+        for (int i = 0; i < StarCount; i++)
+        {
+            float x = i * Width;
+            float y = transform_.position_.y;//Œ©‚¸‚ç‚¢‚©‚çŠi”[‚µ‚½‚¾‚¯
+            DrawExtendGraph(x*StarMoveX, y, x + 64, y + 64, hImage_, TRUE);
+        }
+
+        if (IsStarMoveEnd) {
+            DrawFormatString(0 * MessageMoveX,120, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
+        }
     }
-    
-    if (IsStarMoveEnd) {
-        DrawFormatString(0 * MessageMoveX, 120, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
+    else //ƒvƒŒƒCƒV[ƒ“—p
+    {
+        for (int i = 0; i < StarCount; i++)
+        {
+            float x = i * Width;
+            float y = transform_.position_.y;//Œ©‚¸‚ç‚¢‚©‚çŠi”[‚µ‚½‚¾‚¯
+            DrawExtendGraph(x, y, x + 64, y + 64, hImage_, TRUE);
+        }
+            DrawFormatString(0 * MessageMoveX, transform_.position_.y+75, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
     }
  
 
@@ -96,6 +109,7 @@ void Score::SetPosition(int x, int y)
 void Score::SetPosition(XMFLOAT3 pos)
 {
 }
+
 
 float Score::easeOutQuart(float time)
 {

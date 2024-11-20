@@ -1,5 +1,9 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Engine/SceneManager.h";
+
+class SceneManager;
+class Player;
 
 //テストシーンを管理するクラス
 class PlayScene : public GameObject
@@ -22,4 +26,7 @@ public:
 	void Release() override;
 private:
 	int MapNumber_;
+	int MpPass; //Mpの値
+	SceneManager* pSceneManager;
+	Player* pPlayer;
 };
