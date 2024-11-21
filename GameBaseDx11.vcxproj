@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ChooseLevelScene.cpp" />
     <ClCompile Include="ClearFlag.cpp" />
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Damage.cpp" />
@@ -176,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="Bird.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChooseLevelScene.h" />
     <ClInclude Include="ClearFlag.h" />
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Damage.h" />

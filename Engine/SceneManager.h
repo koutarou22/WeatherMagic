@@ -6,6 +6,7 @@
 enum SCENE_ID
 {
 	SCENE_ID_TITLE,
+	SCENE_ID_LEVEL,
 	SCENE_ID_PLAY,
 	SCENE_ID_LOAD,
 	SCENE_ID_GAMEOVER,
@@ -32,6 +33,10 @@ public:
 	////引数：next	次のシーンのID
 	void ChangeScene(SCENE_ID next);
 
+
+#if 0
+#endif
+	//--------------ステージクリア→ロード→別のステージに移動するなら使うかもしれない関数------------------
 	/// <summary>
 	/// クリアした回数を増やす（player.cppでしか使わない）
 	/// </summary>
@@ -48,6 +53,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool GetClear() { return isGameClear_; }
+	//--------------ステージクリア→ロード→別のステージに移動するなら使うかもしれない関数------------------
      
 	/// <summary>
 	/// MPの変数をセット
@@ -60,6 +66,11 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	int GetMagicPoint()const { return MpReceive_; }
+
+	
+
+
+
 
 private:
 	SCENE_ID currentSceneID_;	

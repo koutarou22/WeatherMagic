@@ -1155,7 +1155,8 @@ void Player::UpdateClear()
 		Field* pField = GetParent()->FindGameObject<Field>();
 		if (pSceneManager != nullptr)
 		{
-			if (pSceneManager->GetClear())
+			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+			/*if (pSceneManager->GetClear())
 			{
 				pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 			}
@@ -1163,7 +1164,7 @@ void Player::UpdateClear()
 			{
 				pSceneManager->ClearCountPlus();
 				pSceneManager->ChangeScene(SCENE_ID_LOAD);;
-			}
+			}*/
 		}
 	}
 }
