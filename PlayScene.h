@@ -27,6 +27,7 @@ public:
 private:
 	int MapNumber_;
 	int MpPass; //Mp‚Ì’l
+	int PlayBGMHandle; //BGM
 	SceneManager* pSceneManager;
 	Player* pPlayer;
 };

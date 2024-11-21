@@ -33,4 +33,6 @@ private:
 	State state;
 
 	bool FreezeOne;//氷結を一回しか出せないようにする　※重くなったので
+
+	int GhostDamageHandle;//ダメージ音
 };

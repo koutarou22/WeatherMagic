@@ -29,6 +29,11 @@ TitleScene::TitleScene(GameObject* parent)
 
     SetFontSize(16);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+    TitleBGMHandle = LoadSoundMem("Assets/Music/BGM/TITLE_BGM.mp3");
+    assert(TitleBGMHandle != -1);
+
+    PlaySoundMem(TitleBGMHandle, DX_PLAYTYPE_LOOP);
 }
 
 void TitleScene::Initialize()
@@ -42,7 +47,7 @@ void TitleScene::Initialize()
    /* spaceImage_ = LoadGraph("Assets/Space.png");//『space』を押してくれ！的なフォント　結局未使用
     assert(spaceImage_ >= 0);*/
 
-    soundHandle = LoadSoundMem("Assets/Music/SE/select01.mp3");//Pを押した時に効果音がなる(登録)
+    soundHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/select01.mp3");//Pを押した時に効果音がなる(登録)
     assert(soundHandle != -1); // 音声ファイルの読み込みに失敗した場合のエラーチェック
 }
 
@@ -52,6 +57,9 @@ void TitleScene::Update()
 
     // スペースキーが押されるかスタートボタンでPlaySceneに遷移
     if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4]) {
+
+
+        StopSoundMem(TitleBGMHandle);
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
         keyPushed_ = true;
     }

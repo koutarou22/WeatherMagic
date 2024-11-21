@@ -53,5 +53,10 @@ private:
 	float ScaleEffect_ = 0.0f;
 	bool Reverse_ = false;
 	int direction = 1;
+
+
+	bool offScreen; //画面外でも音がなないようにする
+	int JumpHandle; //ジャンプした時の音
+	int StunHandle; //気絶した時の音
 };
 

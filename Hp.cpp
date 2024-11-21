@@ -9,7 +9,7 @@ Hp::Hp(GameObject* parent):GameObject(parent, "Hp"), hImage_(-1),BgImage_(-1), W
 
 void Hp::Initialize()
 {
-    Wide_ = 3;
+    /*Wide_ = 3;*/
     hImage_ = LoadGraph("Assets/UI/HP.png");
     assert(hImage_ >= 0);
 

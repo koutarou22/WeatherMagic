@@ -31,6 +31,14 @@ Slime::Slime(GameObject* scene)
 	StunTimer_ = 0;
 
 	HitLanding = false;
+
+	JumpHandle = LoadSoundMem("Assets/Music/SE/Slime/SlimeJump1.mp3");
+	assert(JumpHandle != -1);
+
+	StunHandle = LoadSoundMem("Assets/Music/SE/Slime/SlimeDamage.mp3");
+	assert(StunHandle != -1);
+
+	offScreen = false;
 }
 
 Slime::~Slime()
@@ -121,6 +129,10 @@ void Slime::Update()
 				if (pWeather->GetWeatherState() != WeatherState::Snow)
 				{
 					Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
+
+					//音入れたかったが、画面外からも音がなる
+				   // PlaySoundMem(JumpHandle, DX_PLAYTYPE_BACK);	
+
 				}
 				onGround = false;
 				
@@ -147,15 +159,15 @@ void Slime::Update()
 		// カメラの位置を取得
 		int camX = cam->GetValue();
 
-		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
+		if (transform_.position_.x>= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
 			if (!onGround)
 			{
-
 				//天候取得、雪ならスピードを0に
 				if (pWeather->GetWeatherState() != WeatherState::Snow)
 				{
 					transform_.position_.x += WeatherSpeed_ * direction;
+				    StopSoundMem(JumpHandle);
 				}
 			}
 		}
@@ -241,8 +253,10 @@ void Slime::Update()
 
 		if (distance <= 30.0f)
 		{
+
 			pMagic->SetMagicStateHit();
 
+			PlaySoundMem(StunHandle, DX_PLAYTYPE_BACK);
 			Damage* dam = Instantiate<Damage>(GetParent());
 			dam->SetPosition(transform_.position_);
 			StunTimer_ = 300;

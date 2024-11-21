@@ -42,11 +42,14 @@ void PlayScene::Initialize()
     sc->SetPosition(100,500);
     bool b = true;
     sc->SetPlaying(b);
+
 }
 
 //XV
 void PlayScene::Update()
 {
+   
+
     int MpPass = pPlayer->GetMp();//Mp‚Ì’l‚ğ‚Á‚Ä‚­‚é
     pSceneManager->SetMagicPoint(MpPass);//PlayScene‚ÅPlayer‚ÌMp‚ğSet
 }

@@ -17,11 +17,14 @@ GameOverScene::GameOverScene(GameObject* parent) : GameObject(parent, "GameOverS
 	keyPushed_ = false;
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	GameOverBGMHandle = LoadSoundMem("Assets/Music/BGM/GAMEOVER_BGM.mp3");
+	assert(GameOverBGMHandle != -1);
+
+	PlaySoundMem(GameOverBGMHandle, DX_PLAYTYPE_BACK);
 }
 
 void GameOverScene::Initialize()
 {
-	// ゲームオーバーシーンの初期化処理...
 }
 
 void GameOverScene::Update()
@@ -30,6 +33,7 @@ void GameOverScene::Update()
 	// スペースキーが押されたらスタートボタンでTitleSceneに遷移
 	if (CheckHitKey(KEY_INPUT_SPACE) ||  input.Buttons[4]) {
 		keyPushed_ = true;
+		StopSoundMem(GameOverBGMHandle);
 	}
 
 	if (keyPushed_)

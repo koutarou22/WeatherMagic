@@ -39,6 +39,8 @@ public:
 
 	float x;
 	float y;
+
+	int DustHandle;//“®‚©‚µ‚½‚Æ‚«‚Éˆø‚«‚¸‚é‰¹
 	
 private:
 	bool PressKey_R = false;

@@ -12,6 +12,9 @@ class ClearScene : public GameObject
 	int keyTimer_; //キーが押されてから遷移までのタイマー
 	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
 
+	int ClearBGMHandle;
+
+
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

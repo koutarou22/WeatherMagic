@@ -63,6 +63,8 @@ public:
 
 	void WhereIsGoal(int w,int h,CsvReader c); //ƒS[ƒ‹‚Ìwidth‚ğ‚Æ‚Á‚Ä‚­‚é
 	int GetGoalWidth() { return goalWid_; } 
+
+	void StopPlayBGM();
 private:
 	int hImage_;
 	int hBackGround_;
@@ -79,4 +81,7 @@ private:
 	XINPUT_STATE input;//xbox‚Ì“ü—Í‚ğó‚¯æ‚é
 	
 	bool* isSnow;//áƒtƒ‰ƒO
+
+
+	int Stage_BgmHandle;
 };
