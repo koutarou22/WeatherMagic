@@ -25,6 +25,10 @@ Ghost::Ghost(GameObject* scene)
 	animeType_ = 0;
 	animeFrame_ = 0;
 	FreezeOne = false;
+
+	//ダメージ音
+	GhostDamageHandle = LoadSoundMem("Assets/Music/SE/Ghost/GhostVanishing.mp3");
+	assert(GhostDamageHandle != -1);
 }
 
 Ghost::~Ghost()
@@ -81,6 +85,12 @@ void Ghost::Update()
 					CoolDownAttack_ = 300;
 				}
 			}
+
+			if (CoolDownAttack_ > 0)
+			{
+				CoolDownAttack_--;
+			}
+
 			//天候取得、雪なら止める
 			if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
 			{
@@ -134,6 +144,7 @@ void Ghost::Update()
 
 		if (distance <= 20.0f)
 		{
+			PlaySoundMem(GhostDamageHandle, DX_PLAYTYPE_BACK);
 			pMagic->SetMagicStateHit();
 			KillMe();
 			break;

@@ -97,7 +97,8 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       
-      <AdditionalIncludeDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Users\ko123\Downloads\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Users\2910m\Desktop\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Users\ko123\Downloads\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
+
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>

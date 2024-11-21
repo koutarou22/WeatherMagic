@@ -33,6 +33,11 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	NowStage_ = pSceneManager->GettLevelManager();
 	Reset(NowStage_); // Reset() 
 
+	Stage_BgmHandle = LoadSoundMem("Assets/Music/BGM/STAGE_BGM.mp3");
+	assert(Stage_BgmHandle != -1);
+
+	ChangeVolumeSoundMem(128, Stage_BgmHandle);
+
 	goalWid_ = -1;
 }
 
@@ -55,6 +60,7 @@ Field::~Field()
 void Field::Reset()
 {
 	//LoadStage(NowStage_);
+	
 }
 
 void Field::Update()
@@ -220,6 +226,8 @@ bool Field::IsHitRock(int x, int y)
 void Field::Reset(int num)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	PlaySoundMem(Stage_BgmHandle, DX_PLAYTYPE_LOOP);
+
 
 	if (Map != nullptr)
 	{
@@ -310,6 +318,7 @@ void Field::Reset(int num)
 			{
 				ClearFlag* pClear = Instantiate<ClearFlag>(GetParent());
 				pClear->SetPosition(w * 32, h * 32);
+
 				break;
 			}
 			case 7: //雪の時
@@ -455,4 +464,9 @@ void Field::WhereIsGoal(int w, int h, CsvReader c)
 			}
 		}
 	}
+}
+
+void Field::StopPlayBGM()
+{
+	StopSoundMem(Stage_BgmHandle);
 }

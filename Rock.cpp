@@ -32,6 +32,9 @@ Rock::Rock(GameObject* scene)
 	CanMoveRight = true;
 	CanMoveLeft = true;
 
+	//“®‚©‚µ‚½‚Æ‚«ˆø‚«‚¸‚é‰¹
+	DustHandle = LoadSoundMem("Assets/Music/SE/Rock/Dust.mp3");
+	assert(DustHandle != -1);
 }
 
 Rock::~Rock()
@@ -189,8 +192,10 @@ void Rock::GaleEffect(WeatherState state)
 						//PressKey_R = true;
 						if (CanMoveLeft)
 						{
+							PlaySoundMem(DustHandle, DX_PLAYTYPE_BACK);
 							transform_.position_.x -= MOVE_SPEED;
 						}
+
 					}
 					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_L))
 					{
@@ -198,6 +203,7 @@ void Rock::GaleEffect(WeatherState state)
 						//PressKey_L = true;
 						if (CanMoveRight)
 						{
+							PlaySoundMem(DustHandle, DX_PLAYTYPE_BACK);
 							transform_.position_.x += MOVE_SPEED;
 						}
 					}

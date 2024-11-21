@@ -44,6 +44,7 @@ void PlayScene::Initialize()
     sc->SetPosition(100,500);
     bool b = true;
     sc->SetPlaying(b);
+
 }
 
 //更新

@@ -38,8 +38,7 @@ public:
 	bool IsDead() const { return isDead_; }
 
 	void WhereIs(); //tassei do
-	void StopWeatherSE();
-	void StopMoveSE();
+
 	void StickTiltCheck();
 
 	void GaleEffect(WeatherState state);//Ride on the Rocks && Using the Wind
@@ -49,6 +48,19 @@ public:
   void UpdateDead();
   void UpdateErase();
   void UpdateClear();
+
+  //音関係のSE用関数
+  //音が重なるバグを止める用(死亡)
+  //bool isRainSE;//音が重なるバグを止めるよう
+  //book isGaleSE;
+  //bool isSnowSE;
+  bool MultiDeadSE;
+  //----------------------------
+ 
+  void DamageSE();
+  void StopWeatherSE();
+  void StopMoveSE();
+
 private:
 	int MagicPoint_;//打てる魔法の回数
 	int hImage;
@@ -127,6 +139,10 @@ private:
 	int WindHandle;//風
 	int SnowHandle;//雪
 
+	//天候で起きるSE
+	int FreezeHandle;//『敵が凍ってる』と思わせるようなSE
+	int SpeedUpHandle;//風になったときスピードUpしてると思わせるようなSE
+
 	//動作SE
 	int GetItemHandle;//回復アイテム取得
 	int MagicHandle;//魔法打つ
@@ -134,18 +150,18 @@ private:
 	int LandingHandle;//着地音
 
 	int DamageHandle;//接触時
-	int CrisisHandle;//Hpが1の時;
 	int DieHandle;//死亡時
+	int WarningHandle; //HPになった時　警告音が鳴る
 
-	int SpeedUpHandle;//スピードアップ時
-
+	//特殊敵接触時
+	int BoundHandle;//スライムを踏んだ時のSE
 
 	int CameraPosX;
 
 	float CountSnowFlame; //snowflame
 	bool IsTurnLeft;//左向きかどうか 左右反転処理用
 	//スティックを倒したかどうか
-	struct Stick_Tilt {
+	struct Stick_Tilt{
 		bool IsLeftStickTilt_left;//左スティックを左に
 		bool IsLeftStickTilt_right;//左スティックを右に
 		bool IsRightStickTilt_left;//右スティックを左に

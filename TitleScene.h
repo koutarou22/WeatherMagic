@@ -8,29 +8,33 @@ private:
 	int charImage_;
 	int spaceImage_;
 	int soundHandle;
-	int padAnalogInput;//xbox‚Ì“ü—Í‚ğó‚¯æ‚é
-	XINPUT_STATE input;//xbox‚Ì“ü—Í‚ğó‚¯æ‚é
-	int keyTimer_; //ƒL[‚ª‰Ÿ‚³‚ê‚Ä‚©‚ç‘JˆÚ‚Ü‚Å‚Ìƒ^ƒCƒ}[
-	bool keyPushed_; //ƒL[‚ª‰Ÿ‚³‚ê‚½‚©(ˆÃ“]OK‚©)‚Ìƒtƒ‰ƒO
-	int mojiTimer_; //•¶š‚ğ‚Ò‚©‚Ò‚©‚·‚éƒ^ƒCƒ}[
-	bool mojiend_; //‚Ò‚©‚Ò‚©I‚í‚è‚©‚Èƒtƒ‰ƒO
-	int hStart;//UIƒnƒ“ƒhƒ‹
-	int hStartYellow;//UIƒnƒ“ƒhƒ‹i‰©Fj
+	int padAnalogInput;//xboxã®å…¥åŠ›ã‚’å—ã‘å–ã‚‹
+	XINPUT_STATE input;//xboxã®å…¥åŠ›ã‚’å—ã‘å–ã‚‹
+	int keyTimer_; //ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã‹ã‚‰é·ç§»ã¾ã§ã®ã‚¿ã‚¤ãƒãƒ¼
+	bool keyPushed_; //ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‹(æš—è»¢OKã‹)ã®ãƒ•ãƒ©ã‚°
+	int mojiTimer_; //æ–‡å­—ã‚’ã´ã‹ã´ã‹ã™ã‚‹ã‚¿ã‚¤ãƒãƒ¼
+	bool mojiend_; //ã´ã‹ã´ã‹çµ‚ã‚ã‚Šã‹ãªãƒ•ãƒ©ã‚°
+
+	//Titleã®BGM
+	int TitleBGMHandle;
+
+	int hStart;//UIãƒãƒ³ãƒ‰ãƒ«
+	int hStartYellow;//UIãƒãƒ³ãƒ‰ãƒ«ï¼ˆé»„è‰²ï¼‰
 public:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	//ˆø”Fparent  eƒIƒuƒWƒFƒNƒgiSceneManagerj
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	//å¼•æ•°ï¼šparent  è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆSceneManagerï¼‰
 	TitleScene(GameObject* parent);
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize() override;
 
-	//XV
+	//æ›´æ–°
 	void Update() override;
 
-	//•`‰æ
+	//æç”»
 	void Draw() override;
 
-	//ŠJ•ú
+	//é–‹æ”¾
 	void Release() override;
 
 };

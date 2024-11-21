@@ -25,6 +25,11 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
     keyTimer_ = TIMER;
     keyPushed_ = false;
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+    ClearBGMHandle = LoadSoundMem("Assets/Music/BGM/CLEAR_BGM.mp3");
+    assert(ClearBGMHandle != -1);
+
+    PlaySoundMem(ClearBGMHandle, DX_PLAYTYPE_BACK);
 }
 
 void ClearScene::Initialize()
@@ -41,6 +46,7 @@ void ClearScene::Update()
     if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4])
     {
         keyPushed_ = true;
+        StopSoundMem(ClearBGMHandle);
     }
 
     if (keyPushed_)
