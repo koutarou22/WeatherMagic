@@ -1205,15 +1205,12 @@ void Player::UpdateClear()
 		Field* pField = GetParent()->FindGameObject<Field>();
 		if (pSceneManager != nullptr)
 		{
+
 			pField->StopPlayBGM();
 			pSceneManager->ClearCountPlus();
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 
 			StopWeatherSE();
-			/*else
-			{
-				pSceneManager->ChangeScene(SCENE_ID_LOAD);;
-			}*/
 		}
 	}
 }

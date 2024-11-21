@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/SceneManager.h";
+#include"ChooseLevelScene.h"
 
 class SceneManager;
 class Player;
@@ -30,4 +31,5 @@ private:
 	int PlayBGMHandle; //BGM
 	SceneManager* pSceneManager;
 	Player* pPlayer;
+	ChooseLevelScene* pChooseLevelScene;
 };

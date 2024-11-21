@@ -82,11 +82,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -96,10 +96,13 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      
       <AdditionalIncludeDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Users\2910m\Desktop\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Users\ko123\Downloads\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
+
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Users\2910m\Desktop\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
+
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -110,13 +113,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,17 +131,23 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      
+      <AdditionalIncludeDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;;D:\GE2A15\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Users\2910m\Desktop\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
+    
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Users\2910m\Desktop\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
+      
+      <AdditionalLibraryDirectories>D:\GE2A25\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\GE2A01\DxLib_VC\プロジェクトに追加すべきファイル_VC用;D:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalLibraryDirectories>
+    
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ChooseLevelScene.cpp" />
     <ClCompile Include="ClearFlag.cpp" />
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Damage.cpp" />
@@ -169,6 +178,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Weather.cpp" />
     <ClCompile Include="WeatherBackGround.cpp" />
     <ClCompile Include="WeatherChangeEffect.cpp" />
@@ -176,6 +186,7 @@
   <ItemGroup>
     <ClInclude Include="Bird.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChooseLevelScene.h" />
     <ClInclude Include="ClearFlag.h" />
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Damage.h" />
@@ -206,6 +217,7 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Weather.h" />
     <ClInclude Include="WeatherBackGround.h" />
     <ClInclude Include="WeatherChangeEffect.h" />
