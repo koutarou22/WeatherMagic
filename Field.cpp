@@ -17,7 +17,6 @@
 Field::Field(GameObject* scene) : GameObject(scene)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-	ChooseLevelScene* pChooseLevelScene = (ChooseLevelScene*)FindObject("ChooseLevelScene");
 	
 	Map = nullptr; // まずここでMapでnullいれとく
 	hImage_ = LoadGraph("Assets/BackImage/bgchar_remake.png");
@@ -31,7 +30,7 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	assert(hBackGroundDark_ > 0);
 
 	//NowStage_ = pSceneManager->GetClearCount();
-	NowStage_ = pChooseLevelScene->GetLevel();
+	NowStage_ = pSceneManager->GettLevelManager();
 	Reset(NowStage_); // Reset() 
 
 	goalWid_ = -1;

@@ -6,14 +6,15 @@ namespace
     const int TIMER = 100;
 }
 ChooseLevelScene::ChooseLevelScene(GameObject* parent)
-	: GameObject(parent, "ChooseLevelScene"),hImage_(-1),Level_(0)
+	: GameObject(parent, "ChooseLevelScene"),hImage_(-1),Level_(0),keyPushed_(false),keyTimer_(TIMER)
 {
+    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void ChooseLevelScene::Initialize()
 {
-	hImage_ = LoadGraph("Assets/Scene/Title.jpg");//ƒ^ƒCƒgƒ‹‚Ì”wŒi
-	//assert(hImage_ >= 0);
+	hImage_ = LoadGraph("Assets/Scene/ChooseLevelBack.png");//ƒ^ƒCƒgƒ‹‚Ì”wŒi
+	assert(hImage_ >= 0);
 }
 
 void ChooseLevelScene::Update()
@@ -54,6 +55,7 @@ void ChooseLevelScene::Update()
     {
         SetFontSize(32); //‚à‚Æ‚É‚à‚Ç‚·
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->SetLevelManager(Level_);
         pSceneManager->ChangeScene(SCENE_ID_PLAY);
     }
 
@@ -72,10 +74,14 @@ void ChooseLevelScene::Draw()
         al = keyTimer_;
     }
     else
-        // ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ð•`‰æ
+    {
+       // ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ð•`‰æ
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+       // DrawRectGraph(0, 0, 0, 0, screenWidth, screenHeight, hImage_, FALSE);
+    }
+ 
 
-    DrawFormatString(0, 0, GetColor(0, 0, 0), "“ïˆÕ“x: %d", Level_);
+    DrawFormatString(0, 0, GetColor(255,255,255), "“ïˆÕ“x: %d", Level_);
 }
 
 void ChooseLevelScene::Release()

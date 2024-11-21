@@ -67,9 +67,17 @@ public:
 	/// <returns></returns>
 	int GetMagicPoint()const { return MpReceive_; }
 
-	
+	/// <summary>
+	/// ChooseLevelScene‚©‚ç‚Á‚Ä‚«‚½ƒŒƒxƒ‹‚ğ‘ã“ü
+	/// </summary>
+	/// <param name="lv"></param>
+	void SetLevelManager(int lv) { LevelManager_ = lv; }
 
-
+	/// <summary>
+	/// ChooseLevelScene‚©‚ç‚Á‚Ä‚«‚½ƒŒƒxƒ‹‚ğæ“¾
+	/// </summary>
+	/// <returns></returns>
+	int GettLevelManager() { return LevelManager_; }
 
 
 private:
@@ -83,4 +91,6 @@ private:
 	bool isGameClear_;
 
 	int MpReceive_;//æ‚Á‚Ä‚«‚½MP‚ğ•Û‘¶(Ši”[)‚·‚é•Ï”
+
+	int LevelManager_;
 };

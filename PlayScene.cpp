@@ -22,8 +22,7 @@ PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapN
 void PlayScene::Initialize() 
 {
     pSceneManager = (SceneManager*)FindObject("SceneManager");
-    pChooseLevelScene = (ChooseLevelScene*)FindObject("ChooseLevelScene");
-    MapNumber_ = pChooseLevelScene->GetLevel();
+    MapNumber_ = pSceneManager->GettLevelManager();
     Field* pField = Instantiate<Field>(this);
     pField->Reset(MapNumber_);//‰Šú‰»ˆ—
 
