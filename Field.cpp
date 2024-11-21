@@ -12,10 +12,12 @@
 #include "ClearFlag.h"
 #include "Engine/SceneManager.h"
 #include "Weather.h"
+#include"ChooseLevelScene.h"
 
 Field::Field(GameObject* scene) : GameObject(scene)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	ChooseLevelScene* pChooseLevelScene = (ChooseLevelScene*)FindObject("ChooseLevelScene");
 	
 	Map = nullptr; // まずここでMapでnullいれとく
 	hImage_ = LoadGraph("Assets/BackImage/bgchar_remake.png");
@@ -28,7 +30,8 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	hBackGroundDark_ = LoadGraph("Assets/BackImage/background_dark.png");
 	assert(hBackGroundDark_ > 0);
 
-	NowStage_ = pSceneManager->GetClearCount();
+	//NowStage_ = pSceneManager->GetClearCount();
+	NowStage_ = pChooseLevelScene->GetLevel();
 	Reset(NowStage_); // Reset() 
 
 	goalWid_ = -1;
@@ -199,7 +202,7 @@ bool Field::IsHitClear(int x, int y)
 
 
 
-void Field::Reset(int num)
+
 
 bool Field::IsHitRock(int x, int y)
 {
@@ -215,8 +218,7 @@ bool Field::IsHitRock(int x, int y)
 	return false;
 }
 
-void Field::LoadStage(int StageNumber)
-
+void Field::Reset(int num)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 
@@ -236,6 +238,9 @@ void Field::LoadStage(int StageNumber)
 		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
 		break;
 	case 100:
+		ret = csv.Load("Assets/Stage_csv/stage0-1.csv");
+		break;
+	case 200:
 		ret = csv.Load("Assets/Stage_csv/debug.csv");
 		break;
 	default:

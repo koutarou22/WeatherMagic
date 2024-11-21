@@ -23,7 +23,9 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 
 void ClearScene::Initialize()
 {
-    Instantiate<Score>(this);//評価
+   Score* sc= Instantiate<Score>(this);//評価
+   bool b = false;
+   sc->SetPlaying(false);
 }
 
 void ClearScene::Update()
@@ -46,7 +48,7 @@ void ClearScene::Update()
     {
         SetFontSize(32); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_LOAD);
+        pSceneManager->ChangeScene(SCENE_ID_TITLE);
     }
 
     //テスト用

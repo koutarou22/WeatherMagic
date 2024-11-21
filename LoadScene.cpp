@@ -1,7 +1,6 @@
 #include "LoadScene.h"
 #include "Engine/GameObject.h"
 #include "Engine/SceneManager.h"
-#include"LoadScene.h"
 #include "Score.h"
 #include "Field.h"
 
@@ -29,7 +28,7 @@ void LoadScene::Initialize()
 void LoadScene::Update()
 {
     padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
-    // Cキーが押されたらスタートボタンでTitleSceneに遷移
+    // SPACEキーが押されたらスタートボタンでPlaySceneに遷移
     if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4])
     {
         keyPushed_ = true;

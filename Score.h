@@ -15,6 +15,7 @@ private:
 	float frame_Star;//フレーム数える(星用)
 	float frame_Message;//フレーム数える(メッセージ用)
 	bool IsStarMoveEnd = false;
+	bool isPlaying = true; //今プレイシーンですか
 
 	//int animeType_;//状況
 	//int animeFrame_;//駒
@@ -42,5 +43,6 @@ public:
 
 	//少しはみ出る動き
 	float easeBackOut(float time);
+	void SetPlaying(bool playing) { isPlaying = playing; }
 };
 
