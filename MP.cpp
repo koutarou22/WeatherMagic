@@ -11,10 +11,10 @@ MP::MP(GameObject* parent)
 void MP::Initialize()
 {
 	hMPBar_ = LoadGraph("Assets/UI/MP.png");
-	assert(hMPBar_);
+	assert(hMPBar_>0);
 
 	hMPFrame_ = LoadGraph("Assets/UI/MPFrame.png");
-	assert(hMPFrame_);
+	assert(hMPFrame_>0);
 }
 
 void MP::Update()

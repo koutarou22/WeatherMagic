@@ -14,6 +14,7 @@
 #include "ClearFlag.h"
 #include"MP.h"
 #include "WeatherBackGround.h"
+#include"UI.h"
 
 PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0) 
 {
@@ -39,6 +40,7 @@ void PlayScene::Initialize()
     Instantiate<Camera>(this);
     Instantiate<Hp>(this);
     Instantiate<MP>(this);
+    Instantiate<UI>(this);
     
 }
 

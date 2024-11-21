@@ -29,6 +29,9 @@ TitleScene::TitleScene(GameObject* parent)
 
     SetFontSize(16);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+    hStart = -1;
+    hStartYellow = -1;
 }
 
 void TitleScene::Initialize()
@@ -44,6 +47,12 @@ void TitleScene::Initialize()
 
     soundHandle = LoadSoundMem("Assets/Music/SE/select01.mp3");//Pを押した時に効果音がなる(登録)
     assert(soundHandle != -1); // 音声ファイルの読み込みに失敗した場合のエラーチェック
+
+    hStart = LoadGraph("Assets/UI/XboxBottunUI/startMenu.png");
+    assert(hStart > 0);
+
+    hStartYellow = LoadGraph("Assets/UI/XboxBottunUI/startMenuYellow.png");
+    assert(hStartYellow > 0);
 }
 
 void TitleScene::Update()
@@ -127,16 +136,18 @@ void TitleScene::Draw()
         // 画面全体に背景画像を描画
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
         // タイトル画面のテキストを描画
-        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 0));
+        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 0));//黄色
         DrawGraph(600, 40, charImage_, TRUE);
+        DrawGraph(920, 130, hStartYellow, TRUE);
     }
     else //そもそもキーが押されてない
     {
         // 画面全体に背景画像を描画
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
         // タイトル画面のテキストを描画
-        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
+        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));//白
         DrawGraph(600, 40, charImage_, TRUE);
+        DrawGraph(920, 130, hStart, TRUE);
     }
 #endif
 }
