@@ -29,7 +29,9 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 
 void ClearScene::Initialize()
 {
-    Instantiate<Score>(this);//評価
+   Score* sc= Instantiate<Score>(this);//評価
+   bool b = false;
+   sc->SetPlaying(false);
 }
 
 void ClearScene::Update()
@@ -43,17 +45,24 @@ void ClearScene::Update()
 
     if (keyPushed_)
     {
-
         keyTimer_--;
     }
 
+ 
     //タイマーが終わったら(暗転が終わったら)
     if (keyTimer_ < 0)
     {
         SetFontSize(32); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_TITLE);
+        pSceneManager->ChangeScene(SCENE_ID_LOAD);
     }
+
+    //テスト用
+  /*if (CheckHitKey(KEY_INPUT_SPACE))
+    {
+        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->ChangeScene(SCENE_ID_LOAD);
+    }*/
 }
 
 void ClearScene::Draw()

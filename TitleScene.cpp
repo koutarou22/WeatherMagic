@@ -82,7 +82,7 @@ void TitleScene::Update()
     {
         SetFontSize(32); //‚à‚Æ‚É‚à‚Ç‚·
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_PLAY);
+        pSceneManager->ChangeScene(SCENE_ID_LOAD);
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
     }
 
