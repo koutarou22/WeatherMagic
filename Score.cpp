@@ -29,14 +29,14 @@ void Score::Update()
     StarMoveX = easeOutQuart(frame_Star);
     frame_Star += 1.0f / 60.0f;
 
-    if (frame_Star >= 1.0f) {
-        IsStarMoveEnd = true;
-    }
-
     if (IsStarMoveEnd)
     {
         MessageMoveX = easeBackOut(frame_Message);
         frame_Message += 1.0f / 60.0f;
+    }
+
+    if (frame_Star >= 1.0f) {
+        IsStarMoveEnd = true;
     }
 }
 
