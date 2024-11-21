@@ -12,6 +12,7 @@
 #include "ClearFlag.h"
 #include "Engine/SceneManager.h"
 #include "Weather.h"
+#include"ChooseLevelScene.h"
 
 Field::Field(GameObject* scene) : GameObject(scene)
 {
@@ -28,7 +29,8 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	hBackGroundDark_ = LoadGraph("Assets/BackImage/background_dark.png");
 	assert(hBackGroundDark_ > 0);
 
-	NowStage_ = pSceneManager->GetClearCount();
+	//NowStage_ = pSceneManager->GetClearCount();
+	NowStage_ = pSceneManager->GettLevelManager();
 	Reset(NowStage_); // Reset() 
 
 	goalWid_ = -1;
@@ -231,10 +233,13 @@ void Field::Reset(int num)
 	switch (num)
 	{
 	case 0:
-		ret = csv.Load("Assets/Stage_csv/stage0.csv");
+		ret = csv.Load("Assets/Stage_csv/stage_easy.csv");
 		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
 		break;
-	case 100:
+	case 1:
+		ret = csv.Load("Assets/Stage_csv/stage_normal.csv");
+		break;
+	case 2:
 		ret = csv.Load("Assets/Stage_csv/debug.csv");
 		break;
 	default:

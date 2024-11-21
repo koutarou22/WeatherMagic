@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/SceneManager.h";
+#include"ChooseLevelScene.h"
 
 class SceneManager;
 class Player;
@@ -29,4 +30,5 @@ private:
 	int MpPass; //Mp‚Ì’l
 	SceneManager* pSceneManager;
 	Player* pPlayer;
+	ChooseLevelScene* pChooseLevelScene;
 };

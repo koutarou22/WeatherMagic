@@ -13,7 +13,7 @@ namespace
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
-    hImage_ = LoadGraph("Assets/Scene/GAME CLEAR2.png");
+    hImage_ = LoadGraph("Assets/Scene/GAME CLEAR3.png");
     assert(hImage_ > 0);
 
     //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu10.png");
@@ -54,7 +54,7 @@ void ClearScene::Update()
     {
         SetFontSize(32); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_LOAD);
+        pSceneManager->ChangeScene(SCENE_ID_TITLE);
     }
 
     //テスト用

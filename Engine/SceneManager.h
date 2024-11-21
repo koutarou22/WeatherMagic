@@ -6,6 +6,7 @@
 enum SCENE_ID
 {
 	SCENE_ID_TITLE,
+	SCENE_ID_LEVEL,
 	SCENE_ID_PLAY,
 	SCENE_ID_LOAD,
 	SCENE_ID_GAMEOVER,
@@ -32,6 +33,10 @@ public:
 	////引数：next	次のシーンのID
 	void ChangeScene(SCENE_ID next);
 
+
+#if 0
+#endif
+	//--------------ステージクリア→ロード→別のステージに移動するなら使うかもしれない関数------------------
 	/// <summary>
 	/// クリアした回数を増やす（player.cppでしか使わない）
 	/// </summary>
@@ -48,6 +53,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool GetClear() { return isGameClear_; }
+	//--------------ステージクリア→ロード→別のステージに移動するなら使うかもしれない関数------------------
      
 	/// <summary>
 	/// MPの変数をセット
@@ -61,6 +67,19 @@ public:
 	/// <returns></returns>
 	int GetMagicPoint()const { return MpReceive_; }
 
+	/// <summary>
+	/// ChooseLevelSceneから持ってきたレベルを代入
+	/// </summary>
+	/// <param name="lv"></param>
+	void SetLevelManager(int lv) { LevelManager_ = lv; }
+
+	/// <summary>
+	/// ChooseLevelSceneから持ってきたレベルを取得
+	/// </summary>
+	/// <returns></returns>
+	int GettLevelManager() { return LevelManager_; }
+
+
 private:
 	SCENE_ID currentSceneID_;	
 	SCENE_ID nextSceneID_;	
@@ -72,4 +91,6 @@ private:
 	bool isGameClear_;
 
 	int MpReceive_;//取ってきたMPを保存(格納)する変数
+
+	int LevelManager_;
 };
