@@ -5,16 +5,44 @@ namespace
 {
     const int TIMER = 100;
 }
-ChooseLevelScene::ChooseLevelScene(GameObject* parent)
-	: GameObject(parent, "ChooseLevelScene"),hImage_(-1),Level_(0),keyPushed_(false),keyTimer_(TIMER)
+int ChooseLevelScene::Previous(int level)
 {
+	if(level_arr.empty()) 
+        return -1;  // 配列が空の場合
+
+	// インデックスが0なら、前の要素は配列の最後の要素（2の場合は0）
+	return level_arr[(currentlevel - 1 + level_arr.size()) % level_arr.size()];
+}
+
+int ChooseLevelScene::Next(int currentIndex)
+{
+	if (level_arr.empty())
+        return -1;  // 配列が空の場合
+
+	// インデックスが最後なら、次は最初の要素（2の場合は0）
+	return level_arr[(currentIndex + 1) % level_arr.size()];
+}
+ChooseLevelScene::ChooseLevelScene(GameObject* parent)
+    : GameObject(parent, "ChooseLevelScene"), hImage_back(-1), keyPushed_(false), keyTimer_(TIMER),
+    prevUp(false),prevDown(false)
+{
+    SetFontSize(32);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+    level_arr.push_back(EASY);
+    level_arr.push_back(NORMAL);
+    level_arr.push_back(HARD);
+
+    LevelText1 = "EASY";
+    LevelText2 = "NORMAL";
+    LevelText3 = "HARD";
+
 }
 
 void ChooseLevelScene::Initialize()
 {
-	hImage_ = LoadGraph("Assets/Scene/ChooseLevelBack.png");//タイトルの背景
-	assert(hImage_ >= 0);
+	hImage_back = LoadGraph("Assets/Scene/ChooseLevelBack.png");//タイトルの背景
+	assert(hImage_back >= 0);
 }
 
 void ChooseLevelScene::Update()
@@ -24,22 +52,51 @@ void ChooseLevelScene::Update()
 	/*SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	pSceneManager->ChangeScene(SCENE_ID_PLAY);*/
 
-    if (CheckHitKey(KEY_INPUT_A) /*|| input.Buttons[4]*/)
+    //if (CheckHitKey(KEY_INPUT_A) /*|| input.Buttons[4]*/)
+    //{
+    //    Level_ = 0;
+    //    chooselevel_ = EASY;
+    //}
+    //if (CheckHitKey(KEY_INPUT_S) /*|| input.Buttons[4]*/)
+    //{
+    //    Level_ = 100;
+    //    chooselevel_ = NORMAL;
+    //}
+    //if (CheckHitKey(KEY_INPUT_D) /*|| input.Buttons[4]*/)
+    //{
+    //    Level_ = 200;
+    //    chooselevel_ = HARD;
+    //}
+
+    
+    if (CheckHitKey(KEY_INPUT_UP) || input.Buttons[0])
     {
-        Level_ = 0;
+        if (!prevUp) 
+        {
+            currentlevel = Previous(currentlevel);
+        }
+        prevUp = true;
     }
-    if (CheckHitKey(KEY_INPUT_S) /*|| input.Buttons[4]*/)
-    {
-        Level_ = 100;
+    else {
+        prevUp = false;
     }
-    if (CheckHitKey(KEY_INPUT_D) /*|| input.Buttons[4]*/)
+ 
+    if (CheckHitKey(KEY_INPUT_DOWN) || input.Buttons[1])
     {
-        Level_ = 200;
+        if (!prevDown)
+        {
+            currentlevel = Next(currentlevel);
+        }
+        prevDown = true;
+    }
+    else
+    {
+        prevDown = false;
     }
 
 
-    // SPACEキーが押されたらスタートボタンでPlaySceneに遷移
-    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4])
+    // SPACEキーorStartボタンorBボタンが押されたらスタートボタンでPlaySceneに遷移
+    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4] || input.Buttons[13])
     {
         keyPushed_ = true;
     }
@@ -53,9 +110,9 @@ void ChooseLevelScene::Update()
     //タイマーが終わったら(暗転が終わったら)
     if (keyTimer_ < 0)
     {
-        SetFontSize(32); //もとにもどす
+        //SetFontSize(32); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->SetLevelManager(Level_);
+        pSceneManager->SetLevelManager(currentlevel);
         pSceneManager->ChangeScene(SCENE_ID_PLAY);
     }
 
@@ -70,18 +127,39 @@ void ChooseLevelScene::Draw()
     {
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
-        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
         al = keyTimer_;
     }
     else
     {
-       // 画面全体に背景画像を描画
-        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
-       // DrawRectGraph(0, 0, 0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        // 画面全体に背景画像を描画
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
     }
- 
 
-    DrawFormatString(0, 0, GetColor(255,255,255), "難易度: %d", Level_);
+
+    DrawFormatString(0, 0, GetColor(255, 255, 255), "難易度を選択してください");
+    //DrawFormatString(0, 120, GetColor(255, 255, 255), "難易度： %d", currentlevel);
+
+    if (!keyPushed_) {
+        switch (currentlevel)
+        {
+        case 0:
+            DrawFormatString(0, 200, GetColor(255, 255, 255), "*");
+            break;
+        case 1:
+            DrawFormatString(0, 250, GetColor(255, 255, 255), "*");
+            break;
+        case 2:
+            DrawFormatString(0, 300, GetColor(255, 255, 255), "*");
+            break;
+        default:
+            break;
+        }
+    }
+
+    DrawFormatString(30, 200, GetColor(255, 255, 255), LevelText1);
+    DrawFormatString(30, 250, GetColor(255, 255, 255), LevelText2);
+    DrawFormatString(30, 300, GetColor(255, 255, 255), LevelText3);
 }
 
 void ChooseLevelScene::Release()

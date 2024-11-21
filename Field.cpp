@@ -233,13 +233,13 @@ void Field::Reset(int num)
 	switch (num)
 	{
 	case 0:
-		ret = csv.Load("Assets/Stage_csv/stage0.csv");
+		ret = csv.Load("Assets/Stage_csv/stage_easy.csv");
 		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
 		break;
-	case 100:
-		ret = csv.Load("Assets/Stage_csv/stage0-1.csv");
+	case 1:
+		ret = csv.Load("Assets/Stage_csv/stage_normal.csv");
 		break;
-	case 200:
+	case 2:
 		ret = csv.Load("Assets/Stage_csv/debug.csv");
 		break;
 	default:

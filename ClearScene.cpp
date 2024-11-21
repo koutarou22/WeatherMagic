@@ -13,7 +13,7 @@ namespace
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
-    hImage_ = LoadGraph("Assets/Scene/GAME CLEAR2.png");
+    hImage_ = LoadGraph("Assets/Scene/GAME CLEAR3.png");
     assert(hImage_ > 0);
 
     keyTimer_ = TIMER;

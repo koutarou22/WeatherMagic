@@ -6,6 +6,7 @@
 
 namespace {
     const float max = 1.70158f;//easeBackOutÇÃç≈ëÂíl
+    const int StarPosPlay = 55;
 }
 
 Score::Score(GameObject* parent)
@@ -85,11 +86,10 @@ void Score::Draw()
     {
         for (int i = 0; i < StarCount; i++)
         {
-            float x = i * Width;
-            float y = transform_.position_.y;//å©Ç∏ÇÁÇ¢Ç©ÇÁäiî[ÇµÇΩÇæÇØ
-            DrawExtendGraph(x, y, x + 64, y + 64, hImage_, TRUE);
+            float x = i * Width + 260;
+           // float y = transform_.position_.y;//å©Ç∏ÇÁÇ¢Ç©ÇÁäiî[ÇµÇΩÇæÇØ
+            DrawExtendGraph(x  , StarPosPlay, x + 64, StarPosPlay + 64, hImage_, TRUE);
         }
-            DrawFormatString(0 * MessageMoveX, transform_.position_.y+75, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
     }
  
 
