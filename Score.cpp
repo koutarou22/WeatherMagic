@@ -32,7 +32,7 @@ void Score::Update()
 
     if (IsStarMoveEnd)
     {
-        MessageMoveX = easeBackOut(frame_Message);
+        MessageMoveX = easeBackOut(frame_Message) + 500;
         frame_Message += 1.0f / 60.0f;
     }
 
@@ -73,13 +73,13 @@ void Score::Draw()
     {
         for (int i = 0; i < StarCount; i++)
         {
-            float x = i * Width;
-            float y = transform_.position_.y;//Œ©‚¸‚ç‚¢‚©‚çŠi”[‚µ‚½‚¾‚¯
+            float x = i * Width + 500;
+            float y = 500;//Œ©‚¸‚ç‚¢‚©‚çŠi”[‚µ‚½‚¾‚¯
             DrawExtendGraph(x*StarMoveX, y, x + 64, y + 64, hImage_, TRUE);
         }
 
         if (IsStarMoveEnd) {
-            DrawFormatString(0 * MessageMoveX,120, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
+            DrawFormatString( MessageMoveX,620, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
         }
     }
     else //ƒvƒŒƒCƒV[ƒ“—p

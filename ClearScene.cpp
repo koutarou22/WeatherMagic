@@ -13,7 +13,7 @@ namespace
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
-    hImage_ = LoadGraph("Assets/Scene/GAME CLEAR3.png");
+    hImage_ = LoadGraph("Assets/Scene/GameClearBack.png");
     assert(hImage_ > 0);
 
     //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu10.png");
