@@ -14,6 +14,8 @@ private:
 	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
 	int mojiTimer_; //文字をぴかぴかするタイマー
 	bool mojiend_; //ぴかぴか終わりかなフラグ
+	int hStart;//UIハンドル
+	int hStartYellow;//UIハンドル（黄色）
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

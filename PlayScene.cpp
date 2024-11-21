@@ -13,6 +13,7 @@
 #include "ClearFlag.h"
 #include"MP.h"
 #include "WeatherBackGround.h"
+#include"UI.h"
 #include "Score.h"
 
 PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0) 
@@ -24,19 +25,20 @@ void PlayScene::Initialize()
     pSceneManager = (SceneManager*)FindObject("SceneManager");
     MapNumber_ = pSceneManager->GettLevelManager();
     Field* pField = Instantiate<Field>(this);
-    pField->Reset(MapNumber_);//‰Šú‰»ˆ—
+    pField->Reset(MapNumber_);//åˆæœŸåŒ–å‡¦ç†
 
     Instantiate<Weather>(this);
     Instantiate<WeatherBackGround>(this);
     pPlayer = nullptr;
     pPlayer = Instantiate<Player>(this);
 
-    MpPass = pPlayer->GetMp();//Mp‚Ì’l‚ğ‚Á‚Ä‚­‚é
-    pSceneManager->SetMagicPoint(MpPass);//PlayScene‚ÅPlayer‚ÌMp‚ğSet
+    MpPass = pPlayer->GetMp();//Mpã®å€¤ã‚’æŒã£ã¦ãã‚‹
+    pSceneManager->SetMagicPoint(MpPass);//PlaySceneã§Playerã®Mpã‚’Set
 
     Instantiate<Camera>(this);
     Instantiate<Hp>(this);
     Instantiate<MP>(this);
+    Instantiate<UI>(this);
 
     Score* sc=Instantiate<Score>(this);
     sc->SetPosition(100,500);
@@ -44,19 +46,19 @@ void PlayScene::Initialize()
     sc->SetPlaying(b);
 }
 
-//XV
+//æ›´æ–°
 void PlayScene::Update()
 {
-    int MpPass = pPlayer->GetMp();//Mp‚Ì’l‚ğ‚Á‚Ä‚­‚é
-    pSceneManager->SetMagicPoint(MpPass);//PlayScene‚ÅPlayer‚ÌMp‚ğSet
+    int MpPass = pPlayer->GetMp();//Mpã®å€¤ã‚’æŒã£ã¦ãã‚‹
+    pSceneManager->SetMagicPoint(MpPass);//PlaySceneã§Playerã®Mpã‚’Set
 }
 
-//•`‰æ
+//æç”»
 void PlayScene::Draw()
 {
 }
 
-//ŠJ•ú
+//é–‹æ”¾
 void PlayScene::Release()
 {
 }
