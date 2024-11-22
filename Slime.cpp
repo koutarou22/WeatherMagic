@@ -31,6 +31,14 @@ Slime::Slime(GameObject* scene)
 	StunTimer_ = 0;
 
 	HitLanding = false;
+
+	JumpHandle = LoadSoundMem("Assets/Music/SE/Slime/SlimeJump1.mp3");
+	assert(JumpHandle != -1);
+
+	StunHandle = LoadSoundMem("Assets/Music/SE/Slime/SlimeDamage.mp3");
+	assert(StunHandle != -1);
+
+	offScreen = false;
 }
 
 Slime::~Slime()
@@ -121,6 +129,10 @@ void Slime::Update()
 				if (pWeather->GetWeatherState() != WeatherState::Snow)
 				{
 					Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
+
+					//音入れたかったが、画面外からも音がなる
+				   // PlaySoundMem(JumpHandle, DX_PLAYTYPE_BACK);	
+
 				}
 				onGround = false;
 				
@@ -147,15 +159,15 @@ void Slime::Update()
 		// カメラの位置を取得
 		int camX = cam->GetValue();
 
-		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
+		if (transform_.position_.x>= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
 			if (!onGround)
 			{
-
 				//天候取得、雪ならスピードを0に
 				if (pWeather->GetWeatherState() != WeatherState::Snow)
 				{
 					transform_.position_.x += WeatherSpeed_ * direction;
+				    StopSoundMem(JumpHandle);
 				}
 			}
 		}
@@ -241,6 +253,10 @@ void Slime::Update()
 
 		if (distance <= 30.0f)
 		{
+
+			pMagic->SetMagicStateHit();
+
+			PlaySoundMem(StunHandle, DX_PLAYTYPE_BACK);
 			Damage* dam = Instantiate<Damage>(GetParent());
 			dam->SetPosition(transform_.position_);
 			StunTimer_ = 300;
@@ -261,7 +277,7 @@ void Slime::Update()
 		{
 			if (dy < 0 && abs(dx) <= 42) //岩の上に乗る
 			{
-				transform_.position_.y = pRock->GetPosition().y - 85 + push; // スライムを上に移動
+				transform_.position_.y = pRock->GetPosition().y - 86  * transform_.scale_.y + push * transform_.scale_.y;  // スライムを上に移動
 				onGround = true; // スライムは岩の上にいるので、地面にいるとみなす
 			}
 			else if (dy > -0.1 && abs(dx) <= 42.)
@@ -270,12 +286,12 @@ void Slime::Update()
 			}
 			else if (dx < 0 && direction == -1) // 岩の右側の衝突判定
 			{
-				transform_.position_.x += push;
+				transform_.position_.x += push * transform_.scale_.x;
 				Reverse_ = true;
 			}
 			else if (dx > 0 && direction == 1) // 岩の左側の衝突判定
 			{
-				transform_.position_.x -= push;
+				transform_.position_.x -= push * transform_.scale_.x;
 				Reverse_ = true;
 			}
 		}
@@ -329,8 +345,8 @@ bool Slime::ColliderRect(float x, float y, float w, float h)
 	// 自分の矩形の情報
 	float myX = transform_.position_.x;
 	float myY = transform_.position_.y;
-	float myW = 42.0f; 
-	float myH = 42.0f; 
+	float myW = 85.0f; 
+	float myH = 85.0f; 
 
 	// 矩形の衝突判定
 	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
@@ -397,7 +413,7 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 bool wasKeyPressed_R = false;
 bool wasKeyPressed_L = false;
 
-void Slime::GaleEffect(WeatherState state)
+void Slime::GaleEffect(WeatherState state)//現在使用不可
 {
 	if (state == Gale)
 	{

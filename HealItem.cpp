@@ -6,7 +6,7 @@
 
 HealItem::HealItem(GameObject* parent) :GameObject(parent, "HpItem"), hImage_(-1)
 {
-	hImage_ = LoadGraph("Assets/Item/Heel.png");//回復アイテムのImage
+	hImage_ = LoadGraph("Assets/Item/PotionRed1.png");//回復アイテムのImage
 	assert(hImage_ >= 0);
 
 	flameCounter_ = 0;
@@ -48,7 +48,7 @@ void HealItem::Draw()
 	int SHeight = 127;
 	int frameX = animeFrame_ % 4;
 	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hImage_, TRUE);
-	//DrawCircle(x +63.0f, y + 63.0f, 24.0f, GetColor(255, 0, 0), 0);
+	DrawGraph(x,y,hImage_,TRUE);
 }
 
 void HealItem::Release()

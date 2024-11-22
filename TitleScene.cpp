@@ -3,7 +3,7 @@
 #include "PlayScene.h"
 #include "Engine/SceneManager.h"
 
-// ƒ^ƒCƒgƒ‹‰æ–Ê‚ÌƒeƒLƒXƒg
+// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã®ãƒ†ã‚­ã‚¹ãƒˆ
 const char* TITLE_TEXT = "Press Space Key to start";
 using std::string;
 
@@ -29,30 +29,44 @@ TitleScene::TitleScene(GameObject* parent)
 
     SetFontSize(16);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+    TitleBGMHandle = LoadSoundMem("Assets/Music/BGM/TITLE_BGM.mp3");
+    assert(TitleBGMHandle != -1);
+
+    PlaySoundMem(TitleBGMHandle, DX_PLAYTYPE_LOOP);
 }
 
 void TitleScene::Initialize()
 {
-    hImage_ = LoadGraph("Assets/Scene/Title.jpg");//ƒ^ƒCƒgƒ‹‚Ì”wŒi
+    hImage_ = LoadGraph("Assets/Scene/Title.jpg");//ã‚¿ã‚¤ãƒˆãƒ«ã®èƒŒæ™¯
     assert(hImage_ >= 0);
 
-    charImage_ = LoadGraph("Assets/Font/Weather.png");//wWeatherMagicx‚Ìƒ^ƒCƒgƒ‹ƒtƒHƒ“ƒg
+    charImage_ = LoadGraph("Assets/Font/Weather.png");//ã€WeatherMagicã€ã®ã‚¿ã‚¤ãƒˆãƒ«ãƒ•ã‚©ãƒ³ãƒˆ
     assert(charImage_ >= 0);
 
-   /* spaceImage_ = LoadGraph("Assets/Space.png");//wspacex‚ğ‰Ÿ‚µ‚Ä‚­‚êI“I‚ÈƒtƒHƒ“ƒg@Œ‹‹Ç–¢g—p
+   /* spaceImage_ = LoadGraph("Assets/Space.png");//ã€spaceã€ã‚’æŠ¼ã—ã¦ãã‚Œï¼çš„ãªãƒ•ã‚©ãƒ³ãƒˆã€€çµå±€æœªä½¿ç”¨
     assert(spaceImage_ >= 0);*/
 
-    soundHandle = LoadSoundMem("Assets/Music/SE/select01.mp3");//P‚ğ‰Ÿ‚µ‚½‚ÉŒø‰Ê‰¹‚ª‚È‚é(“o˜^)
-    assert(soundHandle != -1); // ‰¹ºƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚½ê‡‚ÌƒGƒ‰[ƒ`ƒFƒbƒN
+    soundHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/select01.mp3");//Pã‚’æŠ¼ã—ãŸæ™‚ã«åŠ¹æœéŸ³ãŒãªã‚‹(ç™»éŒ²)
+    assert(soundHandle != -1); // éŸ³å£°ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ãŸå ´åˆã®ã‚¨ãƒ©ãƒ¼ãƒã‚§ãƒƒã‚¯
+
+    hStart = LoadGraph("Assets/UI/XboxBottunUI/startMenu.png");
+    assert(hStart > 0);
+
+    hStartYellow = LoadGraph("Assets/UI/XboxBottunUI/startMenuYellow.png");
+    assert(hStartYellow > 0);
 }
 
 void TitleScene::Update()
 {
     padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
 
-    // ƒXƒy[ƒXƒL[‚ª‰Ÿ‚³‚ê‚é‚©ƒXƒ^[ƒgƒ{ƒ^ƒ“‚ÅPlayScene‚É‘JˆÚ
+    // ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã‚‹ã‹ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³ã§PlaySceneã«é·ç§»
     if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4]) {
-        PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // ‰¹º‚ğÄ¶
+
+
+        StopSoundMem(TitleBGMHandle);
+        PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // éŸ³å£°ã‚’å†ç”Ÿ
         keyPushed_ = true;
     }
 
@@ -68,16 +82,16 @@ void TitleScene::Update()
         }
     }
 
-    //ƒ^ƒCƒ}[‚ªI‚í‚Á‚½‚ç(ˆÃ“]‚ªI‚í‚Á‚½‚ç)
+    //ã‚¿ã‚¤ãƒãƒ¼ãŒçµ‚ã‚ã£ãŸã‚‰(æš—è»¢ãŒçµ‚ã‚ã£ãŸã‚‰)
     if (keyTimer_ < 0)
     {
-        SetFontSize(32); //‚à‚Æ‚É‚à‚Ç‚·
+        SetFontSize(32); //ã‚‚ã¨ã«ã‚‚ã©ã™
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_PLAY);
+        pSceneManager->ChangeScene(SCENE_ID_LEVEL);
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
     }
 
-    //•¶šƒ^ƒCƒ}[‚ªI‚í‚Á‚½‚ç(‚Ò‚©‚Ò‚©I‚í‚Á‚½‚ç)
+    //æ–‡å­—ã‚¿ã‚¤ãƒãƒ¼ãŒçµ‚ã‚ã£ãŸã‚‰(ã´ã‹ã´ã‹çµ‚ã‚ã£ãŸã‚‰)
     if (mojiTimer_ < 0)
     {
         mojiend_ = true;
@@ -92,7 +106,7 @@ void TitleScene::Draw()
     int screenWidth, screenHeight, colorBitDepth;
     GetScreenState(&screenWidth, &screenHeight, &colorBitDepth);
   
-//‰Ÿ‚µ‚½‚ç‚·‚®ˆÃ“]‚µ‚Ä‚¢‚­
+//æŠ¼ã—ãŸã‚‰ã™ãæš—è»¢ã—ã¦ã„ã
 #if 0
     if (keyPushed_)
     {
@@ -103,17 +117,17 @@ void TitleScene::Draw()
     }
     else
     {
-        // ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ğ•`‰æ
+        // ç”»é¢å…¨ä½“ã«èƒŒæ™¯ç”»åƒã‚’æç”»
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
-        // ƒ^ƒCƒgƒ‹‰æ–Ê‚ÌƒeƒLƒXƒg‚ğ•`‰æ
+        // ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’æç”»
         DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
         DrawGraph(600, 40, charImage_, TRUE);
     }
 #endif
 
-//‰Ÿ‚µ‚½‚çPush P~‚ª‚¿‚å‚Á‚ÆŒõ‚Á‚ÄˆÃ“]
+//æŠ¼ã—ãŸã‚‰Push P~ãŒã¡ã‚‡ã£ã¨å…‰ã£ã¦æš—è»¢
 #if 1
-    if (keyPushed_&&mojiend_) //•¶š‚Ò‚©‚Ò‚©I‚í‚Á‚½
+    if (keyPushed_&&mojiend_) //æ–‡å­—ã´ã‹ã´ã‹çµ‚ã‚ã£ãŸ
     {
         SetFontSize(16);
         static int al = TIMER;
@@ -121,22 +135,24 @@ void TitleScene::Draw()
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
         al = keyTimer_;
     }
-    else if(keyPushed_&&!mojiend_) //•¶š‚Ò‚©‚Ò‚©‚³‚¹‚Ä‚¢‚é
+    else if(keyPushed_&&!mojiend_) //æ–‡å­—ã´ã‹ã´ã‹ã•ã›ã¦ã„ã‚‹
     {
-        //SetFontSize(18); //ˆêu•¶š‚ª‘å‚«‚­‹¦’²‚³‚ê‚Ü‚·
-        // ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ğ•`‰æ
+        //SetFontSize(18); //ä¸€ç¬æ–‡å­—ãŒå¤§ããå”èª¿ã•ã‚Œã¾ã™
+        // ç”»é¢å…¨ä½“ã«èƒŒæ™¯ç”»åƒã‚’æç”»
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
-        // ƒ^ƒCƒgƒ‹‰æ–Ê‚ÌƒeƒLƒXƒg‚ğ•`‰æ
-        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 0));
+        // ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’æç”»
+        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 0));//é»„è‰²
         DrawGraph(600, 40, charImage_, TRUE);
+        DrawGraph(920, 130, hStartYellow, TRUE);
     }
-    else //‚»‚à‚»‚àƒL[‚ª‰Ÿ‚³‚ê‚Ä‚È‚¢
+    else //ãã‚‚ãã‚‚ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ãªã„
     {
-        // ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ğ•`‰æ
+        // ç”»é¢å…¨ä½“ã«èƒŒæ™¯ç”»åƒã‚’æç”»
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
-        // ƒ^ƒCƒgƒ‹‰æ–Ê‚ÌƒeƒLƒXƒg‚ğ•`‰æ
-        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
+        // ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’æç”»
+        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));//ç™½
         DrawGraph(600, 40, charImage_, TRUE);
+        DrawGraph(920, 130, hStart, TRUE);
     }
 #endif
 }

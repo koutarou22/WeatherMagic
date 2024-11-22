@@ -7,10 +7,14 @@
 class ClearScene : public GameObject
 {
 	int hImage_;
+	int hTitleMenu;//UIハンドル
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る
 	int keyTimer_; //キーが押されてから遷移までのタイマー
 	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
+
+	int ClearBGMHandle;
+
 
 public:
 	//コンストラクタ

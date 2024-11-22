@@ -13,6 +13,7 @@ private:
 	//int bagImage_;
 	int Wide_ = 3;//‘Ì—Í
 
+	
 public:
 
 	Hp(GameObject* parent);

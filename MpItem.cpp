@@ -6,8 +6,10 @@
 
 MpItem::MpItem(GameObject* parent) :GameObject(parent, "MpItem"), hImage_(-1)
 {
-	hImage_ = LoadGraph("Assets/Item/Mp.png");
+	hImage_ = LoadGraph("Assets/Item/PotionBlue1.png");
 	assert(hImage_ > 0);
+
+	hEffect_ = LoadGraph("Assets/Item/right.png");
 
 	transform_.position_.x = 200;
 	transform_.position_.y = 560;
@@ -88,13 +90,14 @@ void MpItem::Draw()
 		x -= cam->GetValue();
 	}
 
-	int SWidth = 512 / 4;
-	int SHeight = 120;
+	int SWidth = 192 / 3;
+	int SHeight = 64;
 
-	int frameX = animeFrame_ % 4;
+	int frameX = animeFrame_ % 3;
 
 	// スプライトを描画
-	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hImage_, TRUE);
+	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight,hEffect_, TRUE);
+	DrawGraph(x, y, hImage_, TRUE);
 }
 
 void MpItem::Release()
@@ -119,7 +122,7 @@ bool MpItem::ColliderCircle(float x, float y, float r)
 	//自分の円の情報
 	float myCenterX = transform_.position_.x + 64.0f;
 	float myCenterY = transform_.position_.y + 64.0f;
-	float myR = 20.0f;
+	float myR = 32.0f;
 	float dx = myCenterX - x;
 	float dy = myCenterY - y;
 	if (sqrt(dx * dx + dy * dy) < (r + myR) * (r + myR))
