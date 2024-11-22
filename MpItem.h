@@ -7,6 +7,7 @@ class MpItem :public GameObject
 {
 private:
 	int hImage_;
+	int hEffect_;
 	int animeType_;//ó‹µ
 	int animeFrame_;//‹î
 	int PictFlame_;

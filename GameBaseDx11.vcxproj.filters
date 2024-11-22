@@ -1,36 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Bird.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ClearFlag.cpp" />
-    <ClCompile Include="ClearScene.cpp" />
-    <ClCompile Include="Damage.cpp" />
-    <ClCompile Include="EnemyMagic.cpp" />
-    <ClCompile Include="Engine\CsvReader.cpp" />
-    <ClCompile Include="Engine\GameObject.cpp" />
-    <ClCompile Include="Engine\Main.cpp" />
-    <ClCompile Include="Engine\RootObject.cpp" />
-    <ClCompile Include="Engine\SceneManager.cpp" />
-    <ClCompile Include="Engine\Transform.cpp" />
-    <ClCompile Include="Field.cpp" />
-    <ClCompile Include="GameOverScene.cpp" />
-    <ClCompile Include="Ghost.cpp" />
-    <ClCompile Include="HealItem.cpp" />
-    <ClCompile Include="Hp.cpp" />
-    <ClCompile Include="MP.cpp" />
-    <ClCompile Include="MpItem.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="LoadScene.cpp" />
-    <ClCompile Include="Score.cpp" />
-    <ClCompile Include="Rock.cpp" />
-    <ClCompile Include="Slime.cpp" />
-    <ClCompile Include="Magic.cpp" />
-    <ClCompile Include="PlayScene.cpp" />
-    <ClCompile Include="Time.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="Weather.cpp" />
-    <ClCompile Include="Logo.cpp" />
     <ClCompile Include="WeatherChangeEffect.cpp">
       <Filter>Effect</Filter>
     </ClCompile>
@@ -43,38 +13,105 @@
     <ClCompile Include="WeatherBackGround.cpp">
       <Filter>Effect</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CsvReader.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SceneManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RootObject.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GameObject.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Transform.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Damage.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Field.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Hp.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MP.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Logo.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Weather.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Main.cpp" />
+    <ClCompile Include="Bird.cpp">
+      <Filter>Object\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>Object\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Object\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>Object\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearFlag.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="HealItem.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="MpItem.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyMagic.cpp">
+      <Filter>Object\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Magic.cpp">
+      <Filter>Object\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock.cpp">
+      <Filter>Object\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="ChooseLevelScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bird.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="ClearFlag.h" />
-    <ClInclude Include="ClearScene.h" />
-    <ClInclude Include="Damage.h" />
-    <ClInclude Include="EnemyMagic.h" />
-    <ClInclude Include="Engine\CsvReader.h" />
-    <ClInclude Include="Engine\GameObject.h" />
-    <ClInclude Include="Engine\Global.h" />
-    <ClInclude Include="Engine\RootObject.h" />
-    <ClInclude Include="Engine\SceneManager.h" />
-    <ClInclude Include="Engine\Transform.h" />
-    <ClInclude Include="Field.h" />
-    <ClInclude Include="GameOverScene.h" />
-    <ClInclude Include="Ghost.h" />
-    <ClInclude Include="HealItem.h" />
-    <ClInclude Include="Hp.h" />
-    <ClInclude Include="MP.h" />
-    <ClInclude Include="MpItem.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="LoadScene.h" />
-    <ClInclude Include="Score.h" />
-    <ClInclude Include="Rock.h" />
-    <ClInclude Include="Slime.h" />
-    <ClInclude Include="Magic.h" />
-    <ClInclude Include="PlayScene.h" />
-    <ClInclude Include="Time.h" />
-    <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="Weather.h" />
-    <ClInclude Include="Logo.h" />
     <ClInclude Include="WeatherChangeEffect.h">
       <Filter>Effect</Filter>
     </ClInclude>
@@ -87,10 +124,133 @@
     <ClInclude Include="WeatherBackGround.h">
       <Filter>Effect</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CsvReader.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SceneManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RootObject.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ClearScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameObject.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Transform.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Damage.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Field.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Global.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Hp.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MP.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Logo.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Weather.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Bird.h">
+      <Filter>Object\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
+      <Filter>Object\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Object\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
+      <Filter>Object\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="ClearFlag.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="HealItem.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="MpItem.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyMagic.h">
+      <Filter>Object\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Magic.h">
+      <Filter>Object\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock.h">
+      <Filter>Object\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="ChooseLevelScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{488e2c4b-5c69-4257-9c7c-fc02b07ee8d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{1cb72b06-a2ff-4136-ad99-7055cceae953}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{b6082ddc-8a67-400d-95dc-2b01be6ea6ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{832c015c-88af-482a-a9a4-0aa782a8bc63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{cb6614ed-afd6-4221-a798-8ee403c13c08}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Effect">
       <UniqueIdentifier>{1901bbed-b2bf-4b31-b464-d9da79b573f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Chara">
+      <UniqueIdentifier>{bc0523ee-ae1a-4b85-a5c8-c20bc31e1304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Item">
+      <UniqueIdentifier>{bef10d40-4499-471a-9e62-615ef4b3cc6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Bullet">
+      <UniqueIdentifier>{e19ddfd8-0e74-4894-84ef-2062174786a3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
