@@ -106,6 +106,11 @@ void Ghost::Update()
 				//transform_.position_.y += sinValue * 50.0f;
 				transform_.position_.y += sinValue * 3.0f;
 
+				//	雪以外で、pFreezeのポインタが生きているなら削除
+				if (pFreeze != nullptr)
+				{
+					pFreeze = nullptr;
+				}
 
 			}
 			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)//髮ｪ縺ｮ譎よｰｷ縺ｮAnimation繧堤匱逕溘＆縺帙ｋ
