@@ -13,8 +13,11 @@ namespace
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
-    hImage_ = LoadGraph("Assets/Scene/GameClearBack.png");
+    hImage_ = LoadGraph("Assets/Scene/CLEAR.png");
     assert(hImage_ > 0);
+
+    hGameClear_ = LoadGraph("Assets/Font/GameClear.png");
+    assert(hGameClear_ > 0);
 
     //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu10.png");
     //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu20.png");
@@ -80,14 +83,16 @@ void ClearScene::Draw()
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
         DrawGraph(0, 0, hImage_, TRUE);
-        DrawGraph(550, 380, hTitleMenu, TRUE);
+        DrawGraph(430, 290, hGameClear_, TRUE);
+        DrawGraph(430, 380, hTitleMenu, TRUE);
         al = keyTimer_;
     }
     else
     {
         // 画面全体に背景画像を描画
         DrawGraph(0, 0, hImage_, TRUE);
-        DrawGraph(550, 380, hTitleMenu, TRUE);
+        DrawGraph(430, 290, hGameClear_, TRUE);
+        DrawGraph(430, 380, hTitleMenu, TRUE);
     }
 
     //SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");

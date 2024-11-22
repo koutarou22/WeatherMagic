@@ -28,7 +28,7 @@ Ghost::Ghost(GameObject* scene)
 	animeFrame_ = 0;
 	FreezeOne = false;
 
-	//ƒ_ƒ[ƒW‰¹
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸éŸ³
 	GhostDamageHandle = LoadSoundMem("Assets/Music/SE/Ghost/GhostVanishing.mp3");
 	assert(GhostDamageHandle != -1);
 
@@ -50,13 +50,13 @@ void Ghost::Update()
 
 	if (++flameCounter_ >= 24)
 	{
-		animeFrame_ = (animeFrame_ + 1) % 4;//if•¶‚ğg‚í‚È‚¢Å“K‰ğ
+		animeFrame_ = (animeFrame_ + 1) % 4;//ifæ–‡ã‚’ä½¿ã‚ãªã„æœ€é©è§£
 		flameCounter_ = 0;
 	}
 
 	if (cam != nullptr)
 	{
-		// ƒJƒƒ‰‚ÌˆÊ’u‚ğæ“¾
+		// ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã‚’å–å¾—
 		int camX = cam->GetValue();
 		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
@@ -76,7 +76,7 @@ void Ghost::Update()
 					emg->SetDirection(dir);
 					emg->SetSpeed(3.5f);
 
-					// “VŒó‚É‚æ‚Á‚Ä‘¬“x‚ğ’²®
+					// å¤©å€™ã«ã‚ˆã£ã¦é€Ÿåº¦ã‚’èª¿æ•´
 
 					//if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
 					//{
@@ -96,7 +96,7 @@ void Ghost::Update()
 				CoolDownAttack_--;
 			}
 
-			//“VŒóæ“¾Aá‚È‚ç~‚ß‚é
+			//å¤©å€™å–å¾—ã€é›ªãªã‚‰æ­¢ã‚ã‚‹
 			if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
 			{
 				
@@ -108,7 +108,7 @@ void Ghost::Update()
 
 
 			}
-			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)//á‚Ì•X‚ÌAnimation‚ğ”­¶‚³‚¹‚é
+			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)//é›ªã®æ™‚æ°·ã®Animationã‚’ç™ºç”Ÿã•ã›ã‚‹
 			{
 					if (pFreeze == nullptr)
 					{
@@ -117,9 +117,9 @@ void Ghost::Update()
 					}
 					
 
-			//	FreezeOne = true; //‚±‚±‚Åˆê‰ñ‚µ‚©ŒÄ‚×‚È‚¢‚æ‚¤‚É‚·‚é
-				//–â‘è‚ª”­¶’†@–{“–‚Éˆê‰ñ‚µ‚©o‚¹‚È‚¢@
-				//§Œä‚µ‚È‚¢‚Æ@d‚­‚È‚Á‚¿‚á‚¤‚ñ‚Å‚·
+			//	FreezeOne = true; //ã“ã“ã§ä¸€å›ã—ã‹å‘¼ã¹ãªã„ã‚ˆã†ã«ã™ã‚‹
+				//å•é¡ŒãŒç™ºç”Ÿä¸­ã€€æœ¬å½“ã«ä¸€å›ã—ã‹å‡ºã›ãªã„ã€€
+				//åˆ¶å¾¡ã—ãªã„ã¨ã€€é‡ããªã£ã¡ã‚ƒã†ã‚“ã§ã™
 			}
 		}
 	}
@@ -131,7 +131,7 @@ void Ghost::Update()
 	//{
 	//	x -= cam->GetValue();
 	//}
-	//if (x > SCREEN_WIDTH)//‘¦’lAƒ}ƒWƒbƒNƒiƒ“ƒo[
+	//if (x > SCREEN_WIDTH)//å³å€¤ã€ãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼
 	//	return;
 	//else if (x < -64)
 	//{
@@ -144,10 +144,9 @@ void Ghost::Update()
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
 	for (Magic* pMagic : pMagics)
 	{
-		//‰ğà@Œ©‚ê‚Î‚í‚©‚é‚Æv‚¤‚ª‚±‚ê‚ÍwMagicx‚ÆwGhostx‚Ì‹——£‚ğ‹‚ß‚Ä‚¢‚é
-		float dx = pMagic->GetPosition().x - (transform_.position_.x + 16.0f);//Mg‚ÌÀ•WX - Gh‚ÌÀ•WX
-		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);//Mg‚ÌÀ•WY - Gh‚ÌÀ•WY
-		float distance = sqrt(dx * dx + dy * dy);//‚±‚±‚Å–¾Šm‚È‹——£‚ğŒvZ
+		float dx = pMagic->GetPosition().x - (transform_.position_.x + 16.0f);//Mgã®åº§æ¨™X - Ghã®åº§æ¨™X
+		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);//Mgã®åº§æ¨™Y - Ghã®åº§æ¨™Y
+		float distance = sqrt(dx * dx + dy * dy);//ã“ã“ã§æ˜ç¢ºãªè·é›¢ã‚’è¨ˆç®—
 
 		if (distance <= 20.0f)
 		{
@@ -170,14 +169,14 @@ void Ghost::Draw()
 	{
 		x -= cam->GetValue();
 	}
-	//¡‰ñ‚Í³–Ê‚ğŒü‚¢‚Ä‚à‚ç‚¤‚¾‚¯‚Å‚¢‚¢‚ñ‚ÅAˆê”Ôã‚ÌO—ñ‚Ì‚İ‰ñ‚·
-	// ƒXƒvƒ‰ƒCƒg‚ÌƒTƒCƒY‚ğŒvZ
+	//ä»Šå›ã¯æ­£é¢ã‚’å‘ã„ã¦ã‚‚ã‚‰ã†ã ã‘ã§ã„ã„ã‚“ã§ã€ä¸€ç•ªä¸Šã®ä¸‰åˆ—ã®ã¿å›ã™
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ã‚µã‚¤ã‚ºã‚’è¨ˆç®—
 	int spriteWidth = 256 / 3;
 	int spriteHeight = 341 / 4;
 
 	int frameX = animeFrame_ % 3;
 
-	// ƒXƒvƒ‰ƒCƒg‚ğ•`‰æ
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’æç”»
 	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
 
 	//DrawCircle(x + 39, y + 34, 32, GetColor(255, 0, 0), FALSE);
@@ -191,8 +190,8 @@ void Ghost::SetPosition(int x, int y)
 
 bool Ghost::ColliderCircle(float x, float y, float r)
 {
-	//x,y,r‚ª‘Šè‚Ì‰~‚Ìî•ñ
-	//©•ª‚Ì‰~‚Ìî•ñ
+	//x,y,rãŒç›¸æ‰‹ã®å††ã®æƒ…å ±
+	//è‡ªåˆ†ã®å††ã®æƒ…å ±
 	float myCenterX = transform_.position_.x + 32.0f;
 	float myCenterY = transform_.position_.y + 32.0f;
 	float myR = 30.0f;

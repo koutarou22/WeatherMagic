@@ -192,7 +192,7 @@ void Player::Draw()
 		}
 		else
 		{
-			if (Flash_Count % 44 == 0)
+			if (Flash_Count % 10 == 0)
 			{
 				if (IsTurnLeft)
 				{
@@ -223,20 +223,19 @@ void Player::Draw()
 		
 		if (IsTurnLeft)
 		{
+			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
 			if (!MultiDeadSE)
 			{
 				PlaySoundMem(DieHandle, DX_PLAYTYPE_BACK); // 音声を再生
-				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
-
 				MultiDeadSE = true;
 			}
 		}
 		else
 		{
+			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 			if (!MultiDeadSE)
 			{
 				PlaySoundMem(DieHandle, DX_PLAYTYPE_BACK); // 音声を再生
-				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
 				MultiDeadSE = true;
 			}
 		}

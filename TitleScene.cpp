@@ -38,7 +38,7 @@ TitleScene::TitleScene(GameObject* parent)
 
 void TitleScene::Initialize()
 {
-    hImage_ = LoadGraph("Assets/Scene/Title.jpg");//タイトルの背景
+    hImage_ = LoadGraph("Assets/Scene/Title.png");//タイトルの背景
     assert(hImage_ >= 0);
 
     charImage_ = LoadGraph("Assets/Font/Weather.png");//『WeatherMagic』のタイトルフォント
@@ -141,17 +141,17 @@ void TitleScene::Draw()
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
         // タイトル画面のテキストを描画
         DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 0));//黄色
-        DrawGraph(600, 40, charImage_, TRUE);
-        DrawGraph(920, 130, hStartYellow, TRUE);
+        DrawGraph(430, 260, charImage_, TRUE);
+        DrawGraph(430, 360, hStartYellow, TRUE);
     }
     else //そもそもキーが押されてない
     {
         // 画面全体に背景画像を描画
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
         // タイトル画面のテキストを描画
-        DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));//白
-        DrawGraph(600, 40, charImage_, TRUE);
-        DrawGraph(920, 130, hStart, TRUE);
+        DrawString(430, 400, TITLE_TEXT, GetColor(255, 255, 255));//白
+        DrawGraph(430, 260, charImage_, TRUE);
+        DrawGraph(430, 360, hStart, TRUE);
     }
 #endif
 }
