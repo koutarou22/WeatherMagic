@@ -5,8 +5,7 @@ class StartScene :
 {
 private:
     int hImage_;
-	int keyTimer_; //キーが押されてから遷移までのタイマー
-	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
+	int keyTimer_; //遷移までのタイマー
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

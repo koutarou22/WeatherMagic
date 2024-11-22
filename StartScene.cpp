@@ -5,11 +5,11 @@
 
 namespace
 {
-    const int TIMER = 100;
+    const int TIMER = 255;
 }
 
 StartScene::StartScene(GameObject* parent)
-    :GameObject(parent,"StartScene"),hImage_(-1)
+    :GameObject(parent,"StartScene"),hImage_(-1),keyTimer_(TIMER)
 {
 }
 
@@ -19,14 +19,14 @@ StartScene::~StartScene()
 
 void StartScene::Initialize()
 {
-    hImage_ = LoadGraph("Assets/Scene/WeatherMagicLogo.jpeg");//ƒ^ƒCƒgƒ‹‚Ì”wŒi
+    hImage_ = LoadGraph("Assets/Scene/GameLogoBack.png");//ƒQ[ƒ€‚ÌƒƒS
     assert(hImage_ >= 0);
 
 }
 
 void StartScene::Update()
 {
-    keyTimer_--;
+    keyTimer_ -= 5;
     if (keyTimer_ < 0)
     {
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
@@ -36,10 +36,9 @@ void StartScene::Update()
 
 void StartScene::Draw()
 {  
-    static int al = TIMER;
-        SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
-        DrawGraph(0, 0, hImage_, TRUE);
-        al = keyTimer_;
+    //static int al = TIMER;
+    SetDrawBlendMode(DX_BLENDMODE_ALPHA, keyTimer_);
+    DrawGraph(0, 0, hImage_, TRUE);
     
 }
 
