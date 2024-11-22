@@ -10,6 +10,13 @@ class GameOverScene : public GameObject
 	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
 
 	int GameOverBGMHandle;
+
+	//遷移用
+	bool isLeft; //true:Retry(left) false:Title(right)
+	void DrawScene(); //遷移の文字とか画像とか用
+	void ChangeScene(); //シーン遷移実際にするところ
+	void CheckRL(); //左右の判定
+ 
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
