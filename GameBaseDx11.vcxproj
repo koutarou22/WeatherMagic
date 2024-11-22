@@ -169,6 +169,7 @@
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Magic.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Magic.h" />
     <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="StartScene.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="UI.h" />
