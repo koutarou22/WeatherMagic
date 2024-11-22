@@ -56,7 +56,7 @@ void Slime::Update()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
-
+	
 	if (WindTimer_ > 0)
 	{
 		WindTimer_--;
@@ -224,7 +224,6 @@ void Slime::Update()
 			{
 				if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow && !HitLanding)//もし天候が雪になってて着地もしていなければ
 				{
-				
 					if (pFreeze == nullptr)
 					{
 						pFreeze = Instantiate<FreezeEffect>(GetParent());
@@ -243,7 +242,12 @@ void Slime::Update()
 		}
 
 	}
-	//-----------------------------------------------------------
+	//	雪以外で、pFreezeのポインタが生きているなら削除
+	if (pWeather != nullptr &&  pWeather->GetWeatherState() != WeatherState::Snow )
+	{
+		pFreeze = nullptr;
+	}
+	
 
 
 	if (transform_.position_.y > GROUND + 20)
