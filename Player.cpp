@@ -34,7 +34,7 @@ namespace
 
 	const float MAX_SNOW_FLAME = 120.0f * 10.0f;
 	const float CHIP_SIZE = 64.0f;  //計算でつかうのでfloat
-	const float DEAD_LINE = 900.0f;
+	const float DEAD_LINE = 800.0f;
 
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
@@ -592,8 +592,7 @@ void Player::UpdateWalk()
 				CanChangeWeather = false;
 				pWeather->SetWeather(Sun);
 
-				StopSoundMem(RainHandle); 
-				StopSoundMem(SnowHandle); 
+				StopWeatherSE();
 
 				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
 				pWCE->SetPosition(CameraPosX ,transform_.position_.y,transform_.position_.z);
@@ -623,7 +622,7 @@ void Player::UpdateWalk()
 			}
 		}
 	}
-	else if (input.Buttons[3] || CheckHitKey(KEY_INPUT_DOWN))//→雪にする
+	else if (input.Buttons[3] || CheckHitKey(KEY_INPUT_RIGHT))//→雪にする
 	{
 		if (CanChangeWeather && pWeather != nullptr)
 		{
@@ -646,7 +645,7 @@ void Player::UpdateWalk()
 			}
 		}
 	}
-	else if (input.Buttons[1] || CheckHitKey(KEY_INPUT_RIGHT))//↓風にする
+	else if (input.Buttons[1] || CheckHitKey(KEY_INPUT_DOWN))//↓風にする
 	{
 		if (CanChangeWeather && pWeather != nullptr)
 		{
@@ -770,9 +769,9 @@ void Player::UpdateWalk()
 		float x = transform_.position_.x;
 		float y = transform_.position_.y;
 
-		if (pSlime->ColliderRect(x + pSlime->GetScale().x, y + pSlime->GetScale().y, 45.0f, 43.0f))
+		if (pSlime->ColliderRect(x + pSlime->GetScale().x, y + pSlime->GetScale().y, 42.0f, 42.0f))
 		{
-			if (y + 43.0f <= pSlime->GetPosition().y + 43 - (43.0f * pSlime->GetScale().y) / 2 + 20) // プレイヤーがスライムの上部にある
+			if (y + 42.0f + pSlime->GetScale().x <= pSlime->GetPosition().y + 42 - (42.0f * pSlime->GetScale().y) / 2) // プレイヤーがスライムの上部にある
 			{
 				WeatherState WeatherState = pWeather->GetWeatherState();
 				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
@@ -868,17 +867,18 @@ void Player::UpdateWalk()
 	std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
 	for (HealItem* pHeal : pHeals)
 	{
-		float dx = pHeal->GetPosition().x + 35 - (transform_.position_.x + 32.0f);
-		float dy = pHeal->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
+		float dx = pHeal->GetPosition().x + 32-(transform_.position_.x + 32.0f);
+		float dy = pHeal->GetPosition().y + 32-(transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
-		if (distance <= 20.0f)
+		if (distance <= 42.0f)
 		{
+			PlaySoundMem(GetItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
 			Hp_GetFlag = true;
 			if (Hp_ < 5)
 			{
-				PlaySoundMem(GetItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
+				
 				hp->HeelHp();
 				Hp_++;
 			}
@@ -896,18 +896,19 @@ void Player::UpdateWalk()
 	std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
 	for (MpItem* pMp : pMps)
 	{
-		float dx = pMp->GetPosition().x + 35 - (transform_.position_.x + 32.0f);
-		float dy = pMp->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
+		float dx = pMp->GetPosition().x +32 - (transform_.position_.x + 32.0f);
+		float dy = pMp->GetPosition().y +32 - (transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
-		if (distance <= 20.0f)
+		if (distance <= 42.0f)
 		{
+			
 			if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
 			{
+				PlaySoundMem(GetItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
 				MagicUp(5);
 				IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
-				PlaySoundMem(GetItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
 			}
 			pMp->KillMe();
 			Mp_GetFlag = true;
@@ -1189,9 +1190,10 @@ void Player::UpdateErase()
 	{
 		//死んだときプレイの時のBGM
 		pField->StopPlayBGM();
+
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
-		StopSoundMem(WindHandle);
+		StopWeatherSE();
 		flameCounter = 0;
 	}
 }

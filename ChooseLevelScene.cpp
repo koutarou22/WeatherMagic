@@ -99,7 +99,7 @@ void ChooseLevelScene::Update()
 
 
     // SPACEキーorStartボタンorBボタンが押されたらスタートボタンでPlaySceneに遷移
-    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4] || input.Buttons[13])
+    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13])
     {
         keyPushed_ = true;
     }
