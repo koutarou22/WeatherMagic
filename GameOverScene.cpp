@@ -26,7 +26,7 @@ GameOverScene::GameOverScene(GameObject* parent) : GameObject(parent, "GameOverS
 	PlaySoundMem(GameOverBGMHandle, DX_PLAYTYPE_BACK);
 
 	isLeft = true;
-
+  
 	hdecB = LoadGraph("Assets/UI/XboxBottunUI/decideB.png");
 	assert(hdecB > 0);
 }
@@ -54,8 +54,6 @@ void GameOverScene::Update()
 
 		keyTimer_--;
 	}
-
-
 
 	ChangeScene(); //シーン遷移
 
@@ -97,20 +95,17 @@ void GameOverScene::DrawScene()
 	int scrHalf = 1280 / 2;
 	int ma = 300; //ごめんなさい！
 	int y = 630;
-	int color[2] = { WHITE,WHITE };
-
-
 	if (isLeft)
 	{
-		color[0] = YELLOW;
+		DrawFormatString(scrHalf - ma-20, y, WHITE, "%s", "*");
 	}
 	else
 	{
-		color[1] = YELLOW;
+		DrawFormatString(scrHalf + ma-20, y, WHITE, "%s", "*");
 	}
 
-	DrawFormatString(scrHalf - ma, y, color[0], "%s", "Retry");
-	DrawFormatString(scrHalf + ma, y, color[1], "%s", "Title");
+	DrawFormatString(scrHalf - ma, y,WHITE, "%s", "Retry");
+	DrawFormatString(scrHalf + ma, y,WHITE, "%s", "Title");
 }
 
 void GameOverScene::ChangeScene()
