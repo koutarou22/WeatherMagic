@@ -111,4 +111,6 @@ void ClearScene::Draw()
 
 void ClearScene::Release()
 {
+    DeleteGraph(hTitleMenu);
+    DeleteGraph(hImage_);
 }
