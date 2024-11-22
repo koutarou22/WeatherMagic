@@ -10,6 +10,7 @@ MpItem::MpItem(GameObject* parent) :GameObject(parent, "MpItem"), hImage_(-1)
 	assert(hImage_ > 0);
 
 	hEffect_ = LoadGraph("Assets/Item/right.png");
+	assert(hEffect_ > 0);
 
 	transform_.position_.x = 200;
 	transform_.position_.y = 560;
@@ -23,6 +24,11 @@ MpItem::~MpItem()
 	if (hImage_ > 0)
 	{
 		DeleteGraph(hImage_);
+	}
+
+	if (hEffect_ > 0)
+	{
+		DeleteGraph(hEffect_);
 	}
 }
 

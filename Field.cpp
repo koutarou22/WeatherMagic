@@ -23,7 +23,7 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	assert(hImage_ > 0);
 
 	/*hBackGround_ = LoadGraph("Assets/BackImage/bg5.png");*/
-	hBackGround_ = LoadGraph("Assets/BackImage/background2.png");
+	hBackGround_ = LoadGraph("Assets/BackImage/bg4.png");
 	assert(hBackGround_ > 0);
 
 	hBackGroundDark_ = LoadGraph("Assets/BackImage/background_dark.png");

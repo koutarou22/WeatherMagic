@@ -9,6 +9,10 @@ LandingEffect::LandingEffect(GameObject* parent) : GameObject(parent, "LandingEf
 
 LandingEffect::~LandingEffect()
 {
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
 }
 
 void LandingEffect::Update()

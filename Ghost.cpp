@@ -104,6 +104,8 @@ void Ghost::Update()
 			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow && !FreezeOne)//雪の時氷のAnimationを発生させる
 			{
 				FreezeEffect* pFreeze = Instantiate<FreezeEffect>(GetParent());
+				// FreezeEffectがアクティブかどうかを確認する関数
+	
 				pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
 				FreezeOne = true; //ここで一回しか呼べないようにする
 				//問題が発生中　本当に一回しか出せない　
@@ -137,7 +139,6 @@ void Ghost::Update()
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
 	for (Magic* pMagic : pMagics)
 	{
-		//解説　見ればわかると思うがこれは『Magic』と『Ghost』の距離を求めている
 		float dx = pMagic->GetPosition().x - (transform_.position_.x + 16.0f);//Mgの座標X - Ghの座標X
 		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);//Mgの座標Y - Ghの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
