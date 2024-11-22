@@ -5,6 +5,9 @@
 /// <summary>
 /// スライムの情報
 /// </summary>
+
+class FreezeEffect;
+
 class Slime : public GameObject
 {
 public:
@@ -58,5 +61,7 @@ private:
 	bool offScreen; //画面外でも音がなないようにする
 	int JumpHandle; //ジャンプした時の音
 	int StunHandle; //気絶した時の音
+
+	FreezeEffect* pFreeze;
 };
 

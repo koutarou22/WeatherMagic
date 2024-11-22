@@ -46,7 +46,7 @@ void ClearScene::Update()
 {
     padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
     // Cキーが押されたらスタートボタンでTitleSceneに遷移
-    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4])
+    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13])
     {
         keyPushed_ = true;
         StopSoundMem(ClearBGMHandle);
@@ -116,4 +116,6 @@ void ClearScene::Draw()
 
 void ClearScene::Release()
 {
+    DeleteGraph(hTitleMenu);
+    DeleteGraph(hImage_);
 }

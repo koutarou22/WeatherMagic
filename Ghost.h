@@ -1,6 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+class FreezeEffect;
+
 /// <summary>
 /// 弾丸を飛ばしてくるお化けの情報
 /// </summary>
@@ -35,4 +37,5 @@ private:
 	bool FreezeOne;//氷結を一回しか出せないようにする　※重くなったので
 
 	int GhostDamageHandle;//ダメージ音
+	FreezeEffect* pFreeze;
 };

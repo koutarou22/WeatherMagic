@@ -62,9 +62,8 @@ void TitleScene::Update()
     padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
 
     // スペースキーが押されるかスタートボタンでPlaySceneに遷移
-    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4]) {
-
-
+    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13]) 
+    {
         StopSoundMem(TitleBGMHandle);
         PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
         keyPushed_ = true;
@@ -159,4 +158,8 @@ void TitleScene::Draw()
 
 void TitleScene::Release()
 {
+    DeleteGraph(hStartYellow);
+    DeleteGraph(hStart);
+    DeleteGraph(charImage_);
+    DeleteGraph(hImage_);
 }

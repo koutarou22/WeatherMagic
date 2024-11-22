@@ -14,7 +14,7 @@ class MP :
 	Transform trs;
 public:
 	MP(GameObject* parent);
-
+	
 	//‰Šú‰»
 	void Initialize() override;
 

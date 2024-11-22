@@ -1,7 +1,6 @@
 #include "FreezeEffect.h"
 #include "Camera.h"
 #include "Weather.h"
-
 FreezeEffect::FreezeEffect(GameObject* parent) : GameObject(parent, "FreezeEffect"), hImage_(-1), animeFrame(0), FrameCounter(0), eraseCounter(0), ReverseFrame(false)
 {
     hImage_ = LoadGraph("Assets/Effect/Ice.png");
@@ -34,9 +33,9 @@ void FreezeEffect::Update()
         if (ReverseFrame)
         {
             animeFrame--;
-            if (animeFrame < 0)
+            if (animeFrame < 5)
             {
-                animeFrame = 0; 
+                animeFrame = 5; 
                 KillMe();
             }
         }
@@ -71,6 +70,7 @@ void FreezeEffect::Draw()
 
 void FreezeEffect::Release()
 {
+
 }
 
 void FreezeEffect::SetPosition(int x, int y)
