@@ -6,6 +6,10 @@ namespace
     const int TIMER = 100;
     const int SCREENSIZE_HALF = 610;
     const int CURSOR_POINT = 580;
+    const int Explanation_x = 250;
+    const int Explanation_y = 450;
+
+    const int Easy_x = 200;
 }
 int ChooseLevelScene::Previous(int level)
 {
@@ -38,7 +42,9 @@ ChooseLevelScene::ChooseLevelScene(GameObject* parent)
     LevelText1 = "EASY";
     LevelText2 = "NORMAL";
     LevelText3 = "HARD";
-
+    Explanation1 = "アクションは控えめにのんびり遊びたい方向け";
+    Explanation2 = "程々のアクションと謎解きを楽しみたい方向け";
+    Explanation3 = "アクションに自信があり、刺激を求める方向け";
 }
 
 void ChooseLevelScene::Initialize()
@@ -153,22 +159,27 @@ void ChooseLevelScene::Draw()
         switch (currentlevel)
         {
         case 0:
-            DrawFormatString(CURSOR_POINT, 200, GetColor(255, 255, 255), "*");
+            DrawFormatString(CURSOR_POINT, Easy_x, GetColor(255, 255, 255), "*");
+            DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation1);
             break;
         case 1:
-            DrawFormatString(CURSOR_POINT, 250, GetColor(255, 255, 255), "*");
+            DrawFormatString(CURSOR_POINT, Easy_x + 50, GetColor(255, 255, 255), "*");
+            DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation2);
             break;
         case 2:
-            DrawFormatString(CURSOR_POINT, 300, GetColor(255, 255, 255), "*");
+            DrawFormatString(CURSOR_POINT, Easy_x + 100, GetColor(255, 255, 255), "*");
+            DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation3);
             break;
         default:
             break;
         }
     }
 
-    DrawFormatString(SCREENSIZE_HALF, 200, GetColor(255, 255, 255), LevelText1);
-    DrawFormatString(SCREENSIZE_HALF, 250, GetColor(255, 255, 255), LevelText2);
-    DrawFormatString(SCREENSIZE_HALF, 300, GetColor(255, 255, 255), LevelText3);
+    DrawFormatString(SCREENSIZE_HALF, Easy_x, GetColor(255, 255, 255), LevelText1);
+    DrawFormatString(SCREENSIZE_HALF, Easy_x + 50, GetColor(255, 255, 255), LevelText2);
+    DrawFormatString(SCREENSIZE_HALF, Easy_x + 100, GetColor(255, 255, 255), LevelText3);
+
+    
 }
 
 void ChooseLevelScene::Release()
