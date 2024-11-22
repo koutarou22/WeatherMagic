@@ -1,49 +1,72 @@
 #include "FreezeEffect.h"
 #include "Camera.h"
 #include "Weather.h"
-
 FreezeEffect::FreezeEffect(GameObject* parent) : GameObject(parent, "FreezeEffect"), hImage_(-1), animeFrame(0), FrameCounter(0), eraseCounter(0), ReverseFrame(false)
 {
     hImage_ = LoadGraph("Assets/Effect/Ice.png");
     assert(hImage_ > 0);
+    freeze_s = S_Freeze;
 }
 
 FreezeEffect::~FreezeEffect()
 {
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
 }
 
 void FreezeEffect::Update()
 {
+
+    switch (freeze_s)
+    {
+    case FreezeEffect::S_Freeze:
+        UpdateFreeze();
+        break;
+    case FreezeEffect::S_MELT:
+        UpdateMelt();
+        break;
+    case FreezeEffect::S_NONE:
+        break;
+    default:
+        break;
+    }
+
+ 
+}
+
+void FreezeEffect::UpdateFreeze()
+{
     Weather* pWeather = GetParent()->FindGameObject<Weather>();
 
-    if (pWeather->GetWeatherState() != WeatherState::Snow)
-    {
-        ReverseFrame = true;
-    }
-    else
-    {
-        ReverseFrame = false;
+    if (pWeather->GetWeatherState() != WeatherState::Snow) {
+        freeze_s = S_MELT;
+        FrameCounter = 0;
     }
 
     if (++FrameCounter >= 16)
     {
-        if (ReverseFrame)
+        animeFrame++;
+        if (animeFrame >= 8)//animeFrame‚ðŒÅ’è
         {
-            animeFrame--;
-            if (animeFrame < 0)
-            {
-                animeFrame = 0; 
-                KillMe();
-            }
+            animeFrame = 7;
         }
-        else
+        FrameCounter = 0;
+     }
+}
+
+void FreezeEffect::UpdateMelt()
+{
+    if (++FrameCounter >= 16)
+    {
+        animeFrame--;
+        if (animeFrame <= 1)
         {
-            animeFrame++;
-            if (animeFrame >= 8)
-            {
-                animeFrame = 7; 
-            }
-        }
+            animeFrame = 1;
+            FrameCounter = 0;
+            KillMe();
+        }      
         FrameCounter = 0;
     }
 }
@@ -67,6 +90,7 @@ void FreezeEffect::Draw()
 
 void FreezeEffect::Release()
 {
+
 }
 
 void FreezeEffect::SetPosition(int x, int y)

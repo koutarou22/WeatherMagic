@@ -73,13 +73,13 @@ void Score::Draw()
     {
         for (int i = 0; i < StarCount; i++)
         {
-            float x = i * Width + 500;
+            float x = i * Width + 550;
             float y = 500;//見ずらいから格納しただけ
             DrawExtendGraph(x*StarMoveX, y, x + 64, y + 64, hImage_, TRUE);
         }
 
         if (IsStarMoveEnd) {
-            DrawFormatString( MessageMoveX,620, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
+            DrawFormatString( 550,620, GetColor(0, 255, 0), ResultMassage[StarCount - 1]);
         }
     }
     else //プレイシーン用

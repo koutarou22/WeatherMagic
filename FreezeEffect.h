@@ -12,6 +12,14 @@ class FreezeEffect :
 	int eraseCounter;
 
 	bool ReverseFrame;//フレームを判定させる用のフラグ
+
+	enum FreezeState {
+		S_Freeze,//凍っている
+		S_MELT,//解けている
+		S_NONE//何もなし
+	};
+	FreezeState freeze_s;
+
 public:
 
 	FreezeEffect(GameObject* parent);
@@ -19,6 +27,9 @@ public:
 
 	//更新
 	void Update() override;
+	void UpdateFreeze();
+	void UpdateMelt();
+
 	//描画
 	void Draw() override;
 	//開放

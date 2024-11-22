@@ -7,6 +7,9 @@
 class ClearScene : public GameObject
 {
 	int hImage_;
+
+	int hGameClear_;
+
 	int hTitleMenu;//UIハンドル
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る

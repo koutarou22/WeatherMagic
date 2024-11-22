@@ -13,8 +13,11 @@ namespace
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
-    hImage_ = LoadGraph("Assets/Scene/GameClearBack.png");
+    hImage_ = LoadGraph("Assets/Scene/CLEAR.png");
     assert(hImage_ > 0);
+
+    hGameClear_ = LoadGraph("Assets/Font/GameClear1.png");
+    assert(hGameClear_ > 0);
 
     //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu10.png");
     //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu20.png");
@@ -43,7 +46,7 @@ void ClearScene::Update()
 {
     padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
     // Cキーが押されたらスタートボタンでTitleSceneに遷移
-    if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4])
+    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13])
     {
         keyPushed_ = true;
         StopSoundMem(ClearBGMHandle);
@@ -80,6 +83,7 @@ void ClearScene::Draw()
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
         DrawGraph(0, 0, hImage_, TRUE);
+        DrawGraph(400, 240, hGameClear_, TRUE);
         DrawGraph(550, 380, hTitleMenu, TRUE);
         al = keyTimer_;
     }
@@ -87,6 +91,7 @@ void ClearScene::Draw()
     {
         // 画面全体に背景画像を描画
         DrawGraph(0, 0, hImage_, TRUE);
+        DrawGraph(400, 240, hGameClear_, TRUE);
         DrawGraph(550, 380, hTitleMenu, TRUE);
     }
 
@@ -113,4 +118,5 @@ void ClearScene::Release()
 {
     DeleteGraph(hTitleMenu);
     DeleteGraph(hImage_);
+    DeleteSoundMem(ClearBGMHandle);
 }

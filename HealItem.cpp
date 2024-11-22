@@ -9,6 +9,9 @@ HealItem::HealItem(GameObject* parent) :GameObject(parent, "HpItem"), hImage_(-1
 	hImage_ = LoadGraph("Assets/Item/PotionRed1.png");//回復アイテムのImage
 	assert(hImage_ >= 0);
 
+	hEffect_ = LoadGraph("Assets/Item/right.png");
+	assert(hEffect_ > 0);
+
 	flameCounter_ = 0;
 	animeType_ = 0;
 	animeFrame_ = 0;
@@ -19,6 +22,10 @@ HealItem::~HealItem()
 	if (hImage_ > 0)
 	{
 		DeleteGraph(hImage_);
+	}
+	if (hEffect_ > 0)
+	{
+		DeleteGraph(hEffect_);
 	}
 }
 
@@ -44,11 +51,15 @@ void HealItem::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
-	int SWidth = 512 /4;
-	int SHeight = 127;
-	int frameX = animeFrame_ % 4;
-	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hImage_, TRUE);
-	DrawGraph(x,y,hImage_,TRUE);
+
+	int SWidth = 192 / 3;
+	int SHeight = 64;
+
+	int frameX = animeFrame_ % 3;
+
+	// スプライトを描画
+	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hEffect_, TRUE);
+	DrawGraph(x, y, hImage_, TRUE);
 }
 
 void HealItem::Release()

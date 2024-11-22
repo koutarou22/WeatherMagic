@@ -39,6 +39,8 @@ Slime::Slime(GameObject* scene)
 	assert(StunHandle != -1);
 
 	offScreen = false;
+	pFreeze = nullptr;
+
 }
 
 Slime::~Slime()
@@ -54,7 +56,7 @@ void Slime::Update()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
-
+	
 	if (WindTimer_ > 0)
 	{
 		WindTimer_--;
@@ -217,12 +219,17 @@ void Slime::Update()
 			///
 			//※地面でのみ氷Effectを出現させたい　たまに表示されない(自信がない)
 			///
+			
 			if (onGround)//地面にいるとき　これを書かないと地面にいるとき表示されない
 			{
-				if (pWeather->GetWeatherState() == WeatherState::Snow && !HitLanding)//もし天候が雪になってて着地もしていなければ
+				if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow && !HitLanding)//もし天候が雪になってて着地もしていなければ
 				{
-					FreezeEffect* pFreeze = Instantiate<FreezeEffect>(GetParent());
-					pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
+					if (pFreeze == nullptr)
+					{
+						pFreeze = Instantiate<FreezeEffect>(GetParent());
+						pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
+					}
+					
 
 					HitLanding = true;//最後に着地したことにする
 				}
@@ -235,7 +242,12 @@ void Slime::Update()
 		}
 
 	}
-	//-----------------------------------------------------------
+	//	雪以外で、pFreezeのポインタが生きているなら削除
+	if (pWeather != nullptr &&  pWeather->GetWeatherState() != WeatherState::Snow )
+	{
+		pFreeze = nullptr;
+	}
+	
 
 
 	if (transform_.position_.y > GROUND + 20)
