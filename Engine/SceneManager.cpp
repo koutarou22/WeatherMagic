@@ -5,7 +5,7 @@
 #include "../ClearScene.h"
 #include "../LoadScene.h"
 #include"../ChooseLevelScene.h"
-
+#include"../StartScene.h"
 
 SceneManager::SceneManager(GameObject* parent)
 	: GameObject(parent, "SceneManager")
@@ -14,9 +14,13 @@ SceneManager::SceneManager(GameObject* parent)
 
 void SceneManager::Initialize()
 {
-	currentSceneID_ = SCENE_ID_TITLE;
+	/*currentSceneID_ = SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;
-	Instantiate<TitleScene>(this);
+	Instantiate<TitleScene>(this);*/
+
+	currentSceneID_ = SCENE_ID_START;
+	nextSceneID_ = currentSceneID_;
+	Instantiate<StartScene>(this);
 }
 
 void SceneManager::Update()
