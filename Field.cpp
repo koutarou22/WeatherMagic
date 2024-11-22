@@ -248,7 +248,7 @@ void Field::Reset(int num)
 		ret = csv.Load("Assets/Stage_csv/stage_normal.csv");
 		break;
 	case 2:
-		ret = csv.Load("Assets/Stage_csv/debug.csv");
+		ret = csv.Load("Assets/Stage_csv/stage_hard.csv");
 		break;
 	default:
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);
