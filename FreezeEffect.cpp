@@ -10,6 +10,10 @@ FreezeEffect::FreezeEffect(GameObject* parent) : GameObject(parent, "FreezeEffec
 
 FreezeEffect::~FreezeEffect()
 {
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
 }
 
 void FreezeEffect::Update()
