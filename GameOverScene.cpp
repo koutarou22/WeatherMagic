@@ -134,12 +134,12 @@ void GameOverScene::ChangeScene()
 
 void GameOverScene::CheckRL()
 {
-	if (CheckHitKey(KEY_INPUT_LEFT) || input.Buttons[2])
+	if (CheckHitKey(KEY_INPUT_LEFT) || input.Buttons[2] || input.ThumbLX <= -10000)
 	{
 		isLeft = true;
 		//左右選択時のBGM入れるならここ
 	}
-	if (CheckHitKey(KEY_INPUT_RIGHT) || input.Buttons[3])
+	if (CheckHitKey(KEY_INPUT_RIGHT) || input.Buttons[3] || input.ThumbLX >= 10000)
 	{
 		isLeft = false;
 		//左右選択時のBGM入れるならここ

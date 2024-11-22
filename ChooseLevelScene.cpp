@@ -74,7 +74,7 @@ void ChooseLevelScene::Update()
     //}
 
     
-    if (CheckHitKey(KEY_INPUT_UP) || input.Buttons[0])
+    if (CheckHitKey(KEY_INPUT_UP) || input.Buttons[0] || input.ThumbLY >= 15000 )
     {
         if (!prevUp) 
         {
@@ -86,7 +86,7 @@ void ChooseLevelScene::Update()
         prevUp = false;
     }
  
-    if (CheckHitKey(KEY_INPUT_DOWN) || input.Buttons[1])
+    if (CheckHitKey(KEY_INPUT_DOWN) || input.Buttons[1] || input.ThumbLY <= -15000)
     {
         if (!prevDown)
         {
