@@ -43,8 +43,8 @@ void GameOverScene::Update()
 	CheckRL(); 
 
 	//キー確定~暗転まで
-	//スペースキーが押されたらスタートボタンでTitleSceneに遷移
-	if (CheckHitKey(KEY_INPUT_SPACE) || input.Buttons[4]) {
+	//スペースキーorBボタンorスタートボタンが押されたらスタートボタンでTitleSceneに遷移
+	if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13]) {
 		keyPushed_ = true;
 		StopSoundMem(GameOverBGMHandle);
 	}
@@ -134,12 +134,12 @@ void GameOverScene::ChangeScene()
 
 void GameOverScene::CheckRL()
 {
-	if (CheckHitKey(KEY_INPUT_LEFT))
+	if (CheckHitKey(KEY_INPUT_LEFT) || input.Buttons[2])
 	{
 		isLeft = true;
 		//左右選択時のBGM入れるならここ
 	}
-	if (CheckHitKey(KEY_INPUT_RIGHT))
+	if (CheckHitKey(KEY_INPUT_RIGHT) || input.Buttons[3])
 	{
 		isLeft = false;
 		//左右選択時のBGM入れるならここ
