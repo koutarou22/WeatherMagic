@@ -345,8 +345,8 @@ bool Slime::ColliderRect(float x, float y, float w, float h)
 	// ©•ª‚Ì‹éŒ`‚Ìî•ñ
 	float myX = transform_.position_.x;
 	float myY = transform_.position_.y;
-	float myW = 42.0f; 
-	float myH = 42.0f; 
+	float myW = 85.0f; 
+	float myH = 85.0f; 
 
 	// ‹éŒ`‚ÌÕ“Ë”»’è
 	if (myX < x + w && myX + myW > x && myY < y + h && myY + myH > y)
