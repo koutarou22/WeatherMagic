@@ -26,6 +26,9 @@ GameOverScene::GameOverScene(GameObject* parent) : GameObject(parent, "GameOverS
 	PlaySoundMem(GameOverBGMHandle, DX_PLAYTYPE_BACK);
 
 	isLeft = true;
+
+	hdecB = LoadGraph("Assets/UI/XboxBottunUI/decideB.png");
+	assert(hdecB > 0);
 }
 
 void GameOverScene::Initialize()
@@ -66,12 +69,14 @@ void GameOverScene::Draw()
 		static int al = TIMER;
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
 		DrawGraph(0, 0, hImage_, TRUE);
+		DrawGraph(580, 660, hdecB, TRUE);
 		al = keyTimer_;
 	}
 	else
 	{
 		// 画面全体に背景画像を描画
 		DrawGraph(0, 0, hImage_, TRUE);
+		DrawGraph(580, 660, hdecB, TRUE);
 	}
 
 	//Retryとtitle描く
