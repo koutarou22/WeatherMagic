@@ -36,7 +36,7 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	Stage_BgmHandle = LoadSoundMem("Assets/Music/BGM/STAGE_BGM.mp3");
 	assert(Stage_BgmHandle != -1);
 
-	ChangeVolumeSoundMem(128, Stage_BgmHandle);
+	//ChangeVolumeSoundMem(128, Stage_BgmHandle);
 
 	goalWid_ = -1;
 }

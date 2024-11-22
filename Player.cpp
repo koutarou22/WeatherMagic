@@ -124,6 +124,9 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 	FreezeHandle = LoadSoundMem("Assets/Music/SE/Weather/Freeze.mp3");
 	assert(FreezeHandle != -1);
 
+	ClearHandle = LoadSoundMem("Assets/Music/SE/Player/Clear3.mp3");
+	assert(ClearHandle != -1);
+
 	MultiDeadSE = false;//複数回鳴るのを阻止
 
 	hGoal = LoadGraph("Assets/Item/GoalFlag.png");
@@ -990,6 +993,8 @@ void Player::UpdateWalk()
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			ClearFlag* pClearFlag = (ClearFlag*)FindObject("ClearFlag");
 
+			PlaySoundMem(ClearHandle, DX_PLAYTYPE_BACK);
+
 			if (pClearFlag != nullptr)
 			{
 				pClearFlag->KillMe();
@@ -1206,7 +1211,6 @@ void Player::UpdateClear()
 		Field* pField = GetParent()->FindGameObject<Field>();
 		if (pSceneManager != nullptr)
 		{
-
 			pField->StopPlayBGM();
 			pSceneManager->ClearCountPlus();
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);

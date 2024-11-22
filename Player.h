@@ -156,6 +156,8 @@ private:
 	//特殊敵接触時
 	int BoundHandle;//スライムを踏んだ時のSE
 
+	int ClearHandle;//ClearFlagに触れた時
+
 	int CameraPosX;
 
 	float CountSnowFlame; //snowflame
