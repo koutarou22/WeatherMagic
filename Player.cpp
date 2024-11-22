@@ -34,7 +34,7 @@ namespace
 
 	const float MAX_SNOW_FLAME = 120.0f * 10.0f;
 	const float CHIP_SIZE = 64.0f;  //計算でつかうのでfloat
-	const float DEAD_LINE = 900.0f;
+	const float DEAD_LINE = 800.0f;
 
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
@@ -623,7 +623,7 @@ void Player::UpdateWalk()
 			}
 		}
 	}
-	else if (input.Buttons[3] || CheckHitKey(KEY_INPUT_DOWN))//→雪にする
+	else if (input.Buttons[3] || CheckHitKey(KEY_INPUT_RIGHT))//→雪にする
 	{
 		if (CanChangeWeather && pWeather != nullptr)
 		{
@@ -646,7 +646,7 @@ void Player::UpdateWalk()
 			}
 		}
 	}
-	else if (input.Buttons[1] || CheckHitKey(KEY_INPUT_RIGHT))//↓風にする
+	else if (input.Buttons[1] || CheckHitKey(KEY_INPUT_DOWN))//↓風にする
 	{
 		if (CanChangeWeather && pWeather != nullptr)
 		{
