@@ -4,6 +4,8 @@
 namespace
 {
     const int TIMER = 100;
+    const int SCREENSIZE_HALF = 610;
+    const int CURSOR_POINT = 580;
 }
 int ChooseLevelScene::Previous(int level)
 {
@@ -72,7 +74,7 @@ void ChooseLevelScene::Update()
     //}
 
     
-    if (CheckHitKey(KEY_INPUT_UP) || input.Buttons[0])
+    if (CheckHitKey(KEY_INPUT_UP) || input.Buttons[0] || input.ThumbLY >= 15000 )
     {
         if (!prevUp) 
         {
@@ -84,7 +86,7 @@ void ChooseLevelScene::Update()
         prevUp = false;
     }
  
-    if (CheckHitKey(KEY_INPUT_DOWN) || input.Buttons[1])
+    if (CheckHitKey(KEY_INPUT_DOWN) || input.Buttons[1] || input.ThumbLY <= -15000)
     {
         if (!prevDown)
         {
@@ -131,16 +133,16 @@ void ChooseLevelScene::Draw()
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
-        //DrawGraph(570, 600, hDecideB, TRUE);//’†‰›‰º
-        DrawGraph(0, 350, hDecideB, TRUE);//“ïˆÕ“x‚Ì‰º
+        DrawGraph(570, 600, hDecideB, TRUE);//’†‰›‰º
+        //DrawGraph(0, 350, hDecideB, TRUE);//“ïˆÕ“x‚Ì‰º
         al = keyTimer_;
     }
     else
     {
         // ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ð•`‰æ
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
-        //DrawGraph(570, 600, hDecideB, TRUE);//’†‰›‰º
-        DrawGraph(0, 350, hDecideB, TRUE);//“ïˆÕ“x‚Ì‰º
+        DrawGraph(570, 600, hDecideB, TRUE);//’†‰›‰º
+        //DrawGraph(0, 350, hDecideB, TRUE);//“ïˆÕ“x‚Ì‰º
     }
 
 
@@ -151,22 +153,22 @@ void ChooseLevelScene::Draw()
         switch (currentlevel)
         {
         case 0:
-            DrawFormatString(0, 200, GetColor(255, 255, 255), "*");
+            DrawFormatString(CURSOR_POINT, 200, GetColor(255, 255, 255), "*");
             break;
         case 1:
-            DrawFormatString(0, 250, GetColor(255, 255, 255), "*");
+            DrawFormatString(CURSOR_POINT, 250, GetColor(255, 255, 255), "*");
             break;
         case 2:
-            DrawFormatString(0, 300, GetColor(255, 255, 255), "*");
+            DrawFormatString(CURSOR_POINT, 300, GetColor(255, 255, 255), "*");
             break;
         default:
             break;
         }
     }
 
-    DrawFormatString(30, 200, GetColor(255, 255, 255), LevelText1);
-    DrawFormatString(30, 250, GetColor(255, 255, 255), LevelText2);
-    DrawFormatString(30, 300, GetColor(255, 255, 255), LevelText3);
+    DrawFormatString(SCREENSIZE_HALF, 200, GetColor(255, 255, 255), LevelText1);
+    DrawFormatString(SCREENSIZE_HALF, 250, GetColor(255, 255, 255), LevelText2);
+    DrawFormatString(SCREENSIZE_HALF, 300, GetColor(255, 255, 255), LevelText3);
 }
 
 void ChooseLevelScene::Release()
