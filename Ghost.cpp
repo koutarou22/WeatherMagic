@@ -6,6 +6,8 @@
 #include "Damage.h"
 #include "Weather.h"
 #include "FreezeEffect.h"
+#include "Debug.h"
+#include "Engine/Global.h"
 
 namespace
 {
@@ -14,10 +16,10 @@ namespace
 
 Ghost::Ghost(GameObject* scene)
 {
-	hImage_ = LoadGraph("Assets/Chara/Ghost.png");
+	hImage_ = LoadGraph("Assets/Chara/obake.png");
 	assert(hImage_ > 0);
-	transform_.position_.x = 900.0f;
-	transform_.position_.y = 780.0f;
+	//transform_.position_.x = 900.0f;
+	//transform_.position_.y = 720.0f;
 	transform_.scale_.x = 2.0f;
 	transform_.scale_.y = 2.0f;
 
@@ -29,6 +31,8 @@ Ghost::Ghost(GameObject* scene)
 	//ダメージ音
 	GhostDamageHandle = LoadSoundMem("Assets/Music/SE/Ghost/GhostVanishing.mp3");
 	assert(GhostDamageHandle != -1);
+
+	pFreeze = nullptr;
 }
 
 Ghost::~Ghost()
@@ -57,10 +61,11 @@ void Ghost::Update()
 		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
 			Weather* pWeather = GetParent()->FindGameObject<Weather>();
-			if (pWeather!=nullptr&&pWeather->GetWeatherState() != WeatherState::Snow)
+			if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
 			{
 				if (CoolDownAttack_ <= 0)
 				{
+					Debug::OutPrint(L"yobarea", true);
 					EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
 					if (emg == nullptr)
 					{
@@ -73,14 +78,14 @@ void Ghost::Update()
 
 					// 天候によって速度を調整
 
-					if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
-					{
-						emg->SetSpeed(1.0f);
-					}
-					else
-					{
-						emg->SetSpeed(3.5f);
-					}
+					//if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
+					//{
+					//	emg->SetSpeed(1.0f);
+					//}
+					//else
+					//{
+					//	emg->SetSpeed(3.5f);
+					//}
 
 					CoolDownAttack_ = 300;
 				}
@@ -94,30 +99,32 @@ void Ghost::Update()
 			//天候取得、雪なら止める
 			if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
 			{
-				transform_.position_.y -= 1.0f;
+				
+				//transform_.position_.y -= 1.0f;
 				sinAngle += 3.0f;
 				float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
-				transform_.position_.y = sinValue * 50.0f;
+				//transform_.position_.y += sinValue * 50.0f;
+				transform_.position_.y += sinValue * 3.0f;
 
-				CoolDownAttack_ = 360;
+
 			}
-			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow && !FreezeOne)//雪の時氷のAnimationを発生させる
+			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)//雪の時氷のAnimationを発生させる
 			{
-				FreezeEffect* pFreeze = Instantiate<FreezeEffect>(GetParent());
-				pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
-				FreezeOne = true; //ここで一回しか呼べないようにする
+					if (pFreeze == nullptr)
+					{
+						pFreeze = Instantiate<FreezeEffect>(GetParent());
+						pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
+					}
+					
+
+			//	FreezeOne = true; //ここで一回しか呼べないようにする
 				//問題が発生中　本当に一回しか出せない　
 				//制御しないと　重くなっちゃうんです
 			}
 		}
 	}
 
-	if (CoolDownAttack_ > 0)
-	{
-		CoolDownAttack_--;
-	}
-
-	int x = (int)transform_.position_.x;
+	//int x = (int)transform_.position_.x;
 
 
 	//if (cam != nullptr)
@@ -166,7 +173,7 @@ void Ghost::Draw()
 	//今回は正面を向いてもらうだけでいいんで、一番上の三列のみ回す
 	// スプライトのサイズを計算
 	int spriteWidth = 256 / 3;
-	int spriteHeight = 344 / 4;
+	int spriteHeight = 341 / 4;
 
 	int frameX = animeFrame_ % 3;
 
