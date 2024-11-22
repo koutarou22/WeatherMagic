@@ -173,4 +173,6 @@ void ChooseLevelScene::Draw()
 
 void ChooseLevelScene::Release()
 {
+    DeleteGraph(hDecideB);
+    DeleteGraph(hImage_back);
 }

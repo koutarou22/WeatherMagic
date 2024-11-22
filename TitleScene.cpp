@@ -158,4 +158,8 @@ void TitleScene::Draw()
 
 void TitleScene::Release()
 {
+    DeleteGraph(hStartYellow);
+    DeleteGraph(hStart);
+    DeleteGraph(charImage_);
+    DeleteGraph(hImage_);
 }

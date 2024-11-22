@@ -6,23 +6,23 @@ UI::UI(GameObject* parent)
 
 void UI::Initialize()
 {
-	hAttB = LoadGraph("Assets/UI/XboxBottunUI/attackB.png");
-	assert(hAttB > 0);
-
-	hChaPad = LoadGraph("Assets/UI/XboxBottunUI/changePad.png");
-	assert(hChaPad > 0);
-
-	hJumpA = LoadGraph("Assets/UI/XboxBottunUI/jumpA.png");
-	assert(hJumpA > 0);
-
-	hExplanLRB = LoadGraph("Assets/UI/XboxBottunUI/LBRBexplan.png");
-	assert(hExplanLRB > 0);
-
 	hStkL = LoadGraph("Assets/UI/XboxBottunUI/stickL.png");
 	assert(hStkL > 0);
 
+	hAttB = LoadGraph("Assets/UI/XboxBottunUI/attackB.png");
+	assert(hAttB > 0);
+	
+	hJumpA = LoadGraph("Assets/UI/XboxBottunUI/jumpA.png");
+	assert(hJumpA > 0);
+
+	hChaPad = LoadGraph("Assets/UI/XboxBottunUI/changePad.png");
+	assert(hChaPad > 0);
+	
 	hStkR = LoadGraph("Assets/UI/XboxBottunUI/stickR.png");
 	assert(hStkR > 0);
+	
+	hExplanLRB = LoadGraph("Assets/UI/XboxBottunUI/LBRBexplan.png");
+	assert(hExplanLRB > 0);
 }
 
 void UI::Update()
@@ -50,4 +50,10 @@ void UI::Draw()
 
 void UI::Release()
 {
+	DeleteGraph(hStkR);
+	DeleteGraph(hStkL);
+	DeleteGraph(hExplanLRB);
+	DeleteGraph(hJumpA);
+	DeleteGraph(hChaPad);
+	DeleteGraph(hAttB);
 }
