@@ -10,6 +10,7 @@ class ChooseLevelScene :
 {
 private:
 	int hImage_back;//”wŒi
+	int hDecideB;   //Œˆ’èUI
 
 	int padAnalogInput;//xbox‚Ì“ü—Í‚ðŽó‚¯Žæ‚é
 	XINPUT_STATE input;//xbox‚Ì“ü—Í‚ðŽó‚¯Žæ‚é

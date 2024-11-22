@@ -43,6 +43,9 @@ void ChooseLevelScene::Initialize()
 {
 	hImage_back = LoadGraph("Assets/Scene/ChooseLevelBack.png");//ƒ^ƒCƒgƒ‹‚Ì”wŒi
 	assert(hImage_back >= 0);
+
+    hDecideB = LoadGraph("Assets/UI/XboxBottunUI/decideB3.png");//BŒˆ’è‚ÌUI
+    assert(hDecideB > 0);
 }
 
 void ChooseLevelScene::Update()
@@ -128,12 +131,16 @@ void ChooseLevelScene::Draw()
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
+        //DrawGraph(570, 600, hDecideB, TRUE);//’†‰›‰º
+        DrawGraph(0, 350, hDecideB, TRUE);//“ïˆÕ“x‚Ì‰º
         al = keyTimer_;
     }
     else
     {
         // ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ð•`‰æ
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
+        //DrawGraph(570, 600, hDecideB, TRUE);//’†‰›‰º
+        DrawGraph(0, 350, hDecideB, TRUE);//“ïˆÕ“x‚Ì‰º
     }
 
 
