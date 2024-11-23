@@ -83,9 +83,13 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 	assert(SnowHandle != -1);
 	//-----------------------------------------------------------
 	
-	//アイテム取得音
-	GetItemHandle = LoadSoundMem("Assets/Music/SE/Player/GetItem.mp3");
-	assert(GetItemHandle != -1);
+	//MP取得音取得音
+	GetMPItemHandle = LoadSoundMem("Assets/Music/SE/Player/GetMPItem.mp3");
+	assert(GetMPItemHandle != -1);
+
+	//HP取得音取得音
+	GetHPItemHandle = LoadSoundMem("Assets/Music/SE/Player/GetHPItem.mp3");
+	assert(GetHPItemHandle != -1);
 
 	//魔法音
 	MagicHandle = LoadSoundMem("Assets/Music/SE/Player/AttackMagic.mp3");
@@ -120,6 +124,10 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 	BoundHandle = LoadSoundMem("Assets/Music/SE/Slime/Bound.mp3");
 	assert(BoundHandle != -1);
 
+	//雨の日の時のスライムバウンド音
+	HighBoundHandle = LoadSoundMem("Assets/Music/SE/Slime/HighBound.mp3");
+	assert(HighBoundHandle != -1);
+
 	//雪の時凍ってることがわかるSE
 	FreezeHandle = LoadSoundMem("Assets/Music/SE/Weather/Freeze.mp3");
 	assert(FreezeHandle != -1);
@@ -127,17 +135,16 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 	ClearHandle = LoadSoundMem("Assets/Music/SE/Player/Clear3.mp3");
 	assert(ClearHandle != -1);
 
-	MultiDeadSE = false;//複数回鳴るのを阻止
+	MultiDeadSE = false;//複数回鳴るのを阻止用
+
+	ChangeVolumeSoundMem(HighBoundHandle, 200);
 
 	hGoal = LoadGraph("Assets/Item/GoalFlag.png");
 }
 
 Player::~Player()
 {
-	if (hImage > 0)
-	{
-		DeleteGraph(hImage);
-	}
+	Release();
 }
 
 void Player::Update()
@@ -253,7 +260,7 @@ void Player::Draw()
 	{
 		if (UIGetTimer > 0)
 		{
-			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "MP+5");
+			DrawFormatString(x, StringUi_Up, GetColor(30, 144, 255), "MP+5");
 			
 			StringUi_Up -= 1;
 			UIGetTimer--;
@@ -268,7 +275,7 @@ void Player::Draw()
 	{
 		if (UIGetTimer > 0)
 		{
-			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "Hp+2");
+			DrawFormatString(x, StringUi_Up, GetColor(255, 81, 81), "HP+2");
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}
@@ -305,6 +312,14 @@ void Player::SetPosition(int x, int y)
 {
 	transform_.position_.x = x;
 	transform_.position_.y = y;
+}
+
+void Player::Release()
+{
+	if (hImage > 0)
+	{
+		DeleteGraph(hImage);
+	}
 }
 
 void Player::WeatherEffects(Weather* weather)
@@ -779,9 +794,14 @@ void Player::UpdateWalk()
 				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
 				if (WeatherState == Rain && MagicPoint_ > 0)
 				{
+					PlaySoundMem(HighBoundHandle, DX_PLAYTYPE_BACK);
 					RainBound = 3.5f; // 雨の時のみジャンプ力を2.5倍
 				}
-				PlaySoundMem(BoundHandle, DX_PLAYTYPE_BACK);
+				else
+				{
+					PlaySoundMem(BoundHandle, DX_PLAYTYPE_BACK);
+				}
+				
 				Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT * RainBound);
 				onGround = false;
 			}
@@ -876,7 +896,7 @@ void Player::UpdateWalk()
 
 		if (distance <= 42.0f)
 		{
-			PlaySoundMem(GetItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
+			PlaySoundMem(GetHPItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
 			Hp_GetFlag = true;
 			if (Hp_ < 5)
 			{
@@ -886,14 +906,12 @@ void Player::UpdateWalk()
 			}
 			pHeal->KillMe();
 			Hp_GetFlag = true;
-			UIGetTimer = 60;
+			UIGetTimer = 65;
 			StringUi_Up = transform_.position_.y;
 			break;
 		}
 
 	}
-
-
 
 	std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
 	for (MpItem* pMp : pMps)
@@ -908,13 +926,13 @@ void Player::UpdateWalk()
 			
 			if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
 			{
-				PlaySoundMem(GetItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
+				PlaySoundMem(GetMPItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
 				MagicUp(5);
 				IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
 			}
 			pMp->KillMe();
 			Mp_GetFlag = true;
-			UIGetTimer = 60;
+			UIGetTimer = 65;
 			StringUi_Up = transform_.position_.y;
 		}
 		else
@@ -985,8 +1003,8 @@ void Player::UpdateWalk()
 
 	if (pField != nullptr)
 	{
-		int playerX = (int)transform_.position_.x;
-		int playerY = (int)transform_.position_.y;
+		int playerX = (int)transform_.position_.x + 32;
+		int playerY = (int)transform_.position_.y + 32;
 
 		if (pField->IsHitClear(playerX, playerY))
 		{
@@ -1160,6 +1178,7 @@ void Player::HpDown(int _MHp)
 	{
 		PlaySoundMem(WarningHandle, DX_PLAYTYPE_BACK);
 	}
+
 }
 
 void Player::WhereIs()

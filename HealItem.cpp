@@ -19,14 +19,7 @@ HealItem::HealItem(GameObject* parent) :GameObject(parent, "HpItem"), hImage_(-1
 
 HealItem::~HealItem()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
-	if (hEffect_ > 0)
-	{
-		DeleteGraph(hEffect_);
-	}
+	Release();
 }
 
 void HealItem::Initialize()
@@ -64,7 +57,14 @@ void HealItem::Draw()
 
 void HealItem::Release()
 {
-
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
+	if (hEffect_ > 0)
+	{
+		DeleteGraph(hEffect_);
+	}
 }
 
 void HealItem::SetPosition(int x, int y)

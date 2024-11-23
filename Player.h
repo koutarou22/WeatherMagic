@@ -20,6 +20,8 @@ public:
 	void Update() override;
 	void Draw() override;
 	void SetPosition(int x, int y);
+	void Release() override;
+
 
 	void WeatherEffects(Weather* weather);
 	
@@ -144,7 +146,8 @@ private:
 	int SpeedUpHandle;//風になったときスピードUpしてると思わせるようなSE
 
 	//動作SE
-	int GetItemHandle;//回復アイテム取得
+	int GetMPItemHandle;//MP回復アイテム取得
+	int GetHPItemHandle;//HP回復アイテム取得
 	int MagicHandle;//魔法打つ
 	int JumpHandle;//ジャンプ音
 	int LandingHandle;//着地音
@@ -154,6 +157,7 @@ private:
 	int WarningHandle; //HPになった時　警告音が鳴る
 
 	//特殊敵接触時
+	int HighBoundHandle;//雨の時にスライムを踏んだ時の音
 	int BoundHandle;//スライムを踏んだ時のSE
 
 	int ClearHandle;//ClearFlagに触れた時

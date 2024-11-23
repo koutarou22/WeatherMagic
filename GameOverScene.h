@@ -17,11 +17,17 @@ class GameOverScene : public GameObject
 	void DrawScene(); //遷移の文字とか画像とか用
 	void ChangeScene(); //シーン遷移実際にするところ
 	void CheckRL(); //左右の判定
- 
+
+
+	bool RightCheck;//右を何回も押して音が出るのを防ぐ用
+	bool LeftCheck; //左を何回も押して音が出るのを防ぐ用
+	int SelectSEHandle;//選択用SE
+	int DecisionHandle;//決定用SE
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
 	GameOverScene(GameObject* parent);
+	~GameOverScene();
 
 	//初期化
 	void Initialize() override;

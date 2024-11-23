@@ -21,15 +21,7 @@ MpItem::MpItem(GameObject* parent) :GameObject(parent, "MpItem"), hImage_(-1)
 
 MpItem::~MpItem()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
-
-	if (hEffect_ > 0)
-	{
-		DeleteGraph(hEffect_);
-	}
+	Release();
 }
 
 void MpItem::Initialize()
@@ -108,7 +100,15 @@ void MpItem::Draw()
 
 void MpItem::Release()
 {
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
 
+	if (hEffect_ > 0)
+	{
+		DeleteGraph(hEffect_);
+	}
 }
 
 void MpItem::SetPosition(int x, int y)

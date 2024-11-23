@@ -18,10 +18,11 @@ class Weather:public GameObject
 public:
 	
 	Weather(GameObject* parent) : GameObject(parent), weather_(Sun) {}
-
+	~Weather();
 	void Initialize() override;
 	void Update() override;
     void Draw() override;
+	void Release() override;
 
 	void SetPosition(int x, int y);
 	void SetWeather(WeatherState _state) { weather_ = _state ; }

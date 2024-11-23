@@ -13,11 +13,7 @@ EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene)
 
 EnemyMagic::~EnemyMagic()
 {
-
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
+	Release();
 }
 
 void EnemyMagic::Update()
@@ -87,4 +83,12 @@ bool EnemyMagic::ColliderCircle(float x, float y, float r)
 	if (sqrt(dx * dx + dy * dy) < (r + myR) * (r + myR))
 		return true;
 	return false;
+}
+
+void EnemyMagic::Release()
+{
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
 }

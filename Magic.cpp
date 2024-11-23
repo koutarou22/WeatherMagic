@@ -41,10 +41,7 @@ direction_({0,0}),frameCounter(0),speed_(0.0f),timer_(0)
 
 Magic::~Magic()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
+	Release();
 }
 
 void Magic::Update()
@@ -161,7 +158,7 @@ void Magic::UpdateHit()
 void Magic::SetPosition(int x, int y)
 {
 	transform_.position_.x = x + 20;
-	transform_.position_.y = y + 10;
+	transform_.position_.y = y + 30;
 	timer_ = 90;
 }
 
@@ -184,4 +181,58 @@ bool Magic::ColliderCircle(float x, float y, float r)
 	if (sqrt(dx * dx + dy * dy) < (r + myR) * (r + myR))
 		return true;
 	return false;
+}
+
+void Magic::Release()
+{
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
+
+	if (hImage_move1 > 0)
+	{
+		DeleteGraph(hImage_move1);
+	}
+	if (hImage_move2 > 0)
+	{
+		DeleteGraph(hImage_move2);
+	}
+	if (hImage_move3 > 0)
+	{
+		DeleteGraph(hImage_move3);
+	}
+	if (hImage_move4 > 0)
+	{
+		DeleteGraph(hImage_move4);
+	}
+
+	if (hImage_hit1 > 0)
+	{
+		DeleteGraph(hImage_hit1);
+	}
+	if (hImage_hit2 > 0)
+	{
+		DeleteGraph(hImage_hit2);
+	}
+	if (hImage_hit3 > 0)
+	{
+		DeleteGraph(hImage_hit3);
+	}
+	if (hImage_hit4 > 0)
+	{
+		DeleteGraph(hImage_hit4);
+	}
+	if (hImage_hit5 > 0)
+	{
+		DeleteGraph(hImage_hit5);
+	}
+	if (hImage_hit6 > 0)
+	{
+		DeleteGraph(hImage_hit6);
+	}
+	if (hImage_hit7 > 0)
+	{
+		DeleteGraph(hImage_hit7);
+	}
 }

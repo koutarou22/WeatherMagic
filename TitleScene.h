@@ -7,7 +7,6 @@ private:
 	int hImage_;
 	int charImage_;
 	int spaceImage_;
-	int soundHandle;
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る
 	int keyTimer_; //キーが押されてから遷移までのタイマー
@@ -15,8 +14,10 @@ private:
 	int mojiTimer_; //文字をぴかぴかするタイマー
 	bool mojiend_; //ぴかぴか終わりかなフラグ
 
-	//TitleのBGM
-	int TitleBGMHandle;
+	int TitleBGMHandle;	//TitleのBGM
+
+	bool CheckSelect;//決定が押されたか確認する用
+	int SelectHandle;//決定を押したときの音
 
 	int hStart;//UIハンドル
 	int hStartYellow;//UIハンドル（黄色）
@@ -24,7 +25,7 @@ public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
 	TitleScene(GameObject* parent);
-
+	~TitleScene();
 	//初期化
 	void Initialize() override;
 

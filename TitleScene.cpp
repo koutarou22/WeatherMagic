@@ -19,7 +19,7 @@ TitleScene::TitleScene(GameObject* parent)
     hImage_ = -1;
     charImage_ = -1;
     spaceImage_ = -1;
-    soundHandle = -1;
+    SelectHandle = -1;
 
     keyTimer_ = TIMER;
     keyPushed_ = false;
@@ -27,6 +27,7 @@ TitleScene::TitleScene(GameObject* parent)
     mojiTimer_ = MOJI_TIMER;
     mojiend_ = false;
 
+    CheckSelect = false;
     SetFontSize(16);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -34,6 +35,11 @@ TitleScene::TitleScene(GameObject* parent)
     assert(TitleBGMHandle != -1);
 
     PlaySoundMem(TitleBGMHandle, DX_PLAYTYPE_LOOP);
+}
+
+TitleScene::~TitleScene()
+{
+    Release();
 }
 
 void TitleScene::Initialize()
@@ -47,8 +53,8 @@ void TitleScene::Initialize()
    /* spaceImage_ = LoadGraph("Assets/Space.png");//『space』を押してくれ！的なフォント　結局未使用
     assert(spaceImage_ >= 0);*/
 
-    soundHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/select01.mp3");//Pを押した時に効果音がなる(登録)
-    assert(soundHandle != -1); // 音声ファイルの読み込みに失敗した場合のエラーチェック
+    SelectHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/select01.mp3");//Pを押した時に効果音がなる(登録)
+    assert(SelectHandle != -1); // 音声ファイルの読み込みに失敗した場合のエラーチェック
 
     hStart = LoadGraph("Assets/UI/XboxBottunUI/startMenu.png");
     assert(hStart > 0);
@@ -65,7 +71,13 @@ void TitleScene::Update()
     if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13]) 
     {
         StopSoundMem(TitleBGMHandle);
-        PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK); // 音声を再生
+
+        if (!CheckSelect)
+        {
+            PlaySoundMem(SelectHandle, DX_PLAYTYPE_BACK);
+            CheckSelect = true; //ここで一回しか鳴らせない
+        }
+      
         keyPushed_ = true;
     }
 
@@ -87,7 +99,6 @@ void TitleScene::Update()
         SetFontSize(32); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_LEVEL);
-        PlaySoundMem(soundHandle, DX_PLAYTYPE_BACK);
     }
 
     //文字タイマーが終わったら(ぴかぴか終わったら)
@@ -158,8 +169,35 @@ void TitleScene::Draw()
 
 void TitleScene::Release()
 {
-    DeleteGraph(hStartYellow);
-    DeleteGraph(hStart);
-    DeleteGraph(charImage_);
-    DeleteGraph(hImage_);
+    if (hStartYellow > 0)
+    {
+        DeleteGraph(hStartYellow);
+    }
+    if (hStart > 0)
+    {
+        DeleteGraph(hStart);
+    }
+    if (charImage_ > 0)
+    {
+        DeleteGraph(charImage_);
+    }
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
+    if (spaceImage_ > 0)
+    {
+        DeleteGraph(spaceImage_);
+    }
+
+
+    if (TitleBGMHandle > 0)
+    {
+        DeleteSoundMem(TitleBGMHandle);
+    }
+    if (SelectHandle > 0)
+    {
+        DeleteSoundMem(SelectHandle);
+    }
+
 }

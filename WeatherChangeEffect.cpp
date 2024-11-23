@@ -9,10 +9,7 @@ WeatherChangeEffect::WeatherChangeEffect(GameObject* parent)
 
 WeatherChangeEffect::~WeatherChangeEffect()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
+	Release();
 }
 
 void WeatherChangeEffect::Update()
@@ -46,4 +43,8 @@ void WeatherChangeEffect::Draw()
 
 void WeatherChangeEffect::Release()
 {
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
 }

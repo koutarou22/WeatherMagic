@@ -39,15 +39,32 @@ ChooseLevelScene::ChooseLevelScene(GameObject* parent)
     LevelText2 = "NORMAL";
     LevelText3 = "HARD";
 
+    CheckDecision = false;
+
+}
+
+ChooseLevelScene::~ChooseLevelScene()
+{
+    Release();
 }
 
 void ChooseLevelScene::Initialize()
 {
-	hImage_back = LoadGraph("Assets/Scene/ChooseLevelBack.png");//タイトルの背景
-	assert(hImage_back >= 0);
+	hImage_back = LoadGraph("Assets/Scene/Back.jpg");//タイトルの背景
+	assert(hImage_back > 0);
+
+    hLevelFont = LoadGraph("Assets/Font/Level1.png");//難易度を選択してくださいのfont
+    assert(hLevelFont > 0);
 
     hDecideB = LoadGraph("Assets/UI/XboxBottunUI/decideB3.png");//B決定のUI
     assert(hDecideB > 0);
+
+    SelectSEHandle = LoadSoundMem("Assets/Music/SE/Select/Select0.mp3");//選択時のSE
+    assert(SelectSEHandle > 0);
+
+    DecisionHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/Select02.mp3");//選択時のSE
+    assert(DecisionHandle > 0);
+
 }
 
 void ChooseLevelScene::Update()
@@ -79,6 +96,7 @@ void ChooseLevelScene::Update()
         if (!prevUp) 
         {
             currentlevel = Previous(currentlevel);
+            PlaySoundMem(SelectSEHandle, DX_PLAYTYPE_BACK);
         }
         prevUp = true;
     }
@@ -91,6 +109,7 @@ void ChooseLevelScene::Update()
         if (!prevDown)
         {
             currentlevel = Next(currentlevel);
+            PlaySoundMem(SelectSEHandle, DX_PLAYTYPE_BACK);
         }
         prevDown = true;
     }
@@ -104,6 +123,14 @@ void ChooseLevelScene::Update()
     if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13])
     {
         keyPushed_ = true;
+
+        if (!CheckDecision)
+        {
+            PlaySoundMem(DecisionHandle, DX_PLAYTYPE_BACK);
+
+            CheckDecision = true;
+        }
+       
     }
 
     if (keyPushed_)
@@ -128,6 +155,7 @@ void ChooseLevelScene::Draw()
     int screenWidth, screenHeight, colorBitDepth;
     GetScreenState(&screenWidth, &screenHeight, &colorBitDepth);
 
+  
     if (keyPushed_)
     {
         static int al = TIMER;
@@ -146,7 +174,7 @@ void ChooseLevelScene::Draw()
     }
 
 
-    DrawFormatString(0, 0, GetColor(255, 255, 255), "難易度を選択してください");
+  //  DrawFormatString(0, 0, GetColor(255, 255, 255), "難易度を選択してください");
     //DrawFormatString(0, 120, GetColor(255, 255, 255), "難易度： %d", currentlevel);
 
     if (!keyPushed_) {
@@ -166,6 +194,7 @@ void ChooseLevelScene::Draw()
         }
     }
 
+    DrawGraph(0, 0, hLevelFont, TRUE);//難易度を選択してくださいのフォント
     DrawFormatString(SCREENSIZE_HALF, 200, GetColor(255, 255, 255), LevelText1);
     DrawFormatString(SCREENSIZE_HALF, 250, GetColor(255, 255, 255), LevelText2);
     DrawFormatString(SCREENSIZE_HALF, 300, GetColor(255, 255, 255), LevelText3);
@@ -173,6 +202,16 @@ void ChooseLevelScene::Draw()
 
 void ChooseLevelScene::Release()
 {
-    DeleteGraph(hDecideB);
-    DeleteGraph(hImage_back);
+    if (hImage_back > 0)
+    {
+        DeleteGraph(hImage_back);
+    }
+    if (hLevelFont > 0)
+    {
+        DeleteGraph(hLevelFont);
+    }
+    if (hDecideB > 0)
+    {
+        DeleteGraph(hDecideB);
+    }
 }
