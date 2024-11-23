@@ -21,8 +21,12 @@ private:
 	const char* LevelText1 = "";
 	const char* LevelText2 = "";
 	const char* LevelText3 = "";
-	array <const char*, 3> ResultMassage = { LevelText1,LevelText2,LevelText3 };
-	
+	const char* Explanation1 = "";
+	const char* Explanation2 = "";
+	const char* Explanation3 = "";
+
+	array <const char*, 3> LevelMassage = { LevelText1,LevelText2,LevelText3 };//Žg‚í‚È‚¢‚©‚à
+	array <const char*, 3> ExplanationMassage = { Explanation1,Explanation2,Explanation3 };//Žg‚í‚È‚¢‚©‚à
 
 	enum StageLevelChoose
 	{
