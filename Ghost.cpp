@@ -151,7 +151,7 @@ void Ghost::Update()
 		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);
 		float distance = sqrt(dx * dx + dy * dy);
 
-		if (distance <= 20.0f)
+		if (distance <= 45.0f)
 		{
 			PlaySoundMem(GhostDamageHandle, DX_PLAYTYPE_BACK);
 			pMagic->SetMagicStateHit();

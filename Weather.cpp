@@ -32,11 +32,11 @@ void Weather::Initialize()
 
 
     //--------------解説が書いてあるUI-------------------------
-    //hImage_StateSun = LoadGraph("Assets/UI/SunText.png");//晴れの解説UI
-    //assert(hImage_StateSun > 0);
+    hImage_StateSun = LoadGraph("Assets/UI/SunText2.png");//晴れの解説UI
+    assert(hImage_StateSun > 0);
     hImage_StateRain = LoadGraph("Assets/UI/RainText2.png");//雨の解説UI
     assert(hImage_StateRain > 0);
-    hImage_StateWind = LoadGraph("Assets/UI/GaleText2.png");//風の解説UI
+    hImage_StateWind = LoadGraph("Assets/UI/GaleText3.png");//風の解説UI
     assert(hImage_StateWind > 0);
     //素材出来次第コメント解除1/2
     hImage_StateSnow = LoadGraph("Assets/UI/SnowText2.png");//雪の解説UI
@@ -223,19 +223,19 @@ void Weather::Draw()
         switch (weather_)
         {
         case Sun:
-            DrawGraph(0, 140, hImage_StateSun, TRUE);//背景暗い時だけ使う
+            DrawGraph(0, 160, hImage_StateSun, TRUE);//背景暗い時だけ使う
             DrawGraph(x, y, hImage_ControllerState, TRUE);
             break;
         case Rain:
-            DrawGraph(-2, 140, hImage_StateRain, TRUE);//背景暗い時だけ使う
+            DrawGraph(0, 160, hImage_StateRain, TRUE);//背景暗い時だけ使う
             DrawGraph(x, y, hImage_ControllerState, TRUE);
             break;
         case Gale:
-            DrawGraph(0, 140, hImage_StateWind, TRUE);//背景暗い時だけ使う
+            DrawGraph(0, 160, hImage_StateWind, TRUE);//背景暗い時だけ使う
             DrawGraph(x, y, hImage_ControllerState, TRUE);
             break;
         case Snow:
-            DrawGraph(0, 140, hImage_StateSnow, TRUE);//背景暗い時だけ使う
+            DrawGraph(0, 160, hImage_StateSnow, TRUE);//背景暗い時だけ使う
             DrawGraph(x, y, hImage_ControllerState, TRUE);
             break;
         default:

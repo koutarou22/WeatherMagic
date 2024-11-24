@@ -260,7 +260,7 @@ void Player::Draw()
 	{
 		if (UIGetTimer > 0)
 		{
-			DrawFormatString(x, StringUi_Up, GetColor(30, 144, 255), "MP+5");
+			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "MP+10");
 			
 			StringUi_Up -= 1;
 			UIGetTimer--;
@@ -275,7 +275,7 @@ void Player::Draw()
 	{
 		if (UIGetTimer > 0)
 		{
-			DrawFormatString(x, StringUi_Up, GetColor(255, 81, 81), "HP+2");
+			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "HP+2");
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}
@@ -287,11 +287,11 @@ void Player::Draw()
 
 	if (MagicPoint_ == 0)
 	{
-		DrawFormatString(0, 130, GetColor(255, 69, 0), "MP: %d /100", MagicPoint_);//0なら赤に
+		DrawFormatString(0, 130, GetColor(0, 0, 255), "MP: %d ", MagicPoint_);//0なら赤に
 	}
 	else
 	{
-		DrawFormatString(0, 130, GetColor(30, 144, 255), "MP: %d /100", MagicPoint_);//それ以外なら青に
+		DrawFormatString(0, 130, GetColor(30, 144, 255), "MP: %d", MagicPoint_);//それ以外なら青に
 	}
 
 	if (DebugLog_ == true)
@@ -927,7 +927,7 @@ void Player::UpdateWalk()
 			if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
 			{
 				PlaySoundMem(GetMPItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
-				MagicUp(5);
+				MagicUp(10);
 				IsHitOneCount_ = true; // MagicPoint_を増やした後はIsHitOneCount_をtrueに設定
 			}
 			pMp->KillMe();
@@ -1025,8 +1025,6 @@ void Player::UpdateWalk()
 				pSceneManager->SetMagicPoint(MpPass); // Set関数に保存
 			}
 
-
-			
 			player_state = S_Clear;
 			Instantiate<Logo>(this);
 		}
@@ -1097,7 +1095,6 @@ void Player::UpdateDamage()
 
 void Player::UpdateDead()
 {
-
 	//死亡のアニメーション
 	if (++flameCounter >= 30)
 	{

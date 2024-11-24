@@ -110,6 +110,7 @@
     <ClCompile Include="ChooseLevelScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="StartScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WeatherChangeEffect.h">
@@ -223,6 +224,7 @@
     <ClInclude Include="ChooseLevelScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="StartScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

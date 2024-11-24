@@ -43,9 +43,13 @@ ChooseLevelScene::ChooseLevelScene(GameObject* parent)
     LevelText2 = "NORMAL";
     LevelText3 = "HARD";
             
-    Explanation1 = "アクションは控えめにのんびり遊びたい方向け";
-    Explanation2 = "程々のアクションと謎解きを楽しみたい方向け";
-    Explanation3 = "アクションに自信があり、刺激を求める方向け";
+    //Explanation1 = "アクションは控えめにのんびり遊びたい方向け";
+    //Explanation2 = "程々のアクションと謎解きを楽しみたい方向け";
+    //Explanation3 = "アクションに自信があり、刺激を求める方向け";
+    
+    //Explanation1 = "アクションは控えめにのんびり遊びたい方向け";
+    //Explanation2 = "程々のアクションと謎解きを楽しみたい方向け";
+    //Explanation3 = "アクションに自信があり,刺激を求める方向け";
       
     CheckDecision = false;
 }
@@ -140,7 +144,6 @@ void ChooseLevelScene::Update()
 
             CheckDecision = true;
         }
-       
     }
 
     if (keyPushed_)
@@ -192,15 +195,15 @@ void ChooseLevelScene::Draw()
         {
         case 0:
             DrawFormatString(CURSOR_POINT, Easy_x, GetColor(255, 255, 255), "*");
-            DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation1);
+            //DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation1);
             break;
         case 1:
             DrawFormatString(CURSOR_POINT, Easy_x + 50, GetColor(255, 255, 255), "*");
-            DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation2);
+           // DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation2);
             break;
         case 2:
             DrawFormatString(CURSOR_POINT, Easy_x + 100, GetColor(255, 255, 255), "*");
-            DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation3);
+           // DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation3);
             break;
         default:
             break;

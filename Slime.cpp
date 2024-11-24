@@ -252,7 +252,7 @@ void Slime::Update()
 		float dy = pMagic->GetPosition().y + 16 - (transform_.position_.y + 42.0f);//Mgの座標Y - Slの座標Y
 		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
 
-		if (distance <= 30.0f)
+		if (distance <= 45.0f)
 		{
 
 			pMagic->SetMagicStateHit();
