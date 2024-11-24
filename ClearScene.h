@@ -11,6 +11,7 @@ class ClearScene : public GameObject
 	int hGameClear_;
 
 	int hTitleMenu;//UIハンドル
+	int hTitleMenuYellow;//黄色UI
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る
 	int keyTimer_; //キーが押されてから遷移までのタイマー

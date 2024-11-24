@@ -151,18 +151,18 @@ void TitleScene::Draw()
         // 画面全体に背景画像を描画
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
         // タイトル画面のテキストを描画
-        DrawString(430, 400, TITLE_TEXT, GetColor(255, 255, 0));//黄色
+        DrawString(520, 400, TITLE_TEXT, GetColor(255, 255, 0));//黄色
         DrawGraph(430, 260, charImage_, TRUE);
-        DrawGraph(430, 360, hStartYellow, TRUE);
+        DrawGraph(560, 360, hStartYellow, TRUE);
     }
     else //そもそもキーが押されてない
     {
         // 画面全体に背景画像を描画
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
         // タイトル画面のテキストを描画
-        DrawString(430, 400, TITLE_TEXT, GetColor(255, 255, 255));//白
+        DrawString(520, 400, TITLE_TEXT, GetColor(255, 255, 255));//白
         DrawGraph(430, 260, charImage_, TRUE);
-        DrawGraph(430, 360, hStart, TRUE);
+        DrawGraph(560, 360, hStart, TRUE);
     }
 #endif
 }

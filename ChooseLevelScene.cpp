@@ -66,6 +66,9 @@ void ChooseLevelScene::Initialize()
     hDecideB = LoadGraph("Assets/UI/XboxBottunUI/decideB3.png");//B決定のUI
     assert(hDecideB > 0);
 
+    hDecideByellow = LoadGraph("Assets/UI/XboxBottunUI/decideB2.png");//B決定のUI（黄色）
+    assert(hDecideByellow > 0);
+
     SelectSEHandle = LoadSoundMem("Assets/Music/SE/Select/Select0.mp3");//選択時のSE
     assert(SelectSEHandle > 0);
 
@@ -168,7 +171,7 @@ void ChooseLevelScene::Draw()
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
-        DrawGraph(570, 600, hDecideB, TRUE);//中央下
+        DrawGraph(570, 600, hDecideByellow, TRUE);//中央下
         //DrawGraph(0, 350, hDecideB, TRUE);//難易度の下
         al = keyTimer_;
     }
@@ -225,5 +228,9 @@ void ChooseLevelScene::Release()
     if (hDecideB > 0)
     {
         DeleteGraph(hDecideB);
+    }
+    if (hDecideByellow > 0)
+    {
+        DeleteGraph(hDecideByellow);
     }
 }
