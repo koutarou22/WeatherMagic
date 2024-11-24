@@ -17,6 +17,7 @@ public:
 	~Slime();
 	void Update() override;
 	void Draw() override;
+	void Release() override;
 
 	void WeatherEffects(Weather* weather);
 	//bool ColliderCircle(float x, float y, float r);
@@ -27,7 +28,7 @@ public:
 	float y;
 
 	void RainScale(WeatherState state, Transform& transform,
-		float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_);
+	float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_);
 	void GaleEffect(WeatherState state);
 	
 private:
@@ -59,8 +60,11 @@ private:
 
 
 	bool offScreen; //画面外でも音がなないようにする
-	int JumpHandle; //ジャンプした時の音
+	int JumpHandle; //スライムを踏んだ時の音
+
 	int StunHandle; //気絶した時の音
+
+	
 
 	FreezeEffect* pFreeze;
 };

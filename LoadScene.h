@@ -14,6 +14,7 @@ public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
 	LoadScene(GameObject* parent);
+	~LoadScene();
 
 	//初期化
 	void Initialize() override;

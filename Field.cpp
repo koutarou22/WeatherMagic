@@ -51,6 +51,10 @@ Field::~Field()
 	{
 		DeleteGraph(hBackGround_);
 	}
+	if (Stage_BgmHandle > 0)
+	{
+		DeleteGraph(Stage_BgmHandle);
+	}
 	if (Map != nullptr)
 	{
 		delete[] Map;//Mapは動的配列なので[]をつける
@@ -121,6 +125,11 @@ void Field::Draw()
 
 }
 
+void Field::Release()
+{
+	
+}
+
 int Field::CollisionRight(int x, int y)
 {
 	if (IsWallBlock(x + 1, y))
@@ -165,31 +174,75 @@ bool Field::IsWallBlock(int x, int y)
 	//今が雪で、かつ雪チップのときに当たり判定をしたい
 	Weather* pWea = GetParent()->FindGameObject<Weather>();
 
-	switch (Map[chipY * width + chipX])
+
+	if (Map != nullptr)
 	{
-		//case 3://ne
-	case 16://地面
-	case 17:
-	case 18:
-	case 19:
-	case 32:
-	case 33:
-	case 34:
-	case 35:
-		return true;
-	case 7:
-	{
-		if (pWea != nullptr)
+		switch (Map[chipY * width + chipX])
 		{
-			if (pWea->GetWeatherState() == Snow)//今が雪
+			//case 3://ne
+		case 16://地面
+		case 17:
+		case 18:
+		case 19:
+		case 32:
+		case 33:
+		case 34:
+		case 35:
+			return true;
+		case 7:
+		{
+			if (pWea != nullptr)
 			{
+				if (pWea->GetWeatherState() == Snow)//今が雪
+				{
+					return true;
+				}
+			}
+		}
+		break;
+		};
+	}
+	return false;
+}
+
+bool Field::IsWallBlock(int x, int y)
+{
+	int chipX = x / 32;
+	int chipY = y / 32;
+
+	// 今が雪で、かつ雪チップのときに当たり判定をしたい
+	Weather* pWea = GetParent()->FindGameObject<Weather>();
+
+	if (Map != nullptr)
+	{
+		int index = chipY * width + chipX;
+		if (index >= 0 && index < width * height)
+		{
+			switch (Map[index])//これが元switch (Map[chipY * width + chipX])
+			{
+			case 16: // 地面
+			case 17:
+			case 18:
+			case 19:
+			case 32:
+			case 33:
+			case 34:
+			case 35:
 				return true;
+			case 7:
+			{
+				if (pWea != nullptr)
+				{
+					if (pWea->GetWeatherState() == Snow) // 今が雪
+					{
+						return true;
+					}
+				}
+			}
+			break;
 			}
 		}
 	}
-	break;
-	};
-
 	return false;
 }
 

@@ -9,8 +9,8 @@ ClearFlag::ClearFlag(GameObject* parent) :GameObject(parent, "ClearFlag"), hImag
 	hImage_ = LoadGraph("Assets/Item/GoalFlag.png");
 	assert(hImage_ >= 0);
 
-	hImage_Right = LoadGraph("Assets/right.png");
-	assert(hImage_ >= 0);
+	hEffect_ = LoadGraph("Assets/Item/right.png");
+	assert(hEffect_ > 0);
 	flameCounter_ = 0;
 	animeType_ = 0;
 	animeFrame_ = 0;
@@ -18,10 +18,7 @@ ClearFlag::ClearFlag(GameObject* parent) :GameObject(parent, "ClearFlag"), hImag
 
 ClearFlag::~ClearFlag()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
+	Release();
 }
 
 void ClearFlag::Initialize()
@@ -46,19 +43,31 @@ void ClearFlag::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
-	int SWidth = 61;
-	int SHeight = 61;
-	//int frameX = animeFrame_ % 4;
+	int SWidth = 192 / 3;
+	int SHeight = 64;
+
+	int frameX = animeFrame_ % 3;
+
+	// スプライトを描画
+	
 	if (!IsClear_)
 	{
-		DrawRectGraph(x, y, animeFrame_ * SWidth, 0, SWidth, SHeight, hImage_Right, TRUE);
 		DrawGraph(x, y, hImage_, TRUE);
+		DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hEffect_, TRUE);
 	}
 	//DrawCircle(x + 63.0f, y + 63.0f, 24.0f, GetColor(255, 0, 0), 0);
 }
 
 void ClearFlag::Release()
 {
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
+	if (hEffect_ > 0)
+	{
+		DeleteGraph(hEffect_);
+	}
 
 }
 

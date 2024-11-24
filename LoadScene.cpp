@@ -21,6 +21,11 @@ LoadScene::LoadScene(GameObject* parent) : GameObject(parent, "LoadScene")
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
+LoadScene::~LoadScene()
+{
+    Release();
+}
+
 void LoadScene::Initialize()
 {
 }
@@ -96,4 +101,8 @@ void LoadScene::Draw()
 
 void LoadScene::Release()
 {
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
 }

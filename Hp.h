@@ -17,6 +17,7 @@ private:
 public:
 
 	Hp(GameObject* parent);
+	~Hp();
 
 	//‰Šú‰»
 	void Initialize() override;

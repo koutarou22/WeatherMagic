@@ -45,10 +45,7 @@ Slime::Slime(GameObject* scene)
 
 Slime::~Slime()
 {
-	if (hImage > 0)
-	{
-		DeleteGraph(hImage);
-	}
+	Release();
 }
 bool HitWeather = true;
 
@@ -137,9 +134,7 @@ void Slime::Update()
 
 				}
 				onGround = false;
-				
 			}
-
 		}
 		prevSpaceKey = true;
 		CoolGround_Now = 240;
@@ -154,7 +149,6 @@ void Slime::Update()
 	{
 		x -= cam->GetValue();
 	}
-
 
 	if (cam != nullptr)//画面外なら行動はとらないよ！
 	{
@@ -219,7 +213,6 @@ void Slime::Update()
 			///
 			//※地面でのみ氷Effectを出現させたい　たまに表示されない(自信がない)
 			///
-			
 			if (onGround)//地面にいるとき　これを書かないと地面にいるとき表示されない
 			{
 				if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow && !HitLanding)//もし天候が雪になってて着地もしていなければ
@@ -229,8 +222,6 @@ void Slime::Update()
 						pFreeze = Instantiate<FreezeEffect>(GetParent());
 						pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
 					}
-					
-
 					HitLanding = true;//最後に着地したことにする
 				}
 			}
@@ -247,8 +238,6 @@ void Slime::Update()
 	{
 		pFreeze = nullptr;
 	}
-	
-
 
 	if (transform_.position_.y > GROUND + 20)
 	{
@@ -336,6 +325,14 @@ void Slime::Draw()
 	{
 		// DrawModiGraphを使用して画像を反転
 		DrawModiGraph(x + SIZE_X * transform_.scale_.x, y, x, y, x, y + SIZE_Y * transform_.scale_.y, x + SIZE_X * transform_.scale_.x, y + SIZE_Y * transform_.scale_.y, hFrame, TRUE);
+	}
+}
+
+void Slime::Release()
+{
+	if (hImage > 0)
+	{
+		DeleteGraph(hImage);
 	}
 }
 

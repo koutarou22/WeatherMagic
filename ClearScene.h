@@ -17,12 +17,14 @@ class ClearScene : public GameObject
 	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
 
 	int ClearBGMHandle;
+	int DecisionHandle;
 
 
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
 	ClearScene(GameObject* parent);
+	~ClearScene();
 
 	//初期化
 	void Initialize() override;

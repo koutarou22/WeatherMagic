@@ -33,22 +33,7 @@ WeatherBackGround::WeatherBackGround(GameObject* parent)
 
 WeatherBackGround::~WeatherBackGround()
 {
-	if (hImage_Sun > 0)
-	{
-		DeleteGraph(hImage_Sun);
-	}
-	if (hImage_Rain > 0)
-	{
-		DeleteGraph(hImage_Rain);
-	}
-	if (hImage_Gale > 0)
-	{
-		DeleteGraph(hImage_Gale);
-	}
-	if (hImage_Snow > 0)
-	{
-		DeleteGraph(hImage_Snow);
-	}
+	Release();
 }
 
 void WeatherBackGround::Update()
@@ -69,6 +54,26 @@ void WeatherBackGround::Draw()
 
 void WeatherBackGround::Release()
 {
+	if (hImage_Sun > 0)
+	{
+		DeleteGraph(hImage_Sun);
+	}
+	if (hImage_Rain > 0)
+	{
+		DeleteGraph(hImage_Rain);
+	}
+	if (hImage_Rain2 > 0)
+	{
+		DeleteGraph(hImage_Rain2);
+	}
+	if (hImage_Gale > 0)
+	{
+		DeleteGraph(hImage_Gale);
+	}
+	if (hImage_Snow > 0)
+	{
+		DeleteGraph(hImage_Snow);
+	}
 }
 
 void WeatherBackGround::WeatherStateConfirm(WeatherState State, bool& Flag, int frameCount, int Frame)

@@ -1,8 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
-class UI :
-    public GameObject
+class UI : public GameObject
 {
+private:
 	int hAttB;
 	int hChaPad;
 	int hJumpA;
@@ -11,7 +11,7 @@ class UI :
 	int hStkR;
 public:
 	UI(GameObject* parent);
-
+	~UI();
 	//‰Šú‰»
 	void Initialize() override;
 
@@ -23,5 +23,6 @@ public:
 
 	//ŠJ•ú
 	void Release() override;
+
 };
 

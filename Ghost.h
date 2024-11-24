@@ -17,6 +17,7 @@ public:
 	void SetPosition(int x, int y);
 	bool ColliderCircle(float x, float y, float r);
 	
+	void Release() override;
 private:
 	float sinAngle;
 	int hImage_;
@@ -37,5 +38,6 @@ private:
 	bool FreezeOne;//氷結を一回しか出せないようにする　※重くなったので
 
 	int GhostDamageHandle;//ダメージ音
+	int GhostAttackHandle;//攻撃音
 	FreezeEffect* pFreeze;
 };

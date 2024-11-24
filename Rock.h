@@ -15,6 +15,8 @@ public:
 	void Update() override;
 	void Draw() override;
 	void SetPosition(int x, int y);
+	void Release() override;
+
 	void WeatherEffects(Weather* weather);
 	void GaleEffect(WeatherState state);
 	//int CollisionUp(int x, int y);
@@ -61,6 +63,13 @@ private:
 
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る
+
+
+	//音が再生中か確認するFlag
+	bool isPlayingDust;
+
+	//動いているか確認する用のフラグ
+	bool isMove;
 
 };
 

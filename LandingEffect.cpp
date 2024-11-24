@@ -9,10 +9,7 @@ LandingEffect::LandingEffect(GameObject* parent) : GameObject(parent, "LandingEf
 
 LandingEffect::~LandingEffect()
 {
-    if (hImage_ > 0)
-    {
-        DeleteGraph(hImage_);
-    }
+    Release();
 }
 
 void LandingEffect::Update()
@@ -53,6 +50,10 @@ void LandingEffect::Draw()
 
 void LandingEffect::Release()
 {
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
 }
 
 void LandingEffect::SetPosition(int x, int y)

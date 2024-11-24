@@ -10,6 +10,7 @@ class ChooseLevelScene :
 {
 private:
 	int hImage_back;//背景
+	int	hLevelFont;//『難易度を選択してください』のフォント
 	int hDecideB;   //決定UI
 
 	int padAnalogInput;//xboxの入力を受け取る
@@ -47,10 +48,17 @@ private:
 	int whitecolor = GetColor(255, 255, 255);
 	int yellowcolor = GetColor(255, 255, 0);
 
+
+	int SelectSEHandle;//選択用SE
+	int DecisionHandle;//決定用SE
+
+	bool CheckDecision;//決定が押されたか確認する用
+
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
 	ChooseLevelScene(GameObject* parent);
+	~ChooseLevelScene();
 
 	//初期化
 	void Initialize() override;

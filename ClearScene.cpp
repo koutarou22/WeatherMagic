@@ -32,7 +32,15 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
     ClearBGMHandle = LoadSoundMem("Assets/Music/BGM/CLEAR_BGM.mp3");
     assert(ClearBGMHandle != -1);
 
+    DecisionHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/Clear.mp3");//決定時のSE
+    assert(DecisionHandle != -1);
+
     PlaySoundMem(ClearBGMHandle, DX_PLAYTYPE_BACK);
+}
+
+ClearScene::~ClearScene()
+{
+    Release();
 }
 
 void ClearScene::Initialize()
@@ -49,6 +57,7 @@ void ClearScene::Update()
     if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13])
     {
         keyPushed_ = true;
+        PlaySoundMem(DecisionHandle,DX_PLAYTYPE_BACK);
         StopSoundMem(ClearBGMHandle);
     }
 
@@ -116,7 +125,21 @@ void ClearScene::Draw()
 
 void ClearScene::Release()
 {
-    DeleteGraph(hTitleMenu);
-    DeleteGraph(hImage_);
-    DeleteSoundMem(ClearBGMHandle);
+    if (hTitleMenu > 0)
+    {
+        DeleteGraph(hTitleMenu);
+    }
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
+    if (ClearBGMHandle > 0)
+    {
+        DeleteSoundMem(ClearBGMHandle);
+    }
+    if (DecisionHandle > 0)
+    {
+        DeleteSoundMem(DecisionHandle);
+    }
+   
 }

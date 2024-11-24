@@ -2,14 +2,19 @@
 #include "Player.h"
 #include "WeatherBackGround.h"
 
+Weather::~Weather()
+{
+    Release();
+}
+
 void Weather::Initialize()
 {
    
     //----------------背景------------------------------------
     hImage_Sun = LoadGraph("Assets/BackImage/Sky.png");
     assert(hImage_Sun > 0);
-    //hImage_Rain = LoadGraph("Assets/BackImage/Rain.png");
-    //assert(hImage_Rain > 0);
+    hImage_Rain = LoadGraph("Assets/BackImage/Rain.png");
+    assert(hImage_Rain > 0);
     hImage_Wind = LoadGraph("Assets/BackImage/Wind.png");
     assert(hImage_Wind > 0);
     hImage_Snow = LoadGraph("Assets/BackImage/Snow.png");
@@ -27,14 +32,14 @@ void Weather::Initialize()
 
 
     //--------------解説が書いてあるUI-------------------------
-    hImage_StateSun = LoadGraph("Assets/UI/SunText.png");//晴れの解説UI
-    assert(hImage_StateSun > 0);
-    hImage_StateRain = LoadGraph("Assets/UI/RainText.png");//雨の解説UI
+    //hImage_StateSun = LoadGraph("Assets/UI/SunText.png");//晴れの解説UI
+    //assert(hImage_StateSun > 0);
+    hImage_StateRain = LoadGraph("Assets/UI/RainText2.png");//雨の解説UI
     assert(hImage_StateRain > 0);
-    hImage_StateWind = LoadGraph("Assets/UI/GaleText.png");//風の解説UI
+    hImage_StateWind = LoadGraph("Assets/UI/GaleText2.png");//風の解説UI
     assert(hImage_StateWind > 0);
     //素材出来次第コメント解除1/2
-    hImage_StateSnow = LoadGraph("Assets/UI/SnowText.png");//雪の解説UI
+    hImage_StateSnow = LoadGraph("Assets/UI/SnowText2.png");//雪の解説UI
     assert(hImage_StateSnow > 0);
     
     //hImage_Book = LoadGraph("Assets/Book.png");
@@ -236,6 +241,85 @@ void Weather::Draw()
         default:
             break;
         }
+    }
+
+}
+
+void Weather::Release()
+{
+    if (hImage_Sun > 0)
+    {
+        DeleteGraph(hImage_Sun);
+    }
+    if (hImage_Rain > 0)
+    {
+        DeleteGraph(hImage_Rain);
+    }
+    if (hImage_Wind > 0)
+    {
+        DeleteGraph(hImage_Wind);
+
+    }
+    if (hImage_Snow > 0)
+    {
+        DeleteGraph(hImage_Snow);
+    }
+
+    if (Sun_Icon > 0)
+    {
+        DeleteGraph(Sun_Icon);
+    }
+    if (Rain_Icon > 0)
+    {
+        DeleteGraph(Rain_Icon);
+    }
+    if (Gale_Icon > 0)
+    {
+        DeleteGraph(Gale_Icon);
+    }
+    if (Snow_Icon > 0)
+    {
+        DeleteGraph(Snow_Icon);
+    }
+
+    if (hImage_StateSun > 0)
+    {
+        DeleteGraph(hImage_StateSun);
+    }
+    if (hImage_StateRain > 0)
+    {
+        DeleteGraph(hImage_StateRain);
+    }
+    if (hImage_StateWind > 0)
+    {
+        DeleteGraph(hImage_StateWind);
+    }
+    if (hImage_StateSnow > 0)
+    {
+        DeleteGraph(hImage_StateSnow);
+    }
+    if (hImage_Book > 0)
+    {
+        DeleteGraph(hImage_Book);
+    }
+
+    if (hImage_RainNoMp > 0)
+    {
+        DeleteGraph(hImage_RainNoMp);
+    }
+    if (hImage_WindNoMp > 0)
+    {
+        DeleteGraph(hImage_WindNoMp);
+    }
+    if (hImage_SnowNoMp > 0)
+    {
+        DeleteGraph(hImage_SnowNoMp);
+    }
+
+
+    if (hImage_ControllerState > 0)
+    {
+        DeleteGraph(hImage_ControllerState);
     }
 
 }

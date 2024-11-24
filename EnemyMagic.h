@@ -15,6 +15,8 @@ public:
 	void SetDirection(VECTOR _direction) { direction_ = _direction; }
 	void SetSpeed(float _speed) { speed_ = _speed; }
 	bool ColliderCircle(float x, float y, float r);
+
+	void Release() override;
 private:
 	int hImage_;
 	int timer_;

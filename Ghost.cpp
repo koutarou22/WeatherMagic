@@ -28,19 +28,20 @@ Ghost::Ghost(GameObject* scene)
 	animeFrame_ = 0;
 	FreezeOne = false;
 
-	//ダメージ音
+	//�_���[�W��
 	GhostDamageHandle = LoadSoundMem("Assets/Music/SE/Ghost/GhostVanishing.mp3");
 	assert(GhostDamageHandle != -1);
+
+	//�U����
+	GhostAttackHandle = LoadSoundMem("Assets/Music/SE/Ghost/GhostAttack.mp3");
+	assert(GhostAttackHandle != -1);
 
 	pFreeze = nullptr;
 }
 
 Ghost::~Ghost()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
+	Release();
 }
 
 void Ghost::Update()
@@ -50,13 +51,13 @@ void Ghost::Update()
 
 	if (++flameCounter_ >= 24)
 	{
-		animeFrame_ = (animeFrame_ + 1) % 4;//if文を使わない最適解
+		animeFrame_ = (animeFrame_ + 1) % 4;
 		flameCounter_ = 0;
 	}
 
 	if (cam != nullptr)
 	{
-		// カメラの位置を取得
+		
 		int camX = cam->GetValue();
 		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
@@ -66,6 +67,7 @@ void Ghost::Update()
 				if (CoolDownAttack_ <= 0)
 				{
 					Debug::OutPrint(L"yobarea", true);
+					PlaySoundMem(GhostAttackHandle, DX_PLAYTYPE_BACK);
 					EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
 					if (emg == nullptr)
 					{
@@ -76,8 +78,7 @@ void Ghost::Update()
 					emg->SetDirection(dir);
 					emg->SetSpeed(3.5f);
 
-					// 天候によって速度を調整
-
+				
 					//if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
 					//{
 					//	emg->SetSpeed(1.0f);
@@ -96,7 +97,6 @@ void Ghost::Update()
 				CoolDownAttack_--;
 			}
 
-			//天候取得、雪なら止める
 			if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
 			{
 				
@@ -122,9 +122,7 @@ void Ghost::Update()
 					}
 					
 
-			//	FreezeOne = true; //ここで一回しか呼べないようにする
-				//問題が発生中　本当に一回しか出せない　
-				//制御しないと　重くなっちゃうんです
+			//	FreezeOne = true; 
 			}
 		}
 	}
@@ -136,7 +134,7 @@ void Ghost::Update()
 	//{
 	//	x -= cam->GetValue();
 	//}
-	//if (x > SCREEN_WIDTH)//即値、マジックナンバー
+	//if (x > SCREEN_WIDTH)
 	//	return;
 	//else if (x < -64)
 	//{
@@ -149,9 +147,9 @@ void Ghost::Update()
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
 	for (Magic* pMagic : pMagics)
 	{
-		float dx = pMagic->GetPosition().x - (transform_.position_.x + 16.0f);//Mgの座標X - Ghの座標X
-		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);//Mgの座標Y - Ghの座標Y
-		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
+		float dx = pMagic->GetPosition().x - (transform_.position_.x + 16.0f);
+		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);
+		float distance = sqrt(dx * dx + dy * dy);
 
 		if (distance <= 20.0f)
 		{
@@ -174,14 +172,12 @@ void Ghost::Draw()
 	{
 		x -= cam->GetValue();
 	}
-	//今回は正面を向いてもらうだけでいいんで、一番上の三列のみ回す
-	// スプライトのサイズを計算
+
 	int spriteWidth = 256 / 3;
 	int spriteHeight = 341 / 4;
 
 	int frameX = animeFrame_ % 3;
 
-	// スプライトを描画
 	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
 
 	//DrawCircle(x + 39, y + 34, 32, GetColor(255, 0, 0), FALSE);
@@ -195,8 +191,6 @@ void Ghost::SetPosition(int x, int y)
 
 bool Ghost::ColliderCircle(float x, float y, float r)
 {
-	//x,y,rが相手の円の情報
-	//自分の円の情報
 	float myCenterX = transform_.position_.x + 32.0f;
 	float myCenterY = transform_.position_.y + 32.0f;
 	float myR = 30.0f;
@@ -205,4 +199,12 @@ bool Ghost::ColliderCircle(float x, float y, float r)
 	if (sqrt(dx * dx + dy * dy) < (r + myR) * (r + myR))
 		return true;
 	return false;
+}
+
+void Ghost::Release()
+{
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
 }

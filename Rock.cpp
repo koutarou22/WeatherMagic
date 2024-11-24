@@ -32,6 +32,9 @@ Rock::Rock(GameObject* scene)
 	CanMoveRight = true;
 	CanMoveLeft = true;
 
+	isMove = false;
+	isPlayingDust = false;
+
 	//“®‚©‚µ‚½‚Æ‚«ˆø‚«‚¸‚é‰¹
 	DustHandle = LoadSoundMem("Assets/Music/SE/Rock/Dust.mp3");
 	assert(DustHandle != -1);
@@ -39,10 +42,7 @@ Rock::Rock(GameObject* scene)
 
 Rock::~Rock()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
+	Release();
 }
 
 void Rock::Update()
@@ -159,6 +159,14 @@ void Rock::SetPosition(int x, int y)
 	transform_.position_.y = y;
 }
 
+void Rock::Release()
+{
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
+}
+
 void Rock::WeatherEffects(Weather* weather)
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
@@ -182,6 +190,7 @@ void Rock::GaleEffect(WeatherState state)
 		{
 			if (state == Gale)
 			{
+				isMove = false;
 				Player* pPlayer = GetParent()->FindGameObject<Player>();
 				int MpVanish = pPlayer->GetMp();
 				if (MpVanish >= 4)
@@ -192,10 +201,9 @@ void Rock::GaleEffect(WeatherState state)
 						//PressKey_R = true;
 						if (CanMoveLeft)
 						{
-							PlaySoundMem(DustHandle, DX_PLAYTYPE_BACK);
 							transform_.position_.x -= MOVE_SPEED;
+							isMove = true;
 						}
-
 					}
 					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_L))
 					{
@@ -203,9 +211,27 @@ void Rock::GaleEffect(WeatherState state)
 						//PressKey_L = true;
 						if (CanMoveRight)
 						{
-							PlaySoundMem(DustHandle, DX_PLAYTYPE_BACK);
 							transform_.position_.x += MOVE_SPEED;
+							isMove = true;
 						}
+					}
+
+				}
+
+				if (isMove)
+				{ 
+				   if (!isPlayingDust) 
+				   { 
+					   PlaySoundMem(DustHandle, DX_PLAYTYPE_LOOP); 
+					   isPlayingDust = true; 
+				   } 
+				}
+				else
+				{ 
+					if (isPlayingDust) 
+					{ 
+						StopSoundMem(DustHandle); 
+					    isPlayingDust = false;
 					}
 				}
 			}

@@ -10,15 +10,11 @@ FreezeEffect::FreezeEffect(GameObject* parent) : GameObject(parent, "FreezeEffec
 
 FreezeEffect::~FreezeEffect()
 {
-    if (hImage_ > 0)
-    {
-        DeleteGraph(hImage_);
-    }
+    Release();
 }
 
 void FreezeEffect::Update()
 {
-
     switch (freeze_s)
     {
     case FreezeEffect::S_Freeze:
@@ -32,8 +28,6 @@ void FreezeEffect::Update()
     default:
         break;
     }
-
- 
 }
 
 void FreezeEffect::UpdateFreeze()
@@ -90,7 +84,10 @@ void FreezeEffect::Draw()
 
 void FreezeEffect::Release()
 {
-
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
 }
 
 void FreezeEffect::SetPosition(int x, int y)

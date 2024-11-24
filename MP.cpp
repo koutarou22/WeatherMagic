@@ -8,6 +8,11 @@ MP::MP(GameObject* parent)
 	trs.position_.y = 60;
 }
 
+MP::~MP()
+{
+	Release();
+}
+
 void MP::Initialize()
 {
 	hMPBar_ = LoadGraph("Assets/UI/MP.png");
