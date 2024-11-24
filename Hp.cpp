@@ -7,6 +7,11 @@ Hp::Hp(GameObject* parent):GameObject(parent, "Hp"), hImage_(-1),BgImage_(-1), W
 
 }
 
+Hp::~Hp()
+{
+    Release();
+}
+
 void Hp::Initialize()
 {
     /*Wide_ = 3;*/
@@ -71,6 +76,12 @@ void Hp::Draw()
 
 void Hp::Release()
 {
-    DeleteGraph(hImage_);
-    //DeleteGraph(bagImage_);
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
+    if (BgImage_ > 0)
+    {
+        DeleteGraph(BgImage_);
+    }
 }

@@ -33,7 +33,7 @@ public:
 	//•`‰æ
 	void Draw() override;
 	//ŠJ•ú
-	void Release() override;;
+	void Release() override;
 
 	void SetPosition(int x, int y);
 };

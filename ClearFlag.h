@@ -8,6 +8,7 @@ class ClearFlag :public GameObject
 {
 private:
 	int hImage_;
+	int hEffect_;
 	int hImage_Right;
 
 	int animeType_;//ó‹µ

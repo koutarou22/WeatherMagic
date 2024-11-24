@@ -18,6 +18,7 @@ Score::Score(GameObject* parent)
 
 Score::~Score()
 {
+    Release();
 }
 
 void Score::Initialize()
@@ -98,6 +99,10 @@ void Score::Draw()
 
 void Score::Release()
 {
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
 }
 
 void Score::SetPosition(int x, int y)

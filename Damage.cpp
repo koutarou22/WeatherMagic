@@ -9,10 +9,7 @@ Damage::Damage(GameObject* parent) :GameObject(parent, "Damage"), hImage_(-1), T
 
 Damage::~Damage()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
+	Release();
 }
 
 void Damage::Initialize()
@@ -21,7 +18,6 @@ void Damage::Initialize()
 
 void Damage::Update()
 {
-
 	//Instantiate<Damage>(this);
 	if (Timer_ <= 0)
 	{
@@ -33,7 +29,6 @@ void Damage::Update()
 	{
 		Timer_--;
 	}
-
 }
 
 void Damage::Draw()
@@ -51,6 +46,7 @@ void Damage::Draw()
 
 void Damage::Release()
 {
+	DeleteGraph(hImage_);
 }
 
 void Damage::SetPosition(int x, int y)

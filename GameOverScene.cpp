@@ -26,9 +26,24 @@ GameOverScene::GameOverScene(GameObject* parent) : GameObject(parent, "GameOverS
 	PlaySoundMem(GameOverBGMHandle, DX_PLAYTYPE_BACK);
 
 	isLeft = true;
+	RightCheck = false; 
+	LeftCheck = false;
   
 	hdecB = LoadGraph("Assets/UI/XboxBottunUI/decideB.png");
 	assert(hdecB > 0);
+
+	SelectSEHandle = LoadSoundMem("Assets/Music/SE/Select/Select0.mp3");//選択時のSE
+	assert(SelectSEHandle > 0);
+
+	DecisionHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/Select02.mp3");//選択時のSE
+	assert(DecisionHandle > 0);
+
+
+}
+
+GameOverScene::~GameOverScene()
+{
+	Release();
 }
 
 void GameOverScene::Initialize()
@@ -44,8 +59,10 @@ void GameOverScene::Update()
 
 	//キー確定~暗転まで
 	//スペースキーorBボタンorスタートボタンが押されたらスタートボタンでTitleSceneに遷移
-	if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13]) {
+	if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13]) 
+	{
 		keyPushed_ = true;
+		PlaySoundMem(DecisionHandle, DX_PLAYTYPE_BACK);
 		StopSoundMem(GameOverBGMHandle);
 	}
 
@@ -87,7 +104,28 @@ void GameOverScene::Draw()
 
 void GameOverScene::Release()
 {
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
+	if (hdecB > 0)
+	{
+		DeleteGraph(hdecB);
+	}
 
+	//SE BGM
+	if (GameOverBGMHandle > 0)
+	{
+		DeleteSoundMem(GameOverBGMHandle);
+	}
+	if (SelectSEHandle > 0)
+	{
+		DeleteSoundMem(SelectSEHandle);
+	}
+	if (DecisionHandle > 0)
+	{
+		DeleteSoundMem(DecisionHandle);
+	}
 }
 
 void GameOverScene::DrawScene()
@@ -134,14 +172,36 @@ void GameOverScene::ChangeScene()
 
 void GameOverScene::CheckRL()
 {
+	// 左入力のチェック
 	if (CheckHitKey(KEY_INPUT_LEFT) || input.Buttons[2] || input.ThumbLX <= -10000)
 	{
-		isLeft = true;
-		//左右選択時のBGM入れるならここ
+		if (!isLeft)
+		{
+			isLeft = true;
+			// 左右選択時のBGM入れるならここ
+			PlaySoundMem(SelectSEHandle, DX_PLAYTYPE_BACK);
+		}
+		LeftCheck = true;
+		RightCheck = false;
 	}
+	else
+	{
+		LeftCheck = false;
+	}
+
 	if (CheckHitKey(KEY_INPUT_RIGHT) || input.Buttons[3] || input.ThumbLX >= 10000)
 	{
-		isLeft = false;
-		//左右選択時のBGM入れるならここ
+		if (isLeft)
+		{
+			isLeft = false;
+			// 左右選択時のBGM入れるならここ
+			PlaySoundMem(SelectSEHandle, DX_PLAYTYPE_BACK);
+		}
+		RightCheck = true;
+		LeftCheck = false;
+	}
+	else
+	{
+		RightCheck = false;
 	}
 }

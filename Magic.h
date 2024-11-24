@@ -23,6 +23,7 @@ public:
 	bool ColliderCircle(float x, float y, float r);
 	void SetMagicStateHit() { Magic_s = S_Hit; }
 
+	void Release() override;
 private:
 	int hImage_;
 	int timer_;

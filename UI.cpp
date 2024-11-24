@@ -4,6 +4,11 @@ UI::UI(GameObject* parent)
 {
 }
 
+UI::~UI()
+{
+	Release();
+}
+
 void UI::Initialize()
 {
 	hStkL = LoadGraph("Assets/UI/XboxBottunUI/stickL.png");

@@ -17,15 +17,13 @@ Logo::Logo(GameObject* parent)
 
 Logo::~Logo()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}
+	Release();
 }
 
 void Logo::Initialize()
 {
-	hImage_ = LoadGraph("Assets/UI/gameclear.png");
+	hImage_ = LoadGraph("Assets/UI/gameclear.png"); 
+	//hImage_ = LoadGraph("Assets/Font/StageClear.png");
 	assert(hImage_ > 0);
 
 }
@@ -48,6 +46,10 @@ void Logo::Draw()
 
 void Logo::Release()
 {
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+	}
 }
 
 float Logo::easeOutExpo(float time, float start, float end)
