@@ -4,7 +4,8 @@
 class GameOverScene : public GameObject
 {
 	int hImage_;
-	int hdecB;
+	int hdecB;//決定UI
+	int hdecByellow;//決定UI（黄色）
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る
 	int keyTimer_; //キーが押されてから遷移までのタイマー

@@ -12,6 +12,7 @@ private:
 	int hImage_back;//背景
 	int	hLevelFont;//『難易度を選択してください』のフォント
 	int hDecideB;   //決定UI
+	int hDecideByellow;//決定UI（黄色）
 
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る

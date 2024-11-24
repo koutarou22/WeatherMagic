@@ -25,6 +25,9 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
     hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu.png");
     assert(hTitleMenu > 0);
 
+    hTitleMenuYellow = LoadGraph("Assets/UI/XboxBottunUI/titleMenu1.png");
+    assert(hTitleMenuYellow > 0);
+
     keyTimer_ = TIMER;
     keyPushed_ = false;
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -93,7 +96,7 @@ void ClearScene::Draw()
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
         DrawGraph(0, 0, hImage_, TRUE);
         DrawGraph(400, 240, hGameClear_, TRUE);
-        DrawGraph(550, 380, hTitleMenu, TRUE);
+        DrawGraph(550, 380, hTitleMenuYellow, TRUE);
         al = keyTimer_;
     }
     else

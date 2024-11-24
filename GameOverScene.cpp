@@ -32,6 +32,9 @@ GameOverScene::GameOverScene(GameObject* parent) : GameObject(parent, "GameOverS
 	hdecB = LoadGraph("Assets/UI/XboxBottunUI/decideB.png");
 	assert(hdecB > 0);
 
+	hdecByellow = LoadGraph("Assets/UI/XboxBottunUI/decideB1.png");//B決定のUI（黄色）サイズ違う
+	assert(hdecByellow > 0);
+
 	SelectSEHandle = LoadSoundMem("Assets/Music/SE/Select/Select0.mp3");//選択時のSE
 	assert(SelectSEHandle > 0);
 
@@ -84,7 +87,7 @@ void GameOverScene::Draw()
 		static int al = TIMER;
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
 		DrawGraph(0, 0, hImage_, TRUE);
-		DrawGraph(580, 660, hdecB, TRUE);
+		DrawGraph(580, 660, hdecByellow, TRUE);
 		al = keyTimer_;
 	}
 	else
@@ -111,6 +114,11 @@ void GameOverScene::Release()
 	if (hdecB > 0)
 	{
 		DeleteGraph(hdecB);
+	}
+
+	if (hdecByellow > 0)
+	{
+		DeleteGraph(hdecByellow);
 	}
 
 	//SE BGM
