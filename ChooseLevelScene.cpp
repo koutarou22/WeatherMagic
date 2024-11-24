@@ -6,22 +6,26 @@ namespace
     const int TIMER = 100;
     const int SCREENSIZE_HALF = 610;
     const int CURSOR_POINT = 580;
+    const int Explanation_x = 250;
+    const int Explanation_y = 450;
+
+    const int Easy_x = 200;
 }
 int ChooseLevelScene::Previous(int level)
 {
 	if(level_arr.empty()) 
-        return -1;  // ”z—ñ‚ª‹ó‚Ìê‡
+        return -1;  // é…åˆ—ãŒç©ºã®å ´åˆ
 
-	// ƒCƒ“ƒfƒbƒNƒX‚ª0‚È‚çA‘O‚Ì—v‘f‚Í”z—ñ‚ÌÅŒã‚Ì—v‘fi2‚Ìê‡‚Í0j
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒ0ãªã‚‰ã€å‰ã®è¦ç´ ã¯é…åˆ—ã®æœ€å¾Œã®è¦ç´ ï¼ˆ2ã®å ´åˆã¯0ï¼‰
 	return level_arr[(currentlevel - 1 + level_arr.size()) % level_arr.size()];
 }
 
 int ChooseLevelScene::Next(int currentIndex)
 {
 	if (level_arr.empty())
-        return -1;  // ”z—ñ‚ª‹ó‚Ìê‡
+        return -1;  // é…åˆ—ãŒç©ºã®å ´åˆ
 
-	// ƒCƒ“ƒfƒbƒNƒX‚ªÅŒã‚È‚çAŸ‚ÍÅ‰‚Ì—v‘fi2‚Ìê‡‚Í0j
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒæœ€å¾Œãªã‚‰ã€æ¬¡ã¯æœ€åˆã®è¦ç´ ï¼ˆ2ã®å ´åˆã¯0ï¼‰
 	return level_arr[(currentIndex + 1) % level_arr.size()];
 }
 ChooseLevelScene::ChooseLevelScene(GameObject* parent)
@@ -38,9 +42,12 @@ ChooseLevelScene::ChooseLevelScene(GameObject* parent)
     LevelText1 = "EASY";
     LevelText2 = "NORMAL";
     LevelText3 = "HARD";
-
+            
+    Explanation1 = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¯æ§ãˆã‚ã«ã®ã‚“ã³ã‚ŠéŠã³ãŸã„æ–¹å‘ã‘";
+    Explanation2 = "ç¨‹ã€…ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¨è¬è§£ãã‚’æ¥½ã—ã¿ãŸã„æ–¹å‘ã‘";
+    Explanation3 = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«è‡ªä¿¡ãŒã‚ã‚Šã€åˆºæ¿€ã‚’æ±‚ã‚ã‚‹æ–¹å‘ã‘";
+      
     CheckDecision = false;
-
 }
 
 ChooseLevelScene::~ChooseLevelScene()
@@ -50,19 +57,19 @@ ChooseLevelScene::~ChooseLevelScene()
 
 void ChooseLevelScene::Initialize()
 {
-	hImage_back = LoadGraph("Assets/Scene/Back.jpg");//ƒ^ƒCƒgƒ‹‚Ì”wŒi
+	hImage_back = LoadGraph("Assets/Scene/Back.jpg");//ã‚¿ã‚¤ãƒˆãƒ«ã®èƒŒæ™¯
 	assert(hImage_back > 0);
 
-    hLevelFont = LoadGraph("Assets/Font/Level1.png");//“ïˆÕ“x‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢‚Ìfont
+    hLevelFont = LoadGraph("Assets/Font/Level1.png");//é›£æ˜“åº¦ã‚’é¸æŠã—ã¦ãã ã•ã„ã®font
     assert(hLevelFont > 0);
 
-    hDecideB = LoadGraph("Assets/UI/XboxBottunUI/decideB3.png");//BŒˆ’è‚ÌUI
+    hDecideB = LoadGraph("Assets/UI/XboxBottunUI/decideB3.png");//Bæ±ºå®šã®UI
     assert(hDecideB > 0);
 
-    SelectSEHandle = LoadSoundMem("Assets/Music/SE/Select/Select0.mp3");//‘I‘ğ‚ÌSE
+    SelectSEHandle = LoadSoundMem("Assets/Music/SE/Select/Select0.mp3");//é¸æŠæ™‚ã®SE
     assert(SelectSEHandle > 0);
 
-    DecisionHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/Select02.mp3");//‘I‘ğ‚ÌSE
+    DecisionHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/Select02.mp3");//é¸æŠæ™‚ã®SE
     assert(DecisionHandle > 0);
 
 }
@@ -119,7 +126,7 @@ void ChooseLevelScene::Update()
     }
 
 
-    // SPACEƒL[orStartƒ{ƒ^ƒ“orBƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚çƒXƒ^[ƒgƒ{ƒ^ƒ“‚ÅPlayScene‚É‘JˆÚ
+    // SPACEã‚­ãƒ¼orStartãƒœã‚¿ãƒ³orBãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³ã§PlaySceneã«é·ç§»
     if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13])
     {
         keyPushed_ = true;
@@ -139,10 +146,10 @@ void ChooseLevelScene::Update()
     }
 
 
-    //ƒ^ƒCƒ}[‚ªI‚í‚Á‚½‚ç(ˆÃ“]‚ªI‚í‚Á‚½‚ç)
+    //ã‚¿ã‚¤ãƒãƒ¼ãŒçµ‚ã‚ã£ãŸã‚‰(æš—è»¢ãŒçµ‚ã‚ã£ãŸã‚‰)
     if (keyTimer_ < 0)
     {
-        //SetFontSize(32); //‚à‚Æ‚É‚à‚Ç‚·
+        //SetFontSize(32); //ã‚‚ã¨ã«ã‚‚ã©ã™
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->SetLevelManager(currentlevel);
         pSceneManager->ChangeScene(SCENE_ID_PLAY);
@@ -161,43 +168,48 @@ void ChooseLevelScene::Draw()
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
-        DrawGraph(570, 600, hDecideB, TRUE);//’†‰›‰º
-        //DrawGraph(0, 350, hDecideB, TRUE);//“ïˆÕ“x‚Ì‰º
+        DrawGraph(570, 600, hDecideB, TRUE);//ä¸­å¤®ä¸‹
+        //DrawGraph(0, 350, hDecideB, TRUE);//é›£æ˜“åº¦ã®ä¸‹
         al = keyTimer_;
     }
     else
     {
-        // ‰æ–Ê‘S‘Ì‚É”wŒi‰æ‘œ‚ğ•`‰æ
+        // ç”»é¢å…¨ä½“ã«èƒŒæ™¯ç”»åƒã‚’æç”»
         DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
-        DrawGraph(570, 600, hDecideB, TRUE);//’†‰›‰º
-        //DrawGraph(0, 350, hDecideB, TRUE);//“ïˆÕ“x‚Ì‰º
+        DrawGraph(570, 600, hDecideB, TRUE);//ä¸­å¤®ä¸‹
+        //DrawGraph(0, 350, hDecideB, TRUE);//é›£æ˜“åº¦ã®ä¸‹
     }
 
 
-  //  DrawFormatString(0, 0, GetColor(255, 255, 255), "“ïˆÕ“x‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢");
-    //DrawFormatString(0, 120, GetColor(255, 255, 255), "“ïˆÕ“xF %d", currentlevel);
+  //  DrawFormatString(0, 0, GetColor(255, 255, 255), "é›£æ˜“åº¦ã‚’é¸æŠã—ã¦ãã ã•ã„");
+    //DrawFormatString(0, 120, GetColor(255, 255, 255), "é›£æ˜“åº¦ï¼š %d", currentlevel);
 
     if (!keyPushed_) {
         switch (currentlevel)
         {
         case 0:
-            DrawFormatString(CURSOR_POINT, 200, GetColor(255, 255, 255), "*");
+            DrawFormatString(CURSOR_POINT, Easy_x, GetColor(255, 255, 255), "*");
+            DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation1);
             break;
         case 1:
-            DrawFormatString(CURSOR_POINT, 250, GetColor(255, 255, 255), "*");
+            DrawFormatString(CURSOR_POINT, Easy_x + 50, GetColor(255, 255, 255), "*");
+            DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation2);
             break;
         case 2:
-            DrawFormatString(CURSOR_POINT, 300, GetColor(255, 255, 255), "*");
+            DrawFormatString(CURSOR_POINT, Easy_x + 100, GetColor(255, 255, 255), "*");
+            DrawFormatString(Explanation_x, Explanation_y, GetColor(255, 255, 255), Explanation3);
             break;
         default:
             break;
         }
     }
 
-    DrawGraph(0, 0, hLevelFont, TRUE);//“ïˆÕ“x‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢‚ÌƒtƒHƒ“ƒg
-    DrawFormatString(SCREENSIZE_HALF, 200, GetColor(255, 255, 255), LevelText1);
-    DrawFormatString(SCREENSIZE_HALF, 250, GetColor(255, 255, 255), LevelText2);
-    DrawFormatString(SCREENSIZE_HALF, 300, GetColor(255, 255, 255), LevelText3);
+
+    DrawGraph(0, 0, hLevelFont, TRUE);//é›£æ˜“åº¦ã‚’é¸æŠã—ã¦ãã ã•ã„ã®ãƒ•ã‚©ãƒ³ãƒˆ
+    DrawFormatString(SCREENSIZE_HALF, Easy_x, GetColor(255, 255, 255), LevelText1);
+    DrawFormatString(SCREENSIZE_HALF, Easy_x + 50, GetColor(255, 255, 255), LevelText2);
+    DrawFormatString(SCREENSIZE_HALF, Easy_x + 100, GetColor(255, 255, 255), LevelText3);
+
 }
 
 void ChooseLevelScene::Release()
