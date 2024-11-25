@@ -287,11 +287,11 @@ void Player::Draw()
 
 	if (MagicPoint_ == 0)
 	{
-		DrawFormatString(0, 130, GetColor(0, 0, 255), "MP: %d ", MagicPoint_);//0なら赤に
+		DrawFormatString(0, 130, GetColor(255, 0, 0), "MP %d ", MagicPoint_);//0なら赤に
 	}
 	else
 	{
-		DrawFormatString(0, 130, GetColor(30, 144, 255), "MP: %d", MagicPoint_);//それ以外なら青に
+		DrawFormatString(0, 130, GetColor(0, 0, 255), "MP %d", MagicPoint_);//それ以外なら青に
 	}
 
 	if (DebugLog_ == true)
@@ -437,6 +437,7 @@ void Player::UpdateWalk()
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	std::list<Slime*> pSlimes = GetParent()->FindGameObjects<Slime>();
 	Rock* pRock = GetParent()->FindGameObject<Rock>();
+	LandingEffect* pLanding = GetParent()->FindGameObject<LandingEffect>();
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 	MP* mp = GetParent()->FindGameObject<MP>();
@@ -1003,8 +1004,8 @@ void Player::UpdateWalk()
 
 	if (pField != nullptr)
 	{
-		int playerX = (int)transform_.position_.x + 32;
-		int playerY = (int)transform_.position_.y + 32;
+		int playerX = (int)transform_.position_.x;
+		int playerY = (int)transform_.position_.y -5;
 
 		if (pField->IsHitClear(playerX, playerY))
 		{
@@ -1066,8 +1067,16 @@ void Player::UpdateWalk()
 		if (MagicPoint_ >= 10)//MPが10以上なら減らす
 		{
 			MagicPoint_ -= 10;
-			HpDown(1);
-			PlaySoundMem(DamageHandle, DX_PLAYTYPE_BACK);
+			if (mp != nullptr)
+			{
+				mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+			}
+		
+			if (Hp_ >= 2) 
+			{
+				HpDown(1);
+				PlaySoundMem(DamageHandle, DX_PLAYTYPE_BACK);
+			}
 		}
 		else
 		{
