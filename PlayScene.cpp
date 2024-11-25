@@ -27,8 +27,8 @@ void PlayScene::Initialize()
     Field* pField = Instantiate<Field>(this);
     pField->Reset(MapNumber_);//初期化処理
 
-    Instantiate<Weather>(this);
     Instantiate<WeatherBackGround>(this);
+    Instantiate<Weather>(this);
     pPlayer = nullptr;
     pPlayer = Instantiate<Player>(this);
 

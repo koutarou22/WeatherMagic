@@ -4,7 +4,7 @@
 FreezeEffect::FreezeEffect(GameObject* parent) : GameObject(parent, "FreezeEffect"), hImage_(-1), animeFrame(0), FrameCounter(0), eraseCounter(0), ReverseFrame(false)
 {
     hImage_ = LoadGraph("Assets/Effect/Ice.png");
-    assert(hImage_ > 0);
+   /* assert(hImage_ > 0);*/
     freeze_s = S_Freeze;
 }
 
