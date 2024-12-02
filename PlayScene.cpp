@@ -38,7 +38,7 @@ void PlayScene::Initialize()
     Instantiate<Camera>(this);
     Instantiate<Hp>(this);
     Instantiate<MP>(this);
-    Instantiate<UI>(this);
+    //Instantiate<UI>(this);
 
     Score* sc=Instantiate<Score>(this);
     sc->SetPosition(100,500);
