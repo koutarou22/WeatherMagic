@@ -60,7 +60,7 @@ void ClearScene::Update()
     if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13])
     {
         keyPushed_ = true;
-        PlaySoundMem(DecisionHandle,DX_PLAYTYPE_BACK);
+        //PlaySoundMem(DecisionHandle,DX_PLAYTYPE_BACK);
         StopSoundMem(ClearBGMHandle);
     }
 
@@ -106,36 +106,28 @@ void ClearScene::Draw()
         DrawGraph(400, 240, hGameClear_, TRUE);
         DrawGraph(550, 380, hTitleMenu, TRUE);
     }
-
-    //SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-    //int mp = pSceneManager->GetMagicPoint();//GetMp
-    //
-    ////Imaha Kantan na Syori
-    //if (mp > 80)
-    //{
-    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "評価☆3");
-    //}
-    //else if (mp > 60)
-    //{
-    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "評価☆2");
-    //}
-    //else 
-    //{
-    //    DrawFormatString(200, 60, GetColor(0, 255, 0), "評価☆1");
-    //}
-
 }
 
 void ClearScene::Release()
 {
-    if (hTitleMenu > 0)
-    {
-        DeleteGraph(hTitleMenu);
-    }
     if (hImage_ > 0)
     {
         DeleteGraph(hImage_);
     }
+    if (hGameClear_ > 0)
+    {
+        DeleteGraph(hGameClear_);
+    }
+    if (hTitleMenu > 0)
+    {
+        DeleteGraph(hTitleMenu);
+    }
+    if (hTitleMenuYellow > 0)
+    {
+        DeleteGraph(hTitleMenuYellow);
+    }
+
+    //SE BGM
     if (ClearBGMHandle > 0)
     {
         DeleteSoundMem(ClearBGMHandle);
@@ -144,5 +136,4 @@ void ClearScene::Release()
     {
         DeleteSoundMem(DecisionHandle);
     }
-   
 }

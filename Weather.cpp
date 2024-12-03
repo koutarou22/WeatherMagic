@@ -65,6 +65,81 @@ void Weather::Initialize()
     DebugLog_ = false;
 }
 
+void Weather::Release()
+{
+    if (hImage_Sun > 0)
+    {
+        DeleteGraph(hImage_Sun);
+    }
+    if (hImage_Rain > 0)
+    {
+        DeleteGraph(hImage_Rain);
+    }
+    if (hImage_Wind > 0)
+    {
+        DeleteGraph(hImage_Wind);
+
+    }
+    if (hImage_Snow > 0)
+    {
+        DeleteGraph(hImage_Snow);
+    }
+
+    if (Sun_Icon > 0)
+    {
+        DeleteGraph(Sun_Icon);
+    }
+    if (Rain_Icon > 0)
+    {
+        DeleteGraph(Rain_Icon);
+    }
+    if (Gale_Icon > 0)
+    {
+        DeleteGraph(Gale_Icon);
+    }
+    if (Snow_Icon > 0)
+    {
+        DeleteGraph(Snow_Icon);
+    }
+
+    if (hImage_StateSun > 0)
+    {
+        DeleteGraph(hImage_StateSun);
+    }
+    if (hImage_StateRain > 0)
+    {
+        DeleteGraph(hImage_StateRain);
+    }
+    if (hImage_StateWind > 0)
+    {
+        DeleteGraph(hImage_StateWind);
+    }
+    if (hImage_StateSnow > 0)
+    {
+        DeleteGraph(hImage_StateSnow);
+    }
+
+    if (hImage_RainNoMp > 0)
+    {
+        DeleteGraph(hImage_RainNoMp);
+    }
+    if (hImage_WindNoMp > 0)
+    {
+        DeleteGraph(hImage_WindNoMp);
+    }
+    if (hImage_SnowNoMp > 0)
+    {
+        DeleteGraph(hImage_SnowNoMp);
+    }
+
+
+    if (hImage_ControllerState > 0)
+    {
+        DeleteGraph(hImage_ControllerState);
+    }
+}
+
+
 void Weather::Update()
 {
     padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
@@ -244,86 +319,6 @@ void Weather::Draw()
     }
 
 }
-
-void Weather::Release()
-{
-    if (hImage_Sun > 0)
-    {
-        DeleteGraph(hImage_Sun);
-    }
-    if (hImage_Rain > 0)
-    {
-        DeleteGraph(hImage_Rain);
-    }
-    if (hImage_Wind > 0)
-    {
-        DeleteGraph(hImage_Wind);
-
-    }
-    if (hImage_Snow > 0)
-    {
-        DeleteGraph(hImage_Snow);
-    }
-
-    if (Sun_Icon > 0)
-    {
-        DeleteGraph(Sun_Icon);
-    }
-    if (Rain_Icon > 0)
-    {
-        DeleteGraph(Rain_Icon);
-    }
-    if (Gale_Icon > 0)
-    {
-        DeleteGraph(Gale_Icon);
-    }
-    if (Snow_Icon > 0)
-    {
-        DeleteGraph(Snow_Icon);
-    }
-
-    if (hImage_StateSun > 0)
-    {
-        DeleteGraph(hImage_StateSun);
-    }
-    if (hImage_StateRain > 0)
-    {
-        DeleteGraph(hImage_StateRain);
-    }
-    if (hImage_StateWind > 0)
-    {
-        DeleteGraph(hImage_StateWind);
-    }
-    if (hImage_StateSnow > 0)
-    {
-        DeleteGraph(hImage_StateSnow);
-    }
-    if (hImage_Book > 0)
-    {
-        DeleteGraph(hImage_Book);
-    }
-
-    if (hImage_RainNoMp > 0)
-    {
-        DeleteGraph(hImage_RainNoMp);
-    }
-    if (hImage_WindNoMp > 0)
-    {
-        DeleteGraph(hImage_WindNoMp);
-    }
-    if (hImage_SnowNoMp > 0)
-    {
-        DeleteGraph(hImage_SnowNoMp);
-    }
-
-
-    if (hImage_ControllerState > 0)
-    {
-        DeleteGraph(hImage_ControllerState);
-    }
-
-}
-
 
 void Weather::SetPosition(int x, int y)
 {

@@ -35,47 +35,6 @@ void MpItem::Update()
 		animeFrame_ = (animeFrame_ + 1) % 4;
 		flameCounter_ = 0;
 	}
-
-
-	//std::list<Player*> pPlayers = GetParent()->FindGameObjects<Player>();
-	//for (Player* pPlayer : pPlayers)
-	//{
-	//	//解説　見ればわかると思うがこれは『Player』と『MpItem』の距離を求めている
-	//	float dx = pPlayer->GetPosition().x - (transform_.position_.x/* + 16.0f*/);//Mgの座標X - Ghの座標X
-	//	float dy = pPlayer->GetPosition().y - (transform_.position_.y/* + 16.0f*/);//Mgの座標Y - Ghの座標Y
-	//	float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
-
-	//	if (distance <= 30.0f)
-	//	{
-	//		KillMe();
-	//		break;
-	//	}
-	//}
-
-	//Field* pField = GetParent()->FindGameObject<Field>();
-	////---------------衝突判定(下)--------------------------------
-	//if (pField != nullptr)
-	//{
-	//	int pushR = pField->CollisionDown(transform_.position_.x + 50, transform_.position_.y + 63);
-	//	int pushL = pField->CollisionDown(transform_.position_.x + 14, transform_.position_.y + 63);
-	//	int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
-	//	if (push >= 1)
-	//	{
-	//		transform_.position_.y -= push - 1;
-	//	}
-
-	//}
-	////Instantiate<Heallten>(this);
-	//if (Timer_ <= 0)
-	//{
-	//	KillMe();
-	//	Timer_ = 180;
-	//}
-
-	//if (Timer_ > 0)
-	//{
-	//	Timer_--;
-	//}
 }
 
 void MpItem::Draw()

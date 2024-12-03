@@ -15,6 +15,7 @@ StartScene::StartScene(GameObject* parent)
 
 StartScene::~StartScene()
 {
+    Release();
 }
 
 void StartScene::Initialize()
@@ -44,4 +45,8 @@ void StartScene::Draw()
 
 void StartScene::Release()
 {
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+    }
 }
