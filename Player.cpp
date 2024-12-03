@@ -147,6 +147,87 @@ Player::~Player()
 	Release();
 }
 
+void Player::Release()
+{
+	if (hImage > 0)
+	{
+		DeleteGraph(hImage);
+	}
+	if (hGoal > 0)
+	{
+		DeleteGraph(hGoal);
+	}
+
+	if (RainHandle > 0)
+	{
+		DeleteSoundMem(RainHandle);
+	}
+	if (WindHandle > 0)
+	{
+		DeleteSoundMem(WindHandle);
+	}
+	if (SnowHandle > 0)
+	{
+		DeleteSoundMem(SnowHandle);
+	}
+
+	if (GetMPItemHandle > 0)
+	{
+		DeleteSoundMem(GetMPItemHandle);
+	}
+	if (GetHPItemHandle > 0)
+	{
+		DeleteSoundMem(GetHPItemHandle);
+	}
+
+
+	if (MagicHandle > 0)
+	{
+		DeleteSoundMem(MagicHandle);
+	}
+	if (JumpHandle > 0)
+	{
+		DeleteSoundMem(JumpHandle);
+	}
+	if (LandingHandle > 0)
+	{
+		DeleteSoundMem(LandingHandle);
+	}
+	if (DamageHandle > 0)
+	{
+		DeleteSoundMem(DamageHandle);
+	}
+	if (WarningHandle > 0)
+	{
+		DeleteSoundMem(WarningHandle);
+	}
+	if (DieHandle > 0)
+	{
+		DeleteSoundMem(DieHandle);
+	}
+	if (SpeedUpHandle > 0)
+	{
+		DeleteSoundMem(SpeedUpHandle);
+	}
+	if (BoundHandle > 0)
+	{
+		DeleteSoundMem(BoundHandle);
+	}
+	if (FreezeHandle > 0)
+	{
+		DeleteSoundMem(FreezeHandle);
+	}
+	if (FreezeHandle > 0)
+	{
+		DeleteSoundMem(FreezeHandle);
+	}
+	if (ClearHandle > 0)
+	{
+		DeleteSoundMem(ClearHandle);
+	}
+
+}
+
 void Player::Update()
 {
 	switch (player_state)
@@ -314,13 +395,7 @@ void Player::SetPosition(int x, int y)
 	transform_.position_.y = y;
 }
 
-void Player::Release()
-{
-	if (hImage > 0)
-	{
-		DeleteGraph(hImage);
-	}
-}
+
 
 void Player::WeatherEffects(Weather* weather)
 {

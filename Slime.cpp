@@ -334,6 +334,16 @@ void Slime::Release()
 	{
 		DeleteGraph(hImage);
 	}
+	
+	if (JumpHandle > 0)
+	{
+		DeleteSoundMem(JumpHandle);
+	}
+	
+	if (StunHandle > 0)
+	{
+		DeleteSoundMem(StunHandle);
+	}
 }
 
 void Slime::WeatherEffects(Weather* weather)

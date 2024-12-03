@@ -165,6 +165,10 @@ void Rock::Release()
 	{
 		DeleteGraph(hImage_);
 	}
+	if (DustHandle > 0)
+	{
+		DeleteSoundMem(DustHandle);
+	}
 }
 
 void Rock::WeatherEffects(Weather* weather)

@@ -28,7 +28,7 @@ WeatherBackGround::WeatherBackGround(GameObject* parent)
 	assert(hImage_Gale > 0);
 
 	hImage_Snow = LoadGraph("Assets/BackAnimation/SnowAnimation.png");
-	assert(hImage_Snow);
+	assert(hImage_Snow > 0);
 }
 
 WeatherBackGround::~WeatherBackGround()
@@ -54,10 +54,10 @@ void WeatherBackGround::Draw()
 
 void WeatherBackGround::Release()
 {
-	if (hImage_Sun > 0)
-	{
-		DeleteGraph(hImage_Sun);
-	}
+	//if (hImage_Sun > 0)
+	//{
+	//	DeleteGraph(hImage_Sun);
+	//}
 	if (hImage_Rain > 0)
 	{
 		DeleteGraph(hImage_Rain);

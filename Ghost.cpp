@@ -41,7 +41,7 @@ Ghost::Ghost(GameObject* scene)
 
 Ghost::~Ghost()
 {
-	Release();
+ 	Release();
 }
 
 void Ghost::Update()
@@ -206,5 +206,15 @@ void Ghost::Release()
 	if (hImage_ > 0)
 	{
 		DeleteGraph(hImage_);
+	}
+
+	//SE
+	if (GhostDamageHandle > 0)
+	{
+		DeleteGraph(GhostDamageHandle);
+	}
+	if (GhostAttackHandle > 0)
+	{
+		DeleteGraph(GhostAttackHandle);
 	}
 }

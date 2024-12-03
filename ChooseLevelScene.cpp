@@ -236,4 +236,14 @@ void ChooseLevelScene::Release()
     {
         DeleteGraph(hDecideByellow);
     }
+
+    //SE
+    if (SelectSEHandle > 0)
+    {
+        DeleteSoundMem(SelectSEHandle);
+    }
+    if (DecisionHandle > 0)
+    {
+        DeleteSoundMem(DecisionHandle);
+    }
 }

@@ -57,7 +57,14 @@ Field::~Field()
 	}
 	if (Map != nullptr)
 	{
-		delete[] Map;//Mapは動的配列なので[]をつける
+		delete[] Map;
+		Map = nullptr;
+	}
+
+	if (isSnow != nullptr)
+	{
+		delete[] isSnow;
+		isSnow = nullptr;
 	}
 }
 
@@ -288,8 +295,6 @@ void Field::Reset(int num)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	PlaySoundMem(Stage_BgmHandle, DX_PLAYTYPE_LOOP);
-
-
 	if (Map != nullptr)
 	{
 		delete[] Map;
