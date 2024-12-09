@@ -5,7 +5,7 @@
 
 namespace
 {
-    const int TIMER = 255;
+    const int TIMER = 512;
 }
 
 StartScene::StartScene(GameObject* parent)
