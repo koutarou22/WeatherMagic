@@ -6,10 +6,11 @@
 
 namespace {
     const float max = 1.70158f;//easeBackOutの最大値
-    const int StarPosPlay = 55;
+    const int StarPosPlay = 72;
 }
 
 Score::Score(GameObject* parent)
+    :StarMoveX(0), MessageMoveX(0.0f),frame_Star(0.0f), frame_Message(0.0f),IsStarMoveEnd(false), isPlaying(true)
 {
 	hImage_ = LoadGraph("Assets/UI/Star.png");
     assert(hImage_ > 0);
@@ -47,7 +48,7 @@ void Score::Draw()
     SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
     int mp = pSceneManager->GetMagicPoint(); // GetMp
 
-    float Width = 66.0f;  //間隔を調整
+    const float Width = 33.0f;  //間隔を調整
     int StarCount = 0;    //個数を指定
 
     //一旦文字で評価文を出す（内容は変更可）
@@ -89,7 +90,7 @@ void Score::Draw()
         {
             float x = i * Width + 260;
            // float y = transform_.position_.y;//見ずらいから格納しただけ
-            DrawExtendGraph(x  , StarPosPlay, x + 64, StarPosPlay + 64, hImage_, TRUE);
+            DrawExtendGraph(x  , StarPosPlay, x + 32, StarPosPlay + 32, hImage_, TRUE);
         }
     }
  
