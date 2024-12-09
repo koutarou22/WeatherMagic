@@ -4,12 +4,14 @@
 #include "Player.h"
 #include "Ghost.h"
 #include"Field.h"
+#include "Debug.h"
 
 Magic::Magic(GameObject* scene) : GameObject(scene),Magic_s(S_Move),animeNum(0),
 direction_({0,0}),frameCounter(0),speed_(0.0f),timer_(0)
 {
 	//hImage_ = LoadGraph("Assets/Bullet/Magic_F.png");
 	//assert(hImage_ > 0);
+	Debug::OutPrint(L"魔法を撃った(プレイヤー)", true);
 
 	hImage_move1 = LoadGraph("Assets/Bullet/bolt/bolt1.png");
 	assert(hImage_move1 > 0);
@@ -189,6 +191,8 @@ void Magic::Release()
 	{
 		DeleteGraph(hImage_);
 	}*/
+
+	Debug::OutPrint(L"魔法を解放(プレイヤー)", true);
 
 	if (hImage_move1 > 0)
 	{

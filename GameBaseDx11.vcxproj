@@ -146,6 +146,7 @@
     <ClCompile Include="Damage.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="EnemyMagic.cpp" />
+    <ClCompile Include="EnemyMagicMaster.cpp" />
     <ClCompile Include="Engine\CsvReader.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="Engine\Main.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Damage.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="EnemyMagic.h" />
+    <ClInclude Include="EnemyMagicMaster.h" />
     <ClInclude Include="Engine\CsvReader.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Global.h" />

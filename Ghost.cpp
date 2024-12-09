@@ -14,7 +14,7 @@ namespace
 	static const int SCREEN_WIDTH = 1280;
 }
 
-Ghost::Ghost(GameObject* scene)
+Ghost::Ghost(GameObject* parent)
 {
 	hImage_ = LoadGraph("Assets/Chara/obake.png");
 	assert(hImage_ > 0);
@@ -47,8 +47,7 @@ Ghost::~Ghost()
 void Ghost::Update()
 {
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-
-
+	EnemyMagic* pEnemyMagic = GetParent()->FindGameObject<EnemyMagic>();
 	if (++flameCounter_ >= 24)
 	{
 		animeFrame_ = (animeFrame_ + 1) % 4;
@@ -66,27 +65,21 @@ void Ghost::Update()
 			{
 				if (CoolDownAttack_ <= 0)
 				{
-					Debug::OutPrint(L"yobarea", true);
-					PlaySoundMem(GhostAttackHandle, DX_PLAYTYPE_BACK);
-					EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
-					if (emg == nullptr)
+					if (GetParent() != nullptr)
 					{
-						return;
-					}
-					emg->SetPosition(transform_.position_);
-					VECTOR dir = { -1.0f,0.0f };
-					emg->SetDirection(dir);
-					emg->SetSpeed(3.5f);
+						PlaySoundMem(GhostAttackHandle, DX_PLAYTYPE_BACK);
 
-				
-					//if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
-					//{
-					//	emg->SetSpeed(1.0f);
-					//}
-					//else
-					//{
-					//	emg->SetSpeed(3.5f);
-					//}
+						EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
+						Debug::OutPrint(L"ƒS[ƒXƒg‚©‚ç”­¶", true);
+						if (emg == nullptr)
+						{
+							return;
+						}
+						emg->SetPosition(transform_.position_);
+						VECTOR dir = { -1.0f,0.0f };
+						emg->SetDirection(dir);
+						emg->SetSpeed(3.5f);
+					}
 
 					CoolDownAttack_ = 300;
 				}
@@ -113,15 +106,13 @@ void Ghost::Update()
 				}
 
 			}
-			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)//é›ªã®æ™‚æ°·ã®Animationã‚’ç™ºç”Ÿã•ã›ã‚‹
+			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
 			{
 					if (pFreeze == nullptr)
 					{
 						pFreeze = Instantiate<FreezeEffect>(GetParent());
 						pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
 					}
-					
-
 			//	FreezeOne = true; 
 			}
 		}
@@ -153,7 +144,7 @@ void Ghost::Update()
 
 		if (distance <= 45.0f)
 		{
-			PlaySoundMem(GhostDamageHandle, DX_PLAYTYPE_BACK);
+ 			PlaySoundMem(GhostDamageHandle, DX_PLAYTYPE_BACK);
 			pMagic->SetMagicStateHit();
 			KillMe();
 			break;

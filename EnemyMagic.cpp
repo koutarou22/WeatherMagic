@@ -2,11 +2,21 @@
 #include <assert.h>
 #include "Camera.h"
 #include "Player.h"
+#include "Debug.h"
 
-EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene)
+EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene),hImage_(-1)
 {
 	hImage_ = LoadGraph("Assets/Chara/EnemyMagic_F.png");
 	assert(hImage_ > 0);
+	
+	timer_ = 0;
+	speed_ = 0;
+	animeType_ = 0;
+	animeFrame_ = 0;
+	PictFlame_ = 0;
+	flameCounter_ = 0;
+
+ 	Debug::OutPrint(L"–‚–@‚ğŒ‚‚Á‚½", true);
 	transform_.scale_.x = -2.0f;
 	transform_.scale_.y = -2.0f;
 }
@@ -90,5 +100,7 @@ void EnemyMagic::Release()
 	if (hImage_ > 0)
 	{
 		DeleteGraph(hImage_);
+		Debug::OutPrint(L"–‚–@‚Ì‰ğ•ú‚Í³‚µ‚­ŒÄ‚Î‚ê‚½", true);
+		hImage_ = 0;
 	}
 }

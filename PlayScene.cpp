@@ -18,6 +18,15 @@
 
 PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0) 
 {
+    StageBGMHandle = LoadSoundMem("Assets/Music/BGM/STAGE_BGM.mp3");
+    assert(StageBGMHandle != -1);
+
+    PlaySoundMem(StageBGMHandle, DX_PLAYTYPE_LOOP);
+}
+
+PlayScene::~PlayScene()
+{
+    DeleteSoundMem(StageBGMHandle);
 }
 
 void PlayScene::Initialize() 
@@ -26,6 +35,9 @@ void PlayScene::Initialize()
     MapNumber_ = pSceneManager->GettLevelManager();
     Field* pField = Instantiate<Field>(this);
     pField->Reset(MapNumber_);//初期化処理
+
+    Instantiate<Hp>(this);
+    Instantiate<MP>(this);
 
     Instantiate<WeatherBackGround>(this);
     Instantiate<Weather>(this);
@@ -36,8 +48,7 @@ void PlayScene::Initialize()
     pSceneManager->SetMagicPoint(MpPass);//PlaySceneでPlayerのMpをSet
 
     Instantiate<Camera>(this);
-    Instantiate<Hp>(this);
-    Instantiate<MP>(this);
+
     //Instantiate<UI>(this);
 
     Score* sc=Instantiate<Score>(this);

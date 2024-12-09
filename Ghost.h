@@ -9,7 +9,7 @@ class FreezeEffect;
 class Ghost : public GameObject
 {
 public:
-	Ghost(GameObject* scene);
+	Ghost(GameObject* parent);
 	~Ghost();
 	void Update() override;
 	void Draw() override;
