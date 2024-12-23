@@ -160,6 +160,7 @@
     <ClCompile Include="Hp.cpp" />
     <ClCompile Include="LandingEffect.cpp" />
     <ClCompile Include="Logo.cpp" />
+    <ClCompile Include="MoveUI.cpp" />
     <ClCompile Include="MP.cpp" />
     <ClCompile Include="MpItem.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Hp.h" />
     <ClInclude Include="LandingEffect.h" />
     <ClInclude Include="Logo.h" />
+    <ClInclude Include="MoveUI.h" />
     <ClInclude Include="MP.h" />
     <ClInclude Include="MpItem.h" />
     <ClInclude Include="Player.h" />

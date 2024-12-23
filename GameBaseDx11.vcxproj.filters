@@ -113,6 +113,9 @@
     <ClCompile Include="StartScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="MoveUI.cpp">
+      <Filter>UI\UIclass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WeatherChangeEffect.h">
@@ -229,6 +232,9 @@
     <ClInclude Include="StartScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="MoveUI.h">
+      <Filter>UI\UIclass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -257,6 +263,9 @@
     </Filter>
     <Filter Include="Object\Bullet">
       <UniqueIdentifier>{e19ddfd8-0e74-4894-84ef-2062174786a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UIclass">
+      <UniqueIdentifier>{7a3ad895-776f-4d14-851f-fbf70b8887a1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
