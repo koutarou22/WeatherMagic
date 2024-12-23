@@ -13,11 +13,12 @@
 #include "Engine/SceneManager.h"
 #include "Weather.h"
 #include"ChooseLevelScene.h"
+#include"MoveUI.h"
 
 Field::Field(GameObject* scene) : GameObject(scene)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-	
+
 	Map = nullptr; // まずここでMapでnullいれとく
 	hImage_ = LoadGraph("Assets/BackImage/bgchar_remake.png");
 	assert(hImage_ > 0);
@@ -392,7 +393,11 @@ void Field::Reset(int num)
 				isSnow[h * width + w] = true;
 				break;
 			}
-
+			case 8:
+			{
+				MoveUI* pMUI = Instantiate<MoveUI>(GetParent());
+				pMUI->SetPosition(w * 32, h * 32);
+			}
 			default:
 				break;
 			}
