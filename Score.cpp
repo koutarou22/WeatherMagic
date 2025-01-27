@@ -12,6 +12,7 @@ namespace {
     const char* Message_3Star = "Excellent!!";
     const char* Message_2Star = "Good!";
     const char* Message_1Star = "Nice!";
+    std::array<const char*, 3> ResultMassage = { Message_1Star, Message_2Star,Message_3Star };
 }
 
 Score::Score(GameObject* parent)
@@ -55,10 +56,6 @@ void Score::Draw()
 
     const float Width = 33.0f;  //ŠÔŠu‚ğ’²®
     int StarCount = 0;    //ŒÂ”‚ğw’è
-
-
-
-    std::array<const char*, 3> ResultMassage = { Message_1Star, Message_2Star,Message_3Star };
 
     if (mp > 80) 
     {
