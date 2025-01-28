@@ -116,6 +116,15 @@
     <ClCompile Include="MoveUI.cpp">
       <Filter>UI\UIclass</Filter>
     </ClCompile>
+    <ClCompile Include="JumpUI.cpp">
+      <Filter>UI\UIclass</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackUI.cpp">
+      <Filter>UI\UIclass</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeRainUI.cpp">
+      <Filter>UI\UIclass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WeatherChangeEffect.h">
@@ -233,6 +242,15 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="MoveUI.h">
+      <Filter>UI\UIclass</Filter>
+    </ClInclude>
+    <ClInclude Include="JumpUI.h">
+      <Filter>UI\UIclass</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackUI.h">
+      <Filter>UI\UIclass</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeRainUI.h">
       <Filter>UI\UIclass</Filter>
     </ClInclude>
   </ItemGroup>
