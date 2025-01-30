@@ -368,11 +368,11 @@ void Player::Draw()
 
 	if (MagicPoint_ == 0)
 	{
-		DrawFormatString(0, 130, GetColor(255, 0, 0), "MP %d ", MagicPoint_);//0なら赤に
+		DrawFormatString(20, 80, GetColor(255, 0, 0), "%d", MagicPoint_);//0なら赤に
 	}
 	else
 	{
-		DrawFormatString(0, 130, GetColor(0, 0, 255), "MP %d", MagicPoint_);//それ以外なら青に
+		DrawFormatString(20, 80, GetColor(0, 0, 255), "%d", MagicPoint_);//それ以外なら青に
 	}
 
 	if (DebugLog_ == true)
@@ -653,7 +653,8 @@ void Player::UpdateWalk()
 			transform_.position_.y -= push - 1;
 			Jump_P = 0.0f;
 
-			if (!onGround)
+			//アサートに引っかかる原因はThisではなくGetParent()を使っているから...?
+			if (!onGround && GetParent() != nullptr)
 			{
 				onGround = true;
 				LandingEffect* pLanding = Instantiate<LandingEffect>(GetParent());
@@ -820,8 +821,9 @@ void Player::UpdateWalk()
 	//攻撃魔法の処理
 	if (CheckHitKey(KEY_INPUT_M) || input.Buttons[13])//bボタン
 	{
-		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
+		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0 )
 		{
+
 			Magic* mg = Instantiate<Magic>(GetParent());
 			mg->SetPosition(transform_.position_.x, transform_.position_.y);
 			VECTOR dir = { 0.0f, 0.0f };
@@ -833,16 +835,16 @@ void Player::UpdateWalk()
 			{
 				dir.x = 1.0f;
 			}
+				mg->SetDirection(dir);
+				mg->SetSpeed(5.5f);
+				CoolDownMagic_ = timer_;
 
-			mg->SetDirection(dir);
-			mg->SetSpeed(5.5f);
-			CoolDownMagic_ = timer_;
 
+				mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+				MagicPoint_--;
 
-			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
-			MagicPoint_--;
-
-			PlaySoundMem(MagicHandle, DX_PLAYTYPE_BACK);
+				PlaySoundMem(MagicHandle, DX_PLAYTYPE_BACK);
+			
 		}
 	}
 	if (CoolDownMagic_ > 0)

@@ -37,9 +37,6 @@ Field::Field(GameObject* scene) : GameObject(scene)
 	NowStage_ = pSceneManager->GettLevelManager();
 	Reset(NowStage_); // Reset() 
 
-	Stage_BgmHandle = LoadSoundMem("Assets/Music/BGM/STAGE_BGM.mp3");
-	assert(Stage_BgmHandle != -1);
-
 	//ChangeVolumeSoundMem(128, Stage_BgmHandle);
 
 	goalWid_ = -1;
@@ -298,7 +295,7 @@ bool Field::IsHitRock(int x, int y)
 void Field::Reset(int num)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-	PlaySoundMem(Stage_BgmHandle, DX_PLAYTYPE_LOOP);
+
 	if (Map != nullptr)
 	{
 		delete[] Map;

@@ -13,6 +13,7 @@ public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
 	PlayScene(GameObject* parent);
+	~PlayScene();
 
 	//初期化
 	void Initialize() override;
@@ -28,7 +29,7 @@ public:
 private:
 	int MapNumber_;
 	int MpPass; //Mpの値
-	int PlayBGMHandle; //BGM
+	int StageBGMHandle; //BGM
 	SceneManager* pSceneManager;
 	Player* pPlayer;
 	ChooseLevelScene* pChooseLevelScene;
