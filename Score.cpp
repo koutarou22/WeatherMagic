@@ -6,10 +6,17 @@
 
 namespace {
     const float max = 1.70158f;//easeBackOut‚ÌÅ‘å’l
-    const int StarPosPlay = 55;
+    const int StarPosPlay = 72;
+
+    //ˆê’U•¶š‚Å•]‰¿•¶‚ğo‚·i“à—e‚Í•ÏX‰Âj
+    const char* Message_3Star = "Excellent!!";
+    const char* Message_2Star = "Good!";
+    const char* Message_1Star = "Nice!";
+    std::array<const char*, 3> ResultMassage = { Message_1Star, Message_2Star,Message_3Star };
 }
 
 Score::Score(GameObject* parent)
+    :StarMoveX(0), MessageMoveX(0.0f),frame_Star(0.0f), frame_Message(0.0f),IsStarMoveEnd(false), isPlaying(true)
 {
 	hImage_ = LoadGraph("Assets/UI/Star.png");
     assert(hImage_ > 0);
@@ -47,15 +54,8 @@ void Score::Draw()
     SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
     int mp = pSceneManager->GetMagicPoint(); // GetMp
 
-    float Width = 66.0f;  //ŠÔŠu‚ğ’²®
+    const float Width = 33.0f;  //ŠÔŠu‚ğ’²®
     int StarCount = 0;    //ŒÂ”‚ğw’è
-
-    //ˆê’U•¶š‚Å•]‰¿•¶‚ğo‚·i“à—e‚Í•ÏX‰Âj
-    const char* Message_3Star = "Excellent!!";
-    const char* Message_2Star = "Good!";
-    const char* Message_1Star = "Nice!";
-
-    std::array<const char*, 3> ResultMassage = { Message_1Star, Message_2Star,Message_3Star };
 
     if (mp > 80) 
     {
@@ -74,8 +74,8 @@ void Score::Draw()
     {
         for (int i = 0; i < StarCount; i++)
         {
-            float x = i * Width + 550;
-            float y = 500;//Œ©‚¸‚ç‚¢‚©‚çŠi”[‚µ‚½‚¾‚¯
+            float x = (i * 2.0) * Width + 530;
+            float y = 500;
             DrawExtendGraph(x*StarMoveX, y, x + 64, y + 64, hImage_, TRUE);
         }
 
@@ -88,8 +88,7 @@ void Score::Draw()
         for (int i = 0; i < StarCount; i++)
         {
             float x = i * Width + 260;
-           // float y = transform_.position_.y;//Œ©‚¸‚ç‚¢‚©‚çŠi”[‚µ‚½‚¾‚¯
-            DrawExtendGraph(x  , StarPosPlay, x + 64, StarPosPlay + 64, hImage_, TRUE);
+            DrawExtendGraph(x  , StarPosPlay, x + 32, StarPosPlay + 32, hImage_, TRUE);
         }
     }
  

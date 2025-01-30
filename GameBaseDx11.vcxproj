@@ -138,8 +138,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AttackUI.cpp" />
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ChangeRainUI.cpp" />
     <ClCompile Include="ChooseLevelScene.cpp" />
     <ClCompile Include="ClearFlag.cpp" />
     <ClCompile Include="ClearScene.cpp" />
@@ -159,8 +161,10 @@
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="HealItem.cpp" />
     <ClCompile Include="Hp.cpp" />
+    <ClCompile Include="JumpUI.cpp" />
     <ClCompile Include="LandingEffect.cpp" />
     <ClCompile Include="Logo.cpp" />
+    <ClCompile Include="MoveUI.cpp" />
     <ClCompile Include="MP.cpp" />
     <ClCompile Include="MpItem.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -179,8 +183,10 @@
     <ClCompile Include="WeatherChangeEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AttackUI.h" />
     <ClInclude Include="Bird.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChangeRainUI.h" />
     <ClInclude Include="ChooseLevelScene.h" />
     <ClInclude Include="ClearFlag.h" />
     <ClInclude Include="ClearScene.h" />
@@ -200,8 +206,10 @@
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="HealItem.h" />
     <ClInclude Include="Hp.h" />
+    <ClInclude Include="JumpUI.h" />
     <ClInclude Include="LandingEffect.h" />
     <ClInclude Include="Logo.h" />
+    <ClInclude Include="MoveUI.h" />
     <ClInclude Include="MP.h" />
     <ClInclude Include="MpItem.h" />
     <ClInclude Include="Player.h" />

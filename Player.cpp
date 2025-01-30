@@ -82,7 +82,7 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 	SnowHandle = LoadSoundMem("Assets/Music/SE/Weather/Snow.mp3");
 	assert(SnowHandle != -1);
 	//-----------------------------------------------------------
-	
+
 	//MP取得音取得音
 	GetMPItemHandle = LoadSoundMem("Assets/Music/SE/Player/GetMPItem.mp3");
 	assert(GetMPItemHandle != -1);
@@ -301,7 +301,7 @@ void Player::Draw()
 	case Player::S_Damage_A:
 
 		if (IsTurnLeft)
-		{	
+		{
 			DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
 		}
 		else
@@ -311,7 +311,7 @@ void Player::Draw()
 
 		break;
 	case Player::S_Dead_A:
-		
+
 		if (IsTurnLeft)
 		{
 			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
@@ -342,7 +342,7 @@ void Player::Draw()
 		if (UIGetTimer > 0)
 		{
 			DrawFormatString(x, StringUi_Up, GetColor(255, 255, 255), "MP+10");
-			
+
 			StringUi_Up -= 1;
 			UIGetTimer--;
 		}
@@ -540,7 +540,7 @@ void Player::UpdateWalk()
 	}
 
 
-	if (Jump_P > 20.0f) 
+	if (Jump_P > 20.0f)
 	{
 		Jump_P = 20.0f; // 落下速度が最大値を超えないように制限
 	}
@@ -674,7 +674,7 @@ void Player::UpdateWalk()
 	//天気を変える　Controller & keyboard
 	if (input.Buttons[0] || CheckHitKey(KEY_INPUT_UP))//↑晴れにする
 	{
-		
+
 		if (CanChangeWeather && pWeather != nullptr)
 		{
 			// 現在の天候状態を取得
@@ -689,14 +689,14 @@ void Player::UpdateWalk()
 				StopWeatherSE();
 
 				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				pWCE->SetPosition(CameraPosX ,transform_.position_.y,transform_.position_.z);
+				pWCE->SetPosition(CameraPosX, transform_.position_.y, transform_.position_.z);
 			}
 
 		}
 	}
 	else if (input.Buttons[2] || CheckHitKey(KEY_INPUT_LEFT))//←雨にする
 	{
-		
+
 		if (CanChangeWeather && pWeather != nullptr)
 		{
 			// 現在の天候状態を取得
@@ -722,7 +722,7 @@ void Player::UpdateWalk()
 		{
 			// 現在の天候状態を取得
 			WeatherState WeatherState = pWeather->GetWeatherState();
-			
+
 			if (WeatherState != Snow)//風以外なら
 			{
 				PlaySoundMem(FreezeHandle, DX_PLAYTYPE_BACK);
@@ -791,15 +791,15 @@ void Player::UpdateWalk()
 		//Rain MP Management
 		if (pWeather->GetWeatherState() == Rain)
 		{
-		
+
 			if (MagicPoint_ > 0)
 			{
-			
+
 				if (RainTime_ < 0)//約5秒ごとに行う処理
 				{
 					MagicDown(1);
 					/*RainTime_ = 10;*/
-					RainTime_ = 420;					
+					RainTime_ = 420;
 				}
 				else
 				{
@@ -823,20 +823,18 @@ void Player::UpdateWalk()
 	{
 		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0 )
 		{
-			if (GetParent() != nullptr)
-			{
-				Magic* mg = Instantiate<Magic>(GetParent());
-				mg->SetPosition(transform_.position_.x, transform_.position_.y);
-				VECTOR dir = { 0.0f, 0.0f };
-				if (IsTurnLeft)
-				{
-					dir.x = -1.0f;
-				}
-				else
-				{
-					dir.x = 1.0f;
-				}
 
+			Magic* mg = Instantiate<Magic>(GetParent());
+			mg->SetPosition(transform_.position_.x, transform_.position_.y);
+			VECTOR dir = { 0.0f, 0.0f };
+			if (IsTurnLeft)
+			{
+				dir.x = -1.0f;
+			}
+			else
+			{
+				dir.x = 1.0f;
+			}
 				mg->SetDirection(dir);
 				mg->SetSpeed(5.5f);
 				CoolDownMagic_ = timer_;
@@ -846,7 +844,7 @@ void Player::UpdateWalk()
 				MagicPoint_--;
 
 				PlaySoundMem(MagicHandle, DX_PLAYTYPE_BACK);
-			}
+			
 		}
 	}
 	if (CoolDownMagic_ > 0)
@@ -881,7 +879,7 @@ void Player::UpdateWalk()
 				{
 					PlaySoundMem(BoundHandle, DX_PLAYTYPE_BACK);
 				}
-				
+
 				Jump_P = -sqrtf(2 * GRAVITY * JUMP_HEIGHT * RainBound);
 				onGround = false;
 			}
@@ -969,8 +967,8 @@ void Player::UpdateWalk()
 	std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
 	for (HealItem* pHeal : pHeals)
 	{
-		float dx = pHeal->GetPosition().x + 32-(transform_.position_.x + 32.0f);
-		float dy = pHeal->GetPosition().y + 32-(transform_.position_.y + 32.0f);
+		float dx = pHeal->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
+		float dy = pHeal->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
@@ -980,7 +978,7 @@ void Player::UpdateWalk()
 			Hp_GetFlag = true;
 			if (Hp_ < 5)
 			{
-				
+
 				hp->HeelHp();
 				Hp_++;
 			}
@@ -996,14 +994,14 @@ void Player::UpdateWalk()
 	std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
 	for (MpItem* pMp : pMps)
 	{
-		float dx = pMp->GetPosition().x +32 - (transform_.position_.x + 32.0f);
-		float dy = pMp->GetPosition().y +32 - (transform_.position_.y + 32.0f);
+		float dx = pMp->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
+		float dy = pMp->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
 
 		float distance = sqrt(dx * dx + dy * dy);
 
 		if (distance <= 42.0f)
 		{
-			
+
 			if (!IsHitOneCount_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
 			{
 				PlaySoundMem(GetMPItemHandle, DX_PLAYTYPE_BACK); // 音声を再生
@@ -1084,7 +1082,7 @@ void Player::UpdateWalk()
 	if (pField != nullptr)
 	{
 		int playerX = (int)transform_.position_.x;
-		int playerY = (int)transform_.position_.y -5;
+		int playerY = (int)transform_.position_.y - 5;
 
 		if (pField->IsHitClear(playerX, playerY))
 		{
@@ -1150,8 +1148,8 @@ void Player::UpdateWalk()
 			{
 				mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 			}
-		
-			if (Hp_ >= 2) 
+
+			if (Hp_ >= 2)
 			{
 				HpDown(1);
 				PlaySoundMem(DamageHandle, DX_PLAYTYPE_BACK);
@@ -1273,9 +1271,26 @@ void Player::WhereIs()
 	static int SenLength = 200; //横線の長さx
 	static int SenY = 50; //横線の始点y
 	static int SenHeight = 5; //横線の幅
-	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GetColor(128, 128, 128), true); //横線かく
+	static int WakuX = 20; //枠の調整用x
+	static int WakuY = 20; //枠の調整用y
+	static int FRAME = 3; //枠の太さ
+	//↓定数にすべきだな...
+	static unsigned int WHITE = GetColor(255, 255, 255); //白
+	static unsigned int YELLOW = GetColor(255, 255, 0); //黄色
+	static unsigned int GRAY = GetColor(128, 128, 128); //灰色
+	static unsigned int BLUE = GetColor(65, 105, 225); //青
+	static unsigned int GREEN = GetColor(59, 175, 117); //緑
+	static unsigned int BLACK = GetColor(0, 0, 0); //黒
 
-	//縦線関連
+
+	//フレーム
+	DrawBox(SenStart - WakuX - FRAME, SenY - WakuY - 7 - FRAME, SenStart + SenLength + WakuX + FRAME, SenY + SenHeight + WakuY - 7 + FRAME, BLACK, true);
+	//後ろの箱
+	DrawBox(SenStart - WakuX, SenY - WakuY - 7, SenStart + SenLength + WakuX, SenY + SenHeight + WakuY - 7, WHITE, true);
+	//元の横線
+	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GRAY, true);
+
+	//三角形関連
 	Field* pField = GetParent()->FindGameObject<Field>();
 	float max = CHIP_SIZE * pField->GetGoalWidth();
 	float now = transform_.position_.x;
@@ -1284,16 +1299,17 @@ void Player::WhereIs()
 	{
 		nowLine = SenStart + SenLength; //マップは続くがゴールしたら縦線は動かない
 	}
-	DrawTriangle(nowLine - 4, SenY - 14, (nowLine - 4 + nowLine + SenHeight + 4) / 2, (SenY - 10 + SenY + 14) / 2, nowLine + SenHeight + 4, SenY - 14, GetColor(128, 128, 128), true); //三角形かく
+	//三角
+	DrawTriangle(nowLine - 4, SenY - 14, (nowLine - 4 + nowLine + SenHeight + 4) / 2, (SenY - 10 + SenY + 14) / 2, nowLine + SenHeight + 4, SenY - 14, BLUE, true); //三角形かく
 	//色変え
-	DrawBox(SenStart, SenY, nowLine + 2, SenY + SenHeight, GetColor(65, 105, 225), true); //横線かく
+	DrawBox(SenStart, SenY, nowLine + 2, SenY + SenHeight, BLUE, true); //横線かく
 	//ゴール
 	DrawRotaGraph(SenStart + SenLength + 2, SenY - 9, 0.75, 0, hGoal, true);
 }
 
 void Player::UpdateErase()
 {
-	Field *pField = GetParent()->FindGameObject<Field>();
+	Field* pField = GetParent()->FindGameObject<Field>();
 	if (++flameCounter >= 60)
 	{
 		//死んだときプレイの時のBGM
@@ -1347,7 +1363,7 @@ void Player::GaleEffect(WeatherState state)
 	{
 		// カメラの位置を取得
 		int camX = cam->GetValue();
-	
+
 		//岩の上に乗る処理
 		if (onRock == true)
 		{

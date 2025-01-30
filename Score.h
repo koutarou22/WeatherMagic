@@ -14,13 +14,9 @@ private:
 	float MessageMoveX;//イージング関数用の値
 	float frame_Star;//フレーム数える(星用)
 	float frame_Message;//フレーム数える(メッセージ用)
-	bool IsStarMoveEnd = false;
-	bool isPlaying = true; //今プレイシーンですか
+	bool IsStarMoveEnd;
+	bool isPlaying; //今プレイシーンですか
 
-	//int animeType_;//状況
-	//int animeFrame_;//駒
-	//int PictFlame_;
-	//int flameCounter_;
 public:
 
 	Score(GameObject* parent);
