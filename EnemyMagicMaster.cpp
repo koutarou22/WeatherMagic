@@ -41,8 +41,3 @@ void EnemyMagicMaster::Draw()
 void EnemyMagicMaster::Release()
 {
 }
-
-int EnemyMagicMaster::GetEnemyMagic()
-{
-	hImage_1
-}

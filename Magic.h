@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include "Player.h"
 #include<array>
 
 /// <summary>
@@ -13,6 +12,7 @@ public:
 	~Magic();
 	void Update() override;
 	void Draw() override;
+	void UpdateIdle();
 	void UpdateMove();
 	void UpdateHit();
 
@@ -21,7 +21,11 @@ public:
 	void SetDirection(VECTOR _direction) { direction_ = _direction; }
 	void SetSpeed(float _speed) { speed_ = _speed; }
 	bool ColliderCircle(float x, float y, float r);
+
+	void SetMagicStateIdle() { Magic_s = S_Idle; }
 	void SetMagicStateHit() { Magic_s = S_Hit; }
+	void SetMagicStateMove() { Magic_s = S_Move; }
+	bool IsActive() { if (Magic_s == S_Idle) return true; else false; }
 
 	void Release() override;
 private:
@@ -45,6 +49,7 @@ private:
 
 	enum MagicState
 	{
+		S_Idle,
 		S_Move,
 		S_Hit,
 	};

@@ -71,6 +71,16 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 	stickTilt.IsLeftStickTilt_right = false;
 	stickTilt.IsRightStickTilt_left = false;
 	stickTilt.IsRightStickTilt_right = false;
+
+	for (int i = 0; i < 3; i++)
+	{
+		Magic* mg = nullptr;
+		mg = Instantiate<Magic>(GetParent());
+		Magics_.push_back(mg);
+	}
+	pmagic_ = Instantiate<Magic>(GetParent());
+	
+
 	////----------------------天候音の登録------------------------
 	//雨音
 	RainHandle = LoadSoundMem("Assets/Music/SE/Weather/Rain.mp3");
@@ -819,12 +829,36 @@ void Player::UpdateWalk()
 	//------------------------------------------------------------------------------------------
 
 	//攻撃魔法の処理
+
 	if (CheckHitKey(KEY_INPUT_M) || input.Buttons[13])//bボタン
 	{
-		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0 )
+		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
 		{
+			/*for (auto& m : Magics_)
+			{
+				if (m->IsActive())
+				{
+					m->SetMagicStateMove();
+				}
+			}*/
 
-			Magic* mg = Instantiate<Magic>(GetParent());
+			pmagic_->SetMagicStateMove();
+			pmagic_->SetPosition(transform_.position_.x, transform_.position_.y);
+			VECTOR dir = { 0.0f, 0.0f };
+			if (IsTurnLeft)
+			{
+				dir.x = -1.0f;
+			}
+			else
+			{
+				dir.x = 1.0f;
+			}
+			pmagic_->SetDirection(dir);
+			pmagic_->SetSpeed(5.5f);
+			
+
+			//Magic* mg = Instantiate<Magic>(GetParent());
+			/*Magic* mg = GetParent()->FindGameObject<Magic>();
 			mg->SetPosition(transform_.position_.x, transform_.position_.y);
 			VECTOR dir = { 0.0f, 0.0f };
 			if (IsTurnLeft)
@@ -835,16 +869,17 @@ void Player::UpdateWalk()
 			{
 				dir.x = 1.0f;
 			}
-				mg->SetDirection(dir);
-				mg->SetSpeed(5.5f);
-				CoolDownMagic_ = timer_;
+			mg->SetDirection(dir);
+			mg->SetSpeed(5.5f);
+			mg->SetMagicStateMove();*/
+			CoolDownMagic_ = timer_;
 
 
-				mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
-				MagicPoint_--;
+			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+			MagicPoint_--;
 
-				PlaySoundMem(MagicHandle, DX_PLAYTYPE_BACK);
-			
+			PlaySoundMem(MagicHandle, DX_PLAYTYPE_BACK);
+
 		}
 	}
 	if (CoolDownMagic_ > 0)
@@ -1094,80 +1129,80 @@ void Player::UpdateWalk()
 			if (pClearFlag != nullptr)
 			{
 				pClearFlag->KillMe();
-			}
 
-			if (pSceneManager != nullptr)
-			{
-				// MPの保存
-				int MpPass = MagicPoint_; // 現在のMPを変数に格納
-				pSceneManager->SetMagicPoint(MpPass); // Set関数に保存
-			}
 
-			player_state = S_Clear;
-			Instantiate<Logo>(this);
+				if (pSceneManager != nullptr)
+				{
+					// MPの保存
+					int MpPass = MagicPoint_; // 現在のMPを変数に格納
+					pSceneManager->SetMagicPoint(MpPass); // Set関数に保存
+				}
+
+				player_state = S_Clear;
+				Instantiate<Logo>(this);
+			}
 		}
-	}
 
-	if (CheckHitKey(KEY_INPUT_Q))
-	{
-		DebugLog_ = true;
-	}
-	else
-	{
-		DebugLog_ = false;
-	}
-
-	//mp20以下でmp自動回復
-	if (MagicPoint_ < 20)
-	{
-		if (--MpHealTimer_ < 0)
+		if (CheckHitKey(KEY_INPUT_Q))
 		{
-			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
-			MagicPoint_++;
-			MpHealTimer_ = 60;
-		}
-	}
-
-	//雪の時間経過(とりあえずフレーム経過)でMPが減る
-	if (pWeather != nullptr)
-	{
-		if (pWeather->GetWeatherState() == WeatherState::Snow)
-		{
-			//フレーム基準だからなぁE..
-			CountSnowFlame--;
-		}
-	}
-
-	//残りの雪時間が0以下だったら
-	if (CountSnowFlame <= 0)
-	{
-		if (MagicPoint_ >= 10)//MPが10以上なら減らす
-		{
-			MagicPoint_ -= 10;
-			if (mp != nullptr)
-			{
-				mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
-			}
-
-			if (Hp_ >= 2)
-			{
-				HpDown(1);
-				PlaySoundMem(DamageHandle, DX_PLAYTYPE_BACK);
-			}
+			DebugLog_ = true;
 		}
 		else
 		{
-			MagicPoint_ = 0;//10より少なかったら0に
+			DebugLog_ = false;
 		}
-		CountSnowFlame = MAX_SNOW_FLAME; //元に戻す
-	}
 
-	if (CheckHitKey(KEY_INPUT_P))
-	{
-		CheckWall(pField);
+		//mp20以下でmp自動回復
+		if (MagicPoint_ < 20)
+		{
+			if (--MpHealTimer_ < 0)
+			{
+				mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+				MagicPoint_++;
+				MpHealTimer_ = 60;
+			}
+		}
+
+		//雪の時間経過(とりあえずフレーム経過)でMPが減る
+		if (pWeather != nullptr)
+		{
+			if (pWeather->GetWeatherState() == WeatherState::Snow)
+			{
+				//フレーム基準だからなぁE..
+				CountSnowFlame--;
+			}
+		}
+
+		//残りの雪時間が0以下だったら
+		if (CountSnowFlame <= 0)
+		{
+			if (MagicPoint_ >= 10)//MPが10以上なら減らす
+			{
+				MagicPoint_ -= 10;
+				if (mp != nullptr)
+				{
+					mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+				}
+
+				if (Hp_ >= 2)
+				{
+					HpDown(1);
+					PlaySoundMem(DamageHandle, DX_PLAYTYPE_BACK);
+				}
+			}
+			else
+			{
+				MagicPoint_ = 0;//10より少なかったら0に
+			}
+			CountSnowFlame = MAX_SNOW_FLAME; //元に戻す
+		}
+
+		if (CheckHitKey(KEY_INPUT_P))
+		{
+			CheckWall(pField);
+		}
 	}
 }
-
 void Player::UpdateDamage()
 {
 	animeFrame = 2;
@@ -1385,5 +1420,10 @@ void Player::GaleEffect(WeatherState state)
 		}
 	}
 }
+
+//vector<Magic*> Player::GetMagicBlank()
+//{
+//	return Magics_;
+//}
 
 

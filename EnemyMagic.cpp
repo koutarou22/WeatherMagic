@@ -19,6 +19,8 @@ EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene),hImage_(-1)
  	Debug::OutPrint(L"–‚–@‚ðŒ‚‚Á‚½", true);
 	transform_.scale_.x = -2.0f;
 	transform_.scale_.y = -2.0f;
+
+	EnemyMagicState_ = S_IDLE;
 }
 
 EnemyMagic::~EnemyMagic()
@@ -27,6 +29,67 @@ EnemyMagic::~EnemyMagic()
 }
 
 void EnemyMagic::Update()
+{
+	switch (EnemyMagicState_)
+	{
+	case EnemyMagic::S_IDLE:
+		UpdateIdle();
+		break;
+	case EnemyMagic::S_MOVE:
+		UpdateMove();
+		break;
+	default:
+		break;
+	}
+}
+
+void EnemyMagic::Draw()
+{
+	int x = (int)transform_.position_.x;
+	int y = (int)transform_.position_.y;
+
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	if (cam != nullptr) {
+		x -= cam->GetValue();
+	}
+
+	switch (EnemyMagicState_)
+	{
+	//case EnemyMagic::S_IDLE:
+	//	UpdateIdle();
+	//	break;
+	//case EnemyMagic::S_IDLE:
+	case EnemyMagic::S_MOVE:
+	{
+		
+		int spriteWidth = 64;
+		int spriteHeight = 70;
+
+		int frameX = animeFrame_ % 3; // ‰¡‚É3‚Â‚Ì‰æ‘œ‚ª‚ ‚é‚½‚ß
+
+		//DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
+
+		//DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 16.0f, GetColor(255, 0, 0), 0);
+		DrawGraph(x, y, hImage_, TRUE);
+		break;
+	}
+		
+	default:
+		break;
+	}
+}
+
+void EnemyMagic::UpdateIdle()
+{
+	timer_ = 0;
+	speed_ = 0;
+	animeType_ = 0;
+	animeFrame_ = 0;
+	PictFlame_ = 0;
+	flameCounter_ = 0;
+}
+
+void EnemyMagic::UpdateMove()
 {
 	if (++flameCounter_ >= 24)
 	{
@@ -42,30 +105,10 @@ void EnemyMagic::Update()
 
 		if (--timer_ <= 0)
 		{
-			KillMe();
+			//KillMe();
+			EnemyMagicState_ = S_IDLE;
 		}
 	}
-
-}
-
-void EnemyMagic::Draw()
-{
-	int x = (int)transform_.position_.x;
-	int y = (int)transform_.position_.y;
-
-	Camera* cam = GetParent()->FindGameObject<Camera>();
-	if (cam != nullptr) {
-		x -= cam->GetValue();
-	}
-	int spriteWidth = 64;
-	int spriteHeight = 70;
-
-	int frameX = animeFrame_ % 3; // ‰¡‚É3‚Â‚Ì‰æ‘œ‚ª‚ ‚é‚½‚ß
-
-	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
-
-	//DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 16.0f, GetColor(255, 0, 0), 0);
-	DrawGraph(x, y, hImage_, TRUE);
 }
 
 void EnemyMagic::SetPosition(int x, int y)
@@ -79,6 +122,25 @@ void EnemyMagic::SetPosition(XMFLOAT3 pos)
 {
 	transform_.position_ = pos;
 	timer_ = 90;
+}
+
+void EnemyMagic::StartMove()
+{
+	EnemyMagicState_ = S_MOVE;
+}
+
+void EnemyMagic::MagicMoveStart(XMFLOAT3 _pos, float _timer, VECTOR _direction, float _speed)
+{
+	transform_.position_ = _pos;
+	timer_ = _timer;
+	direction_ = _direction;
+	speed_ = _speed;
+	EnemyMagicState_ = S_MOVE; 
+}
+
+void EnemyMagic::StopMove()
+{
+	EnemyMagicState_ = S_IDLE;
 }
 
 bool EnemyMagic::ColliderCircle(float x, float y, float r)

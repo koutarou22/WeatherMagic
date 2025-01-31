@@ -15,6 +15,7 @@ namespace
 }
 
 Ghost::Ghost(GameObject* parent)
+	:GameObject(parent),hImage_(-1)
 {
 	hImage_ = LoadGraph("Assets/Chara/obake.png");
 	assert(hImage_ > 0);
@@ -37,6 +38,7 @@ Ghost::Ghost(GameObject* parent)
 	assert(GhostAttackHandle != -1);
 
 	pFreeze = nullptr;
+	Instantiate<EnemyMagic>(GetParent());
 }
 
 Ghost::~Ghost()
@@ -69,16 +71,20 @@ void Ghost::Update()
 					{
 						PlaySoundMem(GhostAttackHandle, DX_PLAYTYPE_BACK);
 
-						EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
+						//EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
+						EnemyMagic* pEnemyMagic = GetParent()->FindGameObject<EnemyMagic>();
 						Debug::OutPrint(L"ゴーストから発生", true);
-						if (emg == nullptr)
+						if (pEnemyMagic == nullptr)
 						{
 							return;
 						}
-						emg->SetPosition(transform_.position_);
 						VECTOR dir = { -1.0f,0.0f };
-						emg->SetDirection(dir);
-						emg->SetSpeed(3.5f);
+						pEnemyMagic->MagicMoveStart(transform_.position_, 90, dir, 3.5f);
+
+						/*pEnemyMagic->SetPosition(transform_.position_);
+						pEnemyMagic->SetDirection(dir);
+						pEnemyMagic->SetSpeed(3.5f);
+						pEnemyMagic->StartMove();*/
 					}
 
 					CoolDownAttack_ = 300;
@@ -97,7 +103,7 @@ void Ghost::Update()
 				sinAngle += 3.0f;
 				float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
 				//transform_.position_.y += sinValue * 50.0f;
-				transform_.position_.y += sinValue * 3.0f;
+				//transform_.position_.y += sinValue * 3.0f;
 
 				//	雪以外で、pFreezeのポインタが生きているなら削除
 				if (pFreeze != nullptr)

@@ -1,8 +1,10 @@
 #pragma once
 #include <DxLib.h>
 #include <assert.h>
+#include<vector>
 #include "Engine/GameObject.h"
 #include "Weather.h"
+#include"Magic.h"
 
 
 /// <summary>
@@ -45,6 +47,8 @@ public:
 
 	void GaleEffect(WeatherState state);//Ride on the Rocks && Using the Wind
 
+	//vector<Magic*> GetMagicBlank(); 
+
   void UpdateWalk();
   void UpdateDamage();
   void UpdateDead();
@@ -64,6 +68,9 @@ public:
   void StopMoveSE();
 
 private:
+	std::vector<Magic *> Magics_;
+	Magic* pmagic_;
+
 	int MagicPoint_;//打てる魔法の回数
 	int hImage;
 	int hImage_cont;

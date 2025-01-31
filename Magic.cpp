@@ -39,6 +39,8 @@ direction_({0,0}),frameCounter(0),speed_(0.0f),timer_(0)
 
 	animeArray_ = { hImage_move1,hImage_move2, hImage_move3, hImage_move4 };
 	animeHitArray_ = { hImage_hit1,hImage_hit2, hImage_hit3, hImage_hit4, hImage_hit5, hImage_hit6, hImage_hit7 };
+
+	Magic_s = S_Idle;
 }
 
 Magic::~Magic()
@@ -48,7 +50,6 @@ Magic::~Magic()
 
 void Magic::Update()
 {
-
 	switch (Magic_s)
 	{
 	case Magic::S_Move:
@@ -97,6 +98,10 @@ void Magic::Draw()
 	}
 
 	//DrawCircle(x + 16, y + 16, 16, GetColor(255, 0, 0), FALSE);
+}
+
+void Magic::UpdateIdle()
+{
 }
 
 void Magic::UpdateMove()
