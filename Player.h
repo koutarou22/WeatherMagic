@@ -14,7 +14,6 @@ class Field;
 class Player : public GameObject
 {
 public:
-
 	Player(GameObject* scene);
 	~Player();
 	void Update() override;

@@ -28,6 +28,7 @@ void SceneManager::Update()
 	if (currentSceneID_ != nextSceneID_)
 	{
 		KillAllChildren();
+		InitGraph();
 		
 		switch (nextSceneID_)
 		{

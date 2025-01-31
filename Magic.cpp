@@ -43,7 +43,7 @@ direction_({0,0}),frameCounter(0),speed_(0.0f),timer_(0)
 
 Magic::~Magic()
 {
-	Release();
+	//Release();
 }
 
 void Magic::Update()

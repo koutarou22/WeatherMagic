@@ -9,7 +9,6 @@
 #include "Engine/SceneManager.h"
 #include "Magic.h"
 #include "Ghost.h"
-#include "EnemyMagic.h"
 #include "Damage.h"
 #include "HealItem.h"
 #include "MpItem.h"
@@ -19,6 +18,7 @@
 #include"ClearFlag.h"
 #include"Logo.h"
 #include "LandingEffect.h"
+#include "EnemyMagic.h"
 
 //satou test
 namespace
@@ -921,23 +921,26 @@ void Player::UpdateWalk()
 	std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
 	for (EnemyMagic* pEnemyMagic : pEMagics)
 	{
-		//『EnemyMagic』と『Slime』の距離を求めている
-		float dx = pEnemyMagic->GetPosition().x + 16 - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
-		float dy = pEnemyMagic->GetPosition().y + 16 - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
-		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
-
-		if (distance <= 30.0f)
+		if (pEnemyMagic->GetIsDraw())
 		{
-			if (NDTIME_ <= 0.0f)
+			//『EnemyMagic』と『Slime』の距離を求めている
+			float dx = pEnemyMagic->GetPosition().x + 16 - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
+			float dy = pEnemyMagic->GetPosition().y + 16 - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
+			float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
+
+			if (distance <= 30.0f)
 			{
-				hp->DamageHp();
-				HpDown(1);
+				if (NDTIME_ <= 0.0f)
+				{
+					hp->DamageHp();
+					HpDown(1);
 
-				DamageSE();
+					DamageSE();
 
-				NDTIME_ = 2.0f;//個々の数値で無敵時間がきまる
+					NDTIME_ = 2.0f;//個々の数値で無敵時間がきまる
+				}
+				break;
 			}
-			break;
 		}
 	}
 

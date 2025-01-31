@@ -44,5 +44,5 @@ void EnemyMagicMaster::Release()
 
 int EnemyMagicMaster::GetEnemyMagic()
 {
-	hImage_1
+	return hImage_1;
 }
