@@ -126,6 +126,18 @@
     <ClCompile Include="ChangeRainUI.cpp">
       <Filter>UI\UIclass</Filter>
     </ClCompile>
+    <ClCompile Include="ChangeSunUI.cpp">
+      <Filter>UI\UIclass</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeWindUI.cpp">
+      <Filter>UI\UIclass</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeSnowUI.cpp">
+      <Filter>UI\UIclass</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveStoneUI.cpp">
+      <Filter>UI\UIclass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WeatherChangeEffect.h">
@@ -243,7 +255,6 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="EnemyMagicMaster.h" />
-  
     <ClInclude Include="MoveUI.h">
       <Filter>UI\UIclass</Filter>
     </ClInclude>
@@ -254,6 +265,18 @@
       <Filter>UI\UIclass</Filter>
     </ClInclude>
     <ClInclude Include="ChangeRainUI.h">
+      <Filter>UI\UIclass</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeSunUI.h">
+      <Filter>UI\UIclass</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeWindUI.h">
+      <Filter>UI\UIclass</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeSnowUI.h">
+      <Filter>UI\UIclass</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveStoneUI.h">
       <Filter>UI\UIclass</Filter>
     </ClInclude>
   </ItemGroup>
