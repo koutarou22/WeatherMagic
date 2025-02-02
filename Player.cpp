@@ -9,7 +9,6 @@
 #include "Engine/SceneManager.h"
 #include "Magic.h"
 #include "Ghost.h"
-#include "EnemyMagic.h"
 #include "Damage.h"
 #include "HealItem.h"
 #include "MpItem.h"
@@ -19,6 +18,7 @@
 #include"ClearFlag.h"
 #include"Logo.h"
 #include "LandingEffect.h"
+#include "EnemyMagic.h"
 
 //satou test
 namespace
@@ -38,7 +38,7 @@ namespace
 
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
-Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), DebugLog_(false)
+Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), DebugLog_(false),hasLanded(false)
 {
 	hImage = LoadGraph("Assets/Chara/Clear_Wizard.png");
 	assert(hImage > 0);
@@ -270,6 +270,7 @@ void Player::Draw()
 	int displayY = y - 30;
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
+
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
@@ -660,23 +661,31 @@ void Player::UpdateWalk()
 		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
 		if (push >= 1)
 		{
+
 			transform_.position_.y -= push - 1;
 			Jump_P = 0.0f;
-
-			//アサートに引っかかる原因はThisではなくGetParent()を使っているから...?
-			if (!onGround && GetParent() != nullptr)
+			if (!onGround && GetParent() != nullptr) 
 			{
+
 				onGround = true;
-				LandingEffect* pLanding = Instantiate<LandingEffect>(GetParent());
-				pLanding->SetPosition(transform_.position_.x, transform_.position_.y);
-				HitLanding = true;
-				PlaySoundMem(LandingHandle, DX_PLAYTYPE_BACK); // 音声を再生
+				if (!hasLanded)
+				{
+					LandingEffect* pLanding = Instantiate<LandingEffect>(GetParent());
+					if (pLanding != nullptr) 
+					{
+						pLanding->SetPosition(transform_.position_.x, transform_.position_.y);
+						HitLanding = true;
+						PlaySoundMem(LandingHandle, DX_PLAYTYPE_BACK);
+						hasLanded = true; //再度生成しないようにする
+					}
+				}
 			}
 		}
-		else
+		else 
 		{
 			onGround = false;
 			HitLanding = false;
+			hasLanded = false; // 地面から離れたらフラグをリセット
 		}
 	}
 	//-----------------------------------------------------------
@@ -956,23 +965,26 @@ void Player::UpdateWalk()
 	std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
 	for (EnemyMagic* pEnemyMagic : pEMagics)
 	{
-		//『EnemyMagic』と『Slime』の距離を求めている
-		float dx = pEnemyMagic->GetPosition().x + 16 - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
-		float dy = pEnemyMagic->GetPosition().y + 16 - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
-		float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
-
-		if (distance <= 30.0f)
+		if (pEnemyMagic->GetIsDraw())
 		{
-			if (NDTIME_ <= 0.0f)
+			//『EnemyMagic』と『Slime』の距離を求めている
+			float dx = pEnemyMagic->GetPosition().x + 16 - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
+			float dy = pEnemyMagic->GetPosition().y + 16 - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
+			float distance = sqrt(dx * dx + dy * dy);//ここで明確な距離を計算
+
+			if (distance <= 30.0f)
 			{
-				hp->DamageHp();
-				HpDown(1);
+				if (NDTIME_ <= 0.0f)
+				{
+					hp->DamageHp();
+					HpDown(1);
 
-				DamageSE();
+					DamageSE();
 
-				NDTIME_ = 2.0f;//個々の数値で無敵時間がきまる
+					NDTIME_ = 2.0f;//個々の数値で無敵時間がきまる
+				}
+				break;
 			}
-			break;
 		}
 	}
 

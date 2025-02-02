@@ -3,6 +3,7 @@
 #include"EnemyMagic.h"
 
 class FreezeEffect;
+class EnemyMagic;
 
 /// <summary>
 /// ’eŠÛ‚ğ”ò‚Î‚µ‚Ä‚­‚é‚¨‰»‚¯‚Ìî•ñ
@@ -20,6 +21,7 @@ public:
 	
 	void Release() override;
 private:
+	EnemyMagic* emg;
 	float sinAngle;
 	int hImage_;
 	int animeType_;//ó‹µ
@@ -29,6 +31,7 @@ private:
 
 	int CoolDownAttack_ = 0;
 	int timer_ = 90;
+	int enemyHandle;
 	enum State//Œ‹‹Çg‚Á‚Ä‚È‚¢
 	{
 		S_WaIk = 0,

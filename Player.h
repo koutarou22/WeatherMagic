@@ -16,7 +16,6 @@ class Field;
 class Player : public GameObject
 {
 public:
-
 	Player(GameObject* scene);
 	~Player();
 	void Update() override;
@@ -89,6 +88,8 @@ private:
 	bool onRock;//Player on the Rock?
 	bool damaged = false;
 	bool HitLanding;//着地したかどうかを確認する
+	bool hasLanded;//一回インスタンスを読んだら再度読ませない用
+
 	float Jump_P = 0.0f;
 	int Flash_Count;
 

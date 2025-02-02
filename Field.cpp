@@ -17,6 +17,10 @@
 #include"JumpUI.h"
 #include"AttackUI.h"
 #include"ChangeRainUI.h"
+#include"ChangeSunUI.h"
+#include"ChangeWindUI.h"
+#include"ChangeSnowUI.h"
+#include"MoveStoneUI.h"
 
 Field::Field(GameObject* scene) : GameObject(scene)
 {
@@ -415,6 +419,30 @@ void Field::Reset(int num)
 			{
 				ChangeRainUI* pCRUI = Instantiate<ChangeRainUI>(GetParent());
 				pCRUI->SetPosition(w * 32, h * 32);
+				break;
+			}
+			case 12:
+			{
+				ChangeSunUI* pCSUI = Instantiate<ChangeSunUI>(GetParent());
+				pCSUI->SetPosition(w * 32, h * 32);
+				break;
+			}
+			case 13:
+			{
+				ChangeWindUI* pCWUI = Instantiate<ChangeWindUI>(GetParent());
+				pCWUI->SetPosition(w * 32, h * 32);
+				break;
+			}
+			case 14:
+			{
+				ChangeSnowUI* pCSnUI = Instantiate<ChangeSnowUI>(GetParent());
+				pCSnUI->SetPosition(w * 32, h * 32);
+				break;
+			}
+			case 15:
+			{
+				MoveStoneUI* pMSUI = Instantiate<MoveStoneUI>(GetParent());
+				pMSUI->SetPosition(w * 32, h * 32);
 				break;
 			}
 			default:

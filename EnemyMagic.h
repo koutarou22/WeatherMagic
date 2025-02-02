@@ -21,8 +21,12 @@ public:
 	void MagicMoveStart(XMFLOAT3 pos, float timer,VECTOR direction, float speed);
 	void StopMove();
 	bool ColliderCircle(float x, float y, float r);
-
+	void LoadMagicImage();
 	void Release() override;
+
+	int GetImageHandle() {	return hImage_;}
+	void SetIsDraw(bool d) { isDraw = d; }
+	bool GetIsDraw() { return isDraw; }
 private:
 	int hImage_;
 	int timer_;
@@ -33,9 +37,14 @@ private:
 	int PictFlame_;
 	int flameCounter_;
 
+<<<<<<< HEAD
 	enum State {
 		S_IDLE = 0,
 		S_MOVE,
 	};
 	State EnemyMagicState_;
+=======
+	float prevPlPosX; //球を打ち始めた時のプレイヤーのx座標
+	bool isDraw; //EnemyMagicを描画するか
+>>>>>>> master
 };

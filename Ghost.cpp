@@ -14,8 +14,12 @@ namespace
 	static const int SCREEN_WIDTH = 1280;
 }
 
+<<<<<<< HEAD
 Ghost::Ghost(GameObject* parent)
 	:GameObject(parent),hImage_(-1)
+=======
+Ghost::Ghost(GameObject* parent):GameObject(parent)
+>>>>>>> master
 {
 	hImage_ = LoadGraph("Assets/Chara/obake.png");
 	assert(hImage_ > 0);
@@ -38,12 +42,19 @@ Ghost::Ghost(GameObject* parent)
 	assert(GhostAttackHandle != -1);
 
 	pFreeze = nullptr;
+<<<<<<< HEAD
 	Instantiate<EnemyMagic>(GetParent());
+=======
+	enemyHandle = -1;
+	emg = nullptr;
+
+	Debug::OutPrint(L"ゴースト爆誕", true);
+>>>>>>> master
 }
 
 Ghost::~Ghost()
 {
- 	Release();
+	Debug::OutPrint(L"ゴーストですとらくた", true);
 }
 
 void Ghost::Update()
@@ -67,17 +78,22 @@ void Ghost::Update()
 			{
 				if (CoolDownAttack_ <= 0)
 				{
-					if (GetParent() != nullptr)
-					{
 						PlaySoundMem(GhostAttackHandle, DX_PLAYTYPE_BACK);
+<<<<<<< HEAD
 
 						//EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
 						EnemyMagic* pEnemyMagic = GetParent()->FindGameObject<EnemyMagic>();
 						Debug::OutPrint(L"ゴーストから発生", true);
 						if (pEnemyMagic == nullptr)
+=======
+						
+						
+						if (emg == nullptr)
+>>>>>>> master
 						{
-							return;
+							emg = Instantiate<EnemyMagic>(GetParent());
 						}
+<<<<<<< HEAD
 						VECTOR dir = { -1.0f,0.0f };
 						pEnemyMagic->MagicMoveStart(transform_.position_, 90, dir, 3.5f);
 
@@ -86,8 +102,26 @@ void Ghost::Update()
 						pEnemyMagic->SetSpeed(3.5f);
 						pEnemyMagic->StartMove();*/
 					}
+=======
+						if (enemyHandle<0)
+						{
+ 							emg->LoadMagicImage();
+							enemyHandle=emg->GetImageHandle();
+							Debug::OutPrint(L"イメージロード", true);
+						}
+						Debug::OutPrint(L"ゴーストから発生", true);
+>>>>>>> master
 
-					CoolDownAttack_ = 300;
+						if (emg != nullptr)
+						{
+							emg->SetPosition(transform_.position_);
+							VECTOR dir = { -1.0f,0.0f };
+							emg->SetDirection(dir);
+							emg->SetSpeed(3.5f);
+							Debug::OutPrint(L"いろいろセット", true);
+						}
+
+						CoolDownAttack_ = 300;
 				}
 			}
 
@@ -200,6 +234,8 @@ bool Ghost::ColliderCircle(float x, float y, float r)
 
 void Ghost::Release()
 {
+	emg=nullptr;
+	Debug::OutPrint(L"ゴーストりりーす", true);
 	if (hImage_ > 0)
 	{
 		DeleteGraph(hImage_);
