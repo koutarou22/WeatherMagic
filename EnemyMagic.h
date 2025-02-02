@@ -1,5 +1,6 @@
 #pragma once
 #include"Engine/GameObject.h"
+
 /// <summary>
 /// 敵が打ってくる魔法の情報
 /// </summary>
@@ -40,4 +41,6 @@ private:
 	float prevPlPosX; //球を打ち始めた時のプレイヤーのx座標
 	bool isDraw; //EnemyMagicを描画するか
 
+//	Ghost* gh_;
+	XMFLOAT3 GhostPos_;
 };

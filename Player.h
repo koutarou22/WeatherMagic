@@ -68,7 +68,7 @@ public:
 
 private:
 	std::vector<Magic *> Magics_;
-	Magic* pmagic_;
+	Magic* pMagic_;
 
 	int MagicPoint_;//打てる魔法の回数
 	int hImage;

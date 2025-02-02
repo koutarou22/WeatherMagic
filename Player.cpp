@@ -72,15 +72,6 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 	stickTilt.IsRightStickTilt_left = false;
 	stickTilt.IsRightStickTilt_right = false;
 
-	for (int i = 0; i < 3; i++)
-	{
-		Magic* mg = nullptr;
-		mg = Instantiate<Magic>(GetParent());
-		Magics_.push_back(mg);
-	}
-	pmagic_ = Instantiate<Magic>(GetParent());
-	
-
 	////----------------------天候音の登録------------------------
 	//雨音
 	RainHandle = LoadSoundMem("Assets/Music/SE/Weather/Rain.mp3");
@@ -843,46 +834,32 @@ void Player::UpdateWalk()
 	{
 		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
 		{
-			/*for (auto& m : Magics_)
+			if (pMagic_ == nullptr)
 			{
-				if (m->IsActive())
+				pMagic_ = Instantiate<Magic>(GetParent());
+			}
+
+			if (pMagic_ != nullptr)
+			{
+				if (!pMagic_->GetIsDraw()) 
 				{
-					m->SetMagicStateMove();
+					pMagic_->SetIsDraw(true);
+					pMagic_->SetMagicStateMove();
+					pMagic_->SetPosition(transform_.position_.x, transform_.position_.y);
+					VECTOR dir = { 0.0f, 0.0f };
+					if (IsTurnLeft)
+					{
+						dir.x = -1.0f;
+					}
+					else
+					{
+						dir.x = 1.0f;
+					}
+					pMagic_->SetDirection(dir);
+					pMagic_->SetSpeed(5.5f);
 				}
-			}*/
-
-			pmagic_->SetMagicStateMove();
-			pmagic_->SetPosition(transform_.position_.x, transform_.position_.y);
-			VECTOR dir = { 0.0f, 0.0f };
-			if (IsTurnLeft)
-			{
-				dir.x = -1.0f;
 			}
-			else
-			{
-				dir.x = 1.0f;
-			}
-			pmagic_->SetDirection(dir);
-			pmagic_->SetSpeed(5.5f);
-			
-
-			//Magic* mg = Instantiate<Magic>(GetParent());
-			/*Magic* mg = GetParent()->FindGameObject<Magic>();
-			mg->SetPosition(transform_.position_.x, transform_.position_.y);
-			VECTOR dir = { 0.0f, 0.0f };
-			if (IsTurnLeft)
-			{
-				dir.x = -1.0f;
-			}
-			else
-			{
-				dir.x = 1.0f;
-			}
-			mg->SetDirection(dir);
-			mg->SetSpeed(5.5f);
-			mg->SetMagicStateMove();*/
 			CoolDownMagic_ = timer_;
-
 
 			mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
 			MagicPoint_--;

@@ -22,10 +22,10 @@ public:
 	void SetSpeed(float _speed) { speed_ = _speed; }
 	bool ColliderCircle(float x, float y, float r);
 
-	void SetMagicStateIdle() { Magic_s = S_Idle; }
 	void SetMagicStateHit() { Magic_s = S_Hit; }
 	void SetMagicStateMove() { Magic_s = S_Move; }
-	bool IsActive() { if (Magic_s == S_Idle) return true; else false; }
+	void SetIsDraw(bool _IsDraw) { isDraw_ = _IsDraw; }
+	bool GetIsDraw() { return isDraw_; }
 
 	void Release() override;
 private:
@@ -49,9 +49,9 @@ private:
 
 	enum MagicState
 	{
-		S_Idle,
 		S_Move,
 		S_Hit,
+		S_Max,
 	};
 	MagicState Magic_s;
 	std::array<int, 4> animeArray_;//アニメーションの固定長配列
@@ -59,6 +59,6 @@ private:
 	int animeNum;//アニメーションのうち何番目か
 	int frameCounter;//アニメーションの切り替えカウント
 
-	//bool IsPrevHit_;//当たっているか（）
+	bool isDraw_;
 
 };

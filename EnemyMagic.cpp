@@ -19,7 +19,8 @@ EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene), hImage_(-1)
 	transform_.scale_.y = -2.0f;
 	prevPlPosX = -1;
 	isDraw = false;
-
+	Ghost*  gh_ = GetParent()->FindGameObject<Ghost>();
+	GhostPos_ = gh_->GetPosition();
 }
 
 EnemyMagic::~EnemyMagic()
@@ -36,7 +37,6 @@ void EnemyMagic::Update()
 	}
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-	Ghost* gh = GetParent()->FindGameObject<Ghost>();
 	if (cam != nullptr)
 	{
 		//球が、打った時のプレイヤーの位置より左にいたら、描画しない、座標を戻しておく?
@@ -50,7 +50,7 @@ void EnemyMagic::Update()
 		{
 			//タイマーが0より小さいとき描画しない、かつ座標をゴーストに
 			isDraw = false;
-			transform_.position_ = gh->GetPosition();
+			transform_.position_ = GhostPos_;
 			//KillMe();
 		}
 	}
@@ -93,8 +93,8 @@ void EnemyMagic::SetPosition(XMFLOAT3 pos)
 
 bool EnemyMagic::ColliderCircle(float x, float y, float r)
 {
-	//x,y,r縺檎嶌謇九・蜀・・諠・ｱ
-	//閾ｪ蛻・・蜀・・諠・ｱ
+	//x,y,rが相手の円の情報
+	//自分の円の情報
 	float myCenterX = transform_.position_.x + 32.0f;
 	float myCenterY = transform_.position_.y + 32.0f;
 	float myR = 24.0f;
