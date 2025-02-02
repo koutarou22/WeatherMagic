@@ -41,11 +41,8 @@ void EnemyMagicMaster::Draw()
 void EnemyMagicMaster::Release()
 {
 }
-<<<<<<< HEAD
-=======
 
 int EnemyMagicMaster::GetEnemyMagic()
 {
 	return hImage_1;
 }
->>>>>>> master

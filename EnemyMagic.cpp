@@ -14,16 +14,12 @@ EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene), hImage_(-1)
 	PictFlame_ = 0;
 	flameCounter_ = 0;
 
-	Debug::OutPrint(L"é­”æ³•ã‚’æ’ƒã£ãŸ", true);
+	Debug::OutPrint(L"a", true);
 	transform_.scale_.x = -2.0f;
 	transform_.scale_.y = -2.0f;
-<<<<<<< HEAD
-
-	EnemyMagicState_ = S_IDLE;
-=======
 	prevPlPosX = -1;
 	isDraw = false;
->>>>>>> master
+
 }
 
 EnemyMagic::~EnemyMagic()
@@ -33,70 +29,9 @@ EnemyMagic::~EnemyMagic()
 
 void EnemyMagic::Update()
 {
-	switch (EnemyMagicState_)
-	{
-	case EnemyMagic::S_IDLE:
-		UpdateIdle();
-		break;
-	case EnemyMagic::S_MOVE:
-		UpdateMove();
-		break;
-	default:
-		break;
-	}
-}
-
-void EnemyMagic::Draw()
-{
-	int x = (int)transform_.position_.x;
-	int y = (int)transform_.position_.y;
-
-	Camera* cam = GetParent()->FindGameObject<Camera>();
-	if (cam != nullptr) {
-		x -= cam->GetValue();
-	}
-
-	switch (EnemyMagicState_)
-	{
-	//case EnemyMagic::S_IDLE:
-	//	UpdateIdle();
-	//	break;
-	//case EnemyMagic::S_IDLE:
-	case EnemyMagic::S_MOVE:
-	{
-		
-		int spriteWidth = 64;
-		int spriteHeight = 70;
-
-		int frameX = animeFrame_ % 3; // ‰¡‚É3‚Â‚Ì‰æ‘œ‚ª‚ ‚é‚½‚ß
-
-		//DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
-
-		//DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 16.0f, GetColor(255, 0, 0), 0);
-		DrawGraph(x, y, hImage_, TRUE);
-		break;
-	}
-		
-	default:
-		break;
-	}
-}
-
-void EnemyMagic::UpdateIdle()
-{
-	timer_ = 0;
-	speed_ = 0;
-	animeType_ = 0;
-	animeFrame_ = 0;
-	PictFlame_ = 0;
-	flameCounter_ = 0;
-}
-
-void EnemyMagic::UpdateMove()
-{
 	if (++flameCounter_ >= 24)
 	{
-		animeFrame_ = (animeFrame_ + 1) % 4;//ifæ–‡ã‚’ä½¿ã‚ãªã„æœ€é©è§£
+		animeFrame_ = (animeFrame_ + 1) % 4;//if•¶‚ğg‚í‚È‚¢Å“K‰ğ
 		flameCounter_ = 0;
 	}
 
@@ -104,8 +39,8 @@ void EnemyMagic::UpdateMove()
 	Ghost* gh = GetParent()->FindGameObject<Ghost>();
 	if (cam != nullptr)
 	{
-		//çƒãŒã€æ‰“ã£ãŸæ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚ˆã‚Šå·¦ã«ã„ãŸã‚‰ã€æç”»ã—ãªã„ã€åº§æ¨™ã‚’æˆ»ã—ã¦ãŠã?
-		
+		//‹…‚ªA‘Å‚Á‚½‚ÌƒvƒŒƒCƒ„[‚ÌˆÊ’u‚æ‚è¶‚É‚¢‚½‚çA•`‰æ‚µ‚È‚¢AÀ•W‚ğ–ß‚µ‚Ä‚¨‚­?
+
 		if (isDraw)
 		{
 			transform_.position_.x += direction_.x * speed_;
@@ -113,19 +48,12 @@ void EnemyMagic::UpdateMove()
 		}
 		if (--timer_ <= 0)
 		{
-<<<<<<< HEAD
-			//KillMe();
-			EnemyMagicState_ = S_IDLE;
-		}
-	}
-=======
-			//ã‚¿ã‚¤ãƒãƒ¼ãŒ0ã‚ˆã‚Šå°ã•ã„ã¨ãæç”»ã—ãªã„ã€ã‹ã¤åº§æ¨™ã‚’ã‚´ãƒ¼ã‚¹ãƒˆã«
+			//ƒ^ƒCƒ}[‚ª0‚æ‚è¬‚³‚¢‚Æ‚«•`‰æ‚µ‚È‚¢A‚©‚ÂÀ•W‚ğƒS[ƒXƒg‚É
 			isDraw = false;
 			transform_.position_ = gh->GetPosition();
 			//KillMe();
 		}
 	}
-
 }
 
 void EnemyMagic::Draw()
@@ -138,7 +66,7 @@ void EnemyMagic::Draw()
 		x -= cam->GetValue();
 	}
 
-	int frameX = animeFrame_ % 3; // æ¨ªã«3ã¤ã®ç”»åƒãŒã‚ã‚‹ãŸã‚
+	int frameX = animeFrame_ % 3; // ‰¡‚É3‚Â‚Ì‰æ‘œ‚ª‚ ‚é‚½‚ß
 
 	//DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
 
@@ -147,8 +75,6 @@ void EnemyMagic::Draw()
 	{
 		DrawGraph(x, y, hImage_, TRUE);
 	}
-
->>>>>>> master
 }
 
 void EnemyMagic::SetPosition(int x, int y)
@@ -165,29 +91,10 @@ void EnemyMagic::SetPosition(XMFLOAT3 pos)
 	isDraw = true;
 }
 
-void EnemyMagic::StartMove()
-{
-	EnemyMagicState_ = S_MOVE;
-}
-
-void EnemyMagic::MagicMoveStart(XMFLOAT3 _pos, float _timer, VECTOR _direction, float _speed)
-{
-	transform_.position_ = _pos;
-	timer_ = _timer;
-	direction_ = _direction;
-	speed_ = _speed;
-	EnemyMagicState_ = S_MOVE; 
-}
-
-void EnemyMagic::StopMove()
-{
-	EnemyMagicState_ = S_IDLE;
-}
-
 bool EnemyMagic::ColliderCircle(float x, float y, float r)
 {
-	//x,y,rãŒç›¸æ‰‹ã®å††ã®æƒ…å ±
-	//è‡ªåˆ†ã®å††ã®æƒ…å ±
+	//x,y,rãŒç›¸æ‰‹ãEå†EEæƒE ±
+	//è‡ªåˆEEå†EEæƒE ±
 	float myCenterX = transform_.position_.x + 32.0f;
 	float myCenterY = transform_.position_.y + 32.0f;
 	float myR = 24.0f;
@@ -206,11 +113,10 @@ void EnemyMagic::LoadMagicImage()
 
 void EnemyMagic::Release()
 {
-
 	if (hImage_ > 0)
 	{
 		DeleteGraph(hImage_);
-		Debug::OutPrint(L"é­”æ³•ã®è§£æ”¾ã¯æ­£ã—ãå‘¼ã°ã‚ŒãŸEnemyMagic.cpp", true);
+		Debug::OutPrint(L"–‚–@‚Ì‰ğ•ú‚Í³‚µ‚­ŒÄ‚Î‚ê‚½EnemyMagic.cpp", true);
 		hImage_ = 0;
 	}
 }
