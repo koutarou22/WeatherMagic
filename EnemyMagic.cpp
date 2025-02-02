@@ -14,7 +14,7 @@ EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene), hImage_(-1)
 	PictFlame_ = 0;
 	flameCounter_ = 0;
 
-	Debug::OutPrint(L"a", true);
+	Debug::OutPrint(L"–‚–@‚ðŒ‚‚Á‚½", true);
 	transform_.scale_.x = -2.0f;
 	transform_.scale_.y = -2.0f;
 	prevPlPosX = -1;

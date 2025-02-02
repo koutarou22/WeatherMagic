@@ -682,6 +682,7 @@ void Player::UpdateWalk()
 	//-----------------------------------------------------------
 
 	//天気を変える　Controller & keyboard
+	//一回だけ初期化
 	if (pWCE_ == nullptr)
 	{
 		pWCE_ = Instantiate<WeatherChangeEffect>(GetParent());
@@ -704,9 +705,11 @@ void Player::UpdateWalk()
 				StopWeatherSE();
 
 				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				if (!pWCE_->GetIsDraw()) {
-					pWCE_->SetIsDraw(true);
-					pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+				if (pWCE_ != nullptr) {
+					if (!pWCE_->GetIsDraw()) {
+						pWCE_->SetIsDraw(true);
+						pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+					}
 				}
 			}
 
@@ -730,9 +733,11 @@ void Player::UpdateWalk()
 				StopSoundMem(SnowHandle);
 				StopSoundMem(WindHandle);
 				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				if (!pWCE_->GetIsDraw()) {
-					pWCE_->SetIsDraw(true);
-					pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+				if (pWCE_ != nullptr) {
+					if (!pWCE_->GetIsDraw()) {
+						pWCE_->SetIsDraw(true);
+						pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+					}
 				}
 			}
 		}
@@ -756,9 +761,11 @@ void Player::UpdateWalk()
 				StopSoundMem(WindHandle);
 
 				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				if (!pWCE_->GetIsDraw()) {
-					pWCE_->SetIsDraw(true);
-					pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+				if (pWCE_ != nullptr) {
+					if (!pWCE_->GetIsDraw()) {
+						pWCE_->SetIsDraw(true);
+						pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+					}
 				}
 			}
 		}
@@ -782,9 +789,11 @@ void Player::UpdateWalk()
 				StopSoundMem(SnowHandle);
 
 				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				if (!pWCE_->GetIsDraw()) {
-					pWCE_->SetIsDraw(true);
-					pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+				if (pWCE_ != nullptr) {
+					if (!pWCE_->GetIsDraw()) {
+						pWCE_->SetIsDraw(true);
+						pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+					}
 				}
 			}
 		}
@@ -851,6 +860,7 @@ void Player::UpdateWalk()
 	{
 		if (CoolDownMagic_ <= 0 && MagicPoint_ > 0)
 		{
+			//一回だけ初期化
 			if (pMagic_ == nullptr)
 			{
 				pMagic_ = Instantiate<Magic>(GetParent());

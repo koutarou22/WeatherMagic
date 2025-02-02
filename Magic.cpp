@@ -128,7 +128,7 @@ void Magic::UpdateMove()
 			{
 				timer_ = 0;
 				isDraw_ = false;
-				transform_.position_.x = -1;
+				transform_.position_.x = -1;//位置を画面外に置く
 				transform_.position_.y = -1;
 			}
 		}

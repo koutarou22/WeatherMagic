@@ -8,7 +8,7 @@ private:
 	int animeFrame;
 	int FrameCounter;
 	int eraseCounter;
-	bool isDraw_;
+	bool isDraw_;//isDraw‚ªtrue‚È‚ç•`‰æ+XV
 
 public:
 	WeatherChangeEffect(GameObject* parent);

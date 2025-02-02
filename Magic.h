@@ -59,6 +59,6 @@ private:
 	int animeNum;//アニメーションのうち何番目か
 	int frameCounter;//アニメーションの切り替えカウント
 
-	bool isDraw_;
+	bool isDraw_;//isDrawがtrueなら描画+更新
 
 };
