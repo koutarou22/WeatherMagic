@@ -23,7 +23,7 @@ EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene),hImage_(-1)
 
 EnemyMagic::~EnemyMagic()
 {
-	Release();
+	//Release();
 }
 
 void EnemyMagic::Update()
@@ -57,14 +57,7 @@ void EnemyMagic::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
-	int spriteWidth = 64;
-	int spriteHeight = 70;
 
-	int frameX = animeFrame_ % 3; // ‰¡‚É3‚Â‚Ì‰æ‘œ‚ª‚ ‚é‚½‚ß
-
-	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
-
-	//DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 16.0f, GetColor(255, 0, 0), 0);
 	DrawGraph(x, y, hImage_, TRUE);
 }
 
@@ -97,10 +90,7 @@ bool EnemyMagic::ColliderCircle(float x, float y, float r)
 
 void EnemyMagic::Release()
 {
-	if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-		Debug::OutPrint(L"–‚–@‚Ì‰ğ•ú‚Í³‚µ‚­ŒÄ‚Î‚ê‚½", true);
-		hImage_ = 0;
-	}
+	DeleteGraph(hImage_);
+	Debug::OutPrint(L"–‚–@‚Ì‰ğ•ú‚Í³‚µ‚­ŒÄ‚Î‚ê‚½", true);
+	
 }
