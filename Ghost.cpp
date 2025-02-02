@@ -14,7 +14,7 @@ namespace
 	static const int SCREEN_WIDTH = 1280;
 }
 
-Ghost::Ghost(GameObject* parent)
+Ghost::Ghost(GameObject* parent):GameObject(parent)
 {
 	hImage_ = LoadGraph("Assets/Chara/obake.png");
 	assert(hImage_ > 0);
@@ -37,11 +37,15 @@ Ghost::Ghost(GameObject* parent)
 	assert(GhostAttackHandle != -1);
 
 	pFreeze = nullptr;
+	enemyHandle = -1;
+	emg = nullptr;
+
+	Debug::OutPrint(L"ゴースト爆誕", true);
 }
 
 Ghost::~Ghost()
 {
- 	Release();
+	Debug::OutPrint(L"ゴーストですとらくた", true);
 }
 
 void Ghost::Update()
@@ -65,23 +69,31 @@ void Ghost::Update()
 			{
 				if (CoolDownAttack_ <= 0)
 				{
-					if (GetParent() != nullptr)
-					{
 						PlaySoundMem(GhostAttackHandle, DX_PLAYTYPE_BACK);
-
-						EnemyMagic* emg = Instantiate<EnemyMagic>(GetParent());
-						Debug::OutPrint(L"ゴーストから発生", true);
+						
+						
 						if (emg == nullptr)
 						{
-							return;
+							emg = Instantiate<EnemyMagic>(GetParent());
 						}
-						emg->SetPosition(transform_.position_);
-						VECTOR dir = { -1.0f,0.0f };
-						emg->SetDirection(dir);
-						emg->SetSpeed(3.5f);
-					}
+						if (enemyHandle<0)
+						{
+ 							emg->LoadMagicImage();
+							enemyHandle=emg->GetImageHandle();
+							Debug::OutPrint(L"イメージロード", true);
+						}
+						Debug::OutPrint(L"ゴーストから発生", true);
 
-					CoolDownAttack_ = 300;
+						if (emg != nullptr)
+						{
+							emg->SetPosition(transform_.position_);
+							VECTOR dir = { -1.0f,0.0f };
+							emg->SetDirection(dir);
+							emg->SetSpeed(3.5f);
+							Debug::OutPrint(L"いろいろセット", true);
+						}
+
+						CoolDownAttack_ = 300;
 				}
 			}
 
@@ -194,6 +206,8 @@ bool Ghost::ColliderCircle(float x, float y, float r)
 
 void Ghost::Release()
 {
+	emg=nullptr;
+	Debug::OutPrint(L"ゴーストりりーす", true);
 	if (hImage_ > 0)
 	{
 		DeleteGraph(hImage_);

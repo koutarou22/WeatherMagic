@@ -15,8 +15,12 @@ public:
 	void SetDirection(VECTOR _direction) { direction_ = _direction; }
 	void SetSpeed(float _speed) { speed_ = _speed; }
 	bool ColliderCircle(float x, float y, float r);
-
+	void LoadMagicImage();
 	void Release() override;
+
+	int GetImageHandle() {	return hImage_;}
+	void SetIsDraw(bool d) { isDraw = d; }
+	bool GetIsDraw() { return isDraw; }
 private:
 	int hImage_;
 	int timer_;
@@ -27,4 +31,6 @@ private:
 	int PictFlame_;
 	int flameCounter_;
 
+	float prevPlPosX; //球を打ち始めた時のプレイヤーのx座標
+	bool isDraw; //EnemyMagicを描画するか
 };

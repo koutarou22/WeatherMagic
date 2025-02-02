@@ -3,12 +3,10 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Debug.h"
+#include "Ghost.h"
 
-EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene),hImage_(-1)
+EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene), hImage_(-1)
 {
-	hImage_ = LoadGraph("Assets/Chara/EnemyMagic_F.png");
-	assert(hImage_ > 0);
-	
 	timer_ = 0;
 	speed_ = 0;
 	animeType_ = 0;
@@ -16,33 +14,43 @@ EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene),hImage_(-1)
 	PictFlame_ = 0;
 	flameCounter_ = 0;
 
- 	Debug::OutPrint(L"���@��������", true);
+	Debug::OutPrint(L"魔法を撃った", true);
 	transform_.scale_.x = -2.0f;
 	transform_.scale_.y = -2.0f;
+	prevPlPosX = -1;
+	isDraw = false;
 }
 
 EnemyMagic::~EnemyMagic()
 {
-	//Release();
+	/*Release();*/
 }
 
 void EnemyMagic::Update()
 {
 	if (++flameCounter_ >= 24)
 	{
-		animeFrame_ = (animeFrame_ + 1) % 4;//if�����g��Ȃ��œK��
+		animeFrame_ = (animeFrame_ + 1) % 4;//if文を使わない最適解
 		flameCounter_ = 0;
 	}
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
+	Ghost* gh = GetParent()->FindGameObject<Ghost>();
 	if (cam != nullptr)
 	{
-		transform_.position_.x += direction_.x * speed_;
-		transform_.position_.y += direction_.y * speed_;
-
+		//球が、打った時のプレイヤーの位置より左にいたら、描画しない、座標を戻しておく?
+		
+		if (isDraw)
+		{
+			transform_.position_.x += direction_.x * speed_;
+			transform_.position_.y += direction_.y * speed_;
+		}
 		if (--timer_ <= 0)
 		{
-			KillMe();
+			//タイマーが0より小さいとき描画しない、かつ座標をゴーストに
+			isDraw = false;
+			transform_.position_ = gh->GetPosition();
+			//KillMe();
 		}
 	}
 
@@ -58,7 +66,16 @@ void EnemyMagic::Draw()
 		x -= cam->GetValue();
 	}
 
-	DrawGraph(x, y, hImage_, TRUE);
+	int frameX = animeFrame_ % 3; // 横に3つの画像があるため
+
+	//DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
+
+	//DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 16.0f, GetColor(255, 0, 0), 0);
+	if (isDraw)
+	{
+		DrawGraph(x, y, hImage_, TRUE);
+	}
+
 }
 
 void EnemyMagic::SetPosition(int x, int y)
@@ -72,12 +89,13 @@ void EnemyMagic::SetPosition(XMFLOAT3 pos)
 {
 	transform_.position_ = pos;
 	timer_ = 90;
+	isDraw = true;
 }
 
 bool EnemyMagic::ColliderCircle(float x, float y, float r)
 {
-	//x,y,r������̉~�̏��
-	//�����̉~�̏��
+	//x,y,rが相手の円の情報
+	//自分の円の情報
 	float myCenterX = transform_.position_.x + 32.0f;
 	float myCenterY = transform_.position_.y + 32.0f;
 	float myR = 24.0f;
@@ -88,9 +106,19 @@ bool EnemyMagic::ColliderCircle(float x, float y, float r)
 	return false;
 }
 
+void EnemyMagic::LoadMagicImage()
+{
+	hImage_ = LoadGraph("Assets/Chara/EnemyMagic_F.png");
+	assert(hImage_ > 0);
+}
+
 void EnemyMagic::Release()
 {
-	DeleteGraph(hImage_);
-	Debug::OutPrint(L"���@�̉���͐������Ă΂ꂽ", true);
-	
+
+	if (hImage_ > 0)
+	{
+		DeleteGraph(hImage_);
+		Debug::OutPrint(L"魔法の解放は正しく呼ばれたEnemyMagic.cpp", true);
+		hImage_ = 0;
+	}
 }
