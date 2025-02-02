@@ -5,6 +5,8 @@ WeatherChangeEffect::WeatherChangeEffect(GameObject* parent)
 {
 	hImage_ = LoadGraph("Assets/Effect/WeatherChangeMagic.png");
 	assert(hImage_ > 0);
+
+	isDraw_ = false;
 }
 
 WeatherChangeEffect::~WeatherChangeEffect()
@@ -14,16 +16,23 @@ WeatherChangeEffect::~WeatherChangeEffect()
 
 void WeatherChangeEffect::Update()
 {
-	if (++FrameCounter >= 3)
+	if (isDraw_)
 	{
-		animeFrame = (animeFrame + 1) % 21;
-		FrameCounter = 0;
-		eraseCounter++;
-	}
+		if (++FrameCounter >= 3)
+		{
+			animeFrame = (animeFrame + 1) % 21;
+			FrameCounter = 0;
+			eraseCounter++;
+		}
 
-	if (eraseCounter >= 22)
-	{
-		KillMe();
+		if (eraseCounter >= 22)
+		{
+			//KillMe();
+			FrameCounter = 0;
+			eraseCounter = 0;
+			animeFrame = 0;
+			isDraw_ = false;
+		}
 	}
 }
 
@@ -36,8 +45,10 @@ void WeatherChangeEffect::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
-
-	DrawRectGraph(x, y, animeFrame * 64,  0, 64, 64, hImage_, TRUE);
+	if (isDraw_)
+	{
+		DrawRectGraph(x, y, animeFrame * 64, 0, 64, 64, hImage_, TRUE);
+	}
 	//DrawFormatString(100,500, GetColor(0, 0, 0), "x: %d y:%d", x,y);
 }
 

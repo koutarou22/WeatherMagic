@@ -5,6 +5,7 @@
 #include "Engine/GameObject.h"
 #include "Weather.h"
 #include"Magic.h"
+#include"WeatherChangeEffect.h"
 
 
 /// <summary>
@@ -69,6 +70,7 @@ public:
 private:
 	std::vector<Magic *> Magics_;
 	Magic* pMagic_;
+	WeatherChangeEffect* pWCE_;
 
 	int MagicPoint_;//打てる魔法の回数
 	int hImage;

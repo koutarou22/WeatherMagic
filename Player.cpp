@@ -265,7 +265,7 @@ void Player::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
-	CameraPosX = x;
+	//CameraPosX = x;
 
 	switch (player_animation_state)
 	{
@@ -682,6 +682,11 @@ void Player::UpdateWalk()
 	//-----------------------------------------------------------
 
 	//天気を変える　Controller & keyboard
+	if (pWCE_ == nullptr)
+	{
+		pWCE_ = Instantiate<WeatherChangeEffect>(GetParent());
+	}
+
 	if (input.Buttons[0] || CheckHitKey(KEY_INPUT_UP))//↑晴れにする
 	{
 
@@ -698,8 +703,11 @@ void Player::UpdateWalk()
 
 				StopWeatherSE();
 
-				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				pWCE->SetPosition(CameraPosX, transform_.position_.y, transform_.position_.z);
+				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+				if (!pWCE_->GetIsDraw()) {
+					pWCE_->SetIsDraw(true);
+					pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+				}
 			}
 
 		}
@@ -721,8 +729,11 @@ void Player::UpdateWalk()
 
 				StopSoundMem(SnowHandle);
 				StopSoundMem(WindHandle);
-				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				pWCE->SetPosition(CameraPosX, transform_.position_.y, transform_.position_.z);
+				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+				if (!pWCE_->GetIsDraw()) {
+					pWCE_->SetIsDraw(true);
+					pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+				}
 			}
 		}
 	}
@@ -744,8 +755,11 @@ void Player::UpdateWalk()
 				StopSoundMem(RainHandle);
 				StopSoundMem(WindHandle);
 
-				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				pWCE->SetPosition(CameraPosX, transform_.position_.y, transform_.position_.z);
+				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+				if (!pWCE_->GetIsDraw()) {
+					pWCE_->SetIsDraw(true);
+					pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+				}
 			}
 		}
 	}
@@ -767,8 +781,11 @@ void Player::UpdateWalk()
 				StopSoundMem(RainHandle);
 				StopSoundMem(SnowHandle);
 
-				WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				pWCE->SetPosition(CameraPosX, transform_.position_.y, transform_.position_.z);
+				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+				if (!pWCE_->GetIsDraw()) {
+					pWCE_->SetIsDraw(true);
+					pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+				}
 			}
 		}
 	}
