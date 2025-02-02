@@ -9,9 +9,7 @@
 Magic::Magic(GameObject* scene) : GameObject(scene),Magic_s(S_Move),animeNum(0),
 direction_({0,0}),frameCounter(0),speed_(0.0f),timer_(0)
 {
-	//hImage_ = LoadGraph("Assets/Bullet/Magic_F.png");
-	//assert(hImage_ > 0);
-	Debug::OutPrint(L"–‚–@‚ðŒ‚‚Á‚½(ƒvƒŒƒCƒ„[)", true);
+	Debug::OutPrint(L"é­”æ³•ã‚’æ’ƒã£ãŸ(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼)", true);
 
 	hImage_move1 = LoadGraph("Assets/Bullet/bolt/bolt1.png");
 	assert(hImage_move1 > 0);
@@ -77,7 +75,7 @@ void Magic::Draw()
 	{
 	case Magic::S_Move:
 	{
-		if (direction_.x == -1.0f)//¶Œü‚«‚È‚ç”½“]•`‰æ
+		if (direction_.x == -1.0f)//å·¦å‘ããªã‚‰åè»¢æç”»
 		{
 			DrawTurnGraph(x, y, animeArray_[animeNum], TRUE);
 		}
@@ -121,7 +119,7 @@ void Magic::UpdateMove()
 		}
 	}
 
-	//---------------Õ“Ë”»’è--------------------------------
+	//---------------è¡çªåˆ¤å®š--------------------------------
 	if (pField != nullptr)
 	{
 		if (direction_.x == 1.0)
@@ -173,8 +171,8 @@ void Magic::SetPosition(XMFLOAT3 pos)
 
 bool Magic::ColliderCircle(float x, float y, float r)
 {
-	//x,y,r‚ª‘ŠŽè‚Ì‰~‚Ìî•ñ
-		//Ž©•ª‚Ì‰~‚Ìî•ñ
+	//x,y,rãŒç›¸æ‰‹ã®å††ã®æƒ…å ±
+		//è‡ªåˆ†ã®å††ã®æƒ…å ±
 	float myCenterX = transform_.position_.x + 16.0f;
 	float myCenterY = transform_.position_.y + 16.0f;
 	float myR = 16.0f;
@@ -187,12 +185,7 @@ bool Magic::ColliderCircle(float x, float y, float r)
 
 void Magic::Release()
 {
-	/*if (hImage_ > 0)
-	{
-		DeleteGraph(hImage_);
-	}*/
-
-	Debug::OutPrint(L"–‚–@‚ð‰ð•ú(ƒvƒŒƒCƒ„[)", true);
+	Debug::OutPrint(L"é­”æ³•ã‚’è§£æ”¾(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼)", true);
 
 	if (hImage_move1 > 0)
 	{

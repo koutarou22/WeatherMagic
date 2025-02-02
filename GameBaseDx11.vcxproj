@@ -142,6 +142,9 @@
     <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChangeRainUI.cpp" />
+    <ClCompile Include="ChangeSnowUI.cpp" />
+    <ClCompile Include="ChangeSunUI.cpp" />
+    <ClCompile Include="ChangeWindUI.cpp" />
     <ClCompile Include="ChooseLevelScene.cpp" />
     <ClCompile Include="ClearFlag.cpp" />
     <ClCompile Include="ClearScene.cpp" />
@@ -164,6 +167,7 @@
     <ClCompile Include="JumpUI.cpp" />
     <ClCompile Include="LandingEffect.cpp" />
     <ClCompile Include="Logo.cpp" />
+    <ClCompile Include="MoveStoneUI.cpp" />
     <ClCompile Include="MoveUI.cpp" />
     <ClCompile Include="MP.cpp" />
     <ClCompile Include="MpItem.cpp" />
@@ -187,6 +191,9 @@
     <ClInclude Include="Bird.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChangeRainUI.h" />
+    <ClInclude Include="ChangeSnowUI.h" />
+    <ClInclude Include="ChangeSunUI.h" />
+    <ClInclude Include="ChangeWindUI.h" />
     <ClInclude Include="ChooseLevelScene.h" />
     <ClInclude Include="ClearFlag.h" />
     <ClInclude Include="ClearScene.h" />
@@ -209,6 +216,7 @@
     <ClInclude Include="JumpUI.h" />
     <ClInclude Include="LandingEffect.h" />
     <ClInclude Include="Logo.h" />
+    <ClInclude Include="MoveStoneUI.h" />
     <ClInclude Include="MoveUI.h" />
     <ClInclude Include="MP.h" />
     <ClInclude Include="MpItem.h" />

@@ -1,34 +1,49 @@
 #include "LandingEffect.h"
 #include "Camera.h"
+#include "Debug.h"
 
-LandingEffect::LandingEffect(GameObject* parent) : GameObject(parent, "LandingEffect"), hImage_(-1), animeFrame(0), FrameCounter(0), eraseCounter(0)
+
+int LandingEffect::hImage_ = -1;
+
+LandingEffect::LandingEffect(GameObject* parent) : GameObject(parent, "LandingEffect"), animeFrame(0), FrameCounter(0), eraseCounter(0), isActive_(true)
 {
-    hImage_ = LoadGraph("Assets/Effect/landing1.png");
-    assert(hImage_ > 0);
+    if (hImage_ == -1) 
+    {
+        hImage_ = LoadGraph("Assets/Effect/landing1.png");
+        assert(hImage_ > 0);
+    }
 }
 
 LandingEffect::~LandingEffect()
 {
-    Release();
+    if (hImage_ > 0)
+    {
+        DeleteGraph(hImage_);
+        hImage_ = -1;
+    }
 }
 
 void LandingEffect::Update()
 {
-    if (++FrameCounter >= 4) // アニメーション速度を調整
+    if (!isActive_) return;
+
+    if (++FrameCounter >= 4) 
     {
-        animeFrame = (animeFrame + 1) % 7; // 7フレームに調整
+        animeFrame = (animeFrame + 1) % 7;
         FrameCounter = 0;
         eraseCounter++;
     }
 
-    if (eraseCounter >= 7) // アニメーションを完了させるフレーム数に合わせる
+    if (eraseCounter >= 7) 
     {
-        KillMe();
+        Deactivate(); 
     }
 }
 
 void LandingEffect::Draw()
 {
+    if (!isActive_) return;
+
     int x = (int)transform_.position_.x;
     int y = (int)transform_.position_.y;
 
@@ -37,27 +52,44 @@ void LandingEffect::Draw()
         x -= cam->GetValue();
     }
 
-    //↓32の場合
     int FrameX = 64;
     int FrameY = 32;
-    //↓64の場合
-    //int FrameX = 128;
-    //int FrameY = 64; 
 
-    // フレームごとの画像の一部を描画
     DrawRectGraph(x, y, animeFrame * FrameX, 0, FrameX, FrameY, hImage_, TRUE);
-}
-
-void LandingEffect::Release()
-{
-    if (hImage_ > 0)
-    {
-        DeleteGraph(hImage_);
-    }
 }
 
 void LandingEffect::SetPosition(int x, int y)
 {
     transform_.position_.x = x;
-    transform_.position_.y = y + 32;//プレイヤーの下に配置するので位置調整
+    transform_.position_.y = y + 32; // プレイヤーの下に配置するので位置調整
+}
+
+void LandingEffect::Activate()
+{
+    isActive_ = true;
+    eraseCounter = 0;
+    animeFrame = 0;
+    FrameCounter = 0;
+    Debug::OutPrint(L"着地は生きてる", true);
+}
+
+void LandingEffect::Deactivate()
+{
+    isActive_ = false;
+    Debug::OutPrint(L"着地が死亡", true);
+}
+
+bool LandingEffect::IsActive() const 
+{
+    return isActive_;
+}
+
+void LandingEffect::Release()
+{
+    if (hImage_ > 0) 
+    {
+        DeleteGraph(hImage_);
+        hImage_ = -1;
+        Debug::OutPrint(L"着地アニメーションは解放された", true);
+    }
 }

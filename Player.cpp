@@ -38,7 +38,7 @@ namespace
 
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
-Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), DebugLog_(false)
+Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), DebugLog_(false),hasLanded(false)
 {
 	hImage = LoadGraph("Assets/Chara/Clear_Wizard.png");
 	assert(hImage > 0);
@@ -260,6 +260,7 @@ void Player::Draw()
 	int displayY = y - 30;
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
+
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
@@ -650,23 +651,31 @@ void Player::UpdateWalk()
 		int push = max(pushR, pushL);//２つの足元のめりこみの大きいほう
 		if (push >= 1)
 		{
+
 			transform_.position_.y -= push - 1;
 			Jump_P = 0.0f;
-
-			//アサートに引っかかる原因はThisではなくGetParent()を使っているから...?
-			if (!onGround && GetParent() != nullptr)
+			if (!onGround && GetParent() != nullptr) 
 			{
+
 				onGround = true;
-				LandingEffect* pLanding = Instantiate<LandingEffect>(GetParent());
-				pLanding->SetPosition(transform_.position_.x, transform_.position_.y);
-				HitLanding = true;
-				PlaySoundMem(LandingHandle, DX_PLAYTYPE_BACK); // 音声を再生
+				if (!hasLanded)
+				{
+					LandingEffect* pLanding = Instantiate<LandingEffect>(GetParent());
+					if (pLanding != nullptr) 
+					{
+						pLanding->SetPosition(transform_.position_.x, transform_.position_.y);
+						HitLanding = true;
+						PlaySoundMem(LandingHandle, DX_PLAYTYPE_BACK);
+						hasLanded = true; //再度生成しないようにする
+					}
+				}
 			}
 		}
-		else
+		else 
 		{
 			onGround = false;
 			HitLanding = false;
+			hasLanded = false; // 地面から離れたらフラグをリセット
 		}
 	}
 	//-----------------------------------------------------------
