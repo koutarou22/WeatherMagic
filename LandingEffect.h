@@ -11,28 +11,16 @@ public:
     void Update() override;
     void Draw() override;
     void SetPosition(int x, int y);
-    /// <summary>
-    /// 生きてた時の処理
-    /// </summary>
-    void Activate();
+    void SetIsDraw(bool _IsDraw) { isDraw_ = _IsDraw; }
+    bool GetIsDraw() { return isDraw_; }
 
-    /// <summary>
-    /// 死んだときの処理
-    /// </summary>
-    void Deactivate();
-
-    /// <summary>
-    /// 生きてるか返す
-    /// </summary>
-    /// <returns></returns>
-    bool IsActive() const;
 
 private:
-    static int hImage_;
+    int hImage_;
     int animeFrame;
     int FrameCounter;
     int eraseCounter;
-    bool isActive_; // アクティブ状態を管理するフラグ
+    bool isDraw_;
 
     void Release();
 };

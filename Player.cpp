@@ -516,7 +516,7 @@ void Player::UpdateWalk()
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	std::list<Slime*> pSlimes = GetParent()->FindGameObjects<Slime>();
 	Rock* pRock = GetParent()->FindGameObject<Rock>();
-	//LandingEffect* pLanding = GetParent()->FindGameObject<LandingEffect>();
+	
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 	MP* mp = GetParent()->FindGameObject<MP>();
@@ -661,21 +661,21 @@ void Player::UpdateWalk()
 			{
 
 				onGround = true;
-			/*	if (!hasLanded)
-				{
-					*/
+
 					if (pLanding == nullptr)
 					{
-						pLanding = Instantiate<LandingEffect>(GetParent());
+       					pLanding = Instantiate<LandingEffect>(GetParent());
 					}
 					if (pLanding != nullptr) 
 					{
-						pLanding->SetPosition(transform_.position_.x, transform_.position_.y);
-						HitLanding = true;
-						PlaySoundMem(LandingHandle, DX_PLAYTYPE_BACK);
-						hasLanded = true; //再度生成しないようにする
+						if (!pLanding->GetIsDraw())
+						{
+							pLanding->SetIsDraw(true);
+							pLanding->SetPosition(transform_.position_.x, transform_.position_.y);
+							HitLanding = true;
+							PlaySoundMem(LandingHandle, DX_PLAYTYPE_BACK);
+						}
 					}
-			/*	}*/
 			}
 		}
 		else 

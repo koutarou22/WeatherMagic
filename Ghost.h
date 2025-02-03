@@ -22,6 +22,7 @@ public:
 	void Release() override;
 private:
 	EnemyMagic* emg;
+	FreezeEffect* pFreeze;
 	float sinAngle;
 	int hImage_;
 	int animeType_;//ó‹µ
@@ -37,5 +38,5 @@ private:
 
 	int GhostDamageHandle;//ƒ_ƒ[ƒW‰¹
 	int GhostAttackHandle;//UŒ‚‰¹
-	FreezeEffect* pFreeze;
+
 };
