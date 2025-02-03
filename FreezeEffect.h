@@ -20,8 +20,6 @@ class FreezeEffect :
 	};
 	FreezeState freeze_s;
 
-	bool isDraw;
-
 public:
 
 	FreezeEffect(GameObject* parent);

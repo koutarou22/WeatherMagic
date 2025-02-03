@@ -1,13 +1,11 @@
 #include "FreezeEffect.h"
 #include "Camera.h"
 #include "Weather.h"
-FreezeEffect::FreezeEffect(GameObject* parent) : GameObject(parent, "FreezeEffect"), hImage_(-1), animeFrame(0), FrameCounter(0), eraseCounter(0), ReverseFrame(false),isDraw(false)
+FreezeEffect::FreezeEffect(GameObject* parent) : GameObject(parent, "FreezeEffect"), hImage_(-1), animeFrame(0), FrameCounter(0), eraseCounter(0), ReverseFrame(false)
 {
     hImage_ = LoadGraph("Assets/Effect/Ice.png");
     assert(hImage_ > 0);
     freeze_s = S_Freeze;
-    isDraw = false;
-
 }
 
 FreezeEffect::~FreezeEffect()
@@ -81,10 +79,7 @@ void FreezeEffect::Draw()
     int FrameX = 64; 
     int FrameY = 64; 
 
-    if (isDraw)
-    {
-        DrawRectGraph(x, y, animeFrame * FrameX, 0, FrameX, FrameY, hImage_, TRUE);
-    }
+    DrawRectGraph(x, y, animeFrame * FrameX, 0, FrameX, FrameY, hImage_, TRUE);
  
 }
 
