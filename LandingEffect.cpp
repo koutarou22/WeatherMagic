@@ -26,18 +26,17 @@ LandingEffect::~LandingEffect()
 void LandingEffect::Update()
 {
     if (!isActive_) return;
+        if (++FrameCounter >= 4)
+        {
+            animeFrame = (animeFrame + 1) % 7;
+            FrameCounter = 0;
+            eraseCounter++;
+        }
 
-    if (++FrameCounter >= 4) 
-    {
-        animeFrame = (animeFrame + 1) % 7;
-        FrameCounter = 0;
-        eraseCounter++;
-    }
-
-    if (eraseCounter >= 7) 
-    {
-        Deactivate(); 
-    }
+        if (eraseCounter >= 7)
+        {
+            Deactivate();
+        }
 }
 
 void LandingEffect::Draw()

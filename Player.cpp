@@ -42,6 +42,9 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 {
 	hImage = LoadGraph("Assets/Chara/Clear_Wizard.png");
 	assert(hImage > 0);
+
+	pLanding = nullptr;
+
 	transform_.position_.x = 100.0f;
 	transform_.position_.y = GROUND;
 	onGround = true;
@@ -403,7 +406,6 @@ void Player::WeatherEffects(Weather* weather)
 {
 	WeatherState WeatherState = weather->GetWeatherState();
 	float WeatherEffect = weather->GetWeatherChange();
-	//Buffs*pBuff = GetParent()->FindGameObject<Buffs>();
 
 	if (WeatherState == Sun)
 	{
@@ -514,7 +516,7 @@ void Player::UpdateWalk()
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	std::list<Slime*> pSlimes = GetParent()->FindGameObjects<Slime>();
 	Rock* pRock = GetParent()->FindGameObject<Rock>();
-	LandingEffect* pLanding = GetParent()->FindGameObject<LandingEffect>();
+	//LandingEffect* pLanding = GetParent()->FindGameObject<LandingEffect>();
 
 	Hp* hp = GetParent()->FindGameObject<Hp>();
 	MP* mp = GetParent()->FindGameObject<MP>();
@@ -659,9 +661,13 @@ void Player::UpdateWalk()
 			{
 
 				onGround = true;
-				if (!hasLanded)
+			/*	if (!hasLanded)
 				{
-					LandingEffect* pLanding = Instantiate<LandingEffect>(GetParent());
+					*/
+					if (pLanding == nullptr)
+					{
+						pLanding = Instantiate<LandingEffect>(GetParent());
+					}
 					if (pLanding != nullptr) 
 					{
 						pLanding->SetPosition(transform_.position_.x, transform_.position_.y);
@@ -669,7 +675,7 @@ void Player::UpdateWalk()
 						PlaySoundMem(LandingHandle, DX_PLAYTYPE_BACK);
 						hasLanded = true; //再度生成しないようにする
 					}
-				}
+			/*	}*/
 			}
 		}
 		else 

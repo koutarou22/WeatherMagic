@@ -6,14 +6,12 @@
 #include "Weather.h"
 #include"Magic.h"
 #include"WeatherChangeEffect.h"
-
+#include"LandingEffect.h"
 
 /// <summary>
 /// プレイヤーキャラの情報
 /// </summary>
-
 class Field;
-
 class Player : public GameObject
 {
 public:
@@ -28,7 +26,6 @@ public:
 	void WeatherEffects(Weather* weather);
 	
 	void SetMagicMP(int _Mp) { MagicPoint_ = _Mp; }//ほかのクラスでも共有するため用
-	/*void DamageHp();*/
 
 	void Jump();
 	int GetMp();
@@ -46,8 +43,6 @@ public:
 	void StickTiltCheck();
 
 	void GaleEffect(WeatherState state);//Ride on the Rocks && Using the Wind
-
-	//vector<Magic*> GetMagicBlank(); 
 
   void UpdateWalk();
   void UpdateDamage();
@@ -68,6 +63,10 @@ public:
   void StopMoveSE();
 
 private:
+
+	LandingEffect* pLanding;
+
+
 	std::vector<Magic *> Magics_;
 	Magic* pMagic_;
 	WeatherChangeEffect* pWCE_;
