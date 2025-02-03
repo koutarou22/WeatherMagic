@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include "Player.h"
 #include<array>
 
 /// <summary>
@@ -13,6 +12,7 @@ public:
 	~Magic();
 	void Update() override;
 	void Draw() override;
+	void UpdateIdle();
 	void UpdateMove();
 	void UpdateHit();
 
@@ -21,7 +21,11 @@ public:
 	void SetDirection(VECTOR _direction) { direction_ = _direction; }
 	void SetSpeed(float _speed) { speed_ = _speed; }
 	bool ColliderCircle(float x, float y, float r);
+
 	void SetMagicStateHit() { Magic_s = S_Hit; }
+	void SetMagicStateMove() { Magic_s = S_Move; }
+	void SetIsDraw(bool _IsDraw) { isDraw_ = _IsDraw; }
+	bool GetIsDraw() { return isDraw_; }
 
 	void Release() override;
 private:
@@ -47,6 +51,7 @@ private:
 	{
 		S_Move,
 		S_Hit,
+		S_Max,
 	};
 	MagicState Magic_s;
 	std::array<int, 4> animeArray_;//アニメーションの固定長配列
@@ -54,6 +59,6 @@ private:
 	int animeNum;//アニメーションのうち何番目か
 	int frameCounter;//アニメーションの切り替えカウント
 
-	//bool IsPrevHit_;//当たっているか（）
+	bool isDraw_;//isDrawがtrueなら描画+更新
 
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include"Engine/GameObject.h"
+
 /// <summary>
 /// 敵が打ってくる魔法の情報
 /// </summary>
@@ -10,10 +11,16 @@ public:
 	~EnemyMagic();
 	void Update() override;
 	void Draw() override;
+
+	void UpdateIdle();
+	void UpdateMove();
 	void SetPosition(int x, int y);
 	void SetPosition(XMFLOAT3 pos);
 	void SetDirection(VECTOR _direction) { direction_ = _direction; }
 	void SetSpeed(float _speed) { speed_ = _speed; }
+	void StartMove();
+	void MagicMoveStart(XMFLOAT3 pos, float timer,VECTOR direction, float speed);
+	void StopMove();
 	bool ColliderCircle(float x, float y, float r);
 	void LoadMagicImage();
 	void Release() override;
@@ -33,4 +40,7 @@ private:
 
 	float prevPlPosX; //球を打ち始めた時のプレイヤーのx座標
 	bool isDraw; //EnemyMagicを描画するか
+
+//	Ghost* gh_;
+	XMFLOAT3 GhostPos_;
 };

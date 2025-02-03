@@ -1,7 +1,6 @@
 #include "Magic.h"
 #include <assert.h>
 #include "Camera.h"
-#include "Player.h"
 #include "Ghost.h"
 #include"Field.h"
 #include "Debug.h"
@@ -37,6 +36,9 @@ direction_({0,0}),frameCounter(0),speed_(0.0f),timer_(0)
 
 	animeArray_ = { hImage_move1,hImage_move2, hImage_move3, hImage_move4 };
 	animeHitArray_ = { hImage_hit1,hImage_hit2, hImage_hit3, hImage_hit4, hImage_hit5, hImage_hit6, hImage_hit7 };
+
+	Magic_s = S_Max;
+	isDraw_ = false;
 }
 
 Magic::~Magic()
@@ -46,7 +48,6 @@ Magic::~Magic()
 
 void Magic::Update()
 {
-
 	switch (Magic_s)
 	{
 	case Magic::S_Move:
@@ -77,17 +78,23 @@ void Magic::Draw()
 	{
 		if (direction_.x == -1.0f)//左向きなら反転描画
 		{
+			if (isDraw_) {
 			DrawTurnGraph(x, y, animeArray_[animeNum], TRUE);
+			}
 		}
 		else
 		{
-			DrawGraph(x, y, animeArray_[animeNum], TRUE);
+			if (isDraw_) {
+				DrawGraph(x, y, animeArray_[animeNum], TRUE);
+			}
 		}
 		break;
 	}
 	case Magic::S_Hit:
 	{
-		DrawGraph(x, y, animeHitArray_[animeNum], TRUE);
+		if (isDraw_) {
+			DrawGraph(x, y, animeHitArray_[animeNum], TRUE);
+		}
 		break;
 	}
 	default:
@@ -97,45 +104,55 @@ void Magic::Draw()
 	//DrawCircle(x + 16, y + 16, 16, GetColor(255, 0, 0), FALSE);
 }
 
+void Magic::UpdateIdle()
+{
+}
+
 void Magic::UpdateMove()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr)
 	{
-		transform_.position_.x += direction_.x * speed_;
-		transform_.position_.y += direction_.y * speed_;
+		if (isDraw_) {
+			transform_.position_.x += direction_.x * speed_;
+			transform_.position_.y += direction_.y * speed_;
 
 
-		if (++frameCounter >= 8)
-		{
-			animeNum = (animeNum + 1) % 4;
-			frameCounter = 0;
-		}
-		if (--timer_ <= 0)
-		{
-			timer_ = 0;
-			KillMe();
+			if (++frameCounter >= 8)
+			{
+				animeNum = (animeNum + 1) % 4;
+				frameCounter = 0;
+			}
+			if (--timer_ <= 0)
+			{
+				timer_ = 0;
+				isDraw_ = false;
+				transform_.position_.x = -1;//位置を画面外に置く
+				transform_.position_.y = -1;
+			}
 		}
 	}
 
 	//---------------衝突判定--------------------------------
 	if (pField != nullptr)
 	{
-		if (direction_.x == 1.0)
-		{
-			if (pField->IsWallBlock(transform_.position_.x + 32 , transform_.position_.y) || 
-				pField->IsHitRock(transform_.position_.x + 32, transform_.position_.y))
+		if (isDraw_) {
+			if (direction_.x == 1.0)
 			{
-				Magic_s = S_Hit;
+				if (pField->IsWallBlock(transform_.position_.x + 32, transform_.position_.y) ||
+					pField->IsHitRock(transform_.position_.x + 32, transform_.position_.y))
+				{
+					Magic_s = S_Hit;
+				}
 			}
-		}
-		else
-		{
-			if (pField->IsWallBlock(transform_.position_.x , transform_.position_.y) || 
-				pField->IsHitRock(transform_.position_.x - 32 , transform_.position_.y))
+			else
 			{
-				Magic_s = S_Hit;
+				if (pField->IsWallBlock(transform_.position_.x, transform_.position_.y) ||
+					pField->IsHitRock(transform_.position_.x - 32, transform_.position_.y))
+				{
+					Magic_s = S_Hit;
+				}
 			}
 		}
 	}
@@ -143,15 +160,21 @@ void Magic::UpdateMove()
 
 void Magic::UpdateHit()
 {
-	if (++frameCounter >= 2)
+	if (isDraw_) 
 	{
-		animeNum = (animeNum + 1) % 7;
-		frameCounter = 0;
-	}
+		if (++frameCounter >= 2)
+		{
+			animeNum = (animeNum + 1) % 7;
+			frameCounter = 0;
+		}
 
-	if (animeNum >= 6)
-	{
-		KillMe();
+		if (animeNum >= 6)
+		{
+			isDraw_ = false;
+			animeNum = 0;
+			transform_.position_.x = -1;
+			transform_.position_.y = -1;
+		}
 	}
 }
 

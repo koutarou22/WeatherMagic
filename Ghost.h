@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"EnemyMagic.h"
 
 class FreezeEffect;
 class EnemyMagic;
@@ -31,12 +32,6 @@ private:
 	int CoolDownAttack_ = 0;
 	int timer_ = 90;
 	int enemyHandle;
-	enum State//結局使ってない
-	{
-		S_WaIk = 0,
-		S_Cry,
-	};
-	State state;
 
 	bool FreezeOne;//氷結を一回しか出せないようにする　※重くなったので
 

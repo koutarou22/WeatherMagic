@@ -8,7 +8,7 @@ private:
 	int animeFrame;
 	int FrameCounter;
 	int eraseCounter;
-
+	bool isDraw_;//isDraw‚ªtrue‚È‚ç•`‰æ+XV
 
 public:
 	WeatherChangeEffect(GameObject* parent);
@@ -22,6 +22,7 @@ public:
 	void Draw() override;
 	//ŠJ•ú
 	void Release() override;
-
+	void SetIsDraw(bool _IsDraw) { isDraw_ = _IsDraw; }
+	bool GetIsDraw() { return isDraw_; }
 };
 

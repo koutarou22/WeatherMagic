@@ -14,11 +14,13 @@ EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene), hImage_(-1)
 	PictFlame_ = 0;
 	flameCounter_ = 0;
 
-	Debug::OutPrint(L"é­”æ³•ã‚’æ’ƒã£ãŸ", true);
+	Debug::OutPrint(L"–‚–@‚ğŒ‚‚Á‚½", true);
 	transform_.scale_.x = -2.0f;
 	transform_.scale_.y = -2.0f;
 	prevPlPosX = -1;
 	isDraw = false;
+	Ghost*  gh_ = GetParent()->FindGameObject<Ghost>();
+	GhostPos_ = gh_->GetPosition();
 }
 
 EnemyMagic::~EnemyMagic()
@@ -30,16 +32,15 @@ void EnemyMagic::Update()
 {
 	if (++flameCounter_ >= 24)
 	{
-		animeFrame_ = (animeFrame_ + 1) % 4;//ifæ–‡ã‚’ä½¿ã‚ãªã„æœ€é©è§£
+		animeFrame_ = (animeFrame_ + 1) % 4;//if•¶‚ğg‚í‚È‚¢Å“K‰ğ
 		flameCounter_ = 0;
 	}
 
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-	Ghost* gh = GetParent()->FindGameObject<Ghost>();
 	if (cam != nullptr)
 	{
-		//çƒãŒã€æ‰“ã£ãŸæ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚ˆã‚Šå·¦ã«ã„ãŸã‚‰ã€æç”»ã—ãªã„ã€åº§æ¨™ã‚’æˆ»ã—ã¦ãŠã?
-		
+		//‹…‚ªA‘Å‚Á‚½‚ÌƒvƒŒƒCƒ„[‚ÌˆÊ’u‚æ‚è¶‚É‚¢‚½‚çA•`‰æ‚µ‚È‚¢AÀ•W‚ğ–ß‚µ‚Ä‚¨‚­?
+
 		if (isDraw)
 		{
 			transform_.position_.x += direction_.x * speed_;
@@ -47,13 +48,12 @@ void EnemyMagic::Update()
 		}
 		if (--timer_ <= 0)
 		{
-			//ã‚¿ã‚¤ãƒãƒ¼ãŒ0ã‚ˆã‚Šå°ã•ã„ã¨ãæç”»ã—ãªã„ã€ã‹ã¤åº§æ¨™ã‚’ã‚´ãƒ¼ã‚¹ãƒˆã«
+			//ƒ^ƒCƒ}[‚ª0‚æ‚è¬‚³‚¢‚Æ‚«•`‰æ‚µ‚È‚¢A‚©‚ÂÀ•W‚ğƒS[ƒXƒg‚É
 			isDraw = false;
-			transform_.position_ = gh->GetPosition();
+			transform_.position_ = GhostPos_;
 			//KillMe();
 		}
 	}
-
 }
 
 void EnemyMagic::Draw()
@@ -66,7 +66,7 @@ void EnemyMagic::Draw()
 		x -= cam->GetValue();
 	}
 
-	int frameX = animeFrame_ % 3; // æ¨ªã«3ã¤ã®ç”»åƒãŒã‚ã‚‹ãŸã‚
+	int frameX = animeFrame_ % 3; // ‰¡‚É3‚Â‚Ì‰æ‘œ‚ª‚ ‚é‚½‚ß
 
 	//DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
 
@@ -75,7 +75,6 @@ void EnemyMagic::Draw()
 	{
 		DrawGraph(x, y, hImage_, TRUE);
 	}
-
 }
 
 void EnemyMagic::SetPosition(int x, int y)
@@ -94,8 +93,8 @@ void EnemyMagic::SetPosition(XMFLOAT3 pos)
 
 bool EnemyMagic::ColliderCircle(float x, float y, float r)
 {
-	//x,y,rãŒç›¸æ‰‹ã®å††ã®æƒ…å ±
-	//è‡ªåˆ†ã®å††ã®æƒ…å ±
+	//x,y,r‚ª‘Šè‚Ì‰~‚Ìî•ñ
+	//©•ª‚Ì‰~‚Ìî•ñ
 	float myCenterX = transform_.position_.x + 32.0f;
 	float myCenterY = transform_.position_.y + 32.0f;
 	float myR = 24.0f;
@@ -114,11 +113,10 @@ void EnemyMagic::LoadMagicImage()
 
 void EnemyMagic::Release()
 {
-
 	if (hImage_ > 0)
 	{
 		DeleteGraph(hImage_);
-		Debug::OutPrint(L"é­”æ³•ã®è§£æ”¾ã¯æ­£ã—ãå‘¼ã°ã‚ŒãŸEnemyMagic.cpp", true);
+		Debug::OutPrint(L"–‚–@‚Ì‰ğ•ú‚Í³‚µ‚­ŒÄ‚Î‚ê‚½EnemyMagic.cpp", true);
 		hImage_ = 0;
 	}
 }
