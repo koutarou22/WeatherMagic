@@ -2,6 +2,7 @@
 #include"Camera.h"
 
 MoveUI::MoveUI(GameObject* parent)
+	:GameObject(parent, "MoveUI"), hMoveUI(-1)
 {
 }
 

@@ -2,6 +2,7 @@
 #include"Camera.h"
 
 ChangeWindUI::ChangeWindUI(GameObject* parent)
+	:GameObject(parent, "ChangeWindUI"), hChangeWindUI(-1)
 {
 }
 

@@ -16,10 +16,10 @@ namespace {
 }
 
 Score::Score(GameObject* parent)
-    :StarMoveX(0), MessageMoveX(0.0f),frame_Star(0.0f), frame_Message(0.0f),IsStarMoveEnd(false), isPlaying(true)
+    :StarMoveX(0), MessageMoveX(0.0f),frame_Star(0.0f), frame_Message(0.0f),IsStarMoveEnd(false), isPlaying(true),hStar_(-1)
 {
-	hImage_ = LoadGraph("Assets/UI/Star.png");
-    assert(hImage_ > 0);
+	hStar_ = LoadGraph("Assets/UI/Star.png");
+    assert(hStar_ > 0);
 
 }
 
@@ -76,7 +76,7 @@ void Score::Draw()
         {
             float x = (i * 2.0) * Width + 530;
             float y = 500;
-            DrawExtendGraph(x*StarMoveX, y, x + 64, y + 64, hImage_, TRUE);
+            DrawExtendGraph(x*StarMoveX, y, x + 64, y + 64, hStar_, TRUE);
         }
 
         if (IsStarMoveEnd) {
@@ -88,7 +88,7 @@ void Score::Draw()
         for (int i = 0; i < StarCount; i++)
         {
             float x = i * Width + 260;
-            DrawExtendGraph(x  , StarPosPlay, x + 32, StarPosPlay + 32, hImage_, TRUE);
+            DrawExtendGraph(x  , StarPosPlay, x + 32, StarPosPlay + 32, hStar_, TRUE);
         }
     }
  
@@ -98,9 +98,9 @@ void Score::Draw()
 
 void Score::Release()
 {
-    if (hImage_ > 0)
+    if (hStar_ > 0)
     {
-        DeleteGraph(hImage_);
+        DeleteGraph(hStar_);
     }
 }
 

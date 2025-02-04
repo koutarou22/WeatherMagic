@@ -2,6 +2,7 @@
 #include"Camera.h"
 
 ChangeSunUI::ChangeSunUI(GameObject* parent)
+	:GameObject(parent, "ChangeSunUI"), hChangeSunUI(-1)
 {
 }
 

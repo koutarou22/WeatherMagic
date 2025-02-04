@@ -2,7 +2,8 @@
 #include "Hp.h"
 #include "Player.h"
 
-Hp::Hp(GameObject* parent):GameObject(parent, "Hp"), hImage_(-1),BgImage_(-1), Wide_(3) /*bagImage_(-1)*/
+Hp::Hp(GameObject* parent)
+    :GameObject(parent, "Hp"), hHp_(-1),hHpFrame_(-1), Wide_(3) /*bagImage_(-1)*/
 {
 
 }
@@ -15,11 +16,11 @@ Hp::~Hp()
 void Hp::Initialize()
 {
     /*Wide_ = 3;*/
-    hImage_ = LoadGraph("Assets/UI/HP.png");
-    assert(hImage_ >= 0);
+    hHp_ = LoadGraph("Assets/UI/HP.png");
+    assert(hHp_ >= 0);
 
-    BgImage_ = LoadGraph("Assets/UI/HpFrame.png");
-    assert(BgImage_ >= 0);
+    hHpFrame_ = LoadGraph("Assets/UI/HpFrame.png");
+    assert(hHpFrame_ >= 0);
 }
 
 void Hp::Update()
@@ -59,7 +60,7 @@ void Hp::Draw()
     float heartWidth = 50.0f;  // ハートの画像の幅に合わせて調整
     Player* player = GetParent()->FindGameObject<Player>();  // Playerオブジェクトを取得
 
-    DrawGraph(0,-15, BgImage_, TRUE);
+    DrawGraph(0,-15, hHpFrame_, TRUE);
 
     if (player != nullptr && player->GetHp() > 0)
     {
@@ -67,7 +68,7 @@ void Hp::Draw()
         for (int i = 0; i < player->GetHp(); i++)
         {
             transform_.position_.x = -0.9 + i * heartWidth;
-            DrawExtendGraph(transform_.position_.x, transform_.position_.y, transform_.position_.x + 64 * transform_.scale_.x, transform_.position_.y + 64 * transform_.scale_.y, hImage_, TRUE);
+            DrawExtendGraph(transform_.position_.x, transform_.position_.y,transform_.position_.x + 64 * transform_.scale_.x, transform_.position_.y + 64 * transform_.scale_.y, hHp_, TRUE);
         }
 
     }
@@ -76,12 +77,12 @@ void Hp::Draw()
 
 void Hp::Release()
 {
-    if (hImage_ > 0)
+    if (hHp_ > 0)
     {
-        DeleteGraph(hImage_);
+        DeleteGraph(hHp_);
     }
-    if (BgImage_ > 0)
+    if (hHpFrame_ > 0)
     {
-        DeleteGraph(BgImage_);
+        DeleteGraph(hHpFrame_);
     }
 }

@@ -2,6 +2,7 @@
 #include"Camera.h"
 
 ChangeSnowUI::ChangeSnowUI(GameObject* parent)
+	:GameObject(parent, "ChangeSnowUI"), hChangeSnowUI(-1)
 {
 }
 

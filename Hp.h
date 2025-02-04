@@ -8,8 +8,8 @@ class Hp :
 	public GameObject
 {
 private:
-	int hImage_;
-	int BgImage_;
+	int hHp_;
+	int hHpFrame_;
 	//int bagImage_;
 	int Wide_ = 3;//‘Ì—Í
 

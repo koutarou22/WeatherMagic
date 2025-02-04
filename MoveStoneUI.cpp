@@ -2,6 +2,7 @@
 #include"Camera.h"
 
 MoveStoneUI::MoveStoneUI(GameObject* parent)
+	:GameObject(parent, "MoveStoneUI"), hMoveStoneUI(-1)
 {
 }
 

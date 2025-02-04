@@ -9,7 +9,7 @@ namespace
 }
 
 Logo::Logo(GameObject* parent)
-	:GameObject(parent,"Logo"),hImage_(-1),MoveValueX(0.0f),frame(0.0f)
+	:GameObject(parent,"Logo"),hClear_(-1),MoveValueX(0.0f),frame(0.0f)
 {
 	transform_.position_.x = 0;
 	transform_.position_.y = height;
@@ -22,9 +22,9 @@ Logo::~Logo()
 
 void Logo::Initialize()
 {
-	hImage_ = LoadGraph("Assets/UI/gameclear.png"); 
+	hClear_ = LoadGraph("Assets/UI/gameclear.png"); 
 	//hImage_ = LoadGraph("Assets/Font/StageClear.png");
-	assert(hImage_ > 0);
+	assert(hClear_ > 0);
 
 }
 
@@ -40,15 +40,15 @@ void Logo::Draw()
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
 
-	DrawGraph(x, y, hImage_, TRUE);
+	DrawGraph(x, y, hClear_, TRUE);
 	//DrawFormatString(0, 400, GetColor(0, 0, 0), "イージングの数値: %d ", MoveValueX);
 }
 
 void Logo::Release()
 {
-	if (hImage_ > 0)
+	if (hClear_ > 0)
 	{
-		DeleteGraph(hImage_);
+		DeleteGraph(hClear_);
 	}
 }
 
