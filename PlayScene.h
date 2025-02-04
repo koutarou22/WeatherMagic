@@ -27,10 +27,9 @@ public:
 	//ŠJ•ú
 	void Release() override;
 private:
-	int MapNumber_;
+	int MapNumber_;//‚Ç‚Ìcsv‚ğ“Ç‚İ‚Ş‚©
 	int MpPass; //Mp‚Ì’l
 	int StageBGMHandle; //BGM
 	SceneManager* pSceneManager;
 	Player* pPlayer;
-	ChooseLevelScene* pChooseLevelScene;
 };

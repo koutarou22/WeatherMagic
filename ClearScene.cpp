@@ -3,9 +3,6 @@
 #include "Engine/SceneManager.h"
 #include"ClearScene.h"
 #include "Score.h"
-
-//ここに星を書く追加予定
-
 namespace
 {
     const int TIMER = 100;
@@ -13,8 +10,8 @@ namespace
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
 {
-    hImage_ = LoadGraph("Assets/Scene/CLEAR.png");
-    assert(hImage_ > 0);
+    hBack_ = LoadGraph("Assets/Scene/CLEAR.png");
+    assert(hBack_ > 0);
 
     hGameClear_ = LoadGraph("Assets/Font/GameClear1.png");
     assert(hGameClear_ > 0);
@@ -22,23 +19,23 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
     //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu10.png");
     //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu20.png");
     //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenuClear0.png");
-    hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu.png");
-    assert(hTitleMenu > 0);
+    hTitleMenu_ = LoadGraph("Assets/UI/XboxBottunUI/titleMenu.png");
+    assert(hTitleMenu_ > 0);
 
-    hTitleMenuYellow = LoadGraph("Assets/UI/XboxBottunUI/titleMenu1.png");
-    assert(hTitleMenuYellow > 0);
+    hTitleMenuYellow_ = LoadGraph("Assets/UI/XboxBottunUI/titleMenu1.png");
+    assert(hTitleMenuYellow_ > 0);
 
     keyTimer_ = TIMER;
     keyPushed_ = false;
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-    ClearBGMHandle = LoadSoundMem("Assets/Music/BGM/CLEAR_BGM.mp3");
-    assert(ClearBGMHandle != -1);
+    ClearBGMHandle_ = LoadSoundMem("Assets/Music/BGM/CLEAR_BGM.mp3");
+    assert(ClearBGMHandle_ != -1);
 
-    DecisionHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/Clear.mp3");//決定時のSE
-    assert(DecisionHandle != -1);
+    DecisionHandle_ = LoadSoundMem("Assets/Music/SE/SceneSwitch/Clear.mp3");//決定時のSE
+    assert(DecisionHandle_ != -1);
 
-    PlaySoundMem(ClearBGMHandle, DX_PLAYTYPE_BACK);
+    PlaySoundMem(ClearBGMHandle_, DX_PLAYTYPE_BACK);
 }
 
 ClearScene::~ClearScene()
@@ -55,13 +52,13 @@ void ClearScene::Initialize()
 
 void ClearScene::Update()
 {
-    padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+    padAnalogInput_ = GetJoypadXInputState(DX_INPUT_PAD1, &input_);
     // Cキーが押されたらスタートボタンでTitleSceneに遷移
-    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13])
+    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input_.Buttons[4] || input_.Buttons[13])
     {
         keyPushed_ = true;
         //PlaySoundMem(DecisionHandle,DX_PLAYTYPE_BACK);
-        StopSoundMem(ClearBGMHandle);
+        StopSoundMem(ClearBGMHandle_);
     }
 
     if (keyPushed_)
@@ -94,46 +91,46 @@ void ClearScene::Draw()
     {
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
-        DrawGraph(0, 0, hImage_, TRUE);
+        DrawGraph(0, 0, hBack_, TRUE);
         DrawGraph(400, 240, hGameClear_, TRUE);
-        DrawGraph(550, 380, hTitleMenuYellow, TRUE);
+        DrawGraph(550, 380, hTitleMenuYellow_, TRUE);
         al = keyTimer_;
     }
     else
     {
         // 画面全体に背景画像を描画
-        DrawGraph(0, 0, hImage_, TRUE);
+        DrawGraph(0, 0, hBack_, TRUE);
         DrawGraph(400, 240, hGameClear_, TRUE);
-        DrawGraph(550, 380, hTitleMenu, TRUE);
+        DrawGraph(550, 380, hTitleMenu_, TRUE);
     }
 }
 
 void ClearScene::Release()
 {
-    if (hImage_ > 0)
+    if (hBack_ > 0)
     {
-        DeleteGraph(hImage_);
+        DeleteGraph(hBack_);
     }
     if (hGameClear_ > 0)
     {
         DeleteGraph(hGameClear_);
     }
-    if (hTitleMenu > 0)
+    if (hTitleMenu_ > 0)
     {
-        DeleteGraph(hTitleMenu);
+        DeleteGraph(hTitleMenu_);
     }
-    if (hTitleMenuYellow > 0)
+    if (hTitleMenuYellow_ > 0)
     {
-        DeleteGraph(hTitleMenuYellow);
+        DeleteGraph(hTitleMenuYellow_);
     }
 
     //SE BGM
-    if (ClearBGMHandle > 0)
+    if (ClearBGMHandle_ > 0)
     {
-        DeleteSoundMem(ClearBGMHandle);
+        DeleteSoundMem(ClearBGMHandle_);
     }
-    if (DecisionHandle > 0)
+    if (DecisionHandle_ > 0)
     {
-        DeleteSoundMem(DecisionHandle);
+        DeleteSoundMem(DecisionHandle_);
     }
 }

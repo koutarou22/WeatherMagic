@@ -4,23 +4,22 @@
 class TitleScene : public GameObject
 {
 private:
-	int hImage_;
-	int charImage_;
-	int spaceImage_;
-	int padAnalogInput;//xboxの入力を受け取る
-	XINPUT_STATE input;//xboxの入力を受け取る
+	int hBack_;//タイトルの背景
+	int hTitle_;//『WeatherMagic』のタイトルフォント
+	int padAnalogInput_;//xboxの入力を受け取る
+	XINPUT_STATE input_;//xboxの入力を受け取る
 	int keyTimer_; //キーが押されてから遷移までのタイマー
 	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
-	int mojiTimer_; //文字をぴかぴかするタイマー
-	bool mojiend_; //ぴかぴか終わりかなフラグ
+	int mojiTimer_; //文字を光らせるタイマー
+	bool mojiend_; //文字の光らせる処理が終わったか
 
-	int TitleBGMHandle;	//TitleのBGM
+	int TitleBGMHandle_;	//TitleのBGM
 
-	bool CheckSelect;//決定が押されたか確認する用
-	int SelectHandle;//決定を押したときの音
+	bool CheckSelect_;//決定が押されたか確認する用
+	int SelectSEHandle_;//決定を押したときの音
 
-	int hStart;//UIハンドル
-	int hStartYellow;//UIハンドル（黄色）
+	int hStart_;//UIハンドル
+	int hStartYellow_;//UIハンドル（黄色）
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

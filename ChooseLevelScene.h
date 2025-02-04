@@ -9,26 +9,20 @@ class ChooseLevelScene :
     public GameObject
 {
 private:
-	int hImage_back;//背景
-	int	hLevelFont;//『難易度を選択してください』のフォント
-	int hDecideB;   //決定UI
-	int hDecideByellow;//決定UI（黄色）
+	int hBack_;//背景
+	int	hLevelFont_;//『難易度を選択してください』のフォント
+	int hDecideB_;   //決定UI
+	int hDecideByellow_;//決定UI（黄色）
 
-	int padAnalogInput;//xboxの入力を受け取る
-	XINPUT_STATE input;//xboxの入力を受け取る
+	int padAnalogInput_;//xboxの入力を受け取る
+	XINPUT_STATE input_;//xboxの入力を受け取る
 
 	int keyTimer_; //キーが押されてから遷移までのタイマー
 	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
 
-	const char* LevelText1 = "";
-	const char* LevelText2 = "";
-	const char* LevelText3 = "";
-	//const char* Explanation1 = "";
-	//const char* Explanation2 = "";
-	//const char* Explanation3 = "";
-
-	//array <const char*, 3> LevelMassage = { LevelText1,LevelText2,LevelText3 };//使わないかも
-	//array <const char*, 3> ExplanationMassage = { Explanation1,Explanation2,Explanation3 };//使わないかも
+	const char* LevelText1_ = "";
+	const char* LevelText2_ = "";
+	const char* LevelText3_ = "";
 
 	enum StageLevelChoose
 	{
@@ -36,24 +30,24 @@ private:
 		NORMAL = 1,
 		HARD = 2,
 	};
-
 	StageLevelChoose chooselevel_;
-	std::vector<StageLevelChoose> level_arr;
-	int currentlevel = 0;//難易度（選択によって読みこむcsvを変える）
-	bool prevUp;//↑を押したか
-	bool prevDown;//↓を押したか
+	std::vector<StageLevelChoose> level_arr_;
+
+	int currentlevel_ = 0;//難易度（選択によって読みこむcsvを変える）
+	bool prevUp_;//↑を押したか
+	bool prevDown_;//↓を押したか
 
 	int Previous(int level);// 前の要素にアクセス（循環的）
 	int Next(int currentIndex);// 次の要素にアクセス（循環的）
 
-	int whitecolor = GetColor(255, 255, 255);
-	int yellowcolor = GetColor(255, 255, 0);
+	int whitecolor_ = GetColor(255, 255, 255);
+	int yellowcolor_ = GetColor(255, 255, 0);
 
 
-	int SelectSEHandle;//選択用SE
-	int DecisionHandle;//決定用SE
+	int SelectSEHandle_;//選択用SE
+	int DecisionHandle_;//決定用SE
 
-	bool CheckDecision;//決定が押されたか確認する用
+	bool CheckDecision_;//決定が押されたか確認する用
 
 public:
 	//コンストラクタ

@@ -13,45 +13,37 @@ namespace
 }
 int ChooseLevelScene::Previous(int level)
 {
-	if(level_arr.empty()) 
+	if(level_arr_.empty()) 
         return -1;  // 配列が空の場合
 
 	// インデックスが0なら、前の要素は配列の最後の要素（2の場合は0）
-	return level_arr[(currentlevel - 1 + level_arr.size()) % level_arr.size()];
+	return level_arr_[(currentlevel_ - 1 + level_arr_.size()) % level_arr_.size()];
 }
 
 int ChooseLevelScene::Next(int currentIndex)
 {
-	if (level_arr.empty())
+	if (level_arr_.empty())
         return -1;  // 配列が空の場合
 
 	// インデックスが最後なら、次は最初の要素（2の場合は0）
-	return level_arr[(currentIndex + 1) % level_arr.size()];
+	return level_arr_[(currentIndex + 1) % level_arr_.size()];
 }
 ChooseLevelScene::ChooseLevelScene(GameObject* parent)
-    : GameObject(parent, "ChooseLevelScene"), hImage_back(-1), keyPushed_(false), keyTimer_(TIMER),
-    prevUp(false),prevDown(false)
+    : GameObject(parent, "ChooseLevelScene"), hBack_(-1), keyPushed_(false), keyTimer_(TIMER),
+    prevUp_(false),prevDown_(false)
 {
     SetFontSize(32);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-    level_arr.push_back(EASY);
-    level_arr.push_back(NORMAL);
-    level_arr.push_back(HARD);
+    level_arr_.push_back(EASY);
+    level_arr_.push_back(NORMAL);
+    level_arr_.push_back(HARD);
 
-    LevelText1 = "EASY";
-    LevelText2 = "NORMAL";
-    LevelText3 = "HARD";
-            
-    //Explanation1 = "アクションは控えめにのんびり遊びたい方向け";
-    //Explanation2 = "程々のアクションと謎解きを楽しみたい方向け";
-    //Explanation3 = "アクションに自信があり、刺激を求める方向け";
-    
-    //Explanation1 = "アクションは控えめにのんびり遊びたい方向け";
-    //Explanation2 = "程々のアクションと謎解きを楽しみたい方向け";
-    //Explanation3 = "アクションに自信があり,刺激を求める方向け";
+    LevelText1_ = "EASY";
+    LevelText2_ = "NORMAL";
+    LevelText3_ = "HARD";
       
-    CheckDecision = false;
+    CheckDecision_ = false;
 }
 
 ChooseLevelScene::~ChooseLevelScene()
@@ -61,29 +53,29 @@ ChooseLevelScene::~ChooseLevelScene()
 
 void ChooseLevelScene::Initialize()
 {
-	hImage_back = LoadGraph("Assets/Scene/Back.jpg");//タイトルの背景
-	assert(hImage_back > 0);
+	hBack_ = LoadGraph("Assets/Scene/Back.jpg");//タイトルの背景
+	assert(hBack_ > 0);
 
-    hLevelFont = LoadGraph("Assets/Font/Level1.png");//難易度を選択してくださいのfont
-    assert(hLevelFont > 0);
+    hLevelFont_ = LoadGraph("Assets/Font/Level1.png");//難易度を選択してくださいのfont
+    assert(hLevelFont_ > 0);
 
-    hDecideB = LoadGraph("Assets/UI/XboxBottunUI/decideB3.png");//B決定のUI
-    assert(hDecideB > 0);
+    hDecideB_ = LoadGraph("Assets/UI/XboxBottunUI/decideB3.png");//B決定のUI
+    assert(hDecideB_ > 0);
 
-    hDecideByellow = LoadGraph("Assets/UI/XboxBottunUI/decideB2.png");//B決定のUI（黄色）
-    assert(hDecideByellow > 0);
+    hDecideByellow_ = LoadGraph("Assets/UI/XboxBottunUI/decideB2.png");//B決定のUI（黄色）
+    assert(hDecideByellow_ > 0);
 
-    SelectSEHandle = LoadSoundMem("Assets/Music/SE/Select/Select0.mp3");//選択時のSE
-    assert(SelectSEHandle > 0);
+    SelectSEHandle_ = LoadSoundMem("Assets/Music/SE/Select/Select0.mp3");//選択時のSE
+    assert(SelectSEHandle_ > 0);
 
-    DecisionHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/Select02.mp3");//選択時のSE
-    assert(DecisionHandle > 0);
+    DecisionHandle_ = LoadSoundMem("Assets/Music/SE/SceneSwitch/Select02.mp3");//選択時のSE
+    assert(DecisionHandle_ > 0);
 
 }
 
 void ChooseLevelScene::Update()
 {
-	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+	padAnalogInput_ = GetJoypadXInputState(DX_INPUT_PAD1, &input_);
 
 	/*SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	pSceneManager->ChangeScene(SCENE_ID_PLAY);*/
@@ -105,44 +97,44 @@ void ChooseLevelScene::Update()
     //}
 
     
-    if (CheckHitKey(KEY_INPUT_UP) || input.Buttons[0] || input.ThumbLY >= 15000 )
+    if (CheckHitKey(KEY_INPUT_UP) || input_.Buttons[0] || input_.ThumbLY >= 15000 )
     {
-        if (!prevUp) 
+        if (!prevUp_)
         {
-            currentlevel = Previous(currentlevel);
-            PlaySoundMem(SelectSEHandle, DX_PLAYTYPE_BACK);
+            currentlevel_ = Previous(currentlevel_);
+            PlaySoundMem(SelectSEHandle_, DX_PLAYTYPE_BACK);
         }
-        prevUp = true;
+        prevUp_ = true;
     }
     else {
-        prevUp = false;
+        prevUp_ = false;
     }
  
-    if (CheckHitKey(KEY_INPUT_DOWN) || input.Buttons[1] || input.ThumbLY <= -15000)
+    if (CheckHitKey(KEY_INPUT_DOWN) || input_.Buttons[1] || input_.ThumbLY <= -15000)
     {
-        if (!prevDown)
+        if (!prevDown_)
         {
-            currentlevel = Next(currentlevel);
-            PlaySoundMem(SelectSEHandle, DX_PLAYTYPE_BACK);
+            currentlevel_ = Next(currentlevel_);
+            PlaySoundMem(SelectSEHandle_, DX_PLAYTYPE_BACK);
         }
-        prevDown = true;
+        prevDown_ = true;
     }
     else
     {
-        prevDown = false;
+        prevDown_ = false;
     }
 
 
     // SPACEキーorStartボタンorBボタンが押されたらスタートボタンでPlaySceneに遷移
-    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13])
+    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input_.Buttons[4] || input_.Buttons[13])
     {
         keyPushed_ = true;
 
-        if (!CheckDecision)
+        if (!CheckDecision_)
         {
-            PlaySoundMem(DecisionHandle, DX_PLAYTYPE_BACK);
+            PlaySoundMem(DecisionHandle_, DX_PLAYTYPE_BACK);
 
-            CheckDecision = true;
+            CheckDecision_ = true;
         }
     }
 
@@ -157,7 +149,7 @@ void ChooseLevelScene::Update()
     {
         //SetFontSize(32); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->SetLevelManager(currentlevel);
+        pSceneManager->SetLevelManager(currentlevel_);
         pSceneManager->ChangeScene(SCENE_ID_PLAY);
     }
 
@@ -173,16 +165,16 @@ void ChooseLevelScene::Draw()
     {
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
-        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
-        DrawGraph(570, 600, hDecideByellow, TRUE);//中央下
-        //DrawGraph(0, 350, hDecideB, TRUE);//難易度の下
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
+        DrawGraph(570, 600, hDecideByellow_, TRUE);//中央下
+        //DrawGraph(0, 350, hDecideByellow, TRUE);//難易度の下
         al = keyTimer_;
     }
     else
     {
         // 画面全体に背景画像を描画
-        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_back, FALSE);
-        DrawGraph(570, 600, hDecideB, TRUE);//中央下
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
+        DrawGraph(570, 600, hDecideB_, TRUE);//中央下
         //DrawGraph(0, 350, hDecideB, TRUE);//難易度の下
     }
 
@@ -191,7 +183,7 @@ void ChooseLevelScene::Draw()
     //DrawFormatString(0, 120, GetColor(255, 255, 255), "難易度： %d", currentlevel);
 
     if (!keyPushed_) {
-        switch (currentlevel)
+        switch (currentlevel_)
         {
         case 0:
             DrawFormatString(CURSOR_POINT, Easy_x, GetColor(255, 255, 255), "*");
@@ -211,39 +203,39 @@ void ChooseLevelScene::Draw()
     }
 
 
-    DrawGraph(0, 0, hLevelFont, TRUE);//難易度を選択してくださいのフォント
-    DrawFormatString(SCREENSIZE_HALF, Easy_x, GetColor(255, 255, 255), LevelText1);
-    DrawFormatString(SCREENSIZE_HALF, Easy_x + 50, GetColor(255, 255, 255), LevelText2);
-    DrawFormatString(SCREENSIZE_HALF, Easy_x + 100, GetColor(255, 255, 255), LevelText3);
+    DrawGraph(0, 0, hLevelFont_, TRUE);//難易度を選択してくださいのフォント
+    DrawFormatString(SCREENSIZE_HALF, Easy_x, GetColor(255, 255, 255), LevelText1_);
+    DrawFormatString(SCREENSIZE_HALF, Easy_x + 50, GetColor(255, 255, 255), LevelText2_);
+    DrawFormatString(SCREENSIZE_HALF, Easy_x + 100, GetColor(255, 255, 255), LevelText3_);
 
 }
 
 void ChooseLevelScene::Release()
 {
-    if (hImage_back > 0)
+    if (hBack_ > 0)
     {
-        DeleteGraph(hImage_back);
+        DeleteGraph(hBack_);
     }
-    if (hLevelFont > 0)
+    if (hLevelFont_ > 0)
     {
-        DeleteGraph(hLevelFont);
+        DeleteGraph(hLevelFont_);
     }
-    if (hDecideB > 0)
+    if (hDecideB_ > 0)
     {
-        DeleteGraph(hDecideB);
+        DeleteGraph(hDecideB_);
     }
-    if (hDecideByellow > 0)
+    if (hDecideByellow_ > 0)
     {
-        DeleteGraph(hDecideByellow);
+        DeleteGraph(hDecideByellow_);
     }
 
     //SE
-    if (SelectSEHandle > 0)
+    if (SelectSEHandle_ > 0)
     {
-        DeleteSoundMem(SelectSEHandle);
+        DeleteSoundMem(SelectSEHandle_);
     }
-    if (DecisionHandle > 0)
+    if (DecisionHandle_ > 0)
     {
-        DeleteSoundMem(DecisionHandle);
+        DeleteSoundMem(DecisionHandle_);
     }
 }

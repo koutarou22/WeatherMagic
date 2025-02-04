@@ -4,7 +4,7 @@ class StartScene :
     public GameObject
 {
 private:
-    int hImage_;
+    int hLogo_;    //ゲームのロゴ
 	int keyTimer_; //遷移までのタイマー
 public:
 	//コンストラクタ

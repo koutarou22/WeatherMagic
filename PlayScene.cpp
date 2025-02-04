@@ -15,7 +15,8 @@
 #include "WeatherBackGround.h"
 #include "Score.h"
 
-PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0) 
+PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0),
+MpPass(0),StageBGMHandle(-1),pSceneManager(nullptr),pPlayer(nullptr)
 {
     StageBGMHandle = LoadSoundMem("Assets/Music/BGM/STAGE_BGM.mp3");
     assert(StageBGMHandle != -1);
@@ -40,21 +41,15 @@ void PlayScene::Initialize()
 
     Instantiate<WeatherBackGround>(this);
     Instantiate<Weather>(this);
-    pPlayer = nullptr;
     pPlayer = Instantiate<Player>(this);
 
     MpPass = pPlayer->GetMp();//Mpの値を持ってくる
     pSceneManager->SetMagicPoint(MpPass);//PlaySceneでPlayerのMpをSet
 
     Instantiate<Camera>(this);
-
-    //Instantiate<UI>(this);
-
     Score* sc=Instantiate<Score>(this);
     sc->SetPosition(100,500);
-    bool b = true;
-    sc->SetPlaying(b);
-
+    sc->SetPlaying(true);
 }
 
 //更新
