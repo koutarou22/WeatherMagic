@@ -80,6 +80,7 @@ void FreezeEffect::Draw()
     int FrameY = 64; 
 
     DrawRectGraph(x, y, animeFrame * FrameX, 0, FrameX, FrameY, hImage_, TRUE);
+ 
 }
 
 void FreezeEffect::Release()
