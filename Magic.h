@@ -17,7 +17,6 @@ public:
 	void UpdateHit();
 
 	void SetPosition(int x, int y);
-	void SetPosition(XMFLOAT3 pos);
 	void SetDirection(VECTOR _direction) { direction_ = _direction; }
 	void SetSpeed(float _speed) { speed_ = _speed; }
 	bool ColliderCircle(float x, float y, float r);
@@ -29,23 +28,22 @@ public:
 
 	void Release() override;
 private:
-	int hImage_;
-	int timer_;
+	int timer_;//出現時間
 	VECTOR direction_;//方向
     float speed_;//弾丸の速度
 
-	int hImage_move1;
-	int hImage_move2;
-	int hImage_move3;
-	int hImage_move4;
+	int hMagic_Move1;
+	int hMagic_Move2;
+	int hMagic_Move3;
+	int hMagic_Move4;
 
-	int hImage_hit1;
-	int hImage_hit2;
-	int hImage_hit3;
-	int hImage_hit4;
-	int hImage_hit5;
-	int hImage_hit6;
-	int hImage_hit7;
+	int hMagic_Hit1;
+	int hMagic_Hit2;
+	int hMagic_Hit3;
+	int hMagic_Hit4;
+	int hMagic_Hit5;
+	int hMagic_Hit6;
+	int hMagic_Hit7;
 
 	enum MagicState
 	{
@@ -58,7 +56,5 @@ private:
 	std::array<int, 7> animeHitArray_;//アニメーションの固定長配列
 	int animeNum;//アニメーションのうち何番目か
 	int frameCounter;//アニメーションの切り替えカウント
-
 	bool isDraw_;//isDrawがtrueなら描画+更新
-
 };

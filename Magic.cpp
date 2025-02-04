@@ -5,40 +5,48 @@
 #include"Field.h"
 #include "Debug.h"
 
-Magic::Magic(GameObject* scene) : GameObject(scene),Magic_s(S_Move),animeNum(0),
-direction_({0,0}),frameCounter(0),speed_(0.0f),timer_(0)
+namespace
+{
+	const int BlockHalf = 32;//ブロック半個分
+	const int InitializeTimer = 90;//タイマー初期化時の値
+	const int FrameUpdateMove = 8;//アニメーションの切り替えフレーム この値を超えたらスプライト切り替え(移動時)
+	const int FrameUpdateHit = 2;//アニメーションの切り替えフレーム この値を超えたらスプライト切り替え(ヒット時)
+	const int SpriteNumMove = 4;//アニメーションのスプライトの総数(移動時)
+	const int SpriteNumHit = 7;//アニメーションのスプライトの総数(ヒット時)
+	const int MagicSetValue = 30;//魔法の射出位置(プレイヤーの位置に加算して調整する)
+}
+
+Magic::Magic(GameObject* scene) : GameObject(scene), Magic_s(S_Max), animeNum(0),
+direction_({ 0,0 }), frameCounter(0), speed_(0.0f), timer_(0), isDraw_(false)
 {
 	Debug::OutPrint(L"魔法を撃った(プレイヤー)", true);
 
-	hImage_move1 = LoadGraph("Assets/Bullet/bolt/bolt1.png");
-	assert(hImage_move1 > 0);
-	hImage_move2 = LoadGraph("Assets/Bullet/bolt/bolt2.png");
-	assert(hImage_move2 > 0);
-	hImage_move3 = LoadGraph("Assets/Bullet/bolt/bolt3.png");
-	assert(hImage_move3 > 0);
-	hImage_move4 = LoadGraph("Assets/Bullet/bolt/bolt4.png");
-	assert(hImage_move4 > 0);
+	hMagic_Move1 = LoadGraph("Assets/Bullet/bolt/bolt1.png");
+	assert(hMagic_Move1 > 0);
+	hMagic_Move2 = LoadGraph("Assets/Bullet/bolt/bolt2.png");
+	assert(hMagic_Move2 > 0);
+	hMagic_Move3 = LoadGraph("Assets/Bullet/bolt/bolt3.png");
+	assert(hMagic_Move3 > 0);
+	hMagic_Move4 = LoadGraph("Assets/Bullet/bolt/bolt4.png");
+	assert(hMagic_Move4 > 0);
 
-	hImage_hit1 = LoadGraph("Assets/Bullet/bolt/hit1.png");
-	assert(hImage_hit1 > 0);
-	hImage_hit2 = LoadGraph("Assets/Bullet/bolt/hit2.png");
-	assert(hImage_hit2 > 0);
-	hImage_hit3 = LoadGraph("Assets/Bullet/bolt/hit3.png");
-	assert(hImage_hit3 > 0);
-	hImage_hit4 = LoadGraph("Assets/Bullet/bolt/hit4.png");
-	assert(hImage_hit4 > 0);
-	hImage_hit5 = LoadGraph("Assets/Bullet/bolt/hit5.png");
-	assert(hImage_hit5 > 0);
-	hImage_hit6 = LoadGraph("Assets/Bullet/bolt/hit6.png");
-	assert(hImage_hit6 > 0);
-	hImage_hit7 = LoadGraph("Assets/Bullet/bolt/hit7.png");
-	assert(hImage_hit7 > 0);
+	hMagic_Hit1 = LoadGraph("Assets/Bullet/bolt/hit1.png");
+	assert(hMagic_Hit1 > 0);
+	hMagic_Hit2 = LoadGraph("Assets/Bullet/bolt/hit2.png");
+	assert(hMagic_Hit2 > 0);
+	hMagic_Hit3 = LoadGraph("Assets/Bullet/bolt/hit3.png");
+	assert(hMagic_Hit3 > 0);
+	hMagic_Hit4 = LoadGraph("Assets/Bullet/bolt/hit4.png");
+	assert(hMagic_Hit4 > 0);
+	hMagic_Hit5 = LoadGraph("Assets/Bullet/bolt/hit5.png");
+	assert(hMagic_Hit5 > 0);
+	hMagic_Hit6 = LoadGraph("Assets/Bullet/bolt/hit6.png");
+	assert(hMagic_Hit6 > 0);
+	hMagic_Hit7 = LoadGraph("Assets/Bullet/bolt/hit7.png");
+	assert(hMagic_Hit7 > 0);
 
-	animeArray_ = { hImage_move1,hImage_move2, hImage_move3, hImage_move4 };
-	animeHitArray_ = { hImage_hit1,hImage_hit2, hImage_hit3, hImage_hit4, hImage_hit5, hImage_hit6, hImage_hit7 };
-
-	Magic_s = S_Max;
-	isDraw_ = false;
+	animeArray_ = { hMagic_Move1, hMagic_Move2,  hMagic_Move3,  hMagic_Move4 };
+	animeHitArray_ = { hMagic_Hit1,hMagic_Hit2, hMagic_Hit3, hMagic_Hit4, hMagic_Hit5, hMagic_Hit6, hMagic_Hit7 };
 }
 
 Magic::~Magic()
@@ -58,8 +66,7 @@ void Magic::Update()
 		break;
 	default:
 		break;
-	}
-	
+	}	
 }
 
 void Magic::Draw()
@@ -100,8 +107,6 @@ void Magic::Draw()
 	default:
 		break;
 	}
-
-	//DrawCircle(x + 16, y + 16, 16, GetColor(255, 0, 0), FALSE);
 }
 
 void Magic::UpdateIdle()
@@ -118,10 +123,9 @@ void Magic::UpdateMove()
 			transform_.position_.x += direction_.x * speed_;
 			transform_.position_.y += direction_.y * speed_;
 
-
-			if (++frameCounter >= 8)
+			if (++frameCounter >= FrameUpdateMove)
 			{
-				animeNum = (animeNum + 1) % 4;
+				animeNum = (animeNum + 1) % SpriteNumMove;
 				frameCounter = 0;
 			}
 			if (--timer_ <= 0)
@@ -140,8 +144,8 @@ void Magic::UpdateMove()
 		if (isDraw_) {
 			if (direction_.x == 1.0)
 			{
-				if (pField->IsWallBlock(transform_.position_.x + 32, transform_.position_.y) ||
-					pField->IsHitRock(transform_.position_.x + 32, transform_.position_.y))
+				if (pField->IsWallBlock(transform_.position_.x + BlockHalf, transform_.position_.y) ||
+					pField->IsHitRock(transform_.position_.x + BlockHalf, transform_.position_.y))
 				{
 					Magic_s = S_Hit;
 				}
@@ -149,7 +153,7 @@ void Magic::UpdateMove()
 			else
 			{
 				if (pField->IsWallBlock(transform_.position_.x, transform_.position_.y) ||
-					pField->IsHitRock(transform_.position_.x - 32, transform_.position_.y))
+					pField->IsHitRock(transform_.position_.x - BlockHalf, transform_.position_.y))
 				{
 					Magic_s = S_Hit;
 				}
@@ -162,13 +166,13 @@ void Magic::UpdateHit()
 {
 	if (isDraw_) 
 	{
-		if (++frameCounter >= 2)
+		if (++frameCounter >= FrameUpdateHit)
 		{
-			animeNum = (animeNum + 1) % 7;
+			animeNum = (animeNum + 1) % SpriteNumHit;
 			frameCounter = 0;
 		}
 
-		if (animeNum >= 6)
+		if (animeNum >= SpriteNumHit - 1)//ヒット時のアニメーションの総数を超えたら(配列確認のため-1)
 		{
 			isDraw_ = false;
 			animeNum = 0;
@@ -180,16 +184,9 @@ void Magic::UpdateHit()
 
 void Magic::SetPosition(int x, int y)
 {
-	transform_.position_.x = x + 20;
-	transform_.position_.y = y + 30;
-	timer_ = 90;
-}
-
-void Magic::SetPosition(XMFLOAT3 pos)
-{
-	pos.y += 10; 
-	transform_.position_ = pos;
-	timer_ = 90;
+	transform_.position_.x = x + MagicSetValue;
+	transform_.position_.y = y + MagicSetValue;
+	timer_ = InitializeTimer;
 }
 
 bool Magic::ColliderCircle(float x, float y, float r)
@@ -210,49 +207,49 @@ void Magic::Release()
 {
 	Debug::OutPrint(L"魔法を解放(プレイヤー)", true);
 
-	if (hImage_move1 > 0)
+	if (hMagic_Move1 > 0)
 	{
-		DeleteGraph(hImage_move1);
+		DeleteGraph(hMagic_Move1);
 	}
-	if (hImage_move2 > 0)
+	if (hMagic_Move2 > 0)
 	{
-		DeleteGraph(hImage_move2);
+		DeleteGraph(hMagic_Move2);
 	}
-	if (hImage_move3 > 0)
+	if (hMagic_Move3 > 0)
 	{
-		DeleteGraph(hImage_move3);
+		DeleteGraph(hMagic_Move3);
 	}
-	if (hImage_move4 > 0)
+	if (hMagic_Move4 > 0)
 	{
-		DeleteGraph(hImage_move4);
+		DeleteGraph(hMagic_Move4);
 	}
 
-	if (hImage_hit1 > 0)
+	if (hMagic_Hit1 > 0)
 	{
-		DeleteGraph(hImage_hit1);
+		DeleteGraph(hMagic_Hit1);
 	}
-	if (hImage_hit2 > 0)
+	if (hMagic_Hit2 > 0)
 	{
-		DeleteGraph(hImage_hit2);
+		DeleteGraph(hMagic_Hit2);
 	}
-	if (hImage_hit3 > 0)
+	if (hMagic_Hit3 > 0)
 	{
-		DeleteGraph(hImage_hit3);
+		DeleteGraph(hMagic_Hit3);
 	}
-	if (hImage_hit4 > 0)
+	if (hMagic_Hit4 > 0)
 	{
-		DeleteGraph(hImage_hit4);
+		DeleteGraph(hMagic_Hit4);
 	}
-	if (hImage_hit5 > 0)
+	if (hMagic_Hit5 > 0)
 	{
-		DeleteGraph(hImage_hit5);
+		DeleteGraph(hMagic_Hit5);
 	}
-	if (hImage_hit6 > 0)
+	if (hMagic_Hit6 > 0)
 	{
-		DeleteGraph(hImage_hit6);
+		DeleteGraph(hMagic_Hit6);
 	}
-	if (hImage_hit7 > 0)
+	if (hMagic_Hit7 > 0)
 	{
-		DeleteGraph(hImage_hit7);
+		DeleteGraph(hMagic_Hit7);
 	}
 }
