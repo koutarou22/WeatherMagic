@@ -2,31 +2,30 @@
 #include "Engine/GameObject.h"
 /// <summary>
 /// スライムが攻撃をくらった時の表示
-/// ※ただその時だけ画像が出るだけなので処理は単純
 /// </summary>
+
+namespace
+{
+	const int TIME = 90; //ダメージエフェクトが消えるまでの時間
+	XMFLOAT2 POS_MARGE = { 10,20 }; //座標をintに変換する際の調整分
+}
+
 class Damage :public GameObject
 {
 private:
-	int hImage_;
-	int Timer_ = 90;
-	int animeFrame_;
-	int flameCounter_;
+	int dmgImage_;
+	int timer_; //タイマー
 public:
 
 	Damage(GameObject* parent);
 	~Damage();
-	//初期化
 	void Initialize() override;
-
-	//更新
 	void Update() override;
-
-	//描画
 	void Draw() override;
-	//開放
 	void Release() override;
-	void SetPosition(int x, int y);
-	void SetPosition(XMFLOAT3 pos);
+	//アクセス関数
+	void SetPosition(int x, int y) {transform_.position_.x = x;transform_.position_.y = y;}
+	void SetPosition(XMFLOAT3 pos) {transform_.position_ = pos;}
 
 };
 
