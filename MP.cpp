@@ -2,8 +2,6 @@
 #include"Player.h"
 MP::MP(GameObject* parent)
 {
-	MPgaugeCrrVal_ = 100;
-	MPgaugeMaxVal_ = 100;
 	trs.position_.x = -270;
 	trs.position_.y = 60;
 }
