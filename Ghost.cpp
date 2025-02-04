@@ -12,6 +12,7 @@
 namespace
 {
 	static const int SCREEN_WIDTH = 1280;
+	const VECTOR dir = { -1.0f,0.0f };//“G‚Ì’e‚Ì”­ŽË•ûŒü
 }
 
 Ghost::Ghost(GameObject* parent)
@@ -89,8 +90,7 @@ void Ghost::Update()
 
 					if (emg != nullptr)
 					{
-						emg->SetPosition(transform_.position_);
-						VECTOR dir = { -1.0f,0.0f };
+						emg->SetPosition(transform_.position_.x,transform_.position_.y);
 						emg->SetDirection(dir);
 						emg->SetSpeed(3.5f);
 						Debug::OutPrint(L"‚¢‚ë‚¢‚ëƒZƒbƒg", true);

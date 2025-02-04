@@ -12,35 +12,24 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void UpdateIdle();
-	void UpdateMove();
 	void SetPosition(int x, int y);
 	void SetPosition(XMFLOAT3 pos);
 	void SetDirection(VECTOR _direction) { direction_ = _direction; }
 	void SetSpeed(float _speed) { speed_ = _speed; }
-	void StartMove();
-	void MagicMoveStart(XMFLOAT3 pos, float timer,VECTOR direction, float speed);
-	void StopMove();
 	bool ColliderCircle(float x, float y, float r);
 	void LoadMagicImage();
 	void Release() override;
 
-	int GetImageHandle() {	return hImage_;}
+	int GetImageHandle() {	return hEnemyMagic_;}
 	void SetIsDraw(bool d) { isDraw = d; }
 	bool GetIsDraw() { return isDraw; }
 private:
-	int hImage_;
-	int timer_;
+	int hEnemyMagic_;
+	int timer_;//出現時間
 	VECTOR direction_;//方向
 	float speed_;//弾丸の速度
-	int animeType_;//状況
-	int animeFrame_;//駒
-	int PictFlame_;
-	int flameCounter_;
-
 	float prevPlPosX; //球を打ち始めた時のプレイヤーのx座標
 	bool isDraw; //EnemyMagicを描画するか
 
-//	Ghost* gh_;
 	XMFLOAT3 GhostPos_;
 };
