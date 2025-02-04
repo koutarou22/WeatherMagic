@@ -1,6 +1,7 @@
 #include "MP.h"
 #include"Player.h"
-MP::MP(GameObject* parent)
+MP::MP(GameObject* parent) 
+	: GameObject(parent,"MP"),MPgaugeCrrVal_(100),MPgaugeMaxVal_(100),hMPBar_(-1),hMPFrame_(-1)
 {
 	trs.position_.x = -270;
 	trs.position_.y = 60;

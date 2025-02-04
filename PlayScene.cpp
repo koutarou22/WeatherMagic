@@ -13,7 +13,6 @@
 #include "ClearFlag.h"
 #include"MP.h"
 #include "WeatherBackGround.h"
-#include"UI.h"
 #include "Score.h"
 
 PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0) 

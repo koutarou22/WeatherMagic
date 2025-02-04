@@ -4,7 +4,7 @@ class Logo :
     public GameObject
 {
 private:
-	int hImage_;
+	int hClear_;
 	float MoveValueX;//イージング関数用の値
 	float frame;//フレーム数える
 public:

@@ -2,6 +2,7 @@
 #include"Camera.h"
 
 JumpUI::JumpUI(GameObject* parent)
+	:GameObject(parent, "JumpUI"), hJumpUI(-1)
 {
 }
 

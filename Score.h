@@ -6,7 +6,7 @@
 class Score : public GameObject
 {
 private:
-	int hImage_;
+	int hStar_;
 
 	int NumStars = 0;
 

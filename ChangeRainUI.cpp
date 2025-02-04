@@ -2,6 +2,7 @@
 #include"Camera.h"
 
 ChangeRainUI::ChangeRainUI(GameObject* parent)
+	:GameObject(parent, "ChangeRainUI"), hChangeRainUI(-1)
 {
 }
 

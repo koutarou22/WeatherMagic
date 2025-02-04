@@ -2,6 +2,7 @@
 #include"Camera.h"
 
 AttackUI::AttackUI(GameObject* parent)
+	:GameObject(parent,"AttackUI"),hAttackUI(-1)
 {
 }
 
