@@ -1,10 +1,10 @@
 #include "Damage.h"
 #include "Camera.h"
 
-Damage::Damage(GameObject* parent) :GameObject(parent, "Damage"), hImage_(-1), Timer_(90)
+Damage::Damage(GameObject* parent) :GameObject(parent, "Damage")
 {
-	hImage_ = LoadGraph("Assets/Chara/Confusion2.png");
-	assert(hImage_ >= 0);
+	dmgImage_ = -1;
+	timer_ = -1;
 }
 
 Damage::~Damage()
@@ -14,48 +14,41 @@ Damage::~Damage()
 
 void Damage::Initialize()
 {
+	dmgImage_ = LoadGraph("Assets/Chara/Confusion2.png");
+	assert(dmgImage_ >0);
+	timer_ = TIME;
 }
 
 void Damage::Update()
 {
-	//Instantiate<Damage>(this);
-	if (Timer_ <= 0)
+	if (timer_ > 0)
+	{
+		timer_--;
+	}
+	else
 	{
 		KillMe();
-		Timer_ = 540;
-	}
-
-	if (Timer_ > 0)
-	{
-		Timer_--;
+		timer_ = TIME;
 	}
 }
 
 void Damage::Draw()
 {
-	int x = (int)transform_.position_.x+10;
-	int y = (int)transform_.position_.y-20;
-
+	//ƒJƒƒ‰À•W‚ð‚Æ‚Á‚Ä‚«‚Ä•`‰æ
+	int x = (int)transform_.position_.x+POS_MARGE.x;
+	int y = (int)transform_.position_.y-POS_MARGE.y;
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-	if (cam != nullptr) {
+	if (cam != nullptr) 
+	{
 		x -= cam->GetValue();
 	}
-
-	DrawGraph(x, y, hImage_, TRUE);
+	DrawGraph(x, y, dmgImage_, TRUE);
 }
 
 void Damage::Release()
 {
-	DeleteGraph(hImage_);
-}
-
-void Damage::SetPosition(int x, int y)
-{
-	transform_.position_.x = x;
-	transform_.position_.y = y;
-}
-
-void Damage::SetPosition(XMFLOAT3 pos)
-{
-	transform_.position_ = pos;
+	if (dmgImage_ > 0)
+	{
+		DeleteGraph(dmgImage_);
+	}
 }

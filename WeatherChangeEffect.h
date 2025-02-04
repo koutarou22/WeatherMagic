@@ -1,27 +1,25 @@
 #pragma once
 #include "Engine/GameObject.h"
+
 class WeatherChangeEffect :
     public GameObject
 {
 private:
-    int hImage_;
-	int animeFrame;
-	int FrameCounter;
-	int eraseCounter;
-	bool isDraw_;//isDrawがtrueなら描画+更新
+    int effImage_;
+	int frameCounter_; //何フレーム分描画するか
+	int eraseCounter_; //画像の何番目を表示しているか
+	int animeFrame_; //画像の何番目を描画するか
+	bool isDraw_; //描画・更新してよいか
 
 public:
 	WeatherChangeEffect(GameObject* parent);
-
-	~WeatherChangeEffect() ;
-
-	//更新
+	~WeatherChangeEffect();
+	void Initialize() override;
 	void Update() override;
-
-	//描画
 	void Draw() override;
-	//開放
 	void Release() override;
+	void Init(); //初期状態にセットする
+	//アクセス関数
 	void SetIsDraw(bool _IsDraw) { isDraw_ = _IsDraw; }
 	bool GetIsDraw() { return isDraw_; }
 };
