@@ -40,8 +40,8 @@ namespace
 Player::Player(GameObject* parent) : GameObject(sceneTop), WeatherSpeed_(MOVE_SPEED),
 Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), DebugLog_(false),hasLanded(false)
 {
-	hImage = LoadGraph("Assets/Chara/Clear_Wizard.png");
-	assert(hImage > 0);
+	hPlayer_ = LoadGraph("Assets/Chara/Clear_Wizard.png");
+	assert(hPlayer_ > 0);
 
 	pLanding = nullptr;
 
@@ -60,7 +60,8 @@ Hp_(5), NDTIME_(2.0f), Flash_Count(0), MagicPoint_(100), IsHitOneCount_(false), 
 
 	HitLanding = true;
 
-	MagicPoint_ = 100;//MPの最大値100変更
+	//MPの最大値100変更
+	MagicPoint_ = 100;
 
 	Hp_GetFlag = false;
 	Hp_GetFlag = false;
@@ -153,9 +154,9 @@ Player::~Player()
 
 void Player::Release()
 {
-	if (hImage > 0)
+	if (hPlayer_ > 0)
 	{
-		DeleteGraph(hImage);
+		DeleteGraph(hPlayer_);
 	}
 	if (hGoal > 0)
 	{
@@ -278,11 +279,11 @@ void Player::Draw()
 		{
 			if (IsTurnLeft)
 			{
-				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);//1...左右反転on 0...上下反転off
+				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hPlayer_, TRUE, 1, 0);//1...左右反転on 0...上下反転off
 			}
 			else
 			{
-				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+				DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hPlayer_, TRUE);
 			}
 
 		}
@@ -292,11 +293,11 @@ void Player::Draw()
 			{
 				if (IsTurnLeft)
 				{
-					DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
+					DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hPlayer_, TRUE, 1, 0);
 				}
 				else
 				{
-					DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+					DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hPlayer_, TRUE);
 				}
 			}
 		}
@@ -307,11 +308,11 @@ void Player::Draw()
 
 		if (IsTurnLeft)
 		{
-			DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
+			DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hPlayer_, TRUE, 1, 0);
 		}
 		else
 		{
-			DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hImage, TRUE);
+			DrawRectGraph(x, y, 2 * 64, animType * 64, 64, 64, hPlayer_, TRUE);
 		}
 
 		break;
@@ -319,7 +320,7 @@ void Player::Draw()
 
 		if (IsTurnLeft)
 		{
-			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE, 1, 0);
+			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hPlayer_, TRUE, 1, 0);
 			if (!MultiDeadSE)
 			{
 				PlaySoundMem(DieHandle, DX_PLAYTYPE_BACK); // 音声を再生
@@ -328,7 +329,7 @@ void Player::Draw()
 		}
 		else
 		{
-			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hImage, TRUE);
+			DrawRectGraph(x, y, animeFrame * 64, animType * 64, 64, 64, hPlayer_, TRUE);
 			if (!MultiDeadSE)
 			{
 				PlaySoundMem(DieHandle, DX_PLAYTYPE_BACK); // 音声を再生
@@ -462,9 +463,7 @@ void Player::StopWeatherSE()
 	}
 }
 
-void Player::StopMoveSE()
-{
-}
+
 
 /// <summary>
 /// sticktiltの構造体の変数を設定（各フレーム）
@@ -485,30 +484,7 @@ void Player::StickTiltCheck()
 		stickTilt.IsLeftStickTilt_left = false;
 		stickTilt.IsLeftStickTilt_right = false;
 	}
-
-	//右スティックを倒してる方向にtrue
-	//player関連で右スティックを使うならコメント外す
-	/*if (input.ThumbRX <= -10000)
-	{
-		stickTilt.IsRightStickTilt_left = true;
-	}
-	else if(input.ThumbRX >= 10000)
-	{
-		stickTilt.IsRightStickTilt_right = true;
-	}
-	else
-	{
-		stickTilt.IsRightStickTilt_left = false;
-		stickTilt.IsRightStickTilt_right = false;
-	}*/
 }
-/*
-void Player::Update()
-{
-
-}
-*/
-
 
 void Player::UpdateWalk()
 {

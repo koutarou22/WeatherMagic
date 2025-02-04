@@ -21,28 +21,68 @@ public:
 	void Draw() override;
 	void SetPosition(int x, int y);
 	void Release() override;
-
-
 	void WeatherEffects(Weather* weather);
 	
-	void SetMagicMP(int _Mp) { MagicPoint_ = _Mp; }//ほかのクラスでも共有するため用
+	/// <summary>
+	/// 他のクラスでも値をSetできる関数
+	/// </summary>
+	/// <param name="_Mp"></param>
+	void SetMagicMP(int _Mp) { MagicPoint_ = _Mp; }
 
 	void Jump();
+	/// <summary>
+	/// MPの値を他クラスでもつかえるGet関数
+	/// </summary>
+	/// <returns></returns>
 	int GetMp();
+	/// <summary>
+	/// HPの値を他クラスでもつかえるGet関数
+	/// </summary>
+	/// <returns></returns>
 	int GetHp();
-	// MagicPoint_を増やす
+	/// <summary>
+	/// MPの値を増やせる関数
+	/// </summary>
+	/// <param name="_PMp"></param>
 	void MagicUp(int _PMp);
+	/// <summary>
+	/// MPの値を減らす関数
+	/// </summary>
+	/// <param name="_MMp"></param>
 	void MagicDown(int _MMp);
+
+	/// <summary>
+	/// HPの値を増やす関数
+	/// </summary>
+	/// <param name="_PHp"></param>
 	void HpUp(int _PHp);
+	/// <summary>
+	/// HPの値を減らす関数
+	/// </summary>
+	/// <param name="_MHp"></param>
 	void HpDown(int _MHp);
 
+	/// <summary>
+	/// 生きてるか死んでるか確認する関数
+	/// </summary>
+	/// <returns></returns>
 	bool IsDead() const { return isDead_; }
 
+	/// <summary>
+	/// ゴールまでの距離情報
+	/// </summary>
 	void WhereIs(); //tassei do
 
+	/// <summary>
+	/// スティックが倒された時に関する情報
+	/// </summary>
 	void StickTiltCheck();
 
-	void GaleEffect(WeatherState state);//Ride on the Rocks && Using the Wind
+	/// <summary>
+	/// 風の時のプレイヤーの状態
+	/// </summary>
+	/// <param name="state"></param>
+	void GaleEffect(WeatherState state);
 
   void UpdateWalk();
   void UpdateDamage();
@@ -52,27 +92,32 @@ public:
 
   //音関係のSE用関数
   //音が重なるバグを止める用(死亡)
-  //bool isRainSE;//音が重なるバグを止めるよう
-  //book isGaleSE;
-  //bool isSnowSE;
+
   bool MultiDeadSE;
   //----------------------------
  
+  /// <summary>
+  /// ダメージを受けた時のSE
+  /// </summary>
   void DamageSE();
+
+  /// <summary>
+  /// 天候音を止める関数
+  /// </summary>
   void StopWeatherSE();
-  void StopMoveSE();
 
 private:
 
 	LandingEffect* pLanding;
 
-
 	std::vector<Magic *> Magics_;
 	Magic* pMagic_;
 	WeatherChangeEffect* pWCE_;
 
-	int MagicPoint_;//打てる魔法の回数
-	int hImage;
+	//打てる魔法の回数
+	int MagicPoint_;
+
+	int hPlayer_;
 	int hImage_cont;
 	int hImage_miss;
 	int hGoal;
