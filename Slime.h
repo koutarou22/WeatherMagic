@@ -12,7 +12,6 @@ class Slime : public GameObject
 {
 public:
 
-
 	Slime(GameObject* scene);
 	~Slime();
 	void Update() override;

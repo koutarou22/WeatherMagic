@@ -15,19 +15,12 @@ namespace
 }
 
 Ghost::Ghost(GameObject* parent)
-	:GameObject(parent),hImage_(-1)
+	:GameObject(parent),hGhost_(-1),AnimeType_(0),AnimeFrame_(0),PictFlame_(0),FlameCounter_(0)
 {
-	hImage_ = LoadGraph("Assets/Chara/obake.png");
-	assert(hImage_ > 0);
-	//transform_.position_.x = 900.0f;
-	//transform_.position_.y = 720.0f;
-	transform_.scale_.x = 2.0f;
-	transform_.scale_.y = 2.0f;
+	hGhost_ = LoadGraph("Assets/Chara/obake.png");
+	assert(hGhost_ > 0);
 
-	flameCounter_ = 0;
-	animeType_ = 0;
-	animeFrame_ = 0;
-	FreezeOne = false;
+	transform_.scale_ = { 2.0f,2.0f,0 };
 
 	//ダメージ音
 	GhostDamageHandle = LoadSoundMem("Assets/Music/SE/Ghost/GhostVanishing.mp3");
@@ -37,135 +30,42 @@ Ghost::Ghost(GameObject* parent)
 	GhostAttackHandle = LoadSoundMem("Assets/Music/SE/Ghost/GhostAttack.mp3");
 	assert(GhostAttackHandle != -1);
 
+	EnemyHandle_ = -1;
 	pFreeze = nullptr;
 
-	enemyHandle = -1;
 	emg = nullptr;
 
-	Debug::OutPrint(L"ゴースト爆誕", true);
-
+	CoolDownAttack_ = 0;
 }
 
 Ghost::~Ghost()
 {
-	Debug::OutPrint(L"ゴーストですとらくた", true);
 }
 
 void Ghost::Update()
 {
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	EnemyMagic* pEnemyMagic = GetParent()->FindGameObject<EnemyMagic>();
-	if (++flameCounter_ >= 24)
+
+	//アニメーションの処理
+	if (++FlameCounter_ >= 24)
 	{
-		animeFrame_ = (animeFrame_ + 1) % 4;
-		flameCounter_ = 0;
+		AnimeFrame_ = (AnimeFrame_ + 1) % 4;
+		FlameCounter_ = 0;
 	}
 
 	if (cam != nullptr)
 	{
-
 		int camX = cam->GetValue();
+		//画面外なら動かせない処理
 		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
-			Weather* pWeather = GetParent()->FindGameObject<Weather>();
-			if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
-			{
-				if (CoolDownAttack_ <= 0)
-				{
-					PlaySoundMem(GhostAttackHandle, DX_PLAYTYPE_BACK);
-
-
-					if (emg == nullptr)
-					{
-						emg = Instantiate<EnemyMagic>(GetParent());
-					}
-					if (enemyHandle < 0)
-					{
-						emg->LoadMagicImage();
-						enemyHandle = emg->GetImageHandle();
-						Debug::OutPrint(L"イメージロード", true);
-					}
-					Debug::OutPrint(L"ゴーストから発生", true);
-
-					if (emg != nullptr)
-					{
-						emg->SetPosition(transform_.position_);
-						VECTOR dir = { -1.0f,0.0f };
-						emg->SetDirection(dir);
-						emg->SetSpeed(3.5f);
-						Debug::OutPrint(L"いろいろセット", true);
-					}
-
-					CoolDownAttack_ = 300;
-				}
-			}
-
-			if (CoolDownAttack_ > 0)
-			{
-				CoolDownAttack_--;
-			}
-
-			if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
-			{
-
-				//transform_.position_.y -= 1.0f;
-				sinAngle += 3.0f;
-				float sinValue = sinf(sinAngle * DX_PI_F / 180.0f);
-				//transform_.position_.y += sinValue * 50.0f;
-				transform_.position_.y += sinValue * 3.0f;
-
-				//	雪以外で、pFreezeのポインタが生きているなら削除
-				if (pFreeze != nullptr)
-				{
-					pFreeze = nullptr;
-				}
-
-			}
-			if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
-			{
-				if (pFreeze == nullptr)
-				{
-					pFreeze = Instantiate<FreezeEffect>(GetParent());
-					pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
-				}
-				//	FreezeOne = true; 
-			}
+			GhostAttack();
+			GhostMove();
 		}
 	}
 
-	//int x = (int)transform_.position_.x;
-
-
-	//if (cam != nullptr)
-	//{
-	//	x -= cam->GetValue();
-	//}
-	//if (x > SCREEN_WIDTH)
-	//	return;
-	//else if (x < -64)
-	//{
-	//	KillMe();
-	//	return;
-	//}
-
-
-
-	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
-	for (Magic* pMagic : pMagics)
-	{
-		float dx = pMagic->GetPosition().x - (transform_.position_.x + 16.0f);
-		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);
-		float distance = sqrt(dx * dx + dy * dy);
-
-		if (distance <= 45.0f)
-		{
-			PlaySoundMem(GhostDamageHandle, DX_PLAYTYPE_BACK);
-			pMagic->SetMagicStateHit();
-			KillMe();
-			break;
-		}
-
-	}
+	HitMagic();
 }
 
 void Ghost::Draw()
@@ -179,14 +79,14 @@ void Ghost::Draw()
 		x -= cam->GetValue();
 	}
 
+	//画像サイズを格納
 	int spriteWidth = 256 / 3;
 	int spriteHeight = 341 / 4;
 
-	int frameX = animeFrame_ % 3;
+	//アニメーションを動かす
+	int frameX = AnimeFrame_ % 3;
 
-	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
-
-	//DrawCircle(x + 39, y + 34, 32, GetColor(255, 0, 0), FALSE);
+	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hGhost_, TRUE);
 }
 
 void Ghost::SetPosition(int x, int y)
@@ -209,20 +109,95 @@ bool Ghost::ColliderCircle(float x, float y, float r)
 
 void Ghost::Release()
 {
-	emg=nullptr;
-	Debug::OutPrint(L"ゴーストりりーす", true);
-	if (hImage_ > 0)
+	emg = nullptr;
+	if (hGhost_ > 0)
 	{
-		DeleteGraph(hImage_);
+		DeleteGraph(hGhost_);
+	}
+}
+
+void Ghost::GhostAttack()
+{
+	Weather* pWeather = GetParent()->FindGameObject<Weather>();
+	if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
+	{
+		if (CoolDownAttack_ <= 0)
+		{
+			PlaySoundMem(GhostAttackHandle, DX_PLAYTYPE_BACK);
+
+			if (emg == nullptr)
+			{
+				emg = Instantiate<EnemyMagic>(GetParent());
+			}
+			if (EnemyHandle_ < 0)
+			{
+				emg->LoadMagicImage();
+				EnemyHandle_ = emg->GetImageHandle();
+				Debug::OutPrint(L"イメージロード", true);
+			}
+
+			if (emg != nullptr)
+			{
+				emg->SetPosition(transform_.position_);
+				VECTOR dir = { -1.0f,0.0f };
+				emg->SetDirection(dir);
+				emg->SetSpeed(3.5f);
+			}
+
+			CoolDownAttack_ = 300;
+		}
 	}
 
-	//SE
-	if (GhostDamageHandle > 0)
+
+	if (CoolDownAttack_ > 0)
 	{
-		DeleteGraph(GhostDamageHandle);
+		CoolDownAttack_--;
 	}
-	if (GhostAttackHandle > 0)
+
+}
+
+void Ghost::GhostMove()
+{
+	Weather* pWeather = GetParent()->FindGameObject<Weather>();
+	if (pWeather != nullptr && pWeather->GetWeatherState() != WeatherState::Snow)
 	{
-		DeleteGraph(GhostAttackHandle);
+		SinAngle_ += 3.0f;
+		float sinValue = sinf(SinAngle_ * DX_PI_F / 180.0f);
+		transform_.position_.y += sinValue * 3.0f;
+
+		//	雪以外で、pFreezeのポインタが生きているなら削除
+		if (pFreeze != nullptr)
+		{
+			pFreeze = nullptr;
+		}
+
+	}
+	if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow)
+	{
+		if (pFreeze == nullptr)
+		{
+			pFreeze = Instantiate<FreezeEffect>(GetParent());
+			pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
+		}
+	}
+}
+
+void Ghost::HitMagic()
+{
+	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
+	for (Magic* pMagic : pMagics)
+	{
+		float dx = pMagic->GetPosition().x - (transform_.position_.x + 16.0f);
+		float dy = pMagic->GetPosition().y - (transform_.position_.y + 16.0f);
+		float distance = sqrt(dx * dx + dy * dy);
+
+		if (distance <= 45.0f)
+		{
+			PlaySoundMem(GhostDamageHandle, DX_PLAYTYPE_BACK);
+			pMagic->SetMagicStateHit();
+			KillMe();
+			break;
+		}
+
 	}
 }
