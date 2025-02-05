@@ -1,7 +1,6 @@
 #include "Field.h"
 #include <assert.h>
 #include"Player.h"
-#include "Bird.h"
 #include "Camera.h"
 #include "Engine/CsvReader.h"
 #include "Slime.h"
@@ -26,31 +25,27 @@ Field::Field(GameObject* scene) : GameObject(scene)
 {
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 
-	Map = nullptr; // まずここでMapでnullいれとく
-	hImage_ = LoadGraph("Assets/BackImage/bgchar_remake.png");
-	assert(hImage_ > 0);
+	Map = nullptr; 
+	hStageChipImage_= LoadGraph("Assets/BackImage/bgchar_remake.png");
+	assert(hStageChipImage_ > 0);
 
-	/*hBackGround_ = LoadGraph("Assets/BackImage/bg5.png");*/
 	hBackGround_ = LoadGraph("Assets/BackImage/bg4.png");
 	assert(hBackGround_ > 0);
 
 	hBackGroundDark_ = LoadGraph("Assets/BackImage/background_dark.png");
 	assert(hBackGroundDark_ > 0);
 
-	//NowStage_ = pSceneManager->GetClearCount();
 	NowStage_ = pSceneManager->GettLevelManager();
-	Reset(NowStage_); // Reset() 
-
-	//ChangeVolumeSoundMem(128, Stage_BgmHandle);
+	Reset(NowStage_);
 
 	goalWid_ = -1;
 }
 
 Field::~Field()
 {
-	if (hImage_ > 0)
+	if (hStageChipImage_ > 0)
 	{
-		DeleteGraph(hImage_);
+		DeleteGraph(hStageChipImage_);
 	}
 	if (hBackGround_ > 0)
 	{
@@ -75,8 +70,6 @@ Field::~Field()
 
 void Field::Reset()
 {
-	//LoadStage(NowStage_);
-	
 }
 
 void Field::Update()
@@ -112,26 +105,18 @@ void Field::Draw()
 		{
 			int chip = Map[y * width + x];
 
-			if (isSnow[y * width + x]) //雪フラグ立ってて
+			//天候が雪の場合新しいブロックを描画する処理
+			if (isSnow[y * width + x]) 
 			{
-				if (pWeather->GetWeatherState() == Snow)//今雪なら
+				if (pWeather->GetWeatherState() == Snow)
 				{
-					//hImage_ = LoadGraph("Assets/BackImage/bgchar_Snow.png");
-					//足場チップに
-					//薄いほう
-					//DrawRectGraph(x * 32 - scroll, y * 32, 32 * 9, 32 * 2, 32, 32, hImage_, TRUE);
-					//濃いほう
-					DrawRectGraph(x * 32 - scroll, y * 32, 32 * 10, 32 * 2, 32, 32, hImage_, TRUE);
+					DrawRectGraph(x * 32 - scroll, y * 32, 32 * 10, 32 * 2, 32, 32, hStageChipImage_, TRUE);
 				}
 			}
 			else
 			{
-				DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hImage_, TRUE);
+				DrawRectGraph(x * 32 - scroll, y * 32, 32 * (chip % 16), 32 * (chip / 16), 32, 32, hStageChipImage_, TRUE);
 			}
-			/*if (IsWallBlock(x * 32, y * 32))
-			{
-				DrawBox(x * 32 - scroll, y * 32, (x + 1) * 32 - scroll, (y + 1) * 32, GetColor(255, 0, 0), FALSE);
-			}*/
 		}
 	}
 
@@ -178,61 +163,21 @@ int Field::CollisionUp(int x, int y)
 	return 0;
 }
 
-//bool Field::IsWallBlock(int x, int y)
-//{
-//	int chipX = x / 32;
-//	int chipY = y / 32;
-//
-//	//今が雪で、かつ雪チップのときに当たり判定をしたい
-//	Weather* pWea = GetParent()->FindGameObject<Weather>();
-//
-//
-//	if (Map != nullptr)
-//	{
-//		switch (Map[chipY * width + chipX])
-//		{
-//			//case 3://ne
-//		case 16://地面
-//		case 17:
-//		case 18:
-//		case 19:
-//		case 32:
-//		case 33:
-//		case 34:
-//		case 35:
-//			return true;
-//		case 7:
-//		{
-//			if (pWea != nullptr)
-//			{
-//				if (pWea->GetWeatherState() == Snow)//今が雪
-//				{
-//					return true;
-//				}
-//			}
-//		}
-//		break;
-//		};
-//	}
-//	return false;
-//}
-
 bool Field::IsWallBlock(int x, int y)
 {
 	int chipX = x / 32;
 	int chipY = y / 32;
 
-	// 今が雪で、かつ雪チップのときに当たり判定をしたい
-	Weather* pWea = GetParent()->FindGameObject<Weather>();
+	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 
 	if (Map != nullptr)
 	{
 		int index = chipY * width + chipX;
 		if (index >= 0 && index < width * height)
 		{
-			switch (Map[index])//これが元switch (Map[chipY * width + chipX])
+			switch (Map[index])
 			{
-			case 16: // 地面
+			case 16: 
 			case 17:
 			case 18:
 			case 19:
@@ -243,9 +188,9 @@ bool Field::IsWallBlock(int x, int y)
 				return true;
 			case 7:
 			{
-				if (pWea != nullptr)
+				if (pWeather != nullptr)
 				{
-					if (pWea->GetWeatherState() == Snow) // 今が雪
+					if (pWeather->GetWeatherState() == Snow)
 					{
 						return true;
 					}
@@ -313,7 +258,6 @@ void Field::Reset(int num)
 	{
 	case 0:
 		ret = csv.Load("Assets/Stage_csv/stage_easy.csv");
-		//ret = csv.Load("Assets/Stage_csv/debug.csv");//ForTestPlay
 		break;
 	case 1:
 		ret = csv.Load("Assets/Stage_csv/stage_normal.csv");
@@ -334,14 +278,17 @@ void Field::Reset(int num)
 	Map = new int[width * height];
 	isSnow = new bool[width * height];
 
-	WhereIsGoal(width, height, csv); //ゴールのwidthをとってくる
+
+	WhereIsGoal(width, height, csv); //ゴールまでのWidthを取得
 
 	for (int h = 0; h < height; h++)
 	{
 		for (int w = 0; w < width; w++)
 		{
 			isSnow[h * width + w] = false;
-			switch (csv.GetInt(w, h /*+ height + 1*/))
+
+			//オブジェクトの情報をcsvに格納
+			switch (csv.GetInt(w, h ))
 			{
 			case 0:
 			{
@@ -392,7 +339,7 @@ void Field::Reset(int num)
 
 				break;
 			}
-			case 7: //雪の時
+			case 7:
 			{
 				isSnow[h * width + w] = true;
 				break;
