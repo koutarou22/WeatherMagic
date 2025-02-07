@@ -139,7 +139,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttackUI.cpp" />
-    <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChangeRainUI.cpp" />
     <ClCompile Include="ChangeSnowUI.cpp" />
@@ -186,7 +185,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackUI.h" />
-    <ClInclude Include="Bird.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChangeRainUI.h" />
     <ClInclude Include="ChangeSnowUI.h" />

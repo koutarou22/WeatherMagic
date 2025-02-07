@@ -2,7 +2,6 @@
 #include "Camera.h"
 #include "Hp.h"
 #include "Player.h"
-#include "Bird.h"
 #include "Field.h"
 #include "Slime.h"
 #include "Rock.h"
