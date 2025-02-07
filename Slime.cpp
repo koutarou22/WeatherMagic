@@ -30,13 +30,13 @@ Slime::Slime(GameObject* scene)
 
 	StunTimer_ = 0;
 
-	HitLanding = false;
+	HitLanding_ = false;
 
-	JumpHandle = LoadSoundMem("Assets/Music/SE/Slime/SlimeJump1.mp3");
-	assert(JumpHandle != -1);
+	JumpHandle_ = LoadSoundMem("Assets/Music/SE/Slime/SlimeJump1.mp3");
+	assert(JumpHandle_ != -1);
 
-	StunHandle = LoadSoundMem("Assets/Music/SE/Slime/SlimeDamage.mp3");
-	assert(StunHandle != -1);
+	StunHandle_ = LoadSoundMem("Assets/Music/SE/Slime/SlimeDamage.mp3");
+	assert(StunHandle_ != -1);
 
 	pFreeze = nullptr;
 
@@ -44,16 +44,15 @@ Slime::Slime(GameObject* scene)
 
 Slime::~Slime()
 {
-	Release();
 }
 
 void Slime::Update()
 {	
-	SlimeBound();
-	HitStageHitTurn();
-	HitStage();
-	HitRock();
-	HitPlayerMagic();
+	SlimeAbility();
+	CheckHitStageHitTurn();
+	CheckHitStage();
+	CheckHitRock();
+	CheckHitPlayerMagic();
 }
 
 void Slime::Draw()
@@ -91,14 +90,14 @@ void Slime::Release()
 		DeleteGraph(hSlime_);
 	}
 	
-	if (JumpHandle > 0)
+	if (JumpHandle_ > 0)
 	{
-		DeleteSoundMem(JumpHandle);
+		DeleteSoundMem(JumpHandle_);
 	}
 	
-	if (StunHandle > 0)
+	if (StunHandle_ > 0)
 	{
-		DeleteSoundMem(StunHandle);
+		DeleteSoundMem(StunHandle_);
 	}
 }
 
@@ -109,7 +108,6 @@ void Slime::WeatherEffects(Weather* weather)
 
 	RainScale(WeatherState, transform_, WeatherSpeed_, MOVE_SPEED, WeatherEffect, ScaleEffect_);
 }
-
 
 bool Slime::ColliderRect(float x, float y, float w, float h)
 {
@@ -179,7 +177,7 @@ void Slime::RainScale(WeatherState state, Transform& transform, float& WeatherSp
 	
 }
 
-void Slime::HitStage()
+void Slime::CheckHitStage()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
@@ -216,7 +214,7 @@ void Slime::HitStage()
 	//----------------------------------------------------------
 
 	//---------------衝突判定(上)--------------------------------
-	if (!onGround && pField != nullptr)
+	if (!OnGround_ && pField != nullptr)
 	{
 		hitX = transform_.position_.x + 32;
 		hitY = transform_.position_.y;
@@ -239,25 +237,25 @@ void Slime::HitStage()
 		{
 			transform_.position_.y -= push - 1;
 			JumpPower_ = 0.0f;
-			onGround = true;
+			OnGround_ = true;
 
-			if (onGround)//地面にいるとき　これを書かないと地面にいるとき表示されない
+			if (OnGround_)//地面にいるとき　これを書かないと地面にいるとき表示されない
 			{
-				if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow && !HitLanding)//もし天候が雪になってて着地もしていなければ
+				if (pWeather != nullptr && pWeather->GetWeatherState() == WeatherState::Snow && !HitLanding_)//もし天候が雪になってて着地もしていなければ
 				{
 					if (pFreeze == nullptr)
 					{
 						pFreeze = Instantiate<FreezeEffect>(GetParent());
 						pFreeze->SetPosition(transform_.position_.x, transform_.position_.y);
 					}
-					HitLanding = true;
+					HitLanding_ = true;
 				}
 			}
 		}
 		else
 		{
-			onGround = false;
-			HitLanding = false;
+			OnGround_ = false;
+			HitLanding_ = false;
 		}
 
 	}
@@ -269,7 +267,7 @@ void Slime::HitStage()
 	}
 }
 
-void Slime::HitPlayerMagic()
+void Slime::CheckHitPlayerMagic()
 {
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
 	for (Magic* pMagic : pMagics)
@@ -284,7 +282,7 @@ void Slime::HitPlayerMagic()
 
 			pMagic->SetMagicStateHit();
 
-			PlaySoundMem(StunHandle, DX_PLAYTYPE_BACK);
+			PlaySoundMem(StunHandle_, DX_PLAYTYPE_BACK);
 			Damage* dam = Instantiate<Damage>(GetParent());
 			dam->SetPosition(transform_.position_);
 			StunTimer_ = 300;
@@ -293,7 +291,7 @@ void Slime::HitPlayerMagic()
 	}
 }
 
-void Slime::HitRock()
+void Slime::CheckHitRock()
 {
 	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
 	for (Rock* pRock : pRocks)
@@ -309,7 +307,7 @@ void Slime::HitRock()
 			if (dy < 0 && abs(dx) <= 42)
 			{
 				transform_.position_.y = pRock->GetPosition().y - 86 * transform_.scale_.y + push * transform_.scale_.y;  // スライムを上に移動
-				onGround = true;
+				OnGround_ = true;
 			}
 			else if (dy > -0.1 && abs(dx) <= 42.)
 			{
@@ -329,7 +327,7 @@ void Slime::HitRock()
 	}
 }
 
-void Slime::HitStageHitTurn()
+void Slime::CheckHitStageHitTurn()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 
@@ -356,7 +354,7 @@ void Slime::HitStageHitTurn()
 	}
 }
 
-void Slime::SlimeBound()
+void Slime::SlimeAbility()
 {
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	Camera* cam = GetParent()->FindGameObject<Camera>();
@@ -370,13 +368,13 @@ void Slime::SlimeBound()
 	//ジャンプの処理
 	if (CoolStayTime_ <= 0 && StunTimer_ <= 0)
 	{
-		if (onGround)
+		if (OnGround_)
 		{
 			if (pWeather->GetWeatherState() != WeatherState::Snow)
 			{
 				JumpPower_ = -sqrtf(2 * GRAVITY * JUMP_HEIGHT);
 			}
-			onGround = false;
+			OnGround_ = false;
 		}
 		CoolStayTime_ = 240;
 	}
@@ -390,12 +388,12 @@ void Slime::SlimeBound()
 
 		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
-			if (!onGround)
+			if (!OnGround_)
 			{
 				if (pWeather->GetWeatherState() != WeatherState::Snow)
 				{
 					transform_.position_.x += WeatherSpeed_ * direction;
-					StopSoundMem(JumpHandle);
+					StopSoundMem(JumpHandle_);
 				}
 			}
 		}
