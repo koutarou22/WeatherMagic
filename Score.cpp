@@ -5,7 +5,6 @@
 #include<array>
 
 namespace {
-    const float max = 1.70158f;//easeBackOutの最大値
     const int StarPosPlay = 72;
 
     //一旦文字で評価文を出す（内容は変更可）
@@ -38,11 +37,11 @@ void Score::Update()
     StarMoveX = easeOutQuart(frame_Star);
     frame_Star += 1.0f / 60.0f;
 
-    if (IsStarMoveEnd)
-    {
-        MessageMoveX = easeBackOut(frame_Message) + 500;
-        frame_Message += 1.0f / 60.0f;
-    }
+    //if (IsStarMoveEnd)
+    //{
+    //    MessageMoveX = easeBackOut(frame_Message) + 500;
+    //    frame_Message += 1.0f / 60.0f;
+    //}
 
     if (frame_Star >= 1.0f) {
         IsStarMoveEnd = true;
@@ -122,9 +121,4 @@ float Score::easeOutQuart(float time)
         return 1.0f;
     }
     return 1 - std::pow(1 - time, 4);
-}
-
-float Score::easeBackOut(float time)
-{
-    return 1.0f - std::pow(1.0f - time, 2) * (1.0f + max * (1.0f - time));
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 /// <summary>
-/// Mpの値を評価し可視化して表示する(未実装)
+/// Mpの値を評価し可視化して表示する
 /// </summary>
 class Score : public GameObject
 {
@@ -14,7 +14,7 @@ private:
 	float MessageMoveX;//イージング関数用の値
 	float frame_Star;//フレーム数える(星用)
 	float frame_Message;//フレーム数える(メッセージ用)
-	bool IsStarMoveEnd;
+	bool IsStarMoveEnd;//星の動きが終わったか
 	bool isPlaying; //今プレイシーンですか
 
 public:
@@ -36,9 +36,7 @@ public:
 
 	//急加速して急減速する
 	float easeOutQuart(float time);
-
-	//少しはみ出る動き
-	float easeBackOut(float time);
+	//プレイシーンかどうかをセット(プレイシーンでの星の表示用)
 	void SetPlaying(bool playing) { isPlaying = playing; }
 };
 

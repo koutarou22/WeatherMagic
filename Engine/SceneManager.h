@@ -36,7 +36,6 @@ public:
 
 
 #if 0
-#endif
 	//--------------ステージクリア→ロード→別のステージに移動するなら使うかもしれない関数------------------
 	/// <summary>
 	/// クリアした回数を増やす（player.cppでしか使わない）
@@ -55,7 +54,7 @@ public:
 	/// <returns></returns>
 	bool GetClear() { return isGameClear_; }
 	//--------------ステージクリア→ロード→別のステージに移動するなら使うかもしれない関数------------------
-     
+#endif   
 	/// <summary>
 	/// MPの変数をセット
 	/// </summary>
@@ -86,12 +85,11 @@ private:
 	SCENE_ID nextSceneID_;	
 
 	/// <summary>
-	/// クリアした回数
+	/// //クリアした回数
 	/// </summary>
 	int ClearCount_;
 	bool isGameClear_;
 
 	int MpReceive_;//取ってきたMPを保存(格納)する変数
-
-	int LevelManager_;
+	int LevelManager_;//どの難易度(読み込むscv)か
 };

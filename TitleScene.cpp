@@ -10,31 +10,42 @@ using std::string;
 namespace
 {
     const int TIMER = 255;
-    const int MOJI_TIMER = 100;
+    const int STRING_TIMER = 100;
+    const int FontSize = 32;
+    const int TitleText_x = 520;
+    const int TitleText_y = 405;
+    const int TitleImage_x = 430;
+    const int TitleImage_y = 260;
+    const int StartImage_x = 560; 
+    const int StartImage_y = 360;
+
+    const int YELLOW = GetColor(255, 255, 0); //黄色
+    const int WHITE = GetColor(255, 255, 255); //白
 }
 
 TitleScene::TitleScene(GameObject* parent)
     : GameObject(parent, "TitleScene")
 {
-    hImage_ = -1;
-    charImage_ = -1;
-    spaceImage_ = -1;
-    SelectHandle = -1;
+    hBack_ = -1;
+    hTitle_ = -1;
+    SelectSEHandle_ = -1;
+    hStart_ = -1;
+    hStartYellow_ = -1;
 
     keyTimer_ = TIMER;
     keyPushed_ = false;
 
-    mojiTimer_ = MOJI_TIMER;
-    mojiend_ = false;
+    LightingTimer_ = STRING_TIMER;
+    Lightingend_ = false;
 
-    CheckSelect = false;
-    SetFontSize(16);
+    CheckSelect_ = false;
+    SetFontSize(FontSize / 2);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-    TitleBGMHandle = LoadSoundMem("Assets/Music/BGM/TITLE_BGM.mp3");
-    assert(TitleBGMHandle != -1);
+    TitleBGMHandle_ = LoadSoundMem("Assets/Music/BGM/TITLE_BGM.mp3");
+    assert(TitleBGMHandle_ != -1);
 
-    PlaySoundMem(TitleBGMHandle, DX_PLAYTYPE_LOOP);
+    PlaySoundMem(TitleBGMHandle_, DX_PLAYTYPE_LOOP);
 }
 
 TitleScene::~TitleScene()
@@ -44,38 +55,35 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
-    hImage_ = LoadGraph("Assets/Scene/Title.png");//タイトルの背景
-    assert(hImage_ >= 0);
+    hBack_ = LoadGraph("Assets/Scene/Title.png");//タイトルの背景
+    assert(hBack_ >= 0);
 
-    charImage_ = LoadGraph("Assets/Font/Weather.png");//『WeatherMagic』のタイトルフォント
-    assert(charImage_ >= 0);
+    hTitle_ = LoadGraph("Assets/Font/Weather.png");//『WeatherMagic』のタイトルフォント
+    assert(hTitle_ >= 0);
 
-   /* spaceImage_ = LoadGraph("Assets/Space.png");//『space』を押してくれ！的なフォント　結局未使用
-    assert(spaceImage_ >= 0);*/
+    SelectSEHandle_ = LoadSoundMem("Assets/Music/SE/SceneSwitch/select01.mp3");//Pを押した時に効果音がなる(登録)
+    assert(SelectSEHandle_ != -1); // 音声ファイルの読み込みに失敗した場合のエラーチェック
 
-    SelectHandle = LoadSoundMem("Assets/Music/SE/SceneSwitch/select01.mp3");//Pを押した時に効果音がなる(登録)
-    assert(SelectHandle != -1); // 音声ファイルの読み込みに失敗した場合のエラーチェック
+    hStart_ = LoadGraph("Assets/UI/XboxBottunUI/startMenu.png");
+    assert(hStart_ > 0);
 
-    hStart = LoadGraph("Assets/UI/XboxBottunUI/startMenu.png");
-    assert(hStart > 0);
-
-    hStartYellow = LoadGraph("Assets/UI/XboxBottunUI/startMenuYellow.png");
-    assert(hStartYellow > 0);
+    hStartYellow_ = LoadGraph("Assets/UI/XboxBottunUI/startMenuYellow.png");
+    assert(hStartYellow_ > 0);
 }
 
 void TitleScene::Update()
 {
-    padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+    padAnalogInput_ = GetJoypadXInputState(DX_INPUT_PAD1, &input_);
 
     // スペースキーが押されるかスタートボタンでPlaySceneに遷移
-    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input.Buttons[4] || input.Buttons[13]) 
+    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_RETURN) || input_.Buttons[4] || input_.Buttons[13])
     {
-        StopSoundMem(TitleBGMHandle);
+        StopSoundMem(TitleBGMHandle_);
 
-        if (!CheckSelect)
+        if (!CheckSelect_)
         {
-            PlaySoundMem(SelectHandle, DX_PLAYTYPE_BACK);
-            CheckSelect = true; //ここで一回しか鳴らせない
+            PlaySoundMem(SelectSEHandle_, DX_PLAYTYPE_BACK);
+            CheckSelect_ = true; //ここで一回しか鳴らせない
         }
       
         keyPushed_ = true;
@@ -83,28 +91,28 @@ void TitleScene::Update()
 
     if (keyPushed_)
     {
-        if (mojiend_)
+        if (Lightingend_)
         {
             keyTimer_--;
         }
         else
         {
-            mojiTimer_--;
+            LightingTimer_--;
         }
     }
 
     //タイマーが終わったら(暗転が終わったら)
     if (keyTimer_ < 0)
     {
-        SetFontSize(32); //もとにもどす
+        SetFontSize(FontSize); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_LEVEL);
     }
 
     //文字タイマーが終わったら(ぴかぴか終わったら)
-    if (mojiTimer_ < 0)
+    if (LightingTimer_ < 0)
     {
-        mojiend_ = true;
+        Lightingend_ = true;
     }
 }
 
@@ -122,82 +130,75 @@ void TitleScene::Draw()
     {
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
-        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         al = keyTimer_;
     }
     else
     {
         // 画面全体に背景画像を描画
-        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         // タイトル画面のテキストを描画
         DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
-        DrawGraph(600, 40, charImage_, TRUE);
+        DrawGraph(600, 40, hTitle_, TRUE);
     }
 #endif
 
 //押したらPush P~がちょっと光って暗転
 #if 1
-    if (keyPushed_&&mojiend_) //文字ぴかぴか終わった
+    if (keyPushed_&&Lightingend_) //文字ぴかぴか終わった
     {
         SetFontSize(16);
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
-        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         al = keyTimer_;
     }
-    else if(keyPushed_&&!mojiend_) //文字ぴかぴかさせている
+    else if(keyPushed_&&!Lightingend_) //文字ぴかぴかさせている
     {
-        //SetFontSize(18); //一瞬文字が大きく協調されます
         // 画面全体に背景画像を描画
-        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         // タイトル画面のテキストを描画
-        DrawString(520, 400+5, TITLE_TEXT, GetColor(255, 255, 0));//黄色
-        DrawGraph(430, 260, charImage_, TRUE);
-        DrawGraph(560, 360, hStartYellow, TRUE);
+        DrawString(TitleText_x, TitleText_y, TITLE_TEXT, YELLOW);//黄色
+        DrawGraph(TitleImage_x, TitleImage_y, hTitle_, TRUE);
+        DrawGraph(StartImage_x, StartImage_y, hStartYellow_, TRUE);
     }
     else //そもそもキーが押されてない
     {
         // 画面全体に背景画像を描画
-        DrawExtendGraph(0, 0, screenWidth, screenHeight, hImage_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         // タイトル画面のテキストを描画
-        DrawString(520, 400+5, TITLE_TEXT, GetColor(255, 255, 255));//白
-        DrawGraph(430, 260, charImage_, TRUE);
-        DrawGraph(560, 360, hStart, TRUE);
+        DrawString(TitleText_x, TitleText_y, TITLE_TEXT, WHITE);//白
+        DrawGraph(TitleImage_x, TitleImage_y, hTitle_, TRUE);
+        DrawGraph(StartImage_x, StartImage_y, hStart_, TRUE);
     }
 #endif
 }
 
 void TitleScene::Release()
 {
-    if (hStartYellow > 0)
+    if (hStartYellow_ > 0)
     {
-        DeleteGraph(hStartYellow);
+        DeleteGraph(hStartYellow_);
     }
-    if (hStart > 0)
+    if (hStart_ > 0)
     {
-        DeleteGraph(hStart);
+        DeleteGraph(hStart_);
     }
-    if (charImage_ > 0)
+    if (hTitle_ > 0)
     {
-        DeleteGraph(charImage_);
+        DeleteGraph(hTitle_);
     }
-    if (hImage_ > 0)
+    if (hBack_ > 0)
     {
-        DeleteGraph(hImage_);
+        DeleteGraph(hBack_);
     }
-    if (spaceImage_ > 0)
+    if (TitleBGMHandle_ > 0)
     {
-        DeleteGraph(spaceImage_);
+        DeleteSoundMem(TitleBGMHandle_);
     }
-
-
-    if (TitleBGMHandle > 0)
+    if (SelectSEHandle_ > 0)
     {
-        DeleteSoundMem(TitleBGMHandle);
-    }
-    if (SelectHandle > 0)
-    {
-        DeleteSoundMem(SelectHandle);
+        DeleteSoundMem(SelectSEHandle_);
     }
 
 }

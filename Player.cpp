@@ -1477,4 +1477,126 @@ void Player::HpDown(int _MHp)
 
 }
 
+void Player::WhereIs()
+{
+	//横線関連
+	static int SenStart = 1000; //横線の始点x
+	static int SenLength = 200; //横線の長さx
+	static int SenY = 50; //横線の始点y
+	static int SenHeight = 5; //横線の幅
+	static int WakuX = 20; //枠の調整用x
+	static int WakuY = 20; //枠の調整用y
+	static int FRAME = 3; //枠の太さ
+	//↓定数にすべきだな...
+	static unsigned int WHITE = GetColor(255, 255, 255); //白
+	static unsigned int YELLOW = GetColor(255, 255, 0); //黄色
+	static unsigned int GRAY = GetColor(128, 128, 128); //灰色
+	static unsigned int BLUE = GetColor(65, 105, 225); //青
+	static unsigned int GREEN = GetColor(59, 175, 117); //緑
+	static unsigned int BLACK = GetColor(0, 0, 0); //黒
+
+
+	//フレーム
+	DrawBox(SenStart - WakuX - FRAME, SenY - WakuY - 7 - FRAME, SenStart + SenLength + WakuX + FRAME, SenY + SenHeight + WakuY - 7 + FRAME, BLACK, true);
+	//後ろの箱
+	DrawBox(SenStart - WakuX, SenY - WakuY - 7, SenStart + SenLength + WakuX, SenY + SenHeight + WakuY - 7, WHITE, true);
+	//元の横線
+	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GRAY, true);
+
+	//三角形関連
+	Field* pField = GetParent()->FindGameObject<Field>();
+	float max = CHIP_SIZE * pField->GetGoalWidth();
+	float now = transform_.position_.x;
+	float nowLine = SenStart + SenLength * (now / max) * 2; //縦線引くところのX
+	if (nowLine >= SenStart + SenLength)
+	{
+		nowLine = SenStart + SenLength; //マップは続くがゴールしたら縦線は動かない
+	}
+	//三角
+	DrawTriangle(nowLine - 4, SenY - 14, (nowLine - 4 + nowLine + SenHeight + 4) / 2, (SenY - 10 + SenY + 14) / 2, nowLine + SenHeight + 4, SenY - 14, BLUE, true); //三角形かく
+	//色変え
+	DrawBox(SenStart, SenY, nowLine + 2, SenY + SenHeight, BLUE, true); //横線かく
+	//ゴール
+	DrawRotaGraph(SenStart + SenLength + 2, SenY - 9, 0.75, 0, hGoal, true);
+}
+
+void Player::UpdateErase()
+{
+	Field* pField = GetParent()->FindGameObject<Field>();
+	if (++flameCounter >= 60)
+	{
+		//死んだときプレイの時のBGM
+		pField->StopPlayBGM();
+
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
+		StopWeatherSE();
+		flameCounter = 0;
+	}
+}
+
+void Player::UpdateClear()
+{
+	if (++flameCounter >= 240)
+	{
+		flameCounter = 0;
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		Field* pField = GetParent()->FindGameObject<Field>();
+		if (pSceneManager != nullptr)
+		{
+			pField->StopPlayBGM();
+			//pSceneManager->ClearCountPlus();
+			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+
+			StopWeatherSE();
+		}
+	}
+}
+
+void Player::CheckWall(Field* pf)
+{
+	bool wallNow = pf->IsWallBlock(transform_.position_.x, transform_.position_.y);
+
+	if (wallNow)
+	{
+		transform_.position_.x -= 32;
+	}
+}
+
+//風の影響
+void Player::GaleEffect(WeatherState state)
+{
+	Camera* cam = GetParent()->FindGameObject<Camera>();
+	Rock* pRock = GetParent()->FindGameObject<Rock>();
+
+	// xboxコントローラーの入力情報を取得
+	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+
+	if (cam != nullptr)
+	{
+		// カメラの位置を取得
+		int camX = cam->GetValue();
+
+		//岩の上に乗る処理
+		if (onRock == true)
+		{
+			if (state == Gale)
+			{
+				int MpVanish = GetMp();
+				if (MpVanish >= 4)
+				{
+					if (input.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_K))
+					{
+						transform_.position_.x -= 1.2f;
+					}
+					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_L))
+					{
+						transform_.position_.x += 1.2f;
+					}
+				}
+			}
+		}
+	}
+}
+
 
