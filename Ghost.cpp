@@ -12,6 +12,7 @@
 namespace
 {
 	static const int SCREEN_WIDTH = 1280;
+	const VECTOR dir = { -1.0f,0.0f };//æ•µã®å¼¾ã®ç™ºå°„æ–¹å‘
 }
 
 Ghost::Ghost(GameObject* parent)
@@ -22,11 +23,11 @@ Ghost::Ghost(GameObject* parent)
 
 	transform_.scale_ = { 2.0f,2.0f,0 };
 
-	//ƒ_ƒ[ƒW‰¹
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸éŸ³
 	GhostDamageHandle = LoadSoundMem("Assets/Music/SE/Ghost/GhostVanishing.mp3");
 	assert(GhostDamageHandle != -1);
 
-	//UŒ‚‰¹
+	//æ”»æ’ƒéŸ³
 	GhostAttackHandle = LoadSoundMem("Assets/Music/SE/Ghost/GhostAttack.mp3");
 	assert(GhostAttackHandle != -1);
 
@@ -47,7 +48,7 @@ void Ghost::Update()
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	EnemyMagic* pEnemyMagic = GetParent()->FindGameObject<EnemyMagic>();
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìˆ—
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å‡¦ç†
 	if (++FlameCounter_ >= 24)
 	{
 		AnimeFrame_ = (AnimeFrame_ + 1) % 4;
@@ -57,7 +58,7 @@ void Ghost::Update()
 	if (cam != nullptr)
 	{
 		int camX = cam->GetValue();
-		//‰æ–ÊŠO‚È‚ç“®‚©‚¹‚È‚¢ˆ—
+		//ç”»é¢å¤–ãªã‚‰å‹•ã‹ã›ãªã„å‡¦ç†
 		if (transform_.position_.x >= camX && transform_.position_.x <= camX + SCREEN_WIDTH)
 		{
 			GhostAttack();
@@ -79,11 +80,11 @@ void Ghost::Draw()
 		x -= cam->GetValue();
 	}
 
-	//‰æ‘œƒTƒCƒY‚ğŠi”[
+	//ç”»åƒã‚µã‚¤ã‚ºã‚’æ ¼ç´
 	int spriteWidth = 256 / 3;
 	int spriteHeight = 341 / 4;
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ“®‚©‚·
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å‹•ã‹ã™
 	int frameX = AnimeFrame_ % 3;
 
 	DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hGhost_, TRUE);
@@ -133,7 +134,7 @@ void Ghost::GhostAttack()
 			{
 				emg->LoadMagicImage();
 				EnemyHandle_ = emg->GetImageHandle();
-				Debug::OutPrint(L"ƒCƒ[ƒWƒ[ƒh", true);
+				Debug::OutPrint(L"ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒ­ãƒ¼ãƒ‰", true);
 			}
 
 			if (emg != nullptr)
@@ -165,7 +166,7 @@ void Ghost::GhostMove()
 		float sinValue = sinf(SinAngle_ * DX_PI_F / 180.0f);
 		transform_.position_.y += sinValue * 3.0f;
 
-		//	áˆÈŠO‚ÅApFreeze‚Ìƒ|ƒCƒ“ƒ^‚ª¶‚«‚Ä‚¢‚é‚È‚çíœ
+		//	é›ªä»¥å¤–ã§ã€pFreezeã®ãƒã‚¤ãƒ³ã‚¿ãŒç”Ÿãã¦ã„ã‚‹ãªã‚‰å‰Šé™¤
 		if (pFreeze != nullptr)
 		{
 			pFreeze = nullptr;

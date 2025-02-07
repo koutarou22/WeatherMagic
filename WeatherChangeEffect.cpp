@@ -1,11 +1,20 @@
 #include "WeatherChangeEffect.h"
 #include"Camera.h"
-WeatherChangeEffect::WeatherChangeEffect(GameObject* parent)
-	:GameObject(parent, "WeatherChangeEffect"), hImage_(-1),animeFrame(0),FrameCounter(0),eraseCounter(0)
-{
-	hImage_ = LoadGraph("Assets/Effect/WeatherChangeMagic.png");
-	assert(hImage_ > 0);
 
+namespace
+{
+	const int IMAGE_SIZE = 64; //切り抜き後の画像1個のサイズ
+	const int MIN_FRAME_NUM = 3; //描画するフレーム数
+	const int MAX_FRAME_NUM = 21; //描画をする画像の番号(何番目か)の最大
+}
+
+WeatherChangeEffect::WeatherChangeEffect(GameObject* parent)
+	:GameObject(parent, "WeatherChangeEffect")
+{
+	effImage_ = -1;
+	frameCounter_ = -1;
+	eraseCounter_ = -1;
+	animeFrame_ = -1;
 	isDraw_ = false;
 }
 
@@ -14,48 +23,62 @@ WeatherChangeEffect::~WeatherChangeEffect()
 	Release();
 }
 
+void WeatherChangeEffect::Initialize()
+{
+
+	effImage_ = LoadGraph("Assets/Effect/WeatherChangeMagic.png");
+	assert(effImage_ > 0);
+
+	Init();
+}
+
 void WeatherChangeEffect::Update()
 {
 	if (isDraw_)
 	{
-		if (++FrameCounter >= 3)
+		//描画(時間は	フレーム数で管理)
+		if (++frameCounter_ >= MIN_FRAME_NUM)
 		{
-			animeFrame = (animeFrame + 1) % 21;
-			FrameCounter = 0;
-			eraseCounter++;
+			animeFrame_ = (animeFrame_ + 1) % (MAX_FRAME_NUM);
+			frameCounter_ = 0;
+			eraseCounter_++;
 		}
 
-		if (eraseCounter >= 22)
+		//描画終了判定・初期化
+		if (eraseCounter_ >MAX_FRAME_NUM)
 		{
-			//KillMe();
-			FrameCounter = 0;
-			eraseCounter = 0;
-			animeFrame = 0;
-			isDraw_ = false;
+			Init();
 		}
 	}
 }
 
 void WeatherChangeEffect::Draw()
 {
+	//カメラ座標をとってきて描画
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
-	
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
 	if (isDraw_)
 	{
-		DrawRectGraph(x, y, animeFrame * 64, 0, 64, 64, hImage_, TRUE);
+		DrawRectGraph(x, y, animeFrame_ * IMAGE_SIZE, 0, IMAGE_SIZE, IMAGE_SIZE, effImage_, TRUE);
 	}
-	//DrawFormatString(100,500, GetColor(0, 0, 0), "x: %d y:%d", x,y);
 }
 
 void WeatherChangeEffect::Release()
 {
-	if (hImage_ > 0)
+	if (effImage_ > 0)
 	{
-		DeleteGraph(hImage_);
+		DeleteGraph(effImage_);
 	}
+}
+
+void WeatherChangeEffect::Init()
+{
+	frameCounter_ = 0;
+	eraseCounter_ = 0;
+	animeFrame_ = 0;
+	isDraw_ = false;
 }

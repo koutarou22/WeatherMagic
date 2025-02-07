@@ -5,20 +5,20 @@
 #include "Debug.h"
 #include "Ghost.h"
 
-EnemyMagic::EnemyMagic(GameObject* scene) : GameObject(scene), hImage_(-1)
+namespace
 {
-	timer_ = 0;
-	speed_ = 0;
-	animeType_ = 0;
-	animeFrame_ = 0;
-	PictFlame_ = 0;
-	flameCounter_ = 0;
+	const int BlockHalf = 32;//ブロック半個分
+	const int InitializeTimer = 90;//タイマー初期化時の値
+	const int MagicSetValue = -2; //魔法の射出位置(プレイヤーの位置に加算して調整する)
+}
 
+EnemyMagic::EnemyMagic(GameObject* scene) 
+	: GameObject(scene), hEnemyMagic_(-1),timer_(0),direction_({0.0f,0.0f}),speed_(0.0f),
+	prevPlPosX(-1),isDraw(false)
+{
 	Debug::OutPrint(L"魔法を撃った", true);
 	transform_.scale_.x = -2.0f;
 	transform_.scale_.y = -2.0f;
-	prevPlPosX = -1;
-	isDraw = false;
 	Ghost*  gh_ = GetParent()->FindGameObject<Ghost>();
 	GhostPos_ = gh_->GetPosition();
 }
@@ -30,17 +30,9 @@ EnemyMagic::~EnemyMagic()
 
 void EnemyMagic::Update()
 {
-	if (++flameCounter_ >= 24)
-	{
-		animeFrame_ = (animeFrame_ + 1) % 4;//if文を使わない最適解
-		flameCounter_ = 0;
-	}
-
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	if (cam != nullptr)
 	{
-		//球が、打った時のプレイヤーの位置より左にいたら、描画しない、座標を戻しておく?
-
 		if (isDraw)
 		{
 			transform_.position_.x += direction_.x * speed_;
@@ -51,7 +43,6 @@ void EnemyMagic::Update()
 			//タイマーが0より小さいとき描画しない、かつ座標をゴーストに
 			isDraw = false;
 			transform_.position_ = GhostPos_;
-			//KillMe();
 		}
 	}
 }
@@ -66,14 +57,9 @@ void EnemyMagic::Draw()
 		x -= cam->GetValue();
 	}
 
-	int frameX = animeFrame_ % 3; // 横に3つの画像があるため
-
-	//DrawRectGraph(x, y, frameX * spriteWidth, 0, spriteWidth, spriteHeight, hImage_, TRUE);
-
-	//DrawCircle(x + spriteWidth / 2, y + spriteHeight / 2, 16.0f, GetColor(255, 0, 0), 0);
 	if (isDraw)
 	{
-		DrawGraph(x, y, hImage_, TRUE);
+		DrawGraph(x, y, hEnemyMagic_, TRUE);
 	}
 }
 
@@ -81,13 +67,14 @@ void EnemyMagic::SetPosition(int x, int y)
 {
 	transform_.position_.x = x;
 	transform_.position_.y = y;
-	timer_ = 90;
+	timer_ = InitializeTimer;
+	isDraw = true;
 }
 
 void EnemyMagic::SetPosition(XMFLOAT3 pos)
 {
 	transform_.position_ = pos;
-	timer_ = 90;
+	timer_ = InitializeTimer;
 	isDraw = true;
 }
 
@@ -107,16 +94,16 @@ bool EnemyMagic::ColliderCircle(float x, float y, float r)
 
 void EnemyMagic::LoadMagicImage()
 {
-	hImage_ = LoadGraph("Assets/Chara/EnemyMagic_F.png");
-	assert(hImage_ > 0);
+	hEnemyMagic_ = LoadGraph("Assets/Chara/EnemyMagic_F.png");
+	assert(hEnemyMagic_ > 0);
 }
 
 void EnemyMagic::Release()
 {
-	if (hImage_ > 0)
+	if (hEnemyMagic_ > 0)
 	{
-		DeleteGraph(hImage_);
+		DeleteGraph(hEnemyMagic_);
 		Debug::OutPrint(L"魔法の解放は正しく呼ばれたEnemyMagic.cpp", true);
-		hImage_ = 0;
+		hEnemyMagic_ = 0;
 	}
 }
