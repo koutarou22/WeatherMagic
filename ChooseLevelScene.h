@@ -24,16 +24,16 @@ private:
 	const char* LevelText2_ = "";
 	const char* LevelText3_ = "";
 
-	enum StageLevelChoose
+	enum StageLevelChoose //各難易度
 	{
 		EASY = 0,
 		NORMAL = 1,
 		HARD = 2,
 	};
-	StageLevelChoose chooselevel_;
-	std::vector<StageLevelChoose> level_arr_;
+	//StageLevelChoose chooselevel_;
+	std::vector<StageLevelChoose> level_arr_;//難易度の配列
 
-	int currentlevel_ = 0;//難易度（選択によって読みこむcsvを変える）
+	int currentlevel_;//選択中の難易度(SceneManagerに値を渡す他、値によってカーソルの位置が変わる)
 	bool prevUp_;//↑を押したか
 	bool prevDown_;//↓を押したか
 
@@ -66,8 +66,5 @@ public:
 
 	//開放
 	void Release() override;
-
-	/*void SetLevel(int level) { Level_ = level; }
-	int GetLevel() { return Level_; }*/
 };
 

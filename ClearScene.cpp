@@ -6,6 +6,11 @@
 namespace
 {
     const int TIMER = 100;
+    const int GameClear_x = 400;
+    const int GameClear_y = 240;
+    const int TitleMenu_x = 550;
+    const int TitleMenu_y = 380;
+    const int FontSize = 32;
 }
 
 ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
@@ -16,9 +21,6 @@ ClearScene::ClearScene(GameObject* parent) : GameObject(parent, "ClearScene")
     hGameClear_ = LoadGraph("Assets/Font/GameClear1.png");
     assert(hGameClear_ > 0);
 
-    //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu10.png");
-    //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenu20.png");
-    //hTitleMenu = LoadGraph("Assets/UI/XboxBottunUI/titleMenuClear0.png");
     hTitleMenu_ = LoadGraph("Assets/UI/XboxBottunUI/titleMenu.png");
     assert(hTitleMenu_ > 0);
 
@@ -46,7 +48,6 @@ ClearScene::~ClearScene()
 void ClearScene::Initialize()
 {
    Score* sc= Instantiate<Score>(this);//評価
-   bool b = false;
    sc->SetPlaying(false);
 }
 
@@ -70,7 +71,7 @@ void ClearScene::Update()
     //タイマーが終わったら(暗転が終わったら)
     if (keyTimer_ < 0)
     {
-        SetFontSize(32); //もとにもどす
+        SetFontSize(FontSize); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_TITLE);
     }
@@ -85,23 +86,21 @@ void ClearScene::Update()
 
 void ClearScene::Draw()
 {
-    /*DrawString(0, 0, "Clear", GetColor(255, 255, 255));
-    DrawString(0, 20, "Press SPACE to return to title", GetColor(255, 255, 255));*/
     if (keyPushed_)
     {
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
         DrawGraph(0, 0, hBack_, TRUE);
-        DrawGraph(400, 240, hGameClear_, TRUE);
-        DrawGraph(550, 380, hTitleMenuYellow_, TRUE);
+        DrawGraph(GameClear_x, GameClear_y, hGameClear_, TRUE);
+        DrawGraph(TitleMenu_x, TitleMenu_y, hTitleMenuYellow_, TRUE);
         al = keyTimer_;
     }
     else
     {
         // 画面全体に背景画像を描画
         DrawGraph(0, 0, hBack_, TRUE);
-        DrawGraph(400, 240, hGameClear_, TRUE);
-        DrawGraph(550, 380, hTitleMenu_, TRUE);
+        DrawGraph(GameClear_x, GameClear_y, hGameClear_, TRUE);
+        DrawGraph(TitleMenu_x, TitleMenu_y, hTitleMenu_, TRUE);
     }
 }
 

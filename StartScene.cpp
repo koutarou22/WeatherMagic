@@ -27,6 +27,7 @@ void StartScene::Initialize()
 
 void StartScene::Update()
 {
+    //ƒƒS‚ğ‘å‚«‚­•\¦‚µ‚Ä‚©‚ç™X‚É“§‰ß‚³‚¹‚Ä‚¢‚­
     keyTimer_ -= 5;
     if (keyTimer_ < 0)
     {

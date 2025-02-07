@@ -10,7 +10,17 @@ using std::string;
 namespace
 {
     const int TIMER = 255;
-    const int MOJI_TIMER = 100;
+    const int STRING_TIMER = 100;
+    const int FontSize = 32;
+    const int TitleText_x = 520;
+    const int TitleText_y = 405;
+    const int TitleImage_x = 430;
+    const int TitleImage_y = 260;
+    const int StartImage_x = 560; 
+    const int StartImage_y = 360;
+
+    const int YELLOW = GetColor(255, 255, 0); //黄色
+    const int WHITE = GetColor(255, 255, 255); //白
 }
 
 TitleScene::TitleScene(GameObject* parent)
@@ -19,15 +29,17 @@ TitleScene::TitleScene(GameObject* parent)
     hBack_ = -1;
     hTitle_ = -1;
     SelectSEHandle_ = -1;
+    hStart_ = -1;
+    hStartYellow_ = -1;
 
     keyTimer_ = TIMER;
     keyPushed_ = false;
 
-    mojiTimer_ = MOJI_TIMER;
-    mojiend_ = false;
+    LightingTimer_ = STRING_TIMER;
+    Lightingend_ = false;
 
     CheckSelect_ = false;
-    SetFontSize(16);
+    SetFontSize(FontSize / 2);
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
     TitleBGMHandle_ = LoadSoundMem("Assets/Music/BGM/TITLE_BGM.mp3");
@@ -44,7 +56,7 @@ TitleScene::~TitleScene()
 void TitleScene::Initialize()
 {
     hBack_ = LoadGraph("Assets/Scene/Title.png");//タイトルの背景
-    assert( hBack_ >= 0);
+    assert(hBack_ >= 0);
 
     hTitle_ = LoadGraph("Assets/Font/Weather.png");//『WeatherMagic』のタイトルフォント
     assert(hTitle_ >= 0);
@@ -79,28 +91,28 @@ void TitleScene::Update()
 
     if (keyPushed_)
     {
-        if (mojiend_)
+        if (Lightingend_)
         {
             keyTimer_--;
         }
         else
         {
-            mojiTimer_--;
+            LightingTimer_--;
         }
     }
 
     //タイマーが終わったら(暗転が終わったら)
     if (keyTimer_ < 0)
     {
-        SetFontSize(32); //もとにもどす
+        SetFontSize(FontSize); //もとにもどす
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_LEVEL);
     }
 
     //文字タイマーが終わったら(ぴかぴか終わったら)
-    if (mojiTimer_ < 0)
+    if (LightingTimer_ < 0)
     {
-        mojiend_ = true;
+        Lightingend_ = true;
     }
 }
 
@@ -118,13 +130,13 @@ void TitleScene::Draw()
     {
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
-        DrawExtendGraph(0, 0, screenWidth, screenHeight,  hBack_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         al = keyTimer_;
     }
     else
     {
         // 画面全体に背景画像を描画
-        DrawExtendGraph(0, 0, screenWidth, screenHeight,  hBack_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         // タイトル画面のテキストを描画
         DrawString(700, 150, TITLE_TEXT, GetColor(255, 255, 255));
         DrawGraph(600, 40, hTitle_, TRUE);
@@ -133,32 +145,31 @@ void TitleScene::Draw()
 
 //押したらPush P~がちょっと光って暗転
 #if 1
-    if (keyPushed_&&mojiend_) //文字ぴかぴか終わった
+    if (keyPushed_&&Lightingend_) //文字ぴかぴか終わった
     {
         SetFontSize(16);
         static int al = TIMER;
         SetDrawBlendMode(DX_BLENDMODE_ALPHA, al);
-        DrawExtendGraph(0, 0, screenWidth, screenHeight,  hBack_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         al = keyTimer_;
     }
-    else if(keyPushed_&&!mojiend_) //文字ぴかぴかさせている
+    else if(keyPushed_&&!Lightingend_) //文字ぴかぴかさせている
     {
-        //SetFontSize(18); //一瞬文字が大きく協調されます
         // 画面全体に背景画像を描画
-        DrawExtendGraph(0, 0, screenWidth, screenHeight,  hBack_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         // タイトル画面のテキストを描画
-        DrawString(520, 400+5, TITLE_TEXT, GetColor(255, 255, 0));//黄色
-        DrawGraph(430, 260, hTitle_, TRUE);
-        DrawGraph(560, 360, hStartYellow_, TRUE);
+        DrawString(TitleText_x, TitleText_y, TITLE_TEXT, YELLOW);//黄色
+        DrawGraph(TitleImage_x, TitleImage_y, hTitle_, TRUE);
+        DrawGraph(StartImage_x, StartImage_y, hStartYellow_, TRUE);
     }
     else //そもそもキーが押されてない
     {
         // 画面全体に背景画像を描画
-        DrawExtendGraph(0, 0, screenWidth, screenHeight,  hBack_, FALSE);
+        DrawExtendGraph(0, 0, screenWidth, screenHeight, hBack_, FALSE);
         // タイトル画面のテキストを描画
-        DrawString(520, 400+5, TITLE_TEXT, GetColor(255, 255, 255));//白
-        DrawGraph(430, 260, hTitle_, TRUE);
-        DrawGraph(560, 360, hStart_, TRUE);
+        DrawString(TitleText_x, TitleText_y, TITLE_TEXT, WHITE);//白
+        DrawGraph(TitleImage_x, TitleImage_y, hTitle_, TRUE);
+        DrawGraph(StartImage_x, StartImage_y, hStart_, TRUE);
     }
 #endif
 }
@@ -179,7 +190,7 @@ void TitleScene::Release()
     }
     if (hBack_ > 0)
     {
-        DeleteGraph( hBack_);
+        DeleteGraph(hBack_);
     }
     if (TitleBGMHandle_ > 0)
     {

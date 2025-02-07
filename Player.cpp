@@ -1365,7 +1365,7 @@ void Player::UpdateClear()
 		if (pSceneManager != nullptr)
 		{
 			pField->StopPlayBGM();
-			pSceneManager->ClearCountPlus();
+			//pSceneManager->ClearCountPlus();
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 
 			StopWeatherSE();
