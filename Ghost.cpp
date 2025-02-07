@@ -65,7 +65,7 @@ void Ghost::Update()
 		}
 	}
 
-	HitMagic();
+	CheckHitMagic();
 }
 
 void Ghost::Draw()
@@ -182,7 +182,7 @@ void Ghost::GhostMove()
 	}
 }
 
-void Ghost::HitMagic()
+void Ghost::CheckHitMagic()
 {
 	std::list<Magic*> pMagics = GetParent()->FindGameObjects<Magic>();
 	for (Magic* pMagic : pMagics)

@@ -4,7 +4,7 @@
 #include "Weather.h"
 
 /// <summary>
-/// 動かしたり乗ったりできる石の情報
+///石の操作・動作・状態を管理
 /// </summary>
 class Rock :public GameObject
 {
@@ -34,37 +34,37 @@ public:
 	/// 他のクラスで値を取得する用のGet関数
 	/// </summary>
 	/// <returns></returns>
-	bool GetNotMoveRight() { return CanMoveRight == false; }
-	bool GetNotMoveLeft() { return CanMoveLeft == false; }
+	bool GetNotMoveRight() { return CanMoveRight_ == false; }
+	bool GetNotMoveLeft() { return CanMoveLeft_ == false; }
 
 	//動かしたときの引きずるような音
 	int DustHandle;
 	
 private:
-	bool PressKey_R = false;
-	bool PressKey_L = false;
+	bool PressKeyR_ = false;
+	bool PressKeyL_ = false;
 
-	//挙動がおかしくならないようにする処理
-	bool CanMoveRight;
-	bool CanMoveLeft;
+	//挙動がおかしくならないように接触を判断する処理
+	bool CanMoveRight_;
+	bool CanMoveLeft_;
 
 	//岩の画像を取得する変数
 	int hRock_;
 	float JumpPower_ = 0.0f;
-	bool onGround;//地面にいるのか？
+	bool OnGround_;//地面にいるのか？
 
-	int padAnalogInput;//xboxの入力を受け取る
-	XINPUT_STATE input;//xboxの入力を受け取る
+	int PadAnalogInput_;//xboxの入力を受け取る
+	XINPUT_STATE Input_;//xboxの入力を受け取る
 
 	//音が再生中か確認するFlag
-	bool isPlayingDust;
+	bool IsPlayingDust_;
 
 	//動いているか確認する用のフラグ
-	bool isMove;
+	bool IsMove_;
 
 	/// <summary>
     /// ステージとの接触判定情報
     /// </summary>
-	void HitStage();
+	void CheckHitStage();
 };
 

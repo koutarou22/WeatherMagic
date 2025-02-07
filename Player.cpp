@@ -250,6 +250,7 @@ void Player::Release()
 
 void Player::Update()
 {
+	//プレイヤーの状態の切り替え
 	switch (player_state)
 	{
 	case Player::S_WaIk:
@@ -274,6 +275,12 @@ void Player::Update()
 
 void Player::Draw()
 {
+	DrawAnimationState();
+}
+
+void Player::DrawAnimationState()
+{
+
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
 
@@ -284,6 +291,8 @@ void Player::Draw()
 	if (cam != nullptr) {
 		x -= cam->GetValue();
 	}
+
+
 
 	switch (player_animation_state)
 	{
@@ -337,7 +346,7 @@ void Player::Draw()
 			DrawRectGraph(x, y, AnimeFrame_ * 64, AnimType_ * 64, 64, 64, hPlayer_, TRUE, 1, 0);
 			if (!MultiDeadSE_)
 			{
-				PlaySoundMem(DieSound_, DX_PLAYTYPE_BACK); // 音声を再生
+				PlaySoundMem(DieSound_, DX_PLAYTYPE_BACK);
 				MultiDeadSE_ = true;
 			}
 		}
@@ -346,7 +355,7 @@ void Player::Draw()
 			DrawRectGraph(x, y, AnimeFrame_ * 64, AnimType_ * 64, 64, 64, hPlayer_, TRUE);
 			if (!MultiDeadSE_)
 			{
-				PlaySoundMem(DieSound_, DX_PLAYTYPE_BACK); // 音声を再生
+				PlaySoundMem(DieSound_, DX_PLAYTYPE_BACK);
 				MultiDeadSE_ = true;
 			}
 		}
@@ -357,6 +366,8 @@ void Player::Draw()
 		break;
 
 	}
+
+	//アイテム取得時に文字を出現させる処理
 	if (MpGetFlag_ == true)
 	{
 		if (ItemGetTimer_ > 0)
@@ -505,19 +516,17 @@ void Player::UpdateWalk()
 	WeatherController();
 	PlayerController();
 	
-	HitSlime();
-	HitGhost();
-	HitRock();
-	HitItem();
+	CheckHitSlime();
+	CheckHitGhost();
+	CheckHitRock();
+	CheckHitItem();
 
-	HitClear();
+	CheckHitClear();
 
-	HitStageDown();
-	HitStageUp();
-
-	
-
+	CheckHitStageDown();
+	CheckHitStageUp();
 }
+
 void Player::UpdateDamage()
 {
 	AnimeFrame_ = 2;
@@ -546,62 +555,6 @@ void Player::UpdateDead()
 		AnimeFrame_ = 7;
 		FlameCounter_ = 0;
 	}
-}
-
-void Player::Jump()
-{
-	JumpPower_ = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_); 
-	OnGround_ = false;
-	OnRock_ = false;
-	HitLanding_ = false;
-	PlaySoundMem(JumpSound_, DX_PLAYTYPE_BACK); 
-}
-
-void Player::MagicUp(int _PMp)
-{
-	MP* mp = GetParent()->FindGameObject<MP>();
-	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
-	MagicPoint_ += _PMp;
-	//PlaySoundMem(GetItemSound, DX_PLAYTYPE_BACK);
-	if (MagicPoint_ > MAX_MAGIC_POINT)
-	{
-		MagicPoint_ = MAX_MAGIC_POINT;
-	}
-}
-
-void Player::MagicDown(int _MMp)
-{
-	MP* mp = GetParent()->FindGameObject<MP>();
-	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
-	MagicPoint_ -= _MMp;
-
-	if (MagicPoint_ < 0)
-	{
-		MagicPoint_ = 0;
-	}
-}
-
-void Player::HpUp(int _PHp)
-{
-	Hp_ += _PHp;
-
-	if (Hp_ < MAX_DAMAGE_HP)
-	{
-		Hp_ > MAX_DAMAGE_HP;
-	}
-}
-
-void Player::HpDown(int _MHp)
-{
-	Hp_ -= _MHp;
-	player_animation_state = S_Damage_A;
-	player_state = S_Damage;
-
-	if (Hp_ == 1)
-	{
-		PlaySoundMem(WarningSound_, DX_PLAYTYPE_BACK);
-	}
-
 }
 
 void Player::WhereIs()
@@ -681,239 +634,6 @@ void Player::UpdateClear()
 	}
 }
 
-void Player::CheckWall(Field* pf)
-{
-	bool wallNow = pf->IsWallBlock(transform_.position_.x, transform_.position_.y);
-
-	if (wallNow)
-	{
-		transform_.position_.x -= 32;
-	}
-}
-
-
-
-void Player::HitRock()
-{
-
-	Weather* pWeather = GetParent()->FindGameObject<Weather>();
-	Field* pField = GetParent()->FindGameObject<Field>();
-
-	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
-	OnRock_ = false;
-	for (Rock* pRock : pRocks)
-	{
-		WeatherState WeatherState = pWeather->GetWeatherState();
-
-		float dx = pRock->GetPosition().x - transform_.position_.x;
-		float dy = pRock->GetPosition().y - transform_.position_.y;
-
-		float distance = sqrt(dx * dx + dy * dy);
-		float push = 3.5;
-
-		if (distance <= 64.0f)
-		{
-			if (dy <= 0 && abs(dx) <= 32.0f)
-			{
-				transform_.position_.y = pRock->GetPosition().y - 64 + push;
-				OnGround_ = true;
-				OnRock_ = true;
-			}
-			else if (dy > 0 && abs(dx) <= 32.0f)
-			{
-				transform_.position_.y = pRock->GetPosition().y + push;
-			}
-			else if (dx < 0 && abs(dy) <= 32.0f)
-			{
-				transform_.position_.x += push;
-			}
-			else if (dx > 0 && abs(dy) <= 32.0f)
-			{
-				transform_.position_.x -= push;
-			}
-		}
-
-	
-		if (pField != nullptr)
-		{
-			int HitX = pRock->GetPosition().x + 32;
-			int HitY = pRock->GetPosition().y + 32;
-
-			if (pField->CollisionLeft(HitX, HitY) > 0 || pField->CollisionRight(HitX, HitY) > 0 ||
-				pField->CollisionUp(HitX, HitY) > 0 || pField->CollisionDown(HitX, HitY) > 0)
-			{
-				OnRock_ = false;
-			}
-		}
-	}
-}
-
-void Player::HitGhost()
-{
-	Hp* hp = GetParent()->FindGameObject<Hp>();
-
-	std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
-	for (Ghost* pGhost : pGhosts)
-	{
-		float dx = pGhost->GetPosition().x + 42 - (transform_.position_.x + 32.0f);
-		float dy = pGhost->GetPosition().y + 42 - (transform_.position_.y + 32.0f);
-
-		float distance = sqrt(dx * dx + dy * dy);
-
-		if (distance <= 40.0f)
-		{
-			if (InvincibleTime_ <= 0.0f)
-			{
-				hp->DamageHp();
-				HpDown(1);
-
-				DamageSE();
-
-				InvincibleTime_ = 3.0f;
-			}
-			break;
-		}
-	}
-
-
-	std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
-	for (EnemyMagic* pEnemyMagic : pEMagics)
-	{
-		if (pEnemyMagic->GetIsDraw())
-		{
-			float dx = pEnemyMagic->GetPosition().x + 16 - (transform_.position_.x + 32.0f);//Mgの座標X - Slの座標X
-			float dy = pEnemyMagic->GetPosition().y + 16 - (transform_.position_.y + 32.0f);//Mgの座標Y - Slの座標Y
-			float distance = sqrt(dx * dx + dy * dy);
-
-			if (distance <= 30.0f)
-			{
-				if (InvincibleTime_ <= 0.0f)
-				{
-					hp->DamageHp();
-					HpDown(1);
-
-					DamageSE();
-
-					InvincibleTime_ = 2.0f;
-				}
-				break;
-			}
-		}
-	}
-}
-void Player::HitSlime()
-{
-	Weather* pWeather = GetParent()->FindGameObject<Weather>();
-	Hp* hp = GetParent()->FindGameObject<Hp>();
-
-	std::list<Slime*> pSlimes = GetParent()->FindGameObjects<Slime>();
-
-	for (Slime* pSlime : pSlimes)
-	{
-		float x = transform_.position_.x;
-		float y = transform_.position_.y;
-
-		if (pSlime->ColliderRect(x + pSlime->GetScale().x, y + pSlime->GetScale().y, 42.0f, 42.0f))
-		{
-			if (y + 42.0f + pSlime->GetScale().x <= pSlime->GetPosition().y + 42 - (42.0f * pSlime->GetScale().y) / 2) // プレイヤーがスライムの上部にある
-			{
-				WeatherState WeatherState = pWeather->GetWeatherState();
-				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
-				if (WeatherState == Rain && MagicPoint_ > 0)
-				{
-					PlaySoundMem(HighBoundSound_, DX_PLAYTYPE_BACK);
-					RainBound = 3.5f; // 雨の時のみジャンプ力を2.5倍
-				}
-				else
-				{
-					PlaySoundMem(BoundSound_, DX_PLAYTYPE_BACK);
-				}
-
-				JumpPower_ = -sqrtf(2 * GRAVITY * JUMP_HEIGHT * RainBound);
-				OnGround_ = false;
-			}
-			else
-			{
-				if (InvincibleTime_ <= 0.0f)
-				{
-					hp->DamageHp();
-					HpDown(1);
-
-					DamageSE();
-
-					InvincibleTime_ = 3.0f;
-					break; // ダメージを与えた後にループを抜ける
-				}
-			}
-		}
-	}
-}
-void Player::HitItem()
-{
-	Hp* hp = GetParent()->FindGameObject<Hp>();
-
-
-	if (hp == nullptr)
-	{
-		return;
-	}
-
-	std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
-	for (HealItem* pHeal : pHeals)
-	{
-		float dx = pHeal->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
-		float dy = pHeal->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
-
-		float distance = sqrt(dx * dx + dy * dy);
-
-		if (distance <= 42.0f)
-		{
-			PlaySoundMem(GetHPItemSound_, DX_PLAYTYPE_BACK); // 音声を再生
-			HpGetFlag_ = true;
-			if (Hp_ < 5)
-			{
-
-				hp->HeelHp();
-				Hp_++;
-			}
-			pHeal->KillMe();
-			HpGetFlag_ = true;
-			ItemGetTimer_ = 65;
-			CharUp_ = transform_.position_.y;
-			break;
-		}
-
-	}
-
-	std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
-	for (MpItem* pMp : pMps)
-	{
-		float dx = pMp->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
-		float dy = pMp->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
-
-		float distance = sqrt(dx * dx + dy * dy);
-
-		if (distance <= 42.0f)
-		{
-
-			if (!GetItemFlag_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
-			{
-				PlaySoundMem(GetMPItemSound_, DX_PLAYTYPE_BACK); // 音声を再生
-				MagicUp(10);
-				GetItemFlag_ = true; // MagicPoint_を増やした後はGetItemFlag_をtrueに設定
-			}
-			pMp->KillMe();
-			MpGetFlag_ = true;
-			ItemGetTimer_ = 65;
-			CharUp_ = transform_.position_.y;
-		}
-		else
-		{
-			GetItemFlag_ = false; // アイテムが範囲外になったらGetItemFlag_をfalseにリセット
-		}
-	}
-}
-
 
 void Player::GaleEffect(WeatherState state)
 {
@@ -950,6 +670,7 @@ void Player::GaleEffect(WeatherState state)
 	}
 }
 
+
 void Player::WeatherController()
 {
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
@@ -968,196 +689,194 @@ void Player::WeatherController()
 		pWCE_ = Instantiate<WeatherChangeEffect>(GetParent());
 	}
 
-	if (Input_.Buttons[0] || CheckHitKey(KEY_INPUT_UP))//↑晴れにする
-	{
-
-		if (CanChangeWeather_ && pWeather != nullptr)
-		{
-			// 現在の天候状態を取得
-			WeatherState WeatherState = pWeather->GetWeatherState();
-
-			if (WeatherState != Sun)//晴れ以外なら
-			{
-				ChangeWeatherCoolTime_ = 60;
-				CanChangeWeather_ = false;
-				pWeather->SetWeather(Sun);
-
-				StopWeatherSE();
-
-				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				if (pWCE_ != nullptr) {
-					if (!pWCE_->GetIsDraw()) {
-						pWCE_->SetIsDraw(true);
-						pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
-					}
-				}
-			}
-
-		}
-	}
-	else if (Input_.Buttons[2] || CheckHitKey(KEY_INPUT_LEFT))//←雨にする
-	{
-
-		if (CanChangeWeather_ && pWeather != nullptr)
-		{
-			// 現在の天候状態を取得
-			WeatherState WeatherState = pWeather->GetWeatherState();
-
-			if (WeatherState != Rain)//雨以外なら
-			{
-				PlaySoundMem(RainSound_, DX_PLAYTYPE_BACK);
-				ChangeWeatherCoolTime_ = 60;
-				CanChangeWeather_ = false;
-				pWeather->SetWeather(Rain);
-
-				StopSoundMem(SnowSound_);
-				StopSoundMem(WindSound_);
-				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				if (pWCE_ != nullptr) {
-					if (!pWCE_->GetIsDraw()) {
-						pWCE_->SetIsDraw(true);
-						pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
-					}
-				}
-			}
-		}
-	}
-	else if (Input_.Buttons[3] || CheckHitKey(KEY_INPUT_RIGHT))//→雪にする
-	{
-		if (CanChangeWeather_ && pWeather != nullptr)
-		{
-			// 現在の天候状態を取得
-			WeatherState WeatherState = pWeather->GetWeatherState();
-
-			if (WeatherState != Snow)//風以外なら
-			{
-				PlaySoundMem(FreezeSound_, DX_PLAYTYPE_BACK);
-				PlaySoundMem(SnowSound_, DX_PLAYTYPE_BACK);
-				ChangeWeatherCoolTime_ = 60;
-				CanChangeWeather_ = false;
-				pWeather->SetWeather(Snow);
-
-				StopSoundMem(RainSound_);
-				StopSoundMem(WindSound_);
-
-				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				if (pWCE_ != nullptr) {
-					if (!pWCE_->GetIsDraw()) {
-						pWCE_->SetIsDraw(true);
-						pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
-					}
-				}
-			}
-		}
-	}
-	else if (Input_.Buttons[1] || CheckHitKey(KEY_INPUT_DOWN))//↓風にする
-	{
-		if (CanChangeWeather_ && pWeather != nullptr)
-		{
-			// 現在の天候状態を取得
-			WeatherState WeatherState = pWeather->GetWeatherState();
-
-			if (WeatherState != Gale)//雪以外なら
-			{
-				PlaySoundMem(SpeedUpSound_, DX_PLAYTYPE_BACK);
-				PlaySoundMem(WindSound_, DX_PLAYTYPE_BACK);
-				ChangeWeatherCoolTime_ = 60;
-				CanChangeWeather_ = false;
-				pWeather->SetWeather(Gale);
-
-				StopSoundMem(RainSound_);
-				StopSoundMem(SnowSound_);
-
-				//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
-				if (pWCE_ != nullptr) {
-					if (!pWCE_->GetIsDraw()) {
-						pWCE_->SetIsDraw(true);
-						pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
-					}
-				}
-			}
-		}
-	}
-	//タイマーが切れてCanChangeWeather_ = trueになるまで再度天気の変更不可
-	if (--ChangeWeatherCoolTime_ < 0)
-	{
-		CanChangeWeather_ = true;
-	}
-
 	if (pWeather != nullptr)
 	{
-		//Gale MP Management
-		if (pWeather->GetWeatherState() == Gale) //風の機能
+		if (Input_.Buttons[0] || CheckHitKey(KEY_INPUT_UP))//↑晴れにする
 		{
-			GaleEffect(Gale);
-			if (MagicPoint_ > 0)
+
+			if (CanChangeWeather_)
 			{
-				if (GaleFlameDownMp_ < 0)//約5秒ごとに行う処理
+				// 現在の天候状態を取得
+				WeatherState WeatherState = pWeather->GetWeatherState();
+
+				if (WeatherState != Sun)//晴れ以外なら
 				{
-					GaleFlameDownMp_ = MAX_GALE_FLAME;
-					MagicDown(2);//消費量は要調整
+					ChangeWeatherCoolTime_ = 60;
+					CanChangeWeather_ = false;
+					pWeather->SetWeather(Sun);
+
+					StopWeatherSE();
+
+					//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+					if (pWCE_ != nullptr) {
+						if (!pWCE_->GetIsDraw()) 
+						{
+							pWCE_->SetIsDraw(true);
+							pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+						}
+					}
 				}
-				else
+
+			}
+		}
+		else if (Input_.Buttons[2] || CheckHitKey(KEY_INPUT_LEFT))//←雨にする
+		{
+
+			if (CanChangeWeather_)
+			{
+				// 現在の天候状態を取得
+				WeatherState WeatherState = pWeather->GetWeatherState();
+
+				if (WeatherState != Rain)//雨以外なら
 				{
-					GaleFlameDownMp_--;
+					PlaySoundMem(RainSound_, DX_PLAYTYPE_BACK);
+					ChangeWeatherCoolTime_ = 60;
+					CanChangeWeather_ = false;
+					pWeather->SetWeather(Rain);
+
+					StopSoundMem(SnowSound_);
+					StopSoundMem(WindSound_);
+
+					if (pWCE_ != nullptr) {
+						if (!pWCE_->GetIsDraw()) {
+							pWCE_->SetIsDraw(true);
+							pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+						}
+					}
 				}
 			}
 		}
-
-		//Rain MP Management
-		if (pWeather->GetWeatherState() == Rain)
+		else if (Input_.Buttons[3] || CheckHitKey(KEY_INPUT_RIGHT))//→雪にする
 		{
-
-			if (MagicPoint_ > 0)
+			if (CanChangeWeather_)
 			{
+				// 現在の天候状態を取得
+				WeatherState WeatherState = pWeather->GetWeatherState();
 
-				if (RainFlameDownMp_ < 0)//約5秒ごとに行う処理
+				if (WeatherState != Snow)//風以外なら
 				{
-					MagicDown(1);
-					RainFlameDownMp_ = MAX_RAIN_FLAME;
-				}
-				else
-				{
-					RainFlameDownMp_--;
+					PlaySoundMem(FreezeSound_, DX_PLAYTYPE_BACK);
+					PlaySoundMem(SnowSound_, DX_PLAYTYPE_BACK);
+					ChangeWeatherCoolTime_ = 60;
+					CanChangeWeather_ = false;
+					pWeather->SetWeather(Snow);
+
+					StopSoundMem(RainSound_);
+					StopSoundMem(WindSound_);
+
+					//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
+					if (pWCE_ != nullptr) {
+						if (!pWCE_->GetIsDraw()) {
+							pWCE_->SetIsDraw(true);
+							pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+						}
+					}
 				}
 			}
 		}
-	}
+		else if (Input_.Buttons[1] || CheckHitKey(KEY_INPUT_DOWN))//↓風にする
+		{
+			if (CanChangeWeather_)
+			{
+				// 現在の天候状態を取得
+				WeatherState WeatherState = pWeather->GetWeatherState();
 
+				if (WeatherState != Gale)//雪以外なら
+				{
+					PlaySoundMem(SpeedUpSound_, DX_PLAYTYPE_BACK);
+					PlaySoundMem(WindSound_, DX_PLAYTYPE_BACK);
+					ChangeWeatherCoolTime_ = 60;
+					CanChangeWeather_ = false;
+					pWeather->SetWeather(Gale);
 
-	//雪の時間経過(とりあえずフレーム経過)でMPが減る
-	if (pWeather != nullptr)
-	{
+					StopSoundMem(RainSound_);
+					StopSoundMem(SnowSound_);
+
+					if (pWCE_ != nullptr) {
+						if (!pWCE_->GetIsDraw()) {
+							pWCE_->SetIsDraw(true);
+							pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
+						}
+					}
+				}
+			}
+		}
+		//タイマーが切れてCanChangeWeather_ = trueになるまで再度天気の変更不可
+		if (--ChangeWeatherCoolTime_ < 0)
+		{
+			CanChangeWeather_ = true;
+		}
+
+		//天候が雨の時のMP減少の処理
+	    if (pWeather->GetWeatherState() == Gale)
+	    {
+		    GaleEffect(Gale);
+		    if (MagicPoint_ > 0)
+		    {
+			    if (GaleFlameDownMp_ < 0)
+			    {
+				    GaleFlameDownMp_ = MAX_GALE_FLAME;
+					MagicDown(2);
+			    }
+			    else
+			    {
+				    GaleFlameDownMp_--;
+			    }
+		    }
+	    }
+
+		//天候が雨の時のMP減少の処理
+	    if (pWeather->GetWeatherState() == Rain)
+	    {
+
+		    if (MagicPoint_ > 0)
+		    {
+
+			    if (RainFlameDownMp_ < 0)
+			    {
+				    MagicDown(1);
+				    RainFlameDownMp_ = MAX_RAIN_FLAME;
+			    }
+			    else
+			    {
+				    RainFlameDownMp_--;
+			    }
+		    }
+	    }
+
+		//雪の時間経過(とりあえずフレーム経過)でMPが減る
 		if (pWeather->GetWeatherState() == WeatherState::Snow)
 		{
-			//フレーム基準だからなぁE..
-			SnowFlameDownMp_--;
+		   SnowFlameDownMp_--;
+		}
+
+
+		//残りの雪時間が0以下なら
+		if (SnowFlameDownMp_ <= 0)
+		{
+			if (MagicPoint_ >= 10)//MPが10以上なら減らす
+			{
+				MagicPoint_ -= 10;
+				if (mp != nullptr)
+				{
+					mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+				}
+
+				if (Hp_ >= 2)
+				{
+					HpDown(1);
+					PlaySoundMem(DamageSound_, DX_PLAYTYPE_BACK);
+				}
+			}
+			else
+			{
+				MagicPoint_ = 0;
+			}
+			SnowFlameDownMp_ = MAX_SNOW_FLAME; //元のフレームに戻す
 		}
 	}
 
-	//残りの雪時間が0以下だったら
-	if (SnowFlameDownMp_ <= 0)
-	{
-		if (MagicPoint_ >= 10)//MPが10以上なら減らす
-		{
-			MagicPoint_ -= 10;
-			if (mp != nullptr)
-			{
-				mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
-			}
-
-			if (Hp_ >= 2)
-			{
-				HpDown(1);
-				PlaySoundMem(DamageSound_, DX_PLAYTYPE_BACK);
-			}
-		}
-		else
-		{
-			MagicPoint_ = 0;//10より少なかったら0に
-		}
-		SnowFlameDownMp_ = MAX_SNOW_FLAME; //元に戻す
-	}
+	
 
 }
 
@@ -1178,7 +897,7 @@ void Player::PlayerController()
 			FlameCounter_ = 0;
 		}
 
-		HitStageRight();
+		CheckHitStageRight();
 		
 	}
 	//左移動
@@ -1192,7 +911,7 @@ void Player::PlayerController()
 			FlameCounter_ = 0;
 		}
 
-		HitStageLeft();
+		CheckHitStageLeft();
 	
 	}
 	else
@@ -1332,7 +1051,250 @@ void Player::PlayerController()
 	}
 }
 
-void Player::HitClear()
+void Player::Jump()
+{
+	JumpPower_ = -sqrtf(2 * GRAVITY * JUMP_HEIGHT + WeatherSpeed_);
+	OnGround_ = false;
+	OnRock_ = false;
+	HitLanding_ = false;
+	PlaySoundMem(JumpSound_, DX_PLAYTYPE_BACK);
+}
+
+
+void Player::CheckWall(Field* pf)
+{
+	bool wallNow = pf->IsWallBlock(transform_.position_.x, transform_.position_.y);
+
+	if (wallNow)
+	{
+		transform_.position_.x -= 32;
+	}
+}
+
+void Player::CheckHitRock()
+{
+
+	Weather* pWeather = GetParent()->FindGameObject<Weather>();
+	Field* pField = GetParent()->FindGameObject<Field>();
+
+	std::list<Rock*> pRocks = GetParent()->FindGameObjects<Rock>();
+	OnRock_ = false;
+	for (Rock* pRock : pRocks)
+	{
+		WeatherState WeatherState = pWeather->GetWeatherState();
+
+		float dx = pRock->GetPosition().x - transform_.position_.x;
+		float dy = pRock->GetPosition().y - transform_.position_.y;
+
+		float distance = sqrt(dx * dx + dy * dy);
+		float push = 3.5;
+
+		if (distance <= 64.0f)
+		{
+			if (dy <= 0 && abs(dx) <= 32.0f)
+			{
+				transform_.position_.y = pRock->GetPosition().y - 64 + push;
+				OnGround_ = true;
+				OnRock_ = true;
+			}
+			else if (dy > 0 && abs(dx) <= 32.0f)
+			{
+				transform_.position_.y = pRock->GetPosition().y + push;
+			}
+			else if (dx < 0 && abs(dy) <= 32.0f)
+			{
+				transform_.position_.x += push;
+			}
+			else if (dx > 0 && abs(dy) <= 32.0f)
+			{
+				transform_.position_.x -= push;
+			}
+		}
+
+
+		if (pField != nullptr)
+		{
+			int HitX = pRock->GetPosition().x + 32;
+			int HitY = pRock->GetPosition().y + 32;
+
+			if (pField->CollisionLeft(HitX, HitY) > 0 || pField->CollisionRight(HitX, HitY) > 0 ||
+				pField->CollisionUp(HitX, HitY) > 0 || pField->CollisionDown(HitX, HitY) > 0)
+			{
+				OnRock_ = false;
+			}
+		}
+	}
+}
+
+void Player::CheckHitGhost()
+{
+	Hp* hp = GetParent()->FindGameObject<Hp>();
+
+	std::list<Ghost*> pGhosts = GetParent()->FindGameObjects<Ghost>();
+	for (Ghost* pGhost : pGhosts)
+	{
+		float dx = pGhost->GetPosition().x + 42 - (transform_.position_.x + 32.0f);
+		float dy = pGhost->GetPosition().y + 42 - (transform_.position_.y + 32.0f);
+
+		float distance = sqrt(dx * dx + dy * dy);
+
+		if (distance <= 40.0f)
+		{
+			if (InvincibleTime_ <= 0.0f)
+			{
+				hp->DamageHp();
+				HpDown(1);
+
+				DamageSE();
+
+				InvincibleTime_ = 3.0f;
+			}
+			break;
+		}
+	}
+
+
+	std::list<EnemyMagic*> pEMagics = GetParent()->FindGameObjects<EnemyMagic>();
+	for (EnemyMagic* pEnemyMagic : pEMagics)
+	{
+		if (pEnemyMagic->GetIsDraw())
+		{
+			float dx = pEnemyMagic->GetPosition().x + 16 - (transform_.position_.x + 32.0f);
+			float dy = pEnemyMagic->GetPosition().y + 16 - (transform_.position_.y + 32.0f);
+			float distance = sqrt(dx * dx + dy * dy);
+
+			if (distance <= 30.0f)
+			{
+				if (InvincibleTime_ <= 0.0f)
+				{
+					hp->DamageHp();
+					HpDown(1);
+
+					DamageSE();
+
+					InvincibleTime_ = 2.0f;
+				}
+				break;
+			}
+		}
+	}
+}
+
+void Player::CheckHitSlime()
+{
+	Weather* pWeather = GetParent()->FindGameObject<Weather>();
+	Hp* hp = GetParent()->FindGameObject<Hp>();
+
+	std::list<Slime*> pSlimes = GetParent()->FindGameObjects<Slime>();
+
+	for (Slime* pSlime : pSlimes)
+	{
+		float x = transform_.position_.x;
+		float y = transform_.position_.y;
+
+		if (pSlime->ColliderRect(x + pSlime->GetScale().x, y + pSlime->GetScale().y, 42.0f, 42.0f))
+		{
+			if (y + 42.0f + pSlime->GetScale().x <= pSlime->GetPosition().y + 42 - (42.0f * pSlime->GetScale().y) / 2) // プレイヤーがスライムの上部にある
+			{
+				WeatherState WeatherState = pWeather->GetWeatherState();
+				float RainBound = 0.5; // 雨の日に発生するスライムの弾性
+				if (WeatherState == Rain && MagicPoint_ > 0)
+				{
+					PlaySoundMem(HighBoundSound_, DX_PLAYTYPE_BACK);
+					RainBound = 3.5f; // 雨の時のみジャンプ力を2.5倍
+				}
+				else
+				{
+					PlaySoundMem(BoundSound_, DX_PLAYTYPE_BACK);
+				}
+
+				JumpPower_ = -sqrtf(2 * GRAVITY * JUMP_HEIGHT * RainBound);
+				OnGround_ = false;
+			}
+			else
+			{
+				if (InvincibleTime_ <= 0.0f)
+				{
+					hp->DamageHp();
+					HpDown(1);
+
+					DamageSE();
+
+					InvincibleTime_ = 3.0f;
+					break; // ダメージを与えた後にループを抜ける
+				}
+			}
+		}
+	}
+}
+
+void Player::CheckHitItem()
+{
+	Hp* hp = GetParent()->FindGameObject<Hp>();
+
+
+	if (hp == nullptr)
+	{
+		return;
+	}
+
+	std::list<HealItem*> pHeals = GetParent()->FindGameObjects<HealItem>();
+	for (HealItem* pHeal : pHeals)
+	{
+		float dx = pHeal->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
+		float dy = pHeal->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
+
+		float distance = sqrt(dx * dx + dy * dy);
+
+		if (distance <= 42.0f)
+		{
+			PlaySoundMem(GetHPItemSound_, DX_PLAYTYPE_BACK);
+			HpGetFlag_ = true;
+			if (Hp_ < 5)
+			{
+
+				hp->HeelHp();
+				Hp_++;
+			}
+			pHeal->KillMe();
+			HpGetFlag_ = true;
+			ItemGetTimer_ = 65;
+			CharUp_ = transform_.position_.y;
+			break;
+		}
+
+	}
+
+	std::list<MpItem*> pMps = GetParent()->FindGameObjects<MpItem>();
+	for (MpItem* pMp : pMps)
+	{
+		float dx = pMp->GetPosition().x + 32 - (transform_.position_.x + 32.0f);
+		float dy = pMp->GetPosition().y + 32 - (transform_.position_.y + 32.0f);
+
+		float distance = sqrt(dx * dx + dy * dy);
+
+		if (distance <= 42.0f)
+		{
+
+			if (!GetItemFlag_) // アイテムを拾ったときに一度だけMagicPoint_を増やす
+			{
+				PlaySoundMem(GetMPItemSound_, DX_PLAYTYPE_BACK);
+				MagicUp(10);
+				GetItemFlag_ = true; // MagicPoint_を増やした後はGetItemFlag_をtrueに設定
+			}
+			pMp->KillMe();
+			MpGetFlag_ = true;
+			ItemGetTimer_ = 65;
+			CharUp_ = transform_.position_.y;
+		}
+		else
+		{
+			GetItemFlag_ = false; // アイテムが範囲外になったらGetItemFlag_をfalseにリセット
+		}
+	}
+}
+
+void Player::CheckHitClear()
 {
 
 	Field* pField = GetParent()->FindGameObject<Field>();
@@ -1373,8 +1335,7 @@ void Player::HitClear()
 	}
 }
 
-
-void Player::HitStageRight()
+void Player::CheckHitStageRight()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 
@@ -1389,7 +1350,8 @@ void Player::HitStageRight()
 		transform_.position_.x -= push;
 	}
 }
-void Player::HitStageLeft()
+
+void Player::CheckHitStageLeft()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 
@@ -1402,7 +1364,8 @@ void Player::HitStageLeft()
 		transform_.position_.x += push;
 	}
 }
-void Player::HitStageUp()
+
+void Player::CheckHitStageUp()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 
@@ -1420,7 +1383,8 @@ void Player::HitStageUp()
 		}
 	}
 }
-void Player::HitStageDown()
+
+void Player::CheckHitStageDown()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 
@@ -1464,3 +1428,53 @@ void Player::HitStageDown()
 	}
 
 }
+
+
+void Player::MagicUp(int _PMp)
+{
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+	MagicPoint_ += _PMp;
+
+	if (MagicPoint_ > MAX_MAGIC_POINT)
+	{
+		MagicPoint_ = MAX_MAGIC_POINT;
+	}
+}
+
+void Player::MagicDown(int _MMp)
+{
+	MP* mp = GetParent()->FindGameObject<MP>();
+	mp->SetGaugeVal(MagicPoint_, MAX_MAGIC_POINT);
+	MagicPoint_ -= _MMp;
+
+	if (MagicPoint_ < 0)
+	{
+		MagicPoint_ = 0;
+	}
+}
+
+void Player::HpUp(int _PHp)
+{
+	Hp_ += _PHp;
+
+	if (Hp_ < MAX_DAMAGE_HP)
+	{
+		Hp_ > MAX_DAMAGE_HP;
+	}
+}
+
+void Player::HpDown(int _MHp)
+{
+	Hp_ -= _MHp;
+	player_animation_state = S_Damage_A;
+	player_state = S_Damage;
+
+	if (Hp_ == 1)
+	{
+		PlaySoundMem(WarningSound_, DX_PLAYTYPE_BACK);
+	}
+
+}
+
+

@@ -6,7 +6,7 @@ class FreezeEffect;
 class EnemyMagic;
 
 /// <summary>
-/// 弾丸を飛ばしてくるお化けの情報
+/// ゴーストの状態・情報を管理
 /// </summary>
 class Ghost : public GameObject
 {
@@ -49,6 +49,6 @@ private:
 	/// </summary>
 	void GhostMove();
 
-	void HitMagic();
+	void CheckHitMagic();
 
 };

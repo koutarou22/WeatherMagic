@@ -9,7 +9,7 @@
 #include"LandingEffect.h"
 
 /// <summary>
-/// プレイヤーキャラの情報
+/// プレイヤーの操作・状態・情報を管理
 /// </summary>
 class Field;
 class Player : public GameObject
@@ -258,30 +258,51 @@ private:
 	/// </summary>
 	void WeatherController();
 
-	void HitClear();
+	/// <summary>
+	/// クリアオブジェクトとの接触情報
+	/// </summary>
+	void CheckHitClear();
 
 	/// <summary>
 	/// ゴーストと弾に関する接触情報
 	/// </summary>
-	void HitGhost();
+	void CheckHitGhost();
 
 	/// <summary>
 	/// スライムの接触判定
 	/// </summary>
-	void HitSlime();
+	void CheckHitSlime();
 	/// <summary>
 	/// HP・MPアイテムとの接触情報
 	/// </summary>
-	void HitItem();
+	void CheckHitItem();
 
 	/// <summary>
 	/// 岩との接触判定
 	/// </summary>
-	void HitRock();
+	void CheckHitRock();
+	
+	/// <summary>
+	/// ステージ(右)との判定
+	/// </summary>
+	void CheckHitStageRight();
+	/// <summary>
+	/// ステージ(左)との判定
+	/// </summary>
+	void CheckHitStageLeft();
 
+	/// <summary>
+	/// ステージ(上)との判定
+	/// </summary>
+	void CheckHitStageUp();
 
-	void HitStageRight();
-	void HitStageLeft();
-	void HitStageUp();
-	void HitStageDown();
+	/// <summary>
+	/// ステージ(下)との判定
+	/// </summary>
+	void CheckHitStageDown();
+
+	/// <summary>
+	/// アニメーション状態の表示する情報
+	/// </summary>
+	void DrawAnimationState();
 };

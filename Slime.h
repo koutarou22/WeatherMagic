@@ -3,11 +3,9 @@
 #include "Player.h"
 #include "Weather.h"
 /// <summary>
-/// スライムの情報
+/// スライムの動作・状態を管理
 /// </summary>
-
 class FreezeEffect;
-
 class Slime : public GameObject
 {
 public:
@@ -32,20 +30,18 @@ public:
 	/// </summary>
 	/// <param name="state">天候の状態</param>
 	/// <param name="transform">座標</param>
-	/// <param name="WeatherSpeed_"></param>
-	/// <param name="MOVE_SPEED"></param>
-	/// <param name="WeatherEffect"></param>
-	/// <param name="ScaleEffect_"></param>
+	/// <param name="WeatherSpeed_">天候時の移動速度</param>
+	/// <param name="MOVE_SPEED">移動速度</param>
+	/// <param name="WeatherEffect">天候クラスからの速度の情報</param>
+	/// <param name="ScaleEffect_">サイズ</param>
 	void RainScale(WeatherState state, Transform& transform,
 	float& WeatherSpeed_, float MOVE_SPEED, float WeatherEffect, float& ScaleEffect_);
 
-
-	
 private:
 	int hSlime_;
-	bool onGround;//地面にいるのか？
+	bool OnGround_;//地面にいるのか？
 
-	bool HitLanding;//着地したかどうかを確認する
+	bool HitLanding_;//着地したかどうかを確認する
 
 	//アニメーションのフレーム情報
 	int flameCounter_;
@@ -70,35 +66,35 @@ private:
 	int direction = 1;
 	
 	//スライムを踏んだ時のSE
-	int JumpHandle; 
+	int JumpHandle_; 
 	//気絶した時のSE
-	int StunHandle; 
+	int StunHandle_; 
 
 	FreezeEffect* pFreeze;
 
 	/// <summary>
 	/// ステージとの接触判定情報
 	/// </summary>
-	void HitStage();
+	void CheckHitStage();
 
 	/// <summary>
 	/// プレイヤーの弾との接触情報
 	/// </summary>
-	void HitPlayerMagic();
+	void CheckHitPlayerMagic();
 
 	/// <summary>
 	/// 岩との接触判定
 	/// </summary>
-	void HitRock();
+	void CheckHitRock();
 
 	/// <summary>
 	/// ステージの壁に接触すると反転する処理
 	/// </summary>
-	void HitStageHitTurn();
+	void CheckHitStageHitTurn();
 
 	/// <summary>
 	/// スライムのジャンプ、状態など基礎的な情報
 	/// </summary>
-	void SlimeBound();
+	void SlimeAbility();
 };
 
