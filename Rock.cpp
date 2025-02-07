@@ -29,18 +29,15 @@ Rock::Rock(GameObject* scene)
 	hitY = transform_.position_.y + 32;
 
 
-	CanMoveRight = true;
-	CanMoveLeft = true;
+	CanMoveRight_ = true;
+	CanMoveLeft_ = true;
 
-	isMove = false;
-	isPlayingDust = false;
-
-
+	IsMove_ = false;
+	IsPlayingDust_ = false;
 }
 
 Rock::~Rock()
 {
-	Release();
 }
 
 void Rock::Update()
@@ -51,10 +48,11 @@ void Rock::Update()
 
 	if (pWeather != nullptr)
 	{
-		WeatherEffects(pWeather); // 天候関数を呼び出す
+		// 天候関数を呼び出す
+		WeatherEffects(pWeather);
 	}
    
-	HitStage();
+	CheckHitStage();
 
 	//重力の処理
 	JumpPower_ += GRAVITY; 
@@ -115,7 +113,7 @@ void Rock::GaleEffect(WeatherState state)
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 
 	//xboxコントローラーの入力情報を取得
-	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
+	PadAnalogInput_ = GetJoypadXInputState(DX_INPUT_PAD1, &Input_);
 
 	if (cam != nullptr)
 	{
@@ -124,44 +122,44 @@ void Rock::GaleEffect(WeatherState state)
 		{
 			if (state == Gale)
 			{
-				isMove = false;
+				IsMove_ = false;
 				Player* pPlayer = GetParent()->FindGameObject<Player>();
 				int MpVanish = pPlayer->GetMp();
 				if (MpVanish >= 4)
 				{
-					if (input.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_K))
+					if (Input_.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_K))
 					{
-						if (CanMoveLeft)
+						if (CanMoveLeft_)
 						{
 							transform_.position_.x -= MOVE_SPEED;
-							isMove = true;
+							IsMove_ = true;
 						}
 					}
-					else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_L))
+					else if (Input_.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_L))
 					{
-						if (CanMoveRight)
+						if (CanMoveRight_)
 						{
 							transform_.position_.x += MOVE_SPEED;
-							isMove = true;
+							IsMove_ = true;
 						}
 					}
 
 				}
 
-				if (isMove)
+				if (IsMove_)
 				{ 
-				   if (!isPlayingDust) 
+				   if (!IsPlayingDust_) 
 				   { 
 					   PlaySoundMem(DustHandle, DX_PLAYTYPE_LOOP); 
-					   isPlayingDust = true; 
+					   IsPlayingDust_ = true; 
 				   } 
 				}
 				else
 				{ 
-					if (isPlayingDust) 
+					if (IsPlayingDust_) 
 					{ 
 						StopSoundMem(DustHandle); 
-					    isPlayingDust = false;
+					    IsPlayingDust_ = false;
 					}
 				}
 			}
@@ -186,7 +184,7 @@ bool Rock::ColliderRect(float x, float y, float w, float h)
 	}
 }
 
-void Rock::HitStage()
+void Rock::CheckHitStage()
 {
 	Field* pField = GetParent()->FindGameObject<Field>();
 
@@ -199,11 +197,11 @@ void Rock::HitStage()
 		int push = pField->CollisionLeft(hitX, hitY);
 		if (push > 0)
 		{
-			CanMoveLeft = false;
+			CanMoveLeft_ = false;
 		}
 		else
 		{
-			CanMoveLeft = true;
+			CanMoveLeft_ = true;
 		}
 	}
 
@@ -216,16 +214,16 @@ void Rock::HitStage()
 		int push = pField->CollisionRight(hitX, hitY);
 		if (push > 0)
 		{
-			CanMoveRight = false;
+			CanMoveRight_ = false;
 		}
 		else
 		{
-			CanMoveRight = true;
+			CanMoveRight_ = true;
 		}
 	}
 
 	//衝突判定(上)
-	if (!onGround && pField != nullptr)
+	if (!OnGround_ && pField != nullptr)
 	{
 		hitX = transform_.position_.x + 32;
 		hitY = transform_.position_.y;
@@ -248,11 +246,11 @@ void Rock::HitStage()
 		{
 			transform_.position_.y -= push - 1;
 			JumpPower_ = 0.0f;
-			onGround = true;
+			OnGround_ = true;
 		}
 		else
 		{
-			onGround = false;
+			OnGround_ = false;
 		}
 	}
 }

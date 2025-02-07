@@ -6,7 +6,7 @@ class FreezeEffect;
 class EnemyMagic;
 
 /// <summary>
-/// 弾丸を飛ばしてくるお化けの情報
+/// ゴーストの状態・情報を管理
 /// </summary>
 class Ghost : public GameObject
 {
@@ -15,7 +15,6 @@ public:
 	~Ghost();
 	void Update() override;
 	void Draw() override;
-	//円の当たり判定をする
 	void SetPosition(int x, int y);
 	bool ColliderCircle(float x, float y, float r);
 	
@@ -23,20 +22,33 @@ public:
 private:
 	EnemyMagic* emg;
 	FreezeEffect* pFreeze;
-	float sinAngle;
-	int hImage_;
-	int animeType_;//状況
-	int animeFrame_;//駒
+	float SinAngle_;
+	int hGhost_;
+	
+	//アニメーション用の変数
+	int AnimeType_;//状況
+	int AnimeFrame_;//駒
 	int PictFlame_;
-	int flameCounter_;
+	int FlameCounter_;
 
-	int CoolDownAttack_ = 0;
-	int timer_ = 90;
-	int enemyHandle;
+	int EnemyHandle_;
 
-	bool FreezeOne;//氷結を一回しか出せないようにする　※重くなったので
+	//球を再度打てるようになるまでのクールタイム格納用変数
+	int CoolDownAttack_;
 
 	int GhostDamageHandle;//ダメージ音
 	int GhostAttackHandle;//攻撃音
+
+	/// <summary>
+	/// 攻撃の情報・処理
+	/// </summary>
+	void GhostAttack();
+
+	/// <summary>
+	/// ゴーストの動きの情報・処理
+	/// </summary>
+	void GhostMove();
+
+	void CheckHitMagic();
 
 };
