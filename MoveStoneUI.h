@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
+/// <summary>
+/// 天候が風の時、石を動かせるUIを表示するクラス
+/// </summary>
 class MoveStoneUI :
     public GameObject
 {

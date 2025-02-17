@@ -6,12 +6,12 @@
 class MpItem :public GameObject
 {
 private:
-	int hImage_;
-	int hEffect_;
+	int hMpItem_;
+	int hMpIEffect_;
 	int animeType_;//èÛãµ
 	int animeFrame_;//ãÓ
-	int PictFlame_;
-	int flameCounter_;
+	//int PictFlame_;
+	int FrameCounter_;
 public:
 
 	MpItem(GameObject* parent);

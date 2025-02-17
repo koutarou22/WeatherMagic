@@ -4,17 +4,17 @@
 #include "Field.h"
 
 
-MpItem::MpItem(GameObject* parent) :GameObject(parent, "MpItem"), hImage_(-1)
+MpItem::MpItem(GameObject* parent) :GameObject(parent, "MpItem"), hMpItem_(-1)
 {
-	hImage_ = LoadGraph("Assets/Item/PotionBlue1.png");
-	assert(hImage_ > 0);
+	hMpItem_ = LoadGraph("Assets/Item/PotionBlue1.png");
+	assert(hMpItem_ > 0);
 
-	hEffect_ = LoadGraph("Assets/Item/right.png");
-	assert(hEffect_ > 0);
+	hMpIEffect_ = LoadGraph("Assets/Item/right.png");
+	assert(hMpIEffect_ > 0);
 
 	transform_.position_.x = 200;
 	transform_.position_.y = 560;
-	flameCounter_ = 0;
+	FrameCounter_ = 0;
 	animeType_ = 0;
 	animeFrame_ = 0;
 }
@@ -30,10 +30,10 @@ void MpItem::Initialize()
 
 void MpItem::Update()
 {
-	if (++flameCounter_ >= 24)
+	if (++FrameCounter_ >= 24)
 	{
 		animeFrame_ = (animeFrame_ + 1) % 4;
-		flameCounter_ = 0;
+		FrameCounter_ = 0;
 	}
 }
 
@@ -53,20 +53,20 @@ void MpItem::Draw()
 	int frameX = animeFrame_ % 3;
 
 	// スプライトを描画
-	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight,hEffect_, TRUE);
-	DrawGraph(x, y, hImage_, TRUE);
+	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight,hMpIEffect_, TRUE);
+	DrawGraph(x, y, hMpItem_, TRUE);
 }
 
 void MpItem::Release()
 {
-	if (hImage_ > 0)
+	if (hMpItem_ > 0)
 	{
-		DeleteGraph(hImage_);
+		DeleteGraph(hMpItem_);
 	}
 
-	if (hEffect_ > 0)
+	if (hMpIEffect_ > 0)
 	{
-		DeleteGraph(hEffect_);
+		DeleteGraph(hMpIEffect_);
 	}
 }
 

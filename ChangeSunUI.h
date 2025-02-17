@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
+/// <summary>
+/// 天候を晴れに変更するUIを表示するクラス
+/// </summary>
 class ChangeSunUI :
     public GameObject
 {

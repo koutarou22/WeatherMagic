@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
+/// <summary>
+/// ジャンプUIを表示するクラス
+/// </summary>
 class JumpUI :
     public GameObject
 {

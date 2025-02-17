@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
+/// <summary>
+/// UŒ‚UI‚ğ•\¦‚·‚éƒNƒ‰ƒX
+/// </summary>
 class AttackUI :
     public GameObject
 {
