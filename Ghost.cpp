@@ -134,7 +134,7 @@ void Ghost::GhostAttack()
 			{
 				emg->LoadMagicImage();
 				EnemyHandle_ = emg->GetImageHandle();
-				Debug::OutPrint(L"イメージロード", true);
+				//Debug::OutPrint(L"イメージロード", true);
 			}
 
 			if (emg != nullptr)
