@@ -7,14 +7,14 @@
 class ClearFlag :public GameObject
 {
 private:
-	int hImage_;
-	int hEffect_;
-	int hImage_Right;
+	int hClearFlag_;
+	int hClearFEffect_;
+	//int hImage_Right;
 
 	int animeType_;//èÛãµ
 	int animeFrame_;//ãÓ
-	int PictFlame_;
-	int flameCounter_;
+	//int PictFlame_;
+	int FrameCounter_;
 	bool IsClear_;
 public:
 
