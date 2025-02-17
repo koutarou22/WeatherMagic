@@ -4,31 +4,32 @@
 
 namespace
 {
-	const int SCREEN_WIDTH = 1280;
-	const int SCREEN_HEIGHT = 720;
-	const int Size = 64;
-	const int RAIN_SIZE = 64;
+	const int SCREEN_WIDTH = 1280; //スクリーンの横幅
+	const int SCREEN_HEIGHT = 720; //スクリーンの縦幅
+	const int GALE_MP = 4; //風に変えられる最小のMP
+	const int ALPHA = 128; //アルファ値
+	const int FRAME_COUNT = 24; //フレーム全体の数
+	const int IMAGE_SIZE[STATE_NUM] = { 64,128,512,64 }; //エフェクト画像のサイズ
+	const int GALE_SIZE_X = 5076 / 6; //風のエフェクト画像のサイズX
+	const XMINT2 POS_MARGE = { 500,100 }; //表示座標の調整用
+	const int MAX_INPUT = 10000; //コントローラーの入力取得上
+	const int MIN_INPUT = -10000; //コントローラーの入力取得用下
 }
 
 
 
 WeatherBackGround::WeatherBackGround(GameObject* parent)
-	:GameObject(parent, "WeatherBackGround"), hImage_Sun(-1), hImage_Rain(-1), hImage_Gale(-1),hImage_Snow(-1),animeFrame(0), FrameCounter(0), eraseCounter(0)
+	:GameObject(parent, "WeatherBackGround")
 {
+	for (int i = 0; i < STATE_NUM; i++)
+	{
+		images_[i] = -1;
+		nowWeather_[i] = false;
+	}
 
-	/*hImage_Sun = LoadGraph("");
-	assert(hImage_Sun > 0);*/
-	hImage_Rain = LoadGraph("Assets/BackAnimation/Rain_Back.png");
-	assert(hImage_Rain > 0);
-
-	hImage_Rain2 = LoadGraph("Assets/BackAnimation/Rain_Front.png");
-	assert(hImage_Rain2 > 0);
-
-	hImage_Gale = LoadGraph("Assets/BackAnimation/GaleAnimation.png");
-	assert(hImage_Gale > 0);
-
-	hImage_Snow = LoadGraph("Assets/BackAnimation/SnowAnimation.png");
-	assert(hImage_Snow > 0);
+	animeFrame_ = 0;
+	frameCounter_ = 0;
+	eraseCounter_ = 0;
 }
 
 WeatherBackGround::~WeatherBackGround()
@@ -36,57 +37,60 @@ WeatherBackGround::~WeatherBackGround()
 	Release();
 }
 
+void WeatherBackGround::Initialize()
+{
+	images_[RAINBACK] = LoadGraph("Assets/BackAnimation/Rain_Back.png");
+	assert(images_[RAINBACK] > 0);
+
+	images_[RAINFRONT] = LoadGraph("Assets/BackAnimation/Rain_Front.png");
+	assert(images_[RAINFRONT] > 0);
+
+	images_[GALE] = LoadGraph("Assets/BackAnimation/GaleAnimation.png");
+	assert(images_[GALE] > 0);
+
+	images_[SNOW] = LoadGraph("Assets/BackAnimation/SnowAnimation.png");
+	assert(images_[SNOW] > 0);
+}
+
 void WeatherBackGround::Update()
 {
-	//WeatherStateConfirm(Sun, SunNow, 0, 0); 
-	WeatherStateConfirm(Rain, RainNow, 24, 10); 
-	WeatherStateConfirm(Gale, GaleNow, 24, 6); 
-	WeatherStateConfirm(Snow, SnowNow, 24, 16);
+	WeatherStateConfirm(Rain, nowWeather_[RAINBACK], FRAME_COUNT, 10);
+	WeatherStateConfirm(Gale, nowWeather_[GALE], FRAME_COUNT, 6);
+	WeatherStateConfirm(Snow, nowWeather_[SNOW], FRAME_COUNT, 16);
 }
 
 void WeatherBackGround::Draw()
 {
-	WeatherAnimation(RainNow, 128, hImage_Rain, 64);
-	WeatherAnimation(RainNow, 128, hImage_Rain2, 128);
-	GaleAnimation(GaleNow, 128, hImage_Gale, 5076/6, 512);
-	WeatherAnimation(SnowNow, 128, hImage_Snow, 64);	
+	WeatherAnimation(nowWeather_[RAINBACK], ALPHA, images_[RAINBACK], IMAGE_SIZE[RAINBACK]);
+	WeatherAnimation(nowWeather_[RAINBACK], ALPHA, images_[RAINFRONT], IMAGE_SIZE[RAINFRONT]);
+	GaleAnimation(nowWeather_[GALE], ALPHA, images_[GALE], GALE_SIZE_X, IMAGE_SIZE[GALE]);
+	WeatherAnimation(nowWeather_[SNOW], ALPHA, images_[SNOW], IMAGE_SIZE[SNOW]);
 }
 
 void WeatherBackGround::Release()
 {
-	//if (hImage_Sun > 0)
-	//{
-	//	DeleteGraph(hImage_Sun);
-	//}
-	if (hImage_Rain > 0)
+	for (int i = 0; i < STATE_NUM; i++)
 	{
-		DeleteGraph(hImage_Rain);
-	}
-	if (hImage_Rain2 > 0)
-	{
-		DeleteGraph(hImage_Rain2);
-	}
-	if (hImage_Gale > 0)
-	{
-		DeleteGraph(hImage_Gale);
-	}
-	if (hImage_Snow > 0)
-	{
-		DeleteGraph(hImage_Snow);
+		if (images_[i] > 0)
+		{
+			DeleteGraph(images_[i]);
+			images_[i] = -1;
+		}
 	}
 }
 
-void WeatherBackGround::WeatherStateConfirm(WeatherState State, bool& Flag, int frameCount, int Frame)
+void WeatherBackGround::WeatherStateConfirm(WeatherState State, bool& Flag, int FrameCount, int Frame)
 {
+	//特定の天候かどうか(現在の天候がStateと同じか)確かめる
 	Weather* pWeather = GetParent()->FindGameObject<Weather>(); 
 	if (pWeather->GetWeatherState() == State)
 	{
-		if (frameCount > 0)
+		if (FrameCount > 0)
 		{
-			if (++FrameCounter >= frameCount)
+			if (++frameCounter_ >= FrameCount)
 			{
-				animeFrame = (animeFrame + 1) % Frame;
-				FrameCounter = 0;
+				animeFrame_ = (animeFrame_ + 1) % Frame;
+				frameCounter_ = 0;
 			}
 		}
 		Flag = true;
@@ -97,14 +101,13 @@ void WeatherBackGround::WeatherStateConfirm(WeatherState State, bool& Flag, int 
 	}
 }
 
-void WeatherBackGround::WeatherAnimation(bool& flag, int alpha, int hImage, int Size)
+void WeatherBackGround::WeatherAnimation(bool& flag, int alpha, int image, int size)
 {
+	//カメラ座標をとってくる
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
-
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	Camera* cam = GetParent()->FindGameObject<Camera>();
-
 	int CameraSet = 0;
 	if (cam != nullptr)
 	{
@@ -112,53 +115,48 @@ void WeatherBackGround::WeatherAnimation(bool& flag, int alpha, int hImage, int 
 		CameraSet = 0;
 	}
 
+	//天候に応じたエフェクトを描画
 	if (flag)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-		for (int y = 0; y < SCREEN_HEIGHT; y += Size)
+		for (int y = 0; y < SCREEN_HEIGHT; y += size)
 		{
-			for (int x = 0; x < SCREEN_WIDTH; x += Size)
+			for (int x = 0; x < SCREEN_WIDTH; x += size)
 			{
-				DrawRectGraph(x - CameraSet, y, animeFrame * Size, 0, Size, Size, hImage, TRUE);
+				DrawRectGraph(x - CameraSet, y, animeFrame_ * size, 0, size, size, image, TRUE);
 			}
 		}
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, alpha);//元に戻す
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, alpha); //元に戻す
 	}
 }
 
-void WeatherBackGround::GaleAnimation(bool& flag, int alpha, int hImage, int SizeX, int SizeY)
+void WeatherBackGround::GaleAnimation(bool& flag, int alpha, int image, int SizeX, int SizeY)
 {
+	//カメラ座標をとってくる
 	int x = (int)transform_.position_.x;
 	int y = (int)transform_.position_.y;
-
 	Weather* pWeather = GetParent()->FindGameObject<Weather>();
 	Camera* cam = GetParent()->FindGameObject<Camera>();
 	Player* pPlayer = GetParent()->FindGameObject<Player>();
 	padAnalogInput = GetJoypadXInputState(DX_INPUT_PAD1, &input);
 
-	int CameraSet = 0;
-	if (cam != nullptr)
-	{
-		//x -= cam->GetValue();
-		CameraSet = 0;
-	}
-
+	//岩を動かすときの風描画
 	if (flag)
 	{
 		int MpVanish = pPlayer->GetMp();
-		if (MpVanish >= 4)
+		if (MpVanish >= GALE_MP) //Mpが残っているとき
 		{  
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-			// 入力方向に応じて反転
-			if (input.ThumbRX <= -10000 || CheckHitKey(KEY_INPUT_K))
+			//入力方向に応じて反転
+			if (input.ThumbRX <= MIN_INPUT || CheckHitKey(KEY_INPUT_K))
 			{
-				// 左に反転
-				DrawRectGraph(x  - CameraSet, y + 100, animeFrame * SizeX, 0, SizeX, SizeY, hImage, TRUE, TRUE);
+				//左に反転
+				DrawRectGraph(x, y + POS_MARGE.y, animeFrame_ * SizeX, 0, SizeX, SizeY, image, TRUE, TRUE);
 			}
-			else if (input.ThumbRX >= 10000 || CheckHitKey(KEY_INPUT_L))
+			else if (input.ThumbRX >= MAX_INPUT || CheckHitKey(KEY_INPUT_L))
 			{
-				// 右に反転しない
-				DrawRectGraph(x + 500- CameraSet, y + 100, animeFrame * SizeX, 0, SizeX, SizeY, hImage, TRUE, FALSE);
+				//反転しない
+				DrawRectGraph(x + POS_MARGE.x, y + POS_MARGE.y, animeFrame_ * SizeX, 0, SizeX, SizeY, image, TRUE, FALSE);
 			}
 
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, alpha); // 元に戻す

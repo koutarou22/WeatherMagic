@@ -50,5 +50,6 @@ void Damage::Release()
 	if (dmgImage_ > 0)
 	{
 		DeleteGraph(dmgImage_);
+		dmgImage_ = -1;
 	}
 }

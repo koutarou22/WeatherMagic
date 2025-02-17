@@ -1,11 +1,23 @@
 #include "FreezeEffect.h"
 #include "Camera.h"
 #include "Weather.h"
-FreezeEffect::FreezeEffect(GameObject* parent) : GameObject(parent, "FreezeEffect"), hImage_(-1), animeFrame(0), FrameCounter(0), eraseCounter(0), ReverseFrame(false)
+
+namespace
 {
-    hImage_ = LoadGraph("Assets/Effect/Ice.png");
-    assert(hImage_ > 0);
-    freeze_s = S_Freeze;
+    const XMFLOAT2 POS_MARGE = { 10,2 }; //座標調整用
+    const int FRAME_SIZE = 64; //アニメーションの切り取りサイズ
+    const int NORMAL_FRAME_COUNT = 16; //アニメーションの基準フレーム
+    const int FREEZE_FRAME = 7; //凍っているときの基準フレーム(フレーム最大値)
+    const int MELT_FRAME = 1; //溶けているときの基準フレーム(フレーム最小値)
+}
+
+FreezeEffect::FreezeEffect(GameObject* parent) : GameObject(parent, "FreezeEffect")
+{
+    freezeImage_ = -1;
+    frameCounter_ = 0;
+    eraseCounter_ = 0;
+    animeFrame_ = 0;
+    freezeSt_ = S_NONE;
 }
 
 FreezeEffect::~FreezeEffect()
@@ -13,9 +25,17 @@ FreezeEffect::~FreezeEffect()
     Release();
 }
 
+void FreezeEffect::Initialize()
+{
+    freezeImage_ = LoadGraph("Assets/Effect/Ice.png");
+    assert(freezeImage_ > 0);
+
+    freezeSt_ = S_Freeze;
+}
+
 void FreezeEffect::Update()
 {
-    switch (freeze_s)
+    switch (freezeSt_)
     {
     case FreezeEffect::S_Freeze:
         UpdateFreeze();
@@ -24,7 +44,6 @@ void FreezeEffect::Update()
         UpdateMelt();
         break;
     case FreezeEffect::S_NONE:
-        break;
     default:
         break;
     }
@@ -32,67 +51,68 @@ void FreezeEffect::Update()
 
 void FreezeEffect::UpdateFreeze()
 {
+    //天候が雪でないときは溶けている状態
     Weather* pWeather = GetParent()->FindGameObject<Weather>();
-
     if (pWeather->GetWeatherState() != WeatherState::Snow) {
-        freeze_s = S_MELT;
-        FrameCounter = 0;
+        freezeSt_ = S_MELT;
+        frameCounter_ = 0;
     }
 
-    if (++FrameCounter >= 16)
+    //凍るアニメーション
+    if (++frameCounter_ >= NORMAL_FRAME_COUNT)
     {
-        animeFrame++;
-        if (animeFrame >= 8)//animeFrameを固定
+        animeFrame_++;
+        if (animeFrame_ > FREEZE_FRAME)
         {
-            animeFrame = 7;
+            animeFrame_ = FREEZE_FRAME; //最後の状態で固定
         }
-        FrameCounter = 0;
-     }
+        frameCounter_ = 0;
+    }
 }
 
 void FreezeEffect::UpdateMelt()
 {
-    if (++FrameCounter >= 16)
+    //溶ける時のアニメーション 凍る時の逆
+    if (++frameCounter_ >= NORMAL_FRAME_COUNT)
     {
-        animeFrame--;
-        if (animeFrame <= 1)
+        animeFrame_--;
+        if (animeFrame_ <= MELT_FRAME)
         {
-            animeFrame = 1;
-            FrameCounter = 0;
+            animeFrame_ = MELT_FRAME; //最後の状態で固定
+            frameCounter_ = 0;
             KillMe();
-        }      
-        FrameCounter = 0;
+        }
+        frameCounter_ = 0;
     }
 }
 
 void FreezeEffect::Draw()
 {
+    //カメラ座標をとってきて描画
     int x = transform_.position_.x;
     int y = transform_.position_.y;
-
     Camera* cam = GetParent()->FindGameObject<Camera>();
-    if (cam != nullptr) 
+    if (cam != nullptr)
     {
         x -= cam->GetValue();
     }
+    int FrameX = 64;
+    int FrameY = 64;
+    DrawRectGraph(x, y, animeFrame_ * FRAME_SIZE, 0, FRAME_SIZE, FRAME_SIZE, freezeImage_, TRUE);
 
-    int FrameX = 64; 
-    int FrameY = 64; 
-
-    DrawRectGraph(x, y, animeFrame * FrameX, 0, FrameX, FrameY, hImage_, TRUE);
- 
 }
 
 void FreezeEffect::Release()
 {
-    if (hImage_ > 0)
+    if (freezeImage_ > 0)
     {
-        DeleteGraph(hImage_);
+        DeleteGraph(freezeImage_);
+        freezeImage_ = -1;
     }
 }
 
 void FreezeEffect::SetPosition(int x, int y)
 {
-    transform_.position_.x = x+10;
-    transform_.position_.y = y+2;
+    transform_.position_.x = x + POS_MARGE.x;
+    transform_.position_.y = y + POS_MARGE.y;
 }
