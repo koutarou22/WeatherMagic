@@ -5,25 +5,25 @@
 /// <summary>
 ///　それぞれの天候時の背景Animation
 /// </summary>
+
+namespace
+{
+	const int STATE_NUM = 4; //天候の状態
+}
 class WeatherBackGround :
     public GameObject
 {
-private:
-	int hImage_Sun;
-	int hImage_Rain;
-	int hImage_Rain2;
-	int hImage_Gale;
-	int hImage_Snow;
+	enum WEATHER_STATE
+	{
+		RAINBACK,RAINFRONT,GALE,SNOW,MAX
+	};
 
-	int animeFrame;//スプライトのどのコマを描画するか
-	int FrameCounter;//スプライトが次のコマに行くまでのカウンター
-	int eraseCounter;///スプライトが次のコマに行ったら増やし、アニメーション終了後消す判定
+	int images_[STATE_NUM];
+	bool nowWeather_[STATE_NUM]; //現在の天気が何か判定用
 
-	bool SunNow;//晴れか判定用
-	bool RainNow;//雨か判定用
-	bool GaleNow;//風か判定用
-	bool SnowNow;//雪か判定用
-
+	int animeFrame_;//スプライトのどのコマを描画するか
+	int frameCounter_;//スプライトが次のコマに行くまでのカウンター
+	int eraseCounter_;///スプライトが次のコマに行ったら増やし、アニメーション終了後消す判定
 
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る
@@ -31,12 +31,9 @@ public:
 	WeatherBackGround(GameObject* parent);
 
 	~WeatherBackGround();
-	//更新
+	void Initialize() override;
 	void Update() override;
-
-	//描画
 	void Draw() override;
-	//開放
 	void Release() override;
 
 	/// <summary>
@@ -59,7 +56,7 @@ public:
 	void WeatherAnimation(bool& flag, int alpha, int hImage , int Size);
 
 	/// <summary>
-	/// 風だけ異質なので風用のAnimation関数　拡張性は皆無
+	/// 風用のAnimation関数
 	/// </summary>
 	/// <param name="flag">天候状態のフラグ</param>
 	/// <param name="alpha">透明度</param>
