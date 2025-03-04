@@ -4,14 +4,14 @@
 #include "Field.h"
 
 
-ClearFlag::ClearFlag(GameObject* parent) :GameObject(parent, "ClearFlag"), hImage_(-1),IsClear_(false)
+ClearFlag::ClearFlag(GameObject* parent) :GameObject(parent, "ClearFlag"), hClearFlag_(-1),IsClear_(false)
 {
-	hImage_ = LoadGraph("Assets/Item/GoalFlag.png");
-	assert(hImage_ >= 0);
+	hClearFlag_ = LoadGraph("Assets/Item/GoalFlag.png");
+	assert(hClearFlag_ >= 0);
 
-	hEffect_ = LoadGraph("Assets/Item/right.png");
-	assert(hEffect_ > 0);
-	flameCounter_ = 0;
+	hClearFEffect_ = LoadGraph("Assets/Item/right.png");
+	assert(hClearFEffect_ > 0);
+	FrameCounter_ = 0;
 	animeType_ = 0;
 	animeFrame_ = 0;
 }
@@ -27,10 +27,10 @@ void ClearFlag::Initialize()
 
 void ClearFlag::Update()
 {
-	if (++flameCounter_ >= 24)
+	if (++FrameCounter_ >= 24)
 	{
 		animeFrame_ = (animeFrame_ + 1) % 3;
-		flameCounter_ = 0;
+		FrameCounter_ = 0;
 	}
 }
 
@@ -52,21 +52,21 @@ void ClearFlag::Draw()
 	
 	if (!IsClear_)
 	{
-		DrawGraph(x, y, hImage_, TRUE);
-		DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hEffect_, TRUE);
+		DrawGraph(x, y, hClearFlag_, TRUE);
+		DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hClearFEffect_, TRUE);
 	}
 	//DrawCircle(x + 63.0f, y + 63.0f, 24.0f, GetColor(255, 0, 0), 0);
 }
 
 void ClearFlag::Release()
 {
-	if (hImage_ > 0)
+	if (hClearFlag_ > 0)
 	{
-		DeleteGraph(hImage_);
+		DeleteGraph(hClearFlag_);
 	}
-	if (hEffect_ > 0)
+	if (hClearFEffect_ > 0)
 	{
-		DeleteGraph(hEffect_);
+		DeleteGraph(hClearFEffect_);
 	}
 
 }

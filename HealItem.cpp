@@ -4,15 +4,15 @@
 #include "Field.h"
 
 
-HealItem::HealItem(GameObject* parent) :GameObject(parent, "HpItem"), hImage_(-1)
+HealItem::HealItem(GameObject* parent) :GameObject(parent, "HpItem"), hHealItem_(-1)
 {
-	hImage_ = LoadGraph("Assets/Item/PotionRed1.png");//回復アイテムのImage
-	assert(hImage_ >= 0);
+	hHealItem_ = LoadGraph("Assets/Item/PotionRed1.png");//回復アイテムのImage
+	assert(hHealItem_ >= 0);
 
-	hEffect_ = LoadGraph("Assets/Item/right.png");
-	assert(hEffect_ > 0);
+	hHealIEffect_ = LoadGraph("Assets/Item/right.png");
+	assert(hHealIEffect_ > 0);
 
-	flameCounter_ = 0;
+	FrameCounter_ = 0;
 	animeType_ = 0;
 	animeFrame_ = 0;
 }
@@ -28,10 +28,10 @@ void HealItem::Initialize()
 
 void HealItem::Update()
 {
-	if (++flameCounter_ >= 24)
+	if (++FrameCounter_ >= 24)
 	{
 		animeFrame_ = (animeFrame_ + 1) % 4;
-		flameCounter_ = 0;
+		FrameCounter_ = 0;
 	}
 }
 
@@ -51,19 +51,19 @@ void HealItem::Draw()
 	int frameX = animeFrame_ % 3;
 
 	// スプライトを描画
-	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hEffect_, TRUE);
-	DrawGraph(x, y, hImage_, TRUE);
+	DrawRectGraph(x, y, frameX * SWidth, 0, SWidth, SHeight, hHealIEffect_, TRUE);
+	DrawGraph(x, y, hHealItem_, TRUE);
 }
 
 void HealItem::Release()
 {
-	if (hImage_ > 0)
+	if (hHealItem_ > 0)
 	{
-		DeleteGraph(hImage_);
+		DeleteGraph(hHealItem_);
 	}
-	if (hEffect_ > 0)
+	if (hHealIEffect_ > 0)
 	{
-		DeleteGraph(hEffect_);
+		DeleteGraph(hHealIEffect_);
 	}
 }
 
