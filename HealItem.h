@@ -6,12 +6,12 @@
 class HealItem :public GameObject
 {
 private:
-	int hImage_;
-	int hEffect_;
+	int hHealItem_;
+	int hHealIEffect_;
 	int animeType_;//ó‹µ
 	int animeFrame_;//‹î
-	int PictFlame_;
-	int flameCounter_;
+	//int PictFlame_;
+	int FrameCounter_;
 public:
 
 	HealItem(GameObject* parent);

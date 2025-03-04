@@ -3,34 +3,33 @@
 #include "Hp.h"
 #include "Player.h"
 #include "Field.h"
-#include "Slime.h"
-#include "Rock.h"
-#include "Ghost.h"
-#include "Damage.h"
-#include "HealItem.h"
-#include "MpItem.h"
-#include "ClearFlag.h"
 #include"MP.h"
 #include "WeatherBackGround.h"
 #include "Score.h"
 
-PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0) 
-{
-    StageBGMHandle = LoadSoundMem("Assets/Music/BGM/STAGE_BGM.mp3");
-    assert(StageBGMHandle != -1);
+namespace {
+    const int ScorePositionX = 100;
+    const int ScorePositionY = 500;
+}
 
-    PlaySoundMem(StageBGMHandle, DX_PLAYTYPE_LOOP);
+PlayScene::PlayScene(GameObject* parent) : GameObject(parent, "PlayScene"), MapNumber_(0),
+MpPass_(0),StageBGMHandle_(-1),pSceneManager_(nullptr),pPlayer_(nullptr)
+{
+    StageBGMHandle_ = LoadSoundMem("Assets/Music/BGM/STAGE_BGM.mp3");
+    assert(StageBGMHandle_ != -1);
+
+    PlaySoundMem(StageBGMHandle_, DX_PLAYTYPE_LOOP);
 }
 
 PlayScene::~PlayScene()
 {
-    DeleteSoundMem(StageBGMHandle);
+    DeleteSoundMem(StageBGMHandle_);
 }
 
 void PlayScene::Initialize() 
 {
-    pSceneManager = (SceneManager*)FindObject("SceneManager");
-    MapNumber_ = pSceneManager->GettLevelManager();
+    pSceneManager_ = (SceneManager*)FindObject("SceneManager");
+    MapNumber_ = pSceneManager_->GettLevelManager();
     Field* pField = Instantiate<Field>(this);
     pField->Reset(MapNumber_);//初期化処理
 
@@ -39,28 +38,22 @@ void PlayScene::Initialize()
 
     Instantiate<WeatherBackGround>(this);
     Instantiate<Weather>(this);
-    pPlayer = nullptr;
-    pPlayer = Instantiate<Player>(this);
+    pPlayer_ = Instantiate<Player>(this);
 
-    MpPass = pPlayer->GetMp();//Mpの値を持ってくる
-    pSceneManager->SetMagicPoint(MpPass);//PlaySceneでPlayerのMpをSet
+    MpPass_ = pPlayer_->GetMp();//Mpの値を持ってくる
+    pSceneManager_->SetMagicPoint(MpPass_);//PlaySceneでPlayerのMpをSet
 
     Instantiate<Camera>(this);
-
-    //Instantiate<UI>(this);
-
     Score* sc=Instantiate<Score>(this);
-    sc->SetPosition(100,500);
-    bool b = true;
-    sc->SetPlaying(b);
-
+    sc->SetPosition(ScorePositionX, ScorePositionY);
+    sc->SetPlaying(true);
 }
 
 //更新
 void PlayScene::Update()
 {
-    int MpPass = pPlayer->GetMp();//Mpの値を持ってくる
-    pSceneManager->SetMagicPoint(MpPass);//PlaySceneでPlayerのMpをSet
+    int MpPass = pPlayer_->GetMp();//Mpの値を持ってくる
+    pSceneManager_->SetMagicPoint(MpPass);//PlaySceneでPlayerのMpをSet
 }
 
 //描画

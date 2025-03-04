@@ -3,27 +3,27 @@
 
 class GameOverScene : public GameObject
 {
-	int hImage_;
-	int hdecB;//決定UI
-	int hdecByellow;//決定UI（黄色）
+	int hBack_;//背景
+	int hDecideB_;//決定UI
+	int hDecideBYellow_;//決定UI（黄色）
 	int padAnalogInput;//xboxの入力を受け取る
 	XINPUT_STATE input;//xboxの入力を受け取る
 	int keyTimer_; //キーが押されてから遷移までのタイマー
 	bool keyPushed_; //キーが押されたか(暗転OKか)のフラグ
 
-	int GameOverBGMHandle;
+	int GameOverBGMHandle_;
 
 	//遷移用
-	bool isLeft; //true:Retry(left) false:Title(right)
-	void DrawScene(); //遷移の文字とか画像とか用
+	bool isLeft_; //true:Retry(left) false:Title(right)
+	void DrawScene(); //遷移の文字とか画像用
 	void ChangeScene(); //シーン遷移実際にするところ
 	void CheckRL(); //左右の判定
 
 
-	bool RightCheck;//右を何回も押して音が出るのを防ぐ用
-	bool LeftCheck; //左を何回も押して音が出るのを防ぐ用
-	int SelectSEHandle;//選択用SE
-	int DecisionHandle;//決定用SE
+	bool RightCheck_;//右を何回も押して音が出るのを防ぐ用
+	bool LeftCheck_; //左を何回も押して音が出るのを防ぐ用
+	int SelectSEHandle_;//選択用SE
+	int DecisionHandle_;//決定用SE
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

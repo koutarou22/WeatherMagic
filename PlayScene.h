@@ -1,7 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/SceneManager.h";
-#include"ChooseLevelScene.h"
 
 class SceneManager;
 class Player;
@@ -27,10 +26,9 @@ public:
 	//ŠJ•ú
 	void Release() override;
 private:
-	int MapNumber_;
-	int MpPass; //Mp‚Ì’l
-	int StageBGMHandle; //BGM
-	SceneManager* pSceneManager;
-	Player* pPlayer;
-	ChooseLevelScene* pChooseLevelScene;
+	int MapNumber_;//‚Ç‚Ìcsv‚ğ“Ç‚İ‚Ş‚©
+	int MpPass_; //Mp‚Ì’l
+	int StageBGMHandle_; //BGM
+	SceneManager* pSceneManager_;
+	Player* pPlayer_;
 };

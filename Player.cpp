@@ -51,18 +51,18 @@ namespace
 	const float MAX_GALE_FLAME = 300.0f;
 
 
-	const float CHIP_SIZE = 64.0f;  
+	const float CHIP_SIZE = 64.0f;
 	const float DEAD_LINE = 800.0f;
 
 };
 Player::Player(GameObject* parent) : GameObject(sceneTop),
 WeatherSpeed_(MOVE_SPEED), ChangeWeatherCoolTime_(60), CanChangeWeather_(true)
 
-,InvincibleTime_(2.0f),FlashCount_(0), Hp_(5),MagicPoint_(100), MpHealTimer_(30)
+, InvincibleTime_(2.0f), FlashCount_(0), Hp_(5), MagicPoint_(100), MpHealTimer_(30)
 
-,OnGround_(true), OnRock_(false),HitLanding_(true)
+, OnGround_(true), OnRock_(false), HitLanding_(true)
 
-,FlameCounter_(0),AnimType_(0),AnimeFrame_(0)
+, FlameCounter_(0), AnimType_(0), AnimeFrame_(0)
 {
 	hPlayer_ = LoadGraph("Assets/Chara/Clear_Wizard.png");
 	assert(hPlayer_ > 0);
@@ -75,7 +75,7 @@ WeatherSpeed_(MOVE_SPEED), ChangeWeatherCoolTime_(60), CanChangeWeather_(true)
 	transform_.position_ = { START_POSITION_X,START_POSITION_Y,0 };
 
 	CharUp_ = transform_.position_.y;
-	
+
 	GaleFlameDownMp_ = MAX_GALE_FLAME;
 	RainFlameDownMp_ = MAX_RAIN_FLAME;
 	SnowFlameDownMp_ = MAX_SNOW_FLAME;
@@ -112,7 +112,7 @@ WeatherSpeed_(MOVE_SPEED), ChangeWeatherCoolTime_(60), CanChangeWeather_(true)
 	assert(GetHPItemSound_ != -1);
 
 	//基本的な動作音の登録
-	
+
 	//攻撃音
 	MagicSound_ = LoadSoundMem("Assets/Music/SE/Player/AttackMagic.mp3");
 	assert(MagicSound_ != -1);
@@ -142,7 +142,7 @@ WeatherSpeed_(MOVE_SPEED), ChangeWeatherCoolTime_(60), CanChangeWeather_(true)
 	assert(SpeedUpSound_ != -1);
 
 	//特殊な音の登録
-	
+
 	//スライムバウンド音
 	BoundSound_ = LoadSoundMem("Assets/Music/SE/Slime/Bound.mp3");
 	assert(BoundSound_ != -1);
@@ -556,64 +556,6 @@ void Player::UpdateDead()
 	}
 }
 
-void Player::WhereIs()
-{
-	//横線関連
-	static int SenStart = 1000; //横線の始点x
-	static int SenLength = 200; //横線の長さx
-	static int SenY = 50; //横線の始点y
-	static int SenHeight = 5; //横線の幅
-	static int WakuX = 20; //枠の調整用x
-	static int WakuY = 20; //枠の調整用y
-	static int FRAME = 3; //枠の太さ
-
-	//色関連
-	static unsigned int WHITE = GetColor(255, 255, 255); //白
-	static unsigned int YELLOW = GetColor(255, 255, 0); //黄色
-	static unsigned int GRAY = GetColor(128, 128, 128); //灰色
-	static unsigned int BLUE = GetColor(65, 105, 225); //青
-	static unsigned int GREEN = GetColor(59, 175, 117); //緑
-	static unsigned int BLACK = GetColor(0, 0, 0); //黒
-
-
-	//フレーム
-	DrawBox(SenStart - WakuX - FRAME, SenY - WakuY - 7 - FRAME, SenStart + SenLength + WakuX + FRAME, SenY + SenHeight + WakuY - 7 + FRAME, BLACK, true);
-	//後ろの箱
-	DrawBox(SenStart - WakuX, SenY - WakuY - 7, SenStart + SenLength + WakuX, SenY + SenHeight + WakuY - 7, WHITE, true);
-	//元の横線
-	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GRAY, true);
-
-	//三角形関連
-	Field* pField = GetParent()->FindGameObject<Field>();
-	float max = CHIP_SIZE * pField->GetGoalWidth();
-	float now = transform_.position_.x;
-	float nowLine = SenStart + SenLength * (now / max) * 2; //縦線引くところのX
-	if (nowLine >= SenStart + SenLength)
-	{
-		nowLine = SenStart + SenLength; //マップは続くがゴールしたら縦線は動かない
-	}
-	//三角
-	DrawTriangle(nowLine - 4, SenY - 14, (nowLine - 4 + nowLine + SenHeight + 4) / 2, (SenY - 10 + SenY + 14) / 2, nowLine + SenHeight + 4, SenY - 14, BLUE, true); //三角形かく
-	//色変え
-	DrawBox(SenStart, SenY, nowLine + 2, SenY + SenHeight, BLUE, true); //横線かく
-	//ゴール
-	DrawRotaGraph(SenStart + SenLength + 2, SenY - 9, 0.75, 0, hGoal_, true);
-}
-
-void Player::UpdateErase()
-{
-	Field* pField = GetParent()->FindGameObject<Field>();
-	if (++FlameCounter_ >= 60)
-	{
-		//死んだときプレイの時のBGM
-		pField->StopPlayBGM();
-
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
-		StopWeatherSE();
-		FlameCounter_ = 0;
-	}
-}
 
 void Player::UpdateClear()
 {
@@ -625,7 +567,6 @@ void Player::UpdateClear()
 		if (pSceneManager != nullptr)
 		{
 			pField->StopPlayBGM();
-			pSceneManager->ClearCountPlus();
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 
 			StopWeatherSE();
@@ -682,7 +623,7 @@ void Player::WeatherController()
 	}
 
 	//天気を変える　Controller & keyboard
-    //一回だけ初期化
+	//一回だけ初期化
 	if (pWCE_ == nullptr)
 	{
 		pWCE_ = Instantiate<WeatherChangeEffect>(GetParent());
@@ -708,7 +649,7 @@ void Player::WeatherController()
 
 					//WeatherChangeEffect* pWCE = Instantiate<WeatherChangeEffect>(this);
 					if (pWCE_ != nullptr) {
-						if (!pWCE_->GetIsDraw()) 
+						if (!pWCE_->GetIsDraw())
 						{
 							pWCE_->SetIsDraw(true);
 							pWCE_->SetPosition(transform_.position_.x, transform_.position_.y, transform_.position_.z);
@@ -807,46 +748,46 @@ void Player::WeatherController()
 		}
 
 		//天候が雨の時のMP減少の処理
-	    if (pWeather->GetWeatherState() == Gale)
-	    {
-		    GaleEffect(Gale);
-		    if (MagicPoint_ > 0)
-		    {
-			    if (GaleFlameDownMp_ < 0)
-			    {
-				    GaleFlameDownMp_ = MAX_GALE_FLAME;
+		if (pWeather->GetWeatherState() == Gale)
+		{
+			GaleEffect(Gale);
+			if (MagicPoint_ > 0)
+			{
+				if (GaleFlameDownMp_ < 0)
+				{
+					GaleFlameDownMp_ = MAX_GALE_FLAME;
 					MagicDown(2);
-			    }
-			    else
-			    {
-				    GaleFlameDownMp_--;
-			    }
-		    }
-	    }
+				}
+				else
+				{
+					GaleFlameDownMp_--;
+				}
+			}
+		}
 
 		//天候が雨の時のMP減少の処理
-	    if (pWeather->GetWeatherState() == Rain)
-	    {
+		if (pWeather->GetWeatherState() == Rain)
+		{
 
-		    if (MagicPoint_ > 0)
-		    {
+			if (MagicPoint_ > 0)
+			{
 
-			    if (RainFlameDownMp_ < 0)
-			    {
-				    MagicDown(1);
-				    RainFlameDownMp_ = MAX_RAIN_FLAME;
-			    }
-			    else
-			    {
-				    RainFlameDownMp_--;
-			    }
-		    }
-	    }
+				if (RainFlameDownMp_ < 0)
+				{
+					MagicDown(1);
+					RainFlameDownMp_ = MAX_RAIN_FLAME;
+				}
+				else
+				{
+					RainFlameDownMp_--;
+				}
+			}
+		}
 
 		//雪の時間経過(とりあえずフレーム経過)でMPが減る
 		if (pWeather->GetWeatherState() == WeatherState::Snow)
 		{
-		   SnowFlameDownMp_--;
+			SnowFlameDownMp_--;
 		}
 
 
@@ -875,13 +816,13 @@ void Player::WeatherController()
 		}
 	}
 
-	
+
 
 }
 
 void Player::PlayerController()
 {
-	
+
 	MP* mp = GetParent()->FindGameObject<MP>();
 
 	//Input_.ThumbLXで左スティック入力をとる 倒した横軸値が-10000以下か10000以上で動く
@@ -897,7 +838,7 @@ void Player::PlayerController()
 		}
 
 		CheckHitStageRight();
-		
+
 	}
 	//左移動
 	else if (CheckHitKey(KEY_INPUT_A) || stickTilt.IsLeftStickTilt_left)
@@ -911,7 +852,7 @@ void Player::PlayerController()
 		}
 
 		CheckHitStageLeft();
-	
+
 	}
 	else
 	{
@@ -1476,4 +1417,60 @@ void Player::HpDown(int _MHp)
 
 }
 
+void Player::WhereIs()
+{
+	//横線関連
+	static int SenStart = 1000; //横線の始点x
+	static int SenLength = 200; //横線の長さx
+	static int SenY = 50; //横線の始点y
+	static int SenHeight = 5; //横線の幅
+	static int WakuX = 20; //枠の調整用x
+	static int WakuY = 20; //枠の調整用y
+	static int FRAME = 3; //枠の太さ
+	//↓定数にすべきだな...
+	static unsigned int WHITE = GetColor(255, 255, 255); //白
+	static unsigned int YELLOW = GetColor(255, 255, 0); //黄色
+	static unsigned int GRAY = GetColor(128, 128, 128); //灰色
+	static unsigned int BLUE = GetColor(65, 105, 225); //青
+	static unsigned int GREEN = GetColor(59, 175, 117); //緑
+	static unsigned int BLACK = GetColor(0, 0, 0); //黒
 
+
+	//フレーム
+	DrawBox(SenStart - WakuX - FRAME, SenY - WakuY - 7 - FRAME, SenStart + SenLength + WakuX + FRAME, SenY + SenHeight + WakuY - 7 + FRAME, BLACK, true);
+	//後ろの箱
+	DrawBox(SenStart - WakuX, SenY - WakuY - 7, SenStart + SenLength + WakuX, SenY + SenHeight + WakuY - 7, WHITE, true);
+	//元の横線
+	DrawBox(SenStart, SenY, SenStart + SenLength, SenY + SenHeight, GRAY, true);
+
+	//三角形関連
+	Field* pField = GetParent()->FindGameObject<Field>();
+	float max = CHIP_SIZE * pField->GetGoalWidth();
+	float now = transform_.position_.x;
+	float nowLine = SenStart + SenLength * (now / max) * 2; //縦線引くところのX
+	if (nowLine >= SenStart + SenLength)
+	{
+		nowLine = SenStart + SenLength; //マップは続くがゴールしたら縦線は動かない
+	}
+	//三角
+	DrawTriangle(nowLine - 4, SenY - 14, (nowLine - 4 + nowLine + SenHeight + 4) / 2, (SenY - 10 + SenY + 14) / 2, nowLine + SenHeight + 4, SenY - 14, BLUE, true); //三角形かく
+	//色変え
+	DrawBox(SenStart, SenY, nowLine + 2, SenY + SenHeight, BLUE, true); //横線かく
+	//ゴール
+	DrawRotaGraph(SenStart + SenLength + 2, SenY - 9, 0.75, 0, hGoal_, true);
+}
+
+void Player::UpdateErase()
+{
+	Field* pField = GetParent()->FindGameObject<Field>();
+	if (++FlameCounter_ >= 60)
+	{
+		//死んだときプレイの時のBGM
+		pField->StopPlayBGM();
+
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
+		StopWeatherSE();
+		FlameCounter_ = 0;
+	}
+}

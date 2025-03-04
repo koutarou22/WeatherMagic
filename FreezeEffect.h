@@ -1,40 +1,41 @@
 #pragma once
 #include "Engine/GameObject.h"
+
 /// <summary>
-/// 雪の時敵が凍ってるのを表現する用のアレ
+/// 雪の時に敵が凍るエフェクトクラス
 /// </summary>
+
 class FreezeEffect :
     public GameObject
 {
-	int hImage_;
-	int animeFrame;
-	int FrameCounter;
-	int eraseCounter;
+    int freezeImage_;
+    int frameCounter_; //何フレーム分描画するか
+    int eraseCounter_; //画像の何番目を表示しているか
+    int animeFrame_; //画像の何番目を描画するか
 
-	bool ReverseFrame;//フレームを判定させる用のフラグ
-
-	enum FreezeState {
-		S_Freeze,//凍っている
-		S_MELT,//解けている
-		S_NONE//何もなし
-	};
-	FreezeState freeze_s;
+    //エフェクト状態のステート
+    enum FreezeState {
+        S_Freeze, //凍っている
+        S_MELT, //解けている
+        S_NONE //何もなし
+    };
+    FreezeState freezeSt_; //エフェクトの状態を表す変数
 
 public:
 
-	FreezeEffect(GameObject* parent);
-	~FreezeEffect();
+    FreezeEffect(GameObject* parent);
+    ~FreezeEffect();
 
-	//更新
-	void Update() override;
-	void UpdateFreeze();
-	void UpdateMelt();
+    void Initialize() override;
+    void Update() override;
+    void Draw() override;
+    void Release() override;
 
-	//描画
-	void Draw() override;
-	//開放
-	void Release() override;
+    //それぞれの状態での更新
+    void UpdateFreeze();
+    void UpdateMelt();
 
-	void SetPosition(int x, int y);
+    //アクセス関数
+    void SetPosition(int x, int y);
 };
 
