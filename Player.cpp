@@ -512,19 +512,18 @@ void Player::UpdateWalk()
 	StickTiltCheck();
 
 	SetFontSize(24);
+	CheckHitStageDown();
+	CheckHitStageUp();
+
+	CheckHitSlime();
+	CheckHitGhost();
+	CheckHitItem();
+	CheckHitRock();
+	CheckHitClear();
 
 	WeatherController();
 	PlayerController();
-	
-	CheckHitSlime();
-	CheckHitGhost();
-	CheckHitRock();
-	CheckHitItem();
 
-	CheckHitClear();
-
-	CheckHitStageDown();
-	CheckHitStageUp();
 }
 
 void Player::UpdateDamage()
